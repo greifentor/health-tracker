@@ -61,6 +61,7 @@
 	<modules>
 		<module>base-lib</module>
 		<module>jpa-persistence</module>
+		<module>shell</module>
 		<module>service</module>
 		<module>service-interface</module>
 	</modules>

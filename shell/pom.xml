@@ -10,11 +10,11 @@
 		<version>0.0.1</version>
 	</parent>
 
-	<artifactId>health-tracker-service</artifactId>
+	<artifactId>health-tracker-shell</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Health-Tracker (Service)</name>
-	<description>The implementation of the service and core module of the application.</description>
+	<name>Health-Tracker (Shell)</name>
+	<description>A shell for the application.</description>
 
 	<properties>
 		<plugin.prettier.goal>write</plugin.prettier.goal>
@@ -32,7 +32,18 @@
 			<artifactId>health-tracker-service-interface</artifactId>
 			<version>0.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>de.ollie</groupId>
+			<artifactId>health-tracker-service</artifactId>
+			<version>0.0.1</version>
+			<scope>runtime</scope>
+		</dependency>
 		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework.shell</groupId>
+			<artifactId>spring-shell-starter</artifactId>
+			<version>3.1.6</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -97,6 +108,10 @@
 					<source>${java.version}</source>
 					<target>${java.version}</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>com.hubspot.maven.plugins</groupId>
