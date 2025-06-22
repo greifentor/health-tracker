@@ -2,6 +2,8 @@ package de.ollie.healthtracker.persistence.jpa.dbo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
@@ -37,6 +39,7 @@ public class BloodPressureMeasurementDbo {
 	@Column(name = "PULSE_PER_MINUTE", nullable = false)
 	private int pulsePerMinute;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "STATUS", nullable = false)
 	private BloodPressureMeasurementStatusDbo status;
 }
