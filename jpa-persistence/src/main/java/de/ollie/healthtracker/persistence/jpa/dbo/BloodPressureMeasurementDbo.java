@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 @Data
 @Generated
 @Entity(name = "BloodPressureMeasurement")
-@Table(name = "BLOOD_PRESURE_MEASUREMENT")
+@Table(name = "BLOOD_PRESSURE_MEASUREMENT")
 public class BloodPressureMeasurementDbo {
 
 	@Id
