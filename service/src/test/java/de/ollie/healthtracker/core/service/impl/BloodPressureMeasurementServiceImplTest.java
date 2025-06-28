@@ -3,12 +3,12 @@ package de.ollie.healthtracker.core.service.impl;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.when;
 
-import de.ollie.healthtracker.core.service.impl.BloodPressureMeasurementServiceImpl;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.core.service.port.persistence.BloodPressureMeasurementPersistencePort;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,6 +63,21 @@ class BloodPressureMeasurementServiceImplTest {
 			);
 			// Check
 			assertSame(recording, returned);
+		}
+	}
+
+	@Nested
+	class list {
+
+		@Test
+		void returnsTheResultOfThePersistencePortMethodCall() {
+			// Prepare
+			List<BloodPressureMeasurement> list = List.of(recording);
+			when(recordingPersistencePort.list()).thenReturn(list);
+			// Run
+			List<BloodPressureMeasurement> returned = unitUnderTest.list();
+			// Check
+			assertSame(list, returned);
 		}
 	}
 }

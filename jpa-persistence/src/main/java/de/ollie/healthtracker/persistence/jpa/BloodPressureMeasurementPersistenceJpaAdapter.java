@@ -8,6 +8,7 @@ import de.ollie.healthtracker.persistence.jpa.repository.BloodPressureMeasuremen
 import jakarta.inject.Named;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @Named
@@ -32,5 +33,10 @@ class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeas
 				dboFactory.create(sysMmHg, diaMmHg, pulsePerMinute, mapper.toDbo(status), dateOfRecording, timeOfRecording)
 			)
 		);
+	}
+
+	@Override
+	public List<BloodPressureMeasurement> list() {
+		return repository.findAll().stream().map(mapper::toModel).toList();
 	}
 }

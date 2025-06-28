@@ -2,6 +2,8 @@ package de.ollie.healthtracker.shell.command;
 
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
+import de.ollie.healthtracker.shell.handler.OutputHandler;
+import de.ollie.healthtracker.shell.mapper.BloodPressureMeasurementToStringMapper;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -18,9 +20,11 @@ public class BloodPressureMeasurementCommands {
 	private static final DateTimeFormatter DE_DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.GERMAN);
 	private static final DateTimeFormatter DE_TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm", Locale.GERMAN);
 
-	private final BloodPressureMeasurementService bloodPreasureMeasurement;
+	private final BloodPressureMeasurementService bloodPressureMeasurementService;
+	private final BloodPressureMeasurementToStringMapper bloodPressureMeasurementToStringMapper;
+	private final OutputHandler outputHandler;
 
-	@ShellMethod(value = "Adds a blood preasure measurement.", key = { "add-blood-pressure-measurement", "apbm" })
+	@ShellMethod(value = "Adds a blood preasure measurement.", key = { "add-blood-pressure-measurement", "abpm" })
 	public String add(
 		@ShellOption(help = "The SYS mmHg value.", value = "sys") int sysMmHg,
 		@ShellOption(help = "The DIA mmHg value.", value = "dia") int diaMmHg,
@@ -41,7 +45,7 @@ public class BloodPressureMeasurementCommands {
 			BloodPressureMeasurementStatus status = BloodPressureMeasurementStatus.valueOf(statusStr);
 			LocalDate dateOfMeasurement = LocalDate.parse(dateOfMeasurementStr, DE_DATE_FORMAT);
 			LocalTime timeOfMeasurement = LocalTime.parse(timeOfMeasurementStr, DE_TIME_FORMAT);
-			bloodPreasureMeasurement.createRecording(
+			bloodPressureMeasurementService.createRecording(
 				sysMmHg,
 				diaMmHg,
 				pulsePerMinute,
@@ -49,6 +53,18 @@ public class BloodPressureMeasurementCommands {
 				dateOfMeasurement,
 				timeOfMeasurement
 			);
+			return Constants.OK;
+		} catch (Exception e) {
+			return Constants.ERROR + e.getMessage();
+		}
+	}
+
+	@ShellMethod(value = "Lists blood preasure measurements.", key = { "list-blood-pressure-measurements", "lbpm" })
+	public String list() {
+		try {
+			bloodPressureMeasurementService
+				.list()
+				.forEach(bpm -> outputHandler.println(bloodPressureMeasurementToStringMapper.map(bpm)));
 			return Constants.OK;
 		} catch (Exception e) {
 			return Constants.ERROR + e.getMessage();

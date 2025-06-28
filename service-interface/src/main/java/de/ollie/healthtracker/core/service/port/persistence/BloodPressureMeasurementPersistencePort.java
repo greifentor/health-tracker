@@ -4,6 +4,7 @@ import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public interface BloodPressureMeasurementPersistencePort {
 	BloodPressureMeasurement create(
@@ -14,4 +15,6 @@ public interface BloodPressureMeasurementPersistencePort {
 		LocalDate dateOfRecording,
 		LocalTime timeOfRecording
 	);
+
+	List<BloodPressureMeasurement> list();
 }

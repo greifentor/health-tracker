@@ -1,18 +1,18 @@
 package de.ollie.healthtracker.persistence.jpa;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.when;
 
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
-import de.ollie.healthtracker.persistence.jpa.BloodPressureMeasurementPersistenceJpaAdapter;
-import de.ollie.healthtracker.persistence.jpa.DboFactory;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementStatusDbo;
 import de.ollie.healthtracker.persistence.jpa.mapper.BloodPressureMeasurementDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.BloodPressureMeasurementDboRepository;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -68,6 +68,19 @@ class BloodPressureMeasurementPersistenceJpaAdapterTest {
 				model,
 				unitUnderTest.create(SYS_MM_HG, PULSE_PER_MINUTE, DIA_MM_HG, STATE, DATE_OF_RECORDING, TIME_OF_RECORDING)
 			);
+		}
+	}
+
+	@Nested
+	class list {
+
+		@Test
+		void returnsAMappedList() {
+			// Prepare
+			when(mapper.toModel(dboSaved)).thenReturn(model);
+			when(repository.findAll()).thenReturn(List.of(dboSaved));
+			// Run & Check
+			assertEquals(List.of(model), unitUnderTest.list());
 		}
 	}
 }

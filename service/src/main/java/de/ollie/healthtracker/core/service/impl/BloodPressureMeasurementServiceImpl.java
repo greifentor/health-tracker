@@ -7,6 +7,7 @@ import de.ollie.healthtracker.core.service.port.persistence.BloodPressureMeasure
 import jakarta.inject.Named;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @Named
@@ -32,5 +33,10 @@ public class BloodPressureMeasurementServiceImpl implements BloodPressureMeasure
 			dateOfRecording,
 			timeOfRecording
 		);
+	}
+
+	@Override
+	public List<BloodPressureMeasurement> list() {
+		return bloodPressureMeasurementPersistencePort.list();
 	}
 }
