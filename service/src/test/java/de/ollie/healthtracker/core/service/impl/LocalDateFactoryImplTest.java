@@ -1,9 +1,8 @@
-package de.ollie.healthtracker.core.service;
+package de.ollie.healthtracker.core.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
-import de.ollie.healthtracker.core.service.UuidFactory;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,22 +10,22 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class UuidFactoryTest {
+class LocalDateFactoryImplTest {
 
 	@InjectMocks
-	private UuidFactory unitUnderTest;
+	private LocalDateFactoryImpl unitUnderTest;
 
 	@Nested
-	class create {
+	class now {
 
 		@Test
-		void returnsANewUuid() {
-			assertNotNull(unitUnderTest.create());
+		void returnsALocalDate() {
+			assertNotNull(unitUnderTest.now());
 		}
 
 		@Test
-		void returnsANewUuid_onEachCall() {
-			assertNotSame(unitUnderTest.create(), unitUnderTest.create());
+		void returnsANewLocalDateOnEachCall() {
+			assertNotSame(unitUnderTest.now(), unitUnderTest.now());
 		}
 	}
 }

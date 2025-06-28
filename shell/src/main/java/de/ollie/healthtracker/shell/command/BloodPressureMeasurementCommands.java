@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.shell.command;
 
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
+import de.ollie.healthtracker.core.service.LocalDateFactory;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.shell.handler.OutputHandler;
 import de.ollie.healthtracker.shell.mapper.BloodPressureMeasurementToStringMapper;
@@ -22,6 +23,7 @@ public class BloodPressureMeasurementCommands {
 
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final BloodPressureMeasurementToStringMapper bloodPressureMeasurementToStringMapper;
+	private final LocalDateFactory localDateFactory;
 	private final OutputHandler outputHandler;
 
 	@ShellMethod(value = "Adds a blood preasure measurement.", key = { "add-blood-pressure-measurement", "abpm" })
@@ -31,19 +33,19 @@ public class BloodPressureMeasurementCommands {
 		@ShellOption(help = "The pulse per minute value.", value = "ppm") int pulsePerMinute,
 		@ShellOption(help = "The status of the measurement.", value = "status") String statusStr,
 		@ShellOption(
-			help = "The date of measurement (DD.MM.JJJJ).",
-			value = "date",
-			defaultValue = "TODAY"
-		) String dateOfMeasurementStr,
-		@ShellOption(
 			help = "The time of measurement (HH:MM).",
 			value = "time",
 			defaultValue = "NOW"
-		) String timeOfMeasurementStr
+		) String timeOfMeasurementStr,
+		@ShellOption(
+			help = "The date of measurement (DD.MM.JJJJ).",
+			value = "date",
+			defaultValue = "TODAY"
+		) String dateOfMeasurementStr
 	) {
 		try {
 			BloodPressureMeasurementStatus status = BloodPressureMeasurementStatus.valueOf(statusStr);
-			LocalDate dateOfMeasurement = LocalDate.parse(dateOfMeasurementStr, DE_DATE_FORMAT);
+			LocalDate dateOfMeasurement = getDateFromParameter(dateOfMeasurementStr);
 			LocalTime timeOfMeasurement = LocalTime.parse(timeOfMeasurementStr, DE_TIME_FORMAT);
 			bloodPressureMeasurementService.createRecording(
 				sysMmHg,
@@ -57,6 +59,17 @@ public class BloodPressureMeasurementCommands {
 		} catch (Exception e) {
 			return Constants.ERROR + e.getMessage();
 		}
+	}
+
+	private LocalDate getDateFromParameter(String dateOfMeasurementStr) {
+		if (
+			(dateOfMeasurementStr == null) ||
+			"TODAY".equalsIgnoreCase(dateOfMeasurementStr) ||
+			"TD".equalsIgnoreCase(dateOfMeasurementStr)
+		) {
+			return localDateFactory.now();
+		}
+		return LocalDate.parse(dateOfMeasurementStr, DE_DATE_FORMAT);
 	}
 
 	@ShellMethod(value = "Lists blood preasure measurements.", key = { "list-blood-pressure-measurements", "lbpm" })

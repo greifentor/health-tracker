@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import de.ollie.healthtracker.core.service.UuidFactory;
-import de.ollie.healthtracker.persistence.jpa.DboFactory;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementStatusDbo;
 import java.time.LocalDate;

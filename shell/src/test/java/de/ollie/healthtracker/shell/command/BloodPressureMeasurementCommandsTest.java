@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
+import de.ollie.healthtracker.core.service.LocalDateFactory;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.shell.handler.OutputHandler;
@@ -18,6 +19,8 @@ import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -35,6 +38,9 @@ class BloodPressureMeasurementCommandsTest {
 	private static final int SYS_MM_HG = 120;
 	private static final LocalTime TIME_OF_RECORDING = LocalTime.of(8, 0);
 	private static final String TIME_OF_RECORDING_STR = "08:00";
+
+	@Mock
+	private LocalDateFactory localDateFactory;
 
 	@Mock
 	private OutputHandler outputHandler;
@@ -78,8 +84,8 @@ class BloodPressureMeasurementCommandsTest {
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
 				STATUS.name(),
-				DATE_OF_RECORDING_STR,
-				TIME_OF_RECORDING_STR
+				TIME_OF_RECORDING_STR,
+				DATE_OF_RECORDING_STR
 			);
 			// Check
 			assertEquals(Constants.ERROR + MESSAGE, returned);
@@ -105,8 +111,65 @@ class BloodPressureMeasurementCommandsTest {
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
 				STATUS.name(),
-				DATE_OF_RECORDING_STR,
-				TIME_OF_RECORDING_STR
+				TIME_OF_RECORDING_STR,
+				DATE_OF_RECORDING_STR
+			);
+			// Check
+			assertEquals(Constants.OK, returned);
+		}
+
+		@Test
+		void returnsOk_whenDateOfMeasurementNotSet() {
+			// Prepare
+			when(localDateFactory.now()).thenReturn(DATE_OF_RECORDING);
+			when(
+				bloodPressureMeasurementService.createRecording(
+					SYS_MM_HG,
+					PULSE_PER_MINUTE,
+					DIA_MM_HG,
+					STATUS,
+					DATE_OF_RECORDING,
+					TIME_OF_RECORDING
+				)
+			)
+				.thenReturn(bloodPressureMeasurement0);
+			// Run
+			String returned = unitUnderTest.add(
+				SYS_MM_HG,
+				PULSE_PER_MINUTE,
+				DIA_MM_HG,
+				STATUS.name(),
+				TIME_OF_RECORDING_STR,
+				null
+			);
+			// Check
+			assertEquals(Constants.OK, returned);
+		}
+
+		@ParameterizedTest
+		@CsvSource({ "Today", "today", "TODAY", "TD", "Td", "td" })
+		void returnsOk_whenDateOfMeasurementIsToday(String today) {
+			// Prepare
+			when(localDateFactory.now()).thenReturn(DATE_OF_RECORDING);
+			when(
+				bloodPressureMeasurementService.createRecording(
+					SYS_MM_HG,
+					PULSE_PER_MINUTE,
+					DIA_MM_HG,
+					STATUS,
+					DATE_OF_RECORDING,
+					TIME_OF_RECORDING
+				)
+			)
+				.thenReturn(bloodPressureMeasurement0);
+			// Run
+			String returned = unitUnderTest.add(
+				SYS_MM_HG,
+				PULSE_PER_MINUTE,
+				DIA_MM_HG,
+				STATUS.name(),
+				TIME_OF_RECORDING_STR,
+				today
 			);
 			// Check
 			assertEquals(Constants.OK, returned);
