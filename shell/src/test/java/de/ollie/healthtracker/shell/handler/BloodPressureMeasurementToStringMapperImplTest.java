@@ -44,7 +44,7 @@ class BloodPressureMeasurementToStringMapperImplTest {
 		@Test
 		void returnsACorrectString_passingABloodPressureMeasurementWithNoSetAttributes() {
 			// Prepare
-			String expected = "         -     -   0   0   0 -";
+			String expected = "         -     -   0   0   0 -     ";
 			// Run
 			String returned = unitUnderTest.map(bloodPressureMeasurement);
 			// Check

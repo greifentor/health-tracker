@@ -13,7 +13,7 @@ class BloodPressureMeasurementToStringMapperImpl implements BloodPressureMeasure
 
 	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 	private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("hh:mm");
-	private static final String LINE_FORMAT = "%10s %5s %3d %3d %3d %s";
+	private static final String LINE_FORMAT = "%10s %5s %3d %3d %3d %-6s";
 
 	@Override
 	public String map(BloodPressureMeasurement bloodPressureMeasurement) {

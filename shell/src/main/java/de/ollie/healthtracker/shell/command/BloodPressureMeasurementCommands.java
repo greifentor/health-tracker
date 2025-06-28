@@ -20,7 +20,7 @@ import org.springframework.shell.standard.ShellOption;
 public class BloodPressureMeasurementCommands {
 
 	private static final DateTimeFormatter DE_DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.GERMAN);
-	private static final DateTimeFormatter DE_TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm", Locale.GERMAN);
+	private static final DateTimeFormatter DE_TIME_FORMAT = DateTimeFormatter.ofPattern("hh:mm", Locale.GERMAN);
 
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final BloodPressureMeasurementToStringMapper bloodPressureMeasurementToStringMapper;
