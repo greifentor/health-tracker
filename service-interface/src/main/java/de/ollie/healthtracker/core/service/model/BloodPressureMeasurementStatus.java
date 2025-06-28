@@ -14,4 +14,13 @@ public enum BloodPressureMeasurementStatus {
 	private BloodPressureMeasurementStatus(int value) {
 		this.value = value;
 	}
+
+	public static BloodPressureMeasurementStatus ofValue(int value) {
+		for (BloodPressureMeasurementStatus status : BloodPressureMeasurementStatus.values()) {
+			if (status.getValue() == value) {
+				return status;
+			}
+		}
+		return null;
+	}
 }

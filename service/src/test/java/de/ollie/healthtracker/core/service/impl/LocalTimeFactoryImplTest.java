@@ -10,22 +10,22 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class UuidFactoryImplTest {
+class LocalTimeFactoryImplTest {
 
 	@InjectMocks
-	private UuidFactoryImpl unitUnderTest;
+	private LocalTimeFactoryImpl unitUnderTest;
 
 	@Nested
-	class create {
+	class now {
 
 		@Test
-		void returnsANewUuid() {
-			assertNotNull(unitUnderTest.create());
+		void returnsALocalDate() {
+			assertNotNull(unitUnderTest.now());
 		}
 
 		@Test
-		void returnsANewUuid_onEachCall() {
-			assertNotSame(unitUnderTest.create(), unitUnderTest.create());
+		void returnsANewLocalDateOnEachCall() {
+			assertNotSame(unitUnderTest.now(), unitUnderTest.now());
 		}
 	}
 }

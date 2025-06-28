@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.LocalDateFactory;
+import de.ollie.healthtracker.core.service.LocalTimeFactory;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.shell.handler.OutputHandler;
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -41,6 +43,9 @@ class BloodPressureMeasurementCommandsTest {
 
 	@Mock
 	private LocalDateFactory localDateFactory;
+
+	@Mock
+	private LocalTimeFactory localTimeFactory;
 
 	@Mock
 	private OutputHandler outputHandler;
@@ -170,6 +175,119 @@ class BloodPressureMeasurementCommandsTest {
 				STATUS.name(),
 				TIME_OF_RECORDING_STR,
 				today
+			);
+			// Check
+			assertEquals(Constants.OK, returned);
+		}
+
+		@Test
+		void returnsOk_whenTimeOfMeasurementNotSet() {
+			// Prepare
+			when(localTimeFactory.now()).thenReturn(TIME_OF_RECORDING);
+			when(
+				bloodPressureMeasurementService.createRecording(
+					SYS_MM_HG,
+					PULSE_PER_MINUTE,
+					DIA_MM_HG,
+					STATUS,
+					DATE_OF_RECORDING,
+					TIME_OF_RECORDING
+				)
+			)
+				.thenReturn(bloodPressureMeasurement0);
+			// Run
+			String returned = unitUnderTest.add(
+				SYS_MM_HG,
+				PULSE_PER_MINUTE,
+				DIA_MM_HG,
+				STATUS.name(),
+				null,
+				DATE_OF_RECORDING_STR
+			);
+			// Check
+			assertEquals(Constants.OK, returned);
+		}
+
+		@ParameterizedTest
+		@CsvSource({ "Now", "now", "NOW" })
+		void returnsOk_whenTimeOfMeasurementIsNow(String now) {
+			// Prepare
+			when(localTimeFactory.now()).thenReturn(TIME_OF_RECORDING);
+			when(
+				bloodPressureMeasurementService.createRecording(
+					SYS_MM_HG,
+					PULSE_PER_MINUTE,
+					DIA_MM_HG,
+					STATUS,
+					DATE_OF_RECORDING,
+					TIME_OF_RECORDING
+				)
+			)
+				.thenReturn(bloodPressureMeasurement0);
+			// Run
+			String returned = unitUnderTest.add(
+				SYS_MM_HG,
+				PULSE_PER_MINUTE,
+				DIA_MM_HG,
+				STATUS.name(),
+				now,
+				DATE_OF_RECORDING_STR
+			);
+			// Check
+			assertEquals(Constants.OK, returned);
+		}
+
+		@ParameterizedTest
+		@EnumSource(BloodPressureMeasurementStatus.class)
+		void returnsOk_whenNoErrorIsDetected_StatusNamePassed(BloodPressureMeasurementStatus status) {
+			// Prepare
+			when(
+				bloodPressureMeasurementService.createRecording(
+					SYS_MM_HG,
+					PULSE_PER_MINUTE,
+					DIA_MM_HG,
+					status,
+					DATE_OF_RECORDING,
+					TIME_OF_RECORDING
+				)
+			)
+				.thenReturn(bloodPressureMeasurement0);
+			// Run
+			String returned = unitUnderTest.add(
+				SYS_MM_HG,
+				PULSE_PER_MINUTE,
+				DIA_MM_HG,
+				status.name(),
+				TIME_OF_RECORDING_STR,
+				DATE_OF_RECORDING_STR
+			);
+			// Check
+			assertEquals(Constants.OK, returned);
+		}
+
+		@ParameterizedTest
+		@EnumSource(BloodPressureMeasurementStatus.class)
+		void returnsOk_whenNoErrorIsDetected_StatusNumberPassed(BloodPressureMeasurementStatus status) {
+			// Prepare
+			when(
+				bloodPressureMeasurementService.createRecording(
+					SYS_MM_HG,
+					PULSE_PER_MINUTE,
+					DIA_MM_HG,
+					status,
+					DATE_OF_RECORDING,
+					TIME_OF_RECORDING
+				)
+			)
+				.thenReturn(bloodPressureMeasurement0);
+			// Run
+			String returned = unitUnderTest.add(
+				SYS_MM_HG,
+				PULSE_PER_MINUTE,
+				DIA_MM_HG,
+				"" + status.getValue(),
+				TIME_OF_RECORDING_STR,
+				DATE_OF_RECORDING_STR
 			);
 			// Check
 			assertEquals(Constants.OK, returned);

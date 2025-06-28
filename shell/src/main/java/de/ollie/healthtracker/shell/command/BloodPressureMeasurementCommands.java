@@ -2,6 +2,7 @@ package de.ollie.healthtracker.shell.command;
 
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.LocalDateFactory;
+import de.ollie.healthtracker.core.service.LocalTimeFactory;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.shell.handler.OutputHandler;
 import de.ollie.healthtracker.shell.mapper.BloodPressureMeasurementToStringMapper;
@@ -24,6 +25,7 @@ public class BloodPressureMeasurementCommands {
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final BloodPressureMeasurementToStringMapper bloodPressureMeasurementToStringMapper;
 	private final LocalDateFactory localDateFactory;
+	private final LocalTimeFactory localTimeFactory;
 	private final OutputHandler outputHandler;
 
 	@ShellMethod(value = "Adds a blood preasure measurement.", key = { "add-blood-pressure-measurement", "abpm" })
@@ -33,20 +35,20 @@ public class BloodPressureMeasurementCommands {
 		@ShellOption(help = "The pulse per minute value.", value = "ppm") int pulsePerMinute,
 		@ShellOption(help = "The status of the measurement.", value = "status") String statusStr,
 		@ShellOption(
-			help = "The time of measurement (HH:MM).",
+			help = "The time of measurement (HH:MM or NOW).",
 			value = "time",
 			defaultValue = "NOW"
 		) String timeOfMeasurementStr,
 		@ShellOption(
-			help = "The date of measurement (DD.MM.JJJJ).",
+			help = "The date of measurement (DD.MM.JJJJ or TODAY or TD).",
 			value = "date",
 			defaultValue = "TODAY"
 		) String dateOfMeasurementStr
 	) {
 		try {
-			BloodPressureMeasurementStatus status = BloodPressureMeasurementStatus.valueOf(statusStr);
+			BloodPressureMeasurementStatus status = getStatusFromParameter(statusStr);
 			LocalDate dateOfMeasurement = getDateFromParameter(dateOfMeasurementStr);
-			LocalTime timeOfMeasurement = LocalTime.parse(timeOfMeasurementStr, DE_TIME_FORMAT);
+			LocalTime timeOfMeasurement = getTimeFromParameter(timeOfMeasurementStr);
 			bloodPressureMeasurementService.createRecording(
 				sysMmHg,
 				diaMmHg,
@@ -61,6 +63,14 @@ public class BloodPressureMeasurementCommands {
 		}
 	}
 
+	private BloodPressureMeasurementStatus getStatusFromParameter(String statusStr) {
+		try {
+			int value = Integer.parseInt(statusStr);
+			return BloodPressureMeasurementStatus.ofValue(value);
+		} catch (Exception e) {}
+		return BloodPressureMeasurementStatus.valueOf(statusStr);
+	}
+
 	private LocalDate getDateFromParameter(String dateOfMeasurementStr) {
 		if (
 			(dateOfMeasurementStr == null) ||
@@ -70,6 +80,13 @@ public class BloodPressureMeasurementCommands {
 			return localDateFactory.now();
 		}
 		return LocalDate.parse(dateOfMeasurementStr, DE_DATE_FORMAT);
+	}
+
+	private LocalTime getTimeFromParameter(String timeOfMeasurementStr) {
+		if ((timeOfMeasurementStr == null) || "NOW".equalsIgnoreCase(timeOfMeasurementStr)) {
+			return localTimeFactory.now();
+		}
+		return LocalTime.parse(timeOfMeasurementStr, DE_TIME_FORMAT);
 	}
 
 	@ShellMethod(value = "Lists blood preasure measurements.", key = { "list-blood-pressure-measurements", "lbpm" })
