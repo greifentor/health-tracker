@@ -7,6 +7,7 @@ import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +21,7 @@ class BloodPressureMeasurementToStringMapperImplTest {
 	private static final LocalDate DATE_OF_RECORDING = LocalDate.of(2025, 06, 25);
 	private static final String DATE_OF_RECORDING_STR = "25.06.2025";
 	private static final int DIA_MM_HG = 80;
+	private static final UUID ID = UUID.randomUUID();
 	private static final int PULSE_PER_MINUTE = 70;
 	private static final BloodPressureMeasurementStatus STATUS = BloodPressureMeasurementStatus.ORANGE;
 	private static final int SYS_MM_HG = 120;
@@ -33,6 +35,15 @@ class BloodPressureMeasurementToStringMapperImplTest {
 	private BloodPressureMeasurementToStringMapperImpl unitUnderTest;
 
 	@Nested
+	class getHeadLine {
+
+		@Test
+		void returnsTheCorrectHeadLine() {
+			assertEquals("Date       Time  SYS DIA  PP Status (ID)", unitUnderTest.getHeadLine());
+		}
+	}
+
+	@Nested
 	class map_BloodPressureMeasurement {
 
 		@Test
@@ -43,7 +54,7 @@ class BloodPressureMeasurementToStringMapperImplTest {
 		@Test
 		void returnsACorrectString_passingABloodPressureMeasurementWithNoSetAttributes() {
 			// Prepare
-			String expected = "         -     -   0   0   0 -     ";
+			String expected = "         -     -   0   0   0 -      (null)";
 			// Run
 			String returned = unitUnderTest.map(bloodPressureMeasurement);
 			// Check
@@ -64,10 +75,14 @@ class BloodPressureMeasurementToStringMapperImplTest {
 				"  " +
 				PULSE_PER_MINUTE +
 				" " +
-				STATUS.name();
+				STATUS.name() +
+				" (" +
+				ID +
+				")";
 			BloodPressureMeasurement bloodPressureMeasurement = new BloodPressureMeasurement()
 				.setDateOfRecording(DATE_OF_RECORDING)
 				.setDiaMmHg(DIA_MM_HG)
+				.setId(ID)
 				.setPulsePerMinute(PULSE_PER_MINUTE)
 				.setStatus(STATUS)
 				.setSysMmHg(SYS_MM_HG)

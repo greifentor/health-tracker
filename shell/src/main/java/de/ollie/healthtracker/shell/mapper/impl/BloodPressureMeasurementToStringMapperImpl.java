@@ -13,7 +13,12 @@ class BloodPressureMeasurementToStringMapperImpl implements BloodPressureMeasure
 
 	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 	private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
-	private static final String LINE_FORMAT = "%10s %5s %3d %3d %3d %-6s";
+	private static final String LINE_FORMAT = "%10s %5s %3d %3d %3d %-6s (%s)";
+
+	@Override
+	public String getHeadLine() {
+		return "Date       Time  SYS DIA  PP Status (ID)";
+	}
 
 	@Override
 	public String map(BloodPressureMeasurement bloodPressureMeasurement) {
@@ -26,7 +31,8 @@ class BloodPressureMeasurementToStringMapperImpl implements BloodPressureMeasure
 				bloodPressureMeasurement.getSysMmHg(),
 				bloodPressureMeasurement.getDiaMmHg(),
 				bloodPressureMeasurement.getPulsePerMinute(),
-				statusToString(bloodPressureMeasurement.getStatus())
+				statusToString(bloodPressureMeasurement.getStatus()),
+				bloodPressureMeasurement.getId()
 			);
 	}
 

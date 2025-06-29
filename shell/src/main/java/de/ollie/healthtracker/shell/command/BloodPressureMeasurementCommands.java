@@ -99,6 +99,7 @@ public class BloodPressureMeasurementCommands {
 	@ShellMethod(value = "Lists blood preasure measurements.", key = { "list-blood-pressure-measurements", "lbpm" })
 	public String list() {
 		try {
+			outputHandler.println(bloodPressureMeasurementToStringMapper.getHeadLine());
 			bloodPressureMeasurementService
 				.list()
 				.forEach(bpm -> outputHandler.println(bloodPressureMeasurementToStringMapper.map(bpm)));
