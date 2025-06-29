@@ -26,7 +26,7 @@ class BloodPressureMeasurementToStringMapperImpl implements BloodPressureMeasure
 				bloodPressureMeasurement.getSysMmHg(),
 				bloodPressureMeasurement.getDiaMmHg(),
 				bloodPressureMeasurement.getPulsePerMinute(),
-				statusToString(bloodPressureMeasurement.getState())
+				statusToString(bloodPressureMeasurement.getStatus())
 			);
 	}
 

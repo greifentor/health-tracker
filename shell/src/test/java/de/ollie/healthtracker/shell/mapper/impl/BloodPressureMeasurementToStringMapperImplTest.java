@@ -69,7 +69,7 @@ class BloodPressureMeasurementToStringMapperImplTest {
 				.setDateOfRecording(DATE_OF_RECORDING)
 				.setDiaMmHg(DIA_MM_HG)
 				.setPulsePerMinute(PULSE_PER_MINUTE)
-				.setState(STATUS)
+				.setStatus(STATUS)
 				.setSysMmHg(SYS_MM_HG)
 				.setTimeOfRecording(TIME_OF_RECORDING);
 			// Run

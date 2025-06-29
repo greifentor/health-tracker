@@ -14,5 +14,5 @@ public class BloodPressureMeasurement {
 	private int pulsePerMinute;
 	private int sysMmHg;
 	private LocalTime timeOfRecording;
-	private BloodPressureMeasurementStatus state;
+	private BloodPressureMeasurementStatus status;
 }
