@@ -1,4 +1,4 @@
-package de.ollie.healthtracker.shell.handler;
+package de.ollie.healthtracker.shell.mapper.impl;
 
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 class BloodPressureMeasurementToStringMapperImpl implements BloodPressureMeasurementToStringMapper {
 
 	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-	private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("hh:mm");
+	private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 	private static final String LINE_FORMAT = "%10s %5s %3d %3d %3d %-6s";
 
 	@Override

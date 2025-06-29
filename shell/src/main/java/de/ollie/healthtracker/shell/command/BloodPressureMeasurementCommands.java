@@ -9,6 +9,8 @@ import de.ollie.healthtracker.shell.mapper.BloodPressureMeasurementToStringMappe
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
@@ -20,7 +22,11 @@ import org.springframework.shell.standard.ShellOption;
 public class BloodPressureMeasurementCommands {
 
 	private static final DateTimeFormatter DE_DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.GERMAN);
-	private static final DateTimeFormatter DE_TIME_FORMAT = DateTimeFormatter.ofPattern("hh:mm", Locale.GERMAN);
+	private static final DateTimeFormatter DE_TIME_FORMAT = new DateTimeFormatterBuilder()
+		.appendValue(ChronoField.HOUR_OF_DAY, 1, 2, java.time.format.SignStyle.NOT_NEGATIVE)
+		.appendLiteral(':')
+		.appendValue(ChronoField.MINUTE_OF_HOUR, 2)
+		.toFormatter();
 
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final BloodPressureMeasurementToStringMapper bloodPressureMeasurementToStringMapper;
@@ -59,6 +65,7 @@ public class BloodPressureMeasurementCommands {
 			);
 			return Constants.OK;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return Constants.ERROR + e.getMessage();
 		}
 	}

@@ -39,7 +39,7 @@ class BloodPressureMeasurementCommandsTest {
 	private static final String STRING = "string";
 	private static final int SYS_MM_HG = 120;
 	private static final LocalTime TIME_OF_RECORDING = LocalTime.of(8, 0);
-	private static final String TIME_OF_RECORDING_STR = "08:00";
+	private static final String TIME_OF_RECORDING_STR = "8:00";
 
 	@Mock
 	private LocalDateFactory localDateFactory;
