@@ -7,12 +7,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
-import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
-import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
-import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementStatusDbo;
-import de.ollie.healthtracker.persistence.jpa.mapper.BloodPressureMeasurementDboMapper;
-import de.ollie.healthtracker.persistence.jpa.repository.BloodPressureMeasurementDboRepository;
+import de.ollie.healthtracker.core.service.model.Comment;
+import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
+import de.ollie.healthtracker.persistence.jpa.mapper.CommentDboMapper;
+import de.ollie.healthtracker.persistence.jpa.repository.CommentDboRepository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -25,63 +23,45 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class BloodPressureMeasurementPersistenceJpaAdapterTest {
+class CommentPersistenceJpaAdapterTest {
 
+	private static final String CONTENT = "content";
 	private static final LocalDate DATE_OF_RECORDING = LocalDate.of(2025, 6, 17);
-	private static final int DIA_MM_HG = 70;
 	private static final UUID ID = UUID.randomUUID();
-	private static final int PULSE_PER_MINUTE = 60;
-	private static final BloodPressureMeasurementStatus STATE = BloodPressureMeasurementStatus.GREEN;
-	private static final BloodPressureMeasurementStatusDbo STATE_DBO = BloodPressureMeasurementStatusDbo.GREEN;
-	private static final int SYS_MM_HG = 130;
 	private static final LocalTime TIME_OF_RECORDING = LocalTime.of(23, 31, 42);
 
 	@Mock
-	private BloodPressureMeasurement model;
+	private Comment model;
 
 	@Mock
-	private BloodPressureMeasurementDbo dbo;
+	private CommentDbo dbo;
 
 	@Mock
-	private BloodPressureMeasurementDbo dboSaved;
+	private CommentDbo dboSaved;
 
 	@Mock
 	private DboFactory dboFactory;
 
 	@Mock
-	private BloodPressureMeasurementDboMapper mapper;
+	private CommentDboMapper mapper;
 
 	@Mock
-	private BloodPressureMeasurementDboRepository repository;
+	private CommentDboRepository repository;
 
 	@InjectMocks
-	private BloodPressureMeasurementPersistenceJpaAdapter unitUnderTest;
+	private CommentPersistenceJpaAdapter unitUnderTest;
 
 	@Nested
-	class create_int_int_int_BloodPresureMeassurementStatus_LocalDate_LocalTime {
+	class create_String_LocalDate_LocalTime {
 
 		@Test
 		void returnsANewSavedObject() {
 			// Prepare
-			when(
-				dboFactory.createBloodPressureMeasurement(
-					SYS_MM_HG,
-					PULSE_PER_MINUTE,
-					DIA_MM_HG,
-					STATE_DBO,
-					DATE_OF_RECORDING,
-					TIME_OF_RECORDING
-				)
-			)
-				.thenReturn(dbo);
-			when(mapper.toDbo(STATE)).thenReturn(STATE_DBO);
+			when(dboFactory.createComment(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING)).thenReturn(dbo);
 			when(mapper.toModel(dboSaved)).thenReturn(model);
 			when(repository.save(dbo)).thenReturn(dboSaved);
 			// Run & Check
-			assertSame(
-				model,
-				unitUnderTest.create(SYS_MM_HG, PULSE_PER_MINUTE, DIA_MM_HG, STATE, DATE_OF_RECORDING, TIME_OF_RECORDING)
-			);
+			assertSame(model, unitUnderTest.create(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING));
 		}
 	}
 

@@ -33,7 +33,14 @@ class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeas
 	) {
 		return mapper.toModel(
 			repository.save(
-				dboFactory.create(sysMmHg, diaMmHg, pulsePerMinute, mapper.toDbo(status), dateOfRecording, timeOfRecording)
+				dboFactory.createBloodPressureMeasurement(
+					sysMmHg,
+					diaMmHg,
+					pulsePerMinute,
+					mapper.toDbo(status),
+					dateOfRecording,
+					timeOfRecording
+				)
 			)
 		);
 	}
