@@ -3,6 +3,7 @@ package de.ollie.healthtracker.shell.command;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,6 +18,7 @@ import de.ollie.healthtracker.shell.mapper.BloodPressureMeasurementToStringMappe
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +35,7 @@ class BloodPressureMeasurementCommandsTest {
 	private static final LocalDate DATE_OF_RECORDING = LocalDate.of(2025, 06, 25);
 	private static final String DATE_OF_RECORDING_STR = "25.06.2025";
 	private static final int DIA_MM_HG = 80;
+	private static final UUID ID = UUID.randomUUID();
 	private static final String MESSAGE = "message";
 	private static final int PULSE_PER_MINUTE = 70;
 	private static final BloodPressureMeasurementStatus STATUS = BloodPressureMeasurementStatus.ORANGE;
@@ -84,7 +87,7 @@ class BloodPressureMeasurementCommandsTest {
 			)
 				.thenThrow(exception);
 			// Run
-			String returned = unitUnderTest.add(
+			String returned = unitUnderTest.addBloodPressureMeasurement(
 				SYS_MM_HG,
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
@@ -111,7 +114,7 @@ class BloodPressureMeasurementCommandsTest {
 			)
 				.thenReturn(bloodPressureMeasurement0);
 			// Run
-			String returned = unitUnderTest.add(
+			String returned = unitUnderTest.addBloodPressureMeasurement(
 				SYS_MM_HG,
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
@@ -139,7 +142,7 @@ class BloodPressureMeasurementCommandsTest {
 			)
 				.thenReturn(bloodPressureMeasurement0);
 			// Run
-			String returned = unitUnderTest.add(
+			String returned = unitUnderTest.addBloodPressureMeasurement(
 				SYS_MM_HG,
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
@@ -168,7 +171,7 @@ class BloodPressureMeasurementCommandsTest {
 			)
 				.thenReturn(bloodPressureMeasurement0);
 			// Run
-			String returned = unitUnderTest.add(
+			String returned = unitUnderTest.addBloodPressureMeasurement(
 				SYS_MM_HG,
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
@@ -196,7 +199,7 @@ class BloodPressureMeasurementCommandsTest {
 			)
 				.thenReturn(bloodPressureMeasurement0);
 			// Run
-			String returned = unitUnderTest.add(
+			String returned = unitUnderTest.addBloodPressureMeasurement(
 				SYS_MM_HG,
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
@@ -225,7 +228,7 @@ class BloodPressureMeasurementCommandsTest {
 			)
 				.thenReturn(bloodPressureMeasurement0);
 			// Run
-			String returned = unitUnderTest.add(
+			String returned = unitUnderTest.addBloodPressureMeasurement(
 				SYS_MM_HG,
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
@@ -253,7 +256,7 @@ class BloodPressureMeasurementCommandsTest {
 			)
 				.thenReturn(bloodPressureMeasurement0);
 			// Run
-			String returned = unitUnderTest.add(
+			String returned = unitUnderTest.addBloodPressureMeasurement(
 				SYS_MM_HG,
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
@@ -281,7 +284,7 @@ class BloodPressureMeasurementCommandsTest {
 			)
 				.thenReturn(bloodPressureMeasurement0);
 			// Run
-			String returned = unitUnderTest.add(
+			String returned = unitUnderTest.addBloodPressureMeasurement(
 				SYS_MM_HG,
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
@@ -295,15 +298,15 @@ class BloodPressureMeasurementCommandsTest {
 	}
 
 	@Nested
-	class list {
+	class deleteById_UUID {
 
 		@Test
 		void returnsExceptionMessage_whenAnExceptionIsThrownWhileRunningServiceMethod() {
 			// Prepare
 			RuntimeException exception = new RuntimeException(MESSAGE);
-			when(bloodPressureMeasurementService.list()).thenThrow(exception);
+			doThrow(exception).when(bloodPressureMeasurementService).deleteRecording(ID);
 			// Run
-			String returned = unitUnderTest.list();
+			String returned = unitUnderTest.removeBloodPressureMeasurement(ID.toString());
 			// Check
 			assertEquals(Constants.ERROR + MESSAGE, returned);
 		}
@@ -311,7 +314,38 @@ class BloodPressureMeasurementCommandsTest {
 		@Test
 		void returnsOkWhenFinishedCorrectly() {
 			// Run
-			String returned = unitUnderTest.list();
+			String returned = unitUnderTest.removeBloodPressureMeasurement(ID.toString());
+			// Check
+			assertEquals(Constants.OK, returned);
+		}
+
+		@Test
+		void callsTheOutputHandlerForEachRecordReturnedByServiceMethodCall() {
+			// Run
+			unitUnderTest.removeBloodPressureMeasurement(ID.toString());
+			// Check
+			verify(bloodPressureMeasurementService, times(1)).deleteRecording(UUID.fromString(ID.toString()));
+		}
+	}
+
+	@Nested
+	class list {
+
+		@Test
+		void returnsExceptionMessage_whenAnExceptionIsThrownWhileRunningServiceMethod() {
+			// Prepare
+			RuntimeException exception = new RuntimeException(MESSAGE);
+			when(bloodPressureMeasurementService.listRecordings()).thenThrow(exception);
+			// Run
+			String returned = unitUnderTest.listBloodPressureMeasurements();
+			// Check
+			assertEquals(Constants.ERROR + MESSAGE, returned);
+		}
+
+		@Test
+		void returnsOkWhenFinishedCorrectly() {
+			// Run
+			String returned = unitUnderTest.listBloodPressureMeasurements();
 			// Check
 			assertEquals(Constants.OK, returned);
 		}
@@ -320,10 +354,10 @@ class BloodPressureMeasurementCommandsTest {
 		void callsTheOutputHandlerForEachRecordReturnedByServiceMethodCall() {
 			// Prepare
 			when(bloodPressureMeasurementToStringMapper.map(any(BloodPressureMeasurement.class))).thenReturn(STRING);
-			when(bloodPressureMeasurementService.list())
+			when(bloodPressureMeasurementService.listRecordings())
 				.thenReturn(List.of(bloodPressureMeasurement0, bloodPressureMeasurement1));
 			// Run
-			unitUnderTest.list();
+			unitUnderTest.listBloodPressureMeasurements();
 			// Check
 			verify(outputHandler, times(2)).println(anyString());
 		}
@@ -333,10 +367,10 @@ class BloodPressureMeasurementCommandsTest {
 			// Prepare
 			when(bloodPressureMeasurementToStringMapper.map(bloodPressureMeasurement0)).thenReturn(STRING);
 			when(bloodPressureMeasurementToStringMapper.map(bloodPressureMeasurement1)).thenReturn(STRING);
-			when(bloodPressureMeasurementService.list())
+			when(bloodPressureMeasurementService.listRecordings())
 				.thenReturn(List.of(bloodPressureMeasurement0, bloodPressureMeasurement1));
 			// Run
-			unitUnderTest.list();
+			unitUnderTest.listBloodPressureMeasurements();
 			// Check
 			verify(outputHandler, times(2)).println(anyString());
 		}

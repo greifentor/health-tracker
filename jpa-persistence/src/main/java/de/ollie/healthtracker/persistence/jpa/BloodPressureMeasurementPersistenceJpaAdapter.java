@@ -1,5 +1,7 @@
 package de.ollie.healthtracker.persistence.jpa;
 
+import static de.ollie.baselib.util.Check.ensure;
+
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.core.service.port.persistence.BloodPressureMeasurementPersistencePort;
@@ -9,6 +11,7 @@ import jakarta.inject.Named;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
 @Named
@@ -36,7 +39,13 @@ class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeas
 	}
 
 	@Override
+	public void deleteById(UUID id) {
+		ensure(id != null, "id cannot be null!");
+		repository.deleteById(id);
+	}
+
+	@Override
 	public List<BloodPressureMeasurement> list() {
-		return repository.findAll().stream().map(mapper::toModel).toList();
+		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
 }

@@ -5,6 +5,7 @@ import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 
 public interface BloodPressureMeasurementService {
 	BloodPressureMeasurement createRecording(
@@ -16,5 +17,7 @@ public interface BloodPressureMeasurementService {
 		LocalTime timeOfRecording
 	);
 
-	List<BloodPressureMeasurement> list();
+	void deleteRecording(UUID id);
+
+	List<BloodPressureMeasurement> listRecordings();
 }

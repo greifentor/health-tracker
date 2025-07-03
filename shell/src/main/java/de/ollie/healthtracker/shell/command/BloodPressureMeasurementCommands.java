@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.Locale;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -35,7 +36,7 @@ public class BloodPressureMeasurementCommands {
 	private final OutputHandler outputHandler;
 
 	@ShellMethod(value = "Adds a blood preasure measurement.", key = { "add-blood-pressure-measurement", "abpm" })
-	public String add(
+	public String addBloodPressureMeasurement(
 		@ShellOption(help = "The SYS mmHg value.", value = "sys") int sysMmHg,
 		@ShellOption(help = "The DIA mmHg value.", value = "dia") int diaMmHg,
 		@ShellOption(help = "The pulse per minute value.", value = "ppm") int pulsePerMinute,
@@ -97,12 +98,28 @@ public class BloodPressureMeasurementCommands {
 	}
 
 	@ShellMethod(value = "Lists blood preasure measurements.", key = { "list-blood-pressure-measurements", "lbpm" })
-	public String list() {
+	public String listBloodPressureMeasurements() {
 		try {
 			outputHandler.println(bloodPressureMeasurementToStringMapper.getHeadLine());
+			outputHandler.println(bloodPressureMeasurementToStringMapper.getUnderLine());
 			bloodPressureMeasurementService
-				.list()
+				.listRecordings()
 				.forEach(bpm -> outputHandler.println(bloodPressureMeasurementToStringMapper.map(bpm)));
+			return Constants.OK;
+		} catch (Exception e) {
+			return Constants.ERROR + e.getMessage();
+		}
+	}
+
+	@ShellMethod(
+		value = "Removes the blood preasure measurement with the passed id.",
+		key = { "remove-blood-pressure-measurement", "rbpm" }
+	)
+	public String removeBloodPressureMeasurement(
+		@ShellOption(help = "The id of the blood pressure measurement to remove.", value = "id") String id
+	) {
+		try {
+			bloodPressureMeasurementService.deleteRecording(UUID.fromString(id));
 			return Constants.OK;
 		} catch (Exception e) {
 			return Constants.ERROR + e.getMessage();

@@ -5,5 +5,7 @@ import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 public interface BloodPressureMeasurementToStringMapper {
 	String getHeadLine();
 
+	String getUnderLine();
+
 	String map(BloodPressureMeasurement bloodPressureMeasurement);
 }

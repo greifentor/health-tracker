@@ -8,6 +8,7 @@ import jakarta.inject.Named;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
 @Named
@@ -36,7 +37,12 @@ public class BloodPressureMeasurementServiceImpl implements BloodPressureMeasure
 	}
 
 	@Override
-	public List<BloodPressureMeasurement> list() {
+	public void deleteRecording(UUID id) {
+		bloodPressureMeasurementPersistencePort.deleteById(id);
+	}
+
+	@Override
+	public List<BloodPressureMeasurement> listRecordings() {
 		return bloodPressureMeasurementPersistencePort.list();
 	}
 }

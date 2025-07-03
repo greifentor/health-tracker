@@ -21,6 +21,11 @@ class BloodPressureMeasurementToStringMapperImpl implements BloodPressureMeasure
 	}
 
 	@Override
+	public String getUnderLine() {
+		return "--------------------------------------------------------------------------";
+	}
+
+	@Override
 	public String map(BloodPressureMeasurement bloodPressureMeasurement) {
 		return bloodPressureMeasurement == null
 			? null

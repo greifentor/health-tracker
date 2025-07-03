@@ -44,6 +44,18 @@ class BloodPressureMeasurementToStringMapperImplTest {
 	}
 
 	@Nested
+	class getUnderLine {
+
+		@Test
+		void returnsTheCorrectUnderLine() {
+			assertEquals(
+				"--------------------------------------------------------------------------",
+				unitUnderTest.getUnderLine()
+			);
+		}
+	}
+
+	@Nested
 	class map_BloodPressureMeasurement {
 
 		@Test

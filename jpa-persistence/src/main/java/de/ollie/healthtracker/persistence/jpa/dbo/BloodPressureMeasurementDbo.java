@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-@Entity(name = "BloodPressureMeasurement")
+@Entity(name = "BloodPressureMeasurementDbo")
 @Table(name = "BLOOD_PRESSURE_MEASUREMENT")
 public class BloodPressureMeasurementDbo {
 
