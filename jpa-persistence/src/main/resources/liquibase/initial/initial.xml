@@ -25,5 +25,21 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet author="dm-comp" id="Add-Table-COMMENT" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="COMMENT">
+            <column name="ID" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="DATE_OF_RECORDING" type="DATE">
+                <constraints nullable="true"/>
+            </column>
+            <column name="TIME_OF_RECORDING" type="TIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CONTENT" type="LONGVARCHAR">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
 
