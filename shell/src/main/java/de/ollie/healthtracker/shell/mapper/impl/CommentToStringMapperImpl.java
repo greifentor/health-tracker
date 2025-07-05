@@ -33,7 +33,7 @@ class CommentToStringMapperImpl implements CommentToStringMapper {
 				dateToString(comment.getDateOfRecording()),
 				timeToString(comment.getTimeOfRecording()),
 				comment.getId(),
-				comment.getContent()
+				(comment.getContent() == null ? "-" : comment.getContent())
 			);
 	}
 
