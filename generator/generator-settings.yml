@@ -1,7 +1,9 @@
 default-target-path: tmp
 properties:
-  - name: model-package
+  - name: core-model-package
     value: de.ollie.healthtracker.core.service.model
+  - name: core-port-persistence-package
+    value: de.ollie.healthtracker.core.service.port.persistence
   - name: jpa-entity-package
     value: de.ollie.healthtracker.persistence.jpa.dbo
   - name: jpa-mapper-package
@@ -11,16 +13,19 @@ properties:
 generators:
   - type: CLASS
     package: de.ollie.healthtracker.core.service.model
-#    path: velocity-template-processing-adapter/src/main/resources/templates
-#    template: Model.vc
     resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
     template: templates/core/Model.vc
     properties:
       - name: target-path
         value: service-interface/src/main/java
-# Settings to read from class path
-#    resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
-#    template: templates/Model.vc
+  - type: CLASS
+    package: de.ollie.healthtracker.core.service.port.persistence
+    target-file-name: ${UnitName}PersistencePort
+    path: generator
+    template: templates/core/PersistencePort.vc
+    properties:
+      - name: target-path
+        value: service-interface/src/main/java
   - type: CLASS
     package: de.ollie.healthtracker.persistence.jpa.dbo
     resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
@@ -39,9 +44,17 @@ generators:
         value: jpa-persistence/src/main/java
   - type: CLASS
     package: de.ollie.healthtracker.persistence.jpa.repository
-    resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
     target-file-name: ${UnitName}DboRepository
-    template: templates/persistence/jpa/DboRepository.vc
+    path: generator
+    template: templates/jpa/DboRepository.vc
+    properties:
+      - name: target-path
+        value: jpa-persistence/src/main/java
+  - type: CLASS
+    package: de.ollie.healthtracker.persistence.jpa
+    target-file-name: ${UnitName}PersistenceJpaAdapter
+    path: generator
+    template: templates/jpa/PersistenceAdapter.vc
     properties:
       - name: target-path
         value: jpa-persistence/src/main/java

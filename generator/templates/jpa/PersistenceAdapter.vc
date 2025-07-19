@@ -1,0 +1,47 @@
+package ${PackageName};
+
+import static de.ollie.baselib.util.Check.ensure;
+
+import ${Properties.get("core-model-package")}.${ClassName};
+import ${Properties.get("core-port-persistence-package")}.${ClassName}PersistencePort;
+import ${Properties.get("jpa-mapper-package")}.${ClassName}DboMapper;
+import ${Properties.get("jpa-repository-package")}.${ClassName}DboRepository;
+import jakarta.inject.Named;
+import java.util.List;
+import lombok.Generated;
+import lombok.RequiredArgsConstructor;
+
+#foreach($Import in $Imports)
+import ${Import};
+#end
+
+/**
+ * ${GeneratedCodeMarker}
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
+@Named
+@RequiredArgsConstructor
+class ${ClassName}PersistenceJpaAdapter implements ${ClassName}PersistencePort {
+
+	private final DboFactory dboFactory;
+	private final ${ClassName}DboMapper mapper;
+	private final ${ClassName}DboRepository repository;
+
+	@Override
+	public ${ClassName} create(#foreach($Attribute in $Attributes)#if(!${Attribute.hasPropertyWithValue("id", "true")})${Attribute.getTypeName()} ${Attribute.getName()}#if($foreach.hasNext), #end#end#end) {
+		return mapper.toModel(repository.save(dboFactory.create${ClassName}(#foreach($Attribute in $Attributes)#if(!${Attribute.hasPropertyWithValue("id", "true")})${Attribute.getName()}#if($foreach.hasNext), #end#end#end)));
+	}
+
+	@Override
+	public void deleteById(${Class.getAttributeTypeNameByPropertyName("id")} id) {
+		ensure(id != null, "id cannot be null!");
+		repository.deleteById(id);
+	}
+
+	@Override
+	public List<${ClassName}> list() {
+		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
+	}
+}

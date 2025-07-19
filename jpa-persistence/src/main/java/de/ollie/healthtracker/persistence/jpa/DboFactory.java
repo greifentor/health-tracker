@@ -6,6 +6,7 @@ import de.ollie.healthtracker.core.service.UuidFactory;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementStatusDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
 import jakarta.inject.Named;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -51,5 +52,11 @@ class DboFactory {
 			.setDateOfRecording(dateOfRecording)
 			.setId(uuidFactory.create())
 			.setTimeOfRecording(timeOfRecording);
+	}
+
+	DoctorTypeDbo createDoctorType(String name) {
+		ensure(name != null, "name be null!");
+		ensure(!name.isBlank(), "name be blank!");
+		return new DoctorTypeDbo().setName(name);
 	}
 }

@@ -1,0 +1,22 @@
+package ${PackageName};
+
+import ${Properties.get("jpa-entity-package")}.${ClassName}Dbo;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+
+#foreach($Import in $Imports)
+import ${Import};
+#end
+
+/**
+ * ${GeneratedCodeMarker}
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Repository
+public interface ${ClassName}DboRepository extends JpaRepository<${ClassName}Dbo, ${Class.getAttributeTypeNameByPropertyName("id")}> {
+	@Query("SELECT c FROM ${ClassName}Dbo c")
+	List<${ClassName}Dbo> findAllOrdered();
+}
