@@ -1,0 +1,27 @@
+classes:
+  - class:
+      name: DoctorType
+      attributes:
+        - attribute:
+            name: id
+            properties:
+              - property:
+                  name: nullable
+                  value: false
+              - property:
+                  name: id
+                  value: true
+            type:
+              name: UUID
+              properties:
+                - property:
+                    name: import
+                    value: java.util.UUID
+        - attribute:
+            name: name
+            properties:
+              - property:
+                  name: nullable
+                  value: false
+            type:
+              name: String
