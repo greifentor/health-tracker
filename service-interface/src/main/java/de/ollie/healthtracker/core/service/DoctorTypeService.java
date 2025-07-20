@@ -1,7 +1,6 @@
-package de.ollie.healthtracker.core.service.port.persistence;
+package de.ollie.healthtracker.core.service;
 
 import de.ollie.healthtracker.core.service.model.DoctorType;
-import jakarta.inject.Named;
 import java.util.List;
 import java.util.UUID;
 import lombok.Generated;
@@ -12,11 +11,10 @@ import lombok.Generated;
  * Remove this comment to suspend class from generation process.
  */
 @Generated
-@Named
-public interface DoctorTypePersistencePort {
-	DoctorType create(String name);
+public interface DoctorTypeService {
+	DoctorType createDoctorType(String name);
 
-	void deleteById(UUID id);
+	void deleteDoctorType(UUID id);
 
-	List<DoctorType> list();
+	List<DoctorType> listDoctorTypes();
 }

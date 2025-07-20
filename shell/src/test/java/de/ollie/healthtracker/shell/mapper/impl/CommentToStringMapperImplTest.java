@@ -25,7 +25,7 @@ class CommentToStringMapperImplTest {
 	private static final String TIME_OF_RECORDING_STR = "08:00";
 
 	@Mock
-	private Comment bloodPressureMeasurement;
+	private Comment comment;
 
 	@InjectMocks
 	private CommentToStringMapperImpl unitUnderTest;
@@ -52,7 +52,7 @@ class CommentToStringMapperImplTest {
 	}
 
 	@Nested
-	class map_BloodPressureMeasurement {
+	class map_Comment {
 
 		@Test
 		void returnsANullValue_passingANullValue() {
@@ -60,26 +60,27 @@ class CommentToStringMapperImplTest {
 		}
 
 		@Test
-		void returnsACorrectString_passingABloodPressureMeasurementWithNoSetAttributes() {
+		void returnsACorrectString_passingACommentWithNoSetAttributes() {
 			// Prepare
 			String expected = "         -     - (                                null) -";
 			// Run
-			String returned = unitUnderTest.map(bloodPressureMeasurement);
+			String returned = unitUnderTest.map(comment);
 			// Check
 			assertEquals(expected, returned);
 		}
 
 		@Test
-		void returnsACorrectString_passingABloodPressureMeasurementWithAllSetAttributes() {
+		void returnsACorrectString_passingACommentWithAllSetAttributes() {
 			// Prepare
 			String expected = DATE_OF_RECORDING_STR + " " + TIME_OF_RECORDING_STR + " (" + ID + ") " + CONTENT;
-			Comment bloodPressureMeasurement = new Comment()
-				.setContent(CONTENT)
-				.setDateOfRecording(DATE_OF_RECORDING)
-				.setId(ID)
-				.setTimeOfRecording(TIME_OF_RECORDING);
+			comment =
+				new Comment()
+					.setContent(CONTENT)
+					.setDateOfRecording(DATE_OF_RECORDING)
+					.setId(ID)
+					.setTimeOfRecording(TIME_OF_RECORDING);
 			// Run
-			String returned = unitUnderTest.map(bloodPressureMeasurement);
+			String returned = unitUnderTest.map(comment);
 			// Check
 			assertEquals(expected, returned);
 		}

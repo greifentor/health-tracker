@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @Data
 @Generated
 @Entity(name = "DoctorTypeDbo")
-@Table(name = "DOCTORTYPE")
+@Table(name = "DOCTOR_TYPE")
 public class DoctorTypeDbo {
 
 	@Id

@@ -41,5 +41,15 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet author="dm-comp" id="Add-Table-DOCTOR_TYPE" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="DOCTOR_TYPE">
+            <column name="ID" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
 

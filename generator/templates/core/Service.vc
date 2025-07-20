@@ -1,0 +1,24 @@
+package ${PackageName};
+
+import ${Properties.get("core-model-package")}.${ClassName};
+import java.util.List;
+import lombok.Generated;
+
+#foreach($Import in $Imports)
+import ${Import};
+#end
+
+/**
+ * ${GeneratedCodeMarker}
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
+public interface ${ClassName}Service {
+
+	${ClassName} create${ClassName}(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})${Attribute.getTypeName()} ${Attribute.getName()}#if($foreach.hasNext), #end#end);
+
+	void delete${ClassName}(${Class.getAttributeTypeNameByPropertyName("id")} id);
+
+	List<${ClassName}> list${ClassName}s();
+}

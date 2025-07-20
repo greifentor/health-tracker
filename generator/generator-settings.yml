@@ -4,13 +4,18 @@ properties:
     value: de.ollie.healthtracker.core.service.model
   - name: core-port-persistence-package
     value: de.ollie.healthtracker.core.service.port.persistence
+  - name: core-service-package
+    value: de.ollie.healthtracker.core.service
   - name: jpa-entity-package
     value: de.ollie.healthtracker.persistence.jpa.dbo
   - name: jpa-mapper-package
     value: de.ollie.healthtracker.persistence.jpa.mapper
   - name: jpa-repository-package
     value: de.ollie.healthtracker.persistence.jpa.repository
+  - name: shell-mapper-package
+    value: de.ollie.healthtracker.shell.mapper
 generators:
+# --- Service ---
   - type: CLASS
     package: de.ollie.healthtracker.core.service.model
     resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
@@ -27,6 +32,22 @@ generators:
       - name: target-path
         value: service-interface/src/main/java
   - type: CLASS
+    package: de.ollie.healthtracker.core.service
+    target-file-name: ${UnitName}Service
+    path: generator
+    template: templates/core/Service.vc
+    properties:
+      - name: target-path
+        value: service-interface/src/main/java
+  - type: CLASS
+    package: de.ollie.healthtracker.core.service.impl
+    target-file-name: ${UnitName}ServiceImpl
+    path: generator
+    template: templates/core/ServiceImpl.vc
+    properties:
+      - name: target-path
+        value: service/src/main/java
+  - type: CLASS
     package: de.ollie.healthtracker.persistence.jpa.dbo
     resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
     target-file-name: ${UnitName}Dbo
@@ -42,6 +63,7 @@ generators:
     properties:
       - name: target-path
         value: jpa-persistence/src/main/java
+# --- JPA ---
   - type: CLASS
     package: de.ollie.healthtracker.persistence.jpa.repository
     target-file-name: ${UnitName}DboRepository
@@ -58,3 +80,21 @@ generators:
     properties:
       - name: target-path
         value: jpa-persistence/src/main/java
+# --- Shell ---
+  - type: CLASS
+    package: de.ollie.healthtracker.shell.mapper.impl
+    target-file-name: ${UnitName}ToStringMapperImpl
+    path: generator
+    template: templates/shell/ToStringMapperImpl.vc
+    properties:
+      - name: target-path
+        value: shell/src/main/java
+  - type: CLASS
+    package: de.ollie.healthtracker.shell.mapper
+    target-file-name: ${UnitName}ToStringMapper
+    path: generator
+    template: templates/shell/ToStringMapper.vc
+    properties:
+      - name: target-path
+        value: shell/src/main/java
+

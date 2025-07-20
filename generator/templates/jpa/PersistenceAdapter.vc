@@ -30,8 +30,8 @@ class ${ClassName}PersistenceJpaAdapter implements ${ClassName}PersistencePort {
 	private final ${ClassName}DboRepository repository;
 
 	@Override
-	public ${ClassName} create(#foreach($Attribute in $Attributes)#if(!${Attribute.hasPropertyWithValue("id", "true")})${Attribute.getTypeName()} ${Attribute.getName()}#if($foreach.hasNext), #end#end#end) {
-		return mapper.toModel(repository.save(dboFactory.create${ClassName}(#foreach($Attribute in $Attributes)#if(!${Attribute.hasPropertyWithValue("id", "true")})${Attribute.getName()}#if($foreach.hasNext), #end#end#end)));
+	public ${ClassName} create(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})${Attribute.getTypeName()} ${Attribute.getName()}#if($foreach.hasNext), #end#end) {
+		return mapper.toModel(repository.save(dboFactory.create${ClassName}(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})${Attribute.getName()}#if($foreach.hasNext), #end#end)));
 	}
 
 	@Override

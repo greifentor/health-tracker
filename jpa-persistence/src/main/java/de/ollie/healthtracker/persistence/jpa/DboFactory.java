@@ -57,6 +57,6 @@ class DboFactory {
 	DoctorTypeDbo createDoctorType(String name) {
 		ensure(name != null, "name be null!");
 		ensure(!name.isBlank(), "name be blank!");
-		return new DoctorTypeDbo().setName(name);
+		return new DoctorTypeDbo().setId(uuidFactory.create()).setName(name);
 	}
 }
