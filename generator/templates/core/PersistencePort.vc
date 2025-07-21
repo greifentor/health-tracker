@@ -1,6 +1,11 @@
 package ${PackageName};
 
 import ${Properties.get("core-model-package")}.${ClassName};
+#foreach($Attribute in $Attributes)
+#if (${Attribute.hasPropertyWithValue("reference", "true")})
+import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
+#end
+#end
 import jakarta.inject.Named;
 import java.util.List;
 import lombok.Generated;

@@ -2,6 +2,11 @@ package ${PackageName};
 
 import ${Properties.get("core-service-package")}.${ClassName}Service;
 import ${Properties.get("core-model-package")}.${ClassName};
+#foreach($Attribute in $Attributes)
+#if (${Attribute.hasPropertyWithValue("reference", "true")})
+import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
+#end
+#end
 import ${Properties.get("core-port-persistence-package")}.${ClassName}PersistencePort;
 import jakarta.inject.Named;
 import java.util.List;

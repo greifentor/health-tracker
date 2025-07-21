@@ -3,6 +3,11 @@ package ${PackageName};
 import static de.ollie.baselib.util.Check.ensure;
 
 import ${Properties.get("core-model-package")}.${ClassName};
+#foreach($Attribute in $Attributes)
+#if (${Attribute.hasPropertyWithValue("reference", "true")})
+import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
+#end
+#end
 import ${Properties.get("core-port-persistence-package")}.${ClassName}PersistencePort;
 import ${Properties.get("jpa-mapper-package")}.${ClassName}DboMapper;
 import ${Properties.get("jpa-repository-package")}.${ClassName}DboRepository;
