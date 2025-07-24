@@ -53,12 +53,10 @@ classes:
               name: String
         - attribute:
             name: doctorType
+            reference: true
             properties:
               - property:
                   name: nullable
                   value: false
-              - property:
-                  name: reference
-                  value: true
             type:
               name: DoctorType
