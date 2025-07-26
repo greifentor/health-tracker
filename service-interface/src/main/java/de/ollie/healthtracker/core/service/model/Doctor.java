@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
  */
 @Accessors(chain = true)
 @Data
+@Generated
 public class Doctor {
 
 	private UUID id;

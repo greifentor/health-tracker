@@ -3,7 +3,7 @@ package ${PackageName};
 import ${Properties.get("core-service-package")}.${ClassName}Service;
 import ${Properties.get("core-model-package")}.${ClassName};
 #foreach($Attribute in $Attributes)
-#if (${Attribute.hasPropertyWithValue("reference", "true")})
+#if (${Attribute.isReference()})
 import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
 #end
 #end
