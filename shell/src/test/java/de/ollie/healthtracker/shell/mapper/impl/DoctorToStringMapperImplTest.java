@@ -3,6 +3,7 @@ package de.ollie.healthtracker.shell.mapper.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import de.ollie.healthtracker.core.service.model.Doctor;
 import de.ollie.healthtracker.core.service.model.DoctorType;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
@@ -13,23 +14,30 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class DoctorTypeToStringMapperImplTest {
+class DoctorToStringMapperImplTest {
 
 	private static final String NAME = "name";
 	private static final UUID ID = UUID.randomUUID();
+	private static final String TYPE_NAME = "type-name";
+
+	@Mock
+	private Doctor doctor;
 
 	@Mock
 	private DoctorType doctorType;
 
 	@InjectMocks
-	private DoctorTypeToStringMapperImpl unitUnderTest;
+	private DoctorToStringMapperImpl unitUnderTest;
 
 	@Nested
 	class getHeadLine {
 
 		@Test
 		void returnsTheCorrectHeadLine() {
-			assertEquals("(ID)                                   Name", unitUnderTest.getHeadLine());
+			assertEquals(
+				"(ID)                                   Name                           Typ",
+				unitUnderTest.getHeadLine()
+			);
 		}
 	}
 
@@ -39,7 +47,7 @@ class DoctorTypeToStringMapperImplTest {
 		@Test
 		void returnsTheCorrectUnderLine() {
 			assertEquals(
-				"-----------------------------------------------------------------------------------",
+				"-------------------------------------------------------------------------------------------------------",
 				unitUnderTest.getUnderLine()
 			);
 		}
@@ -54,11 +62,11 @@ class DoctorTypeToStringMapperImplTest {
 		}
 
 		@Test
-		void returnsACorrectString_passingDoctorTypeWithNoSetAttributes() {
+		void returnsACorrectString_passingDoctorWithNoSetAttributes() {
 			// Prepare
-			String expected = "(                                null) -";
+			String expected = "(                                null) null                           -";
 			// Run
-			String returned = unitUnderTest.map(doctorType);
+			String returned = unitUnderTest.map(doctor);
 			// Check
 			assertEquals(expected, returned);
 		}
@@ -66,10 +74,11 @@ class DoctorTypeToStringMapperImplTest {
 		@Test
 		void returnsACorrectString_passingADoctorTypeWithAllSetAttributes() {
 			// Prepare
-			String expected = "(" + ID + ") " + NAME;
-			doctorType = new DoctorType().setId(ID).setName(NAME);
+			String expected = "(" + ID + ") " + NAME + "                           " + TYPE_NAME;
+			doctorType = new DoctorType().setName(TYPE_NAME);
+			doctor = new Doctor().setId(ID).setName(NAME).setDoctorType(doctorType);
 			// Run
-			String returned = unitUnderTest.map(doctorType);
+			String returned = unitUnderTest.map(doctor);
 			// Check
 			assertEquals(expected, returned);
 		}

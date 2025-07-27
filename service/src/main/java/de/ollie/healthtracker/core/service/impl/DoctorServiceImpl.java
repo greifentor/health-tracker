@@ -18,20 +18,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DoctorServiceImpl implements DoctorService {
 
-	private final DoctorPersistencePort DoctorPersistencePort;
+	private final DoctorPersistencePort doctorPersistencePort;
 
 	@Override
 	public Doctor createDoctor(String name, DoctorType doctorType) {
-		return DoctorPersistencePort.create(name, doctorType);
+		return doctorPersistencePort.create(name, doctorType);
 	}
 
 	@Override
 	public void deleteDoctor(UUID id) {
-		DoctorPersistencePort.deleteById(id);
+		doctorPersistencePort.deleteById(id);
 	}
 
 	@Override
 	public List<Doctor> listDoctors() {
-		return DoctorPersistencePort.list();
+		return doctorPersistencePort.list();
 	}
 }

@@ -11,4 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface DoctorTypeDboRepository extends JpaRepository<DoctorTypeDbo, UUID> {
 	@Query("SELECT c FROM DoctorTypeDbo c ORDER BY c.name")
 	List<DoctorTypeDbo> findAllOrdered();
+
+	@Query("SELECT c FROM DoctorTypeDbo c WHERE c.name LIKE CONCAT('%', :name, '%')")
+	List<DoctorTypeDbo> findAllByNameMatch(String name);
 }

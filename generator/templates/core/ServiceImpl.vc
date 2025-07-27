@@ -25,20 +25,20 @@ import ${Import};
 @RequiredArgsConstructor
 public class ${ClassName}ServiceImpl implements ${ClassName}Service {
 
-	private final ${ClassName}PersistencePort ${ClassName}PersistencePort;
+	private final ${ClassName}PersistencePort ${ClassNameAsAttribute}PersistencePort;
 
 	@Override
 	public ${ClassName} create${ClassName}(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})${Attribute.getTypeName()} ${Attribute.getName()}#if($foreach.hasNext), #end#end) {
-		return ${ClassName}PersistencePort.create(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})${Attribute.getName()}#if($foreach.hasNext), #end#end);
+		return ${ClassNameAsAttribute}PersistencePort.create(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})${Attribute.getName()}#if($foreach.hasNext), #end#end);
 	}
 
 	@Override
 	public void delete${ClassName}(UUID id) {
-		${ClassName}PersistencePort.deleteById(id);
+		${ClassNameAsAttribute}PersistencePort.deleteById(id);
 	}
 
 	@Override
 	public List<${ClassName}> list${ClassName}s() {
-		return ${ClassName}PersistencePort.list();
+		return ${ClassNameAsAttribute}PersistencePort.list();
 	}
 }

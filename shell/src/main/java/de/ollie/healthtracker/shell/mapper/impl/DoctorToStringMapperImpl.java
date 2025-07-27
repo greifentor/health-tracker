@@ -7,20 +7,27 @@ import jakarta.inject.Named;
 @Named
 class DoctorToStringMapperImpl implements DoctorToStringMapper {
 
-	private static final String LINE_FORMAT = "(%36s) %s";
+	private static final String LINE_FORMAT = "(%36s) %-30s %s";
 
 	@Override
 	public String getHeadLine() {
-		return "(ID)                                   Content";
+		return "(ID)                                   Name                           Typ";
 	}
 
 	@Override
 	public String getUnderLine() {
-		return "-----------------------------------------------------------------------------------";
+		return "-------------------------------------------------------------------------------------------------------";
 	}
 
 	@Override
 	public String map(Doctor model) {
-		return model == null ? null : String.format(LINE_FORMAT, model.getId(), model.toString());
+		return model == null
+			? null
+			: String.format(
+				LINE_FORMAT,
+				model.getId(),
+				model.getName(),
+				(model.getDoctorType() != null ? model.getDoctorType().getName() : "-")
+			);
 	}
 }

@@ -29,7 +29,7 @@
     <ComplexIndices />
     <DataSources>
         <Import dbName="IMPORT" description="no description" domains="false" driver="IMPORT" name="unknown" references="false" user="usr" />
-        <DatabaseConnection dbExecMode="MYSQL" driver="com.mysql.jdbc.Driver" name="Healthtracker (mySQL)" quote="" setDomains="false" setNotNull="true" setReferences="true" url="jdbc:mysql://localhost/healthtracker" userName="healthtracker" />
+        <DatabaseConnection dbExecMode="MYSQL" driver="org.mariadb.jdbc.Driver" name="Healthtracker (mariadb)" quote="" setDomains="false" setNotNull="true" setReferences="true" url="jdbc:mariadb://localhost:3306/healthtracker" userName="healthtracker" />
     </DataSources>
     <Domains>
         <Domain comment="" dataType="12" decimalPlace="0" history="" initialValue="NULL" length="10" name="BloodPressureMeasurementStatus" parameters="" type="varchar(10)" />
@@ -43,7 +43,9 @@
         <Domain comment="" dataType="12" decimalPlace="0" history="" initialValue="NULL" length="5" name="Token" parameters="" type="varchar(5)" />
         <Domain comment="" dataType="12" decimalPlace="0" history="" initialValue="NULL" length="40" name="UUID" parameters="" type="varchar(40)" />
     </Domains>
-    <Options />
+    <Options>
+        <Option name="SCHEMA_NAME" parameter="healthtracker" />
+    </Options>
     <Parameters additionalDiagramInfo="" additionalSQLScriptListener="" applicationName="" author="" basePackageName="" codeBasePath="" codeFactoryClassName="" comment="" dbVersionColumnDescriptionName="" dbVersionColumnVersionName="" dbVersionTableName="" deprecatedTablesHidden="false" disableTechnicalFields="false" disableTransientFields="false" domainShowMode="ALL" fontSizeDiagramHeadlines="24" fontSizeDiagramSubtitles="12" fontSizeTableContents="12" history="" markUpRequiredFieldNames="false" modelCheckerScript="" name="DIAGRAMMNAME" owner="" relationColorExternalTables="schwarz" relationColorRegular="schwarz" schemeName="" scriptAfterWrite="" showReferencedColumns="true" uscheptiClassName="" version="1" versionComment="" versionDate="04.07.2025" />
     <Sequences />
     <Stereotypes />

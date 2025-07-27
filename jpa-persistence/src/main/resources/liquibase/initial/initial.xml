@@ -44,12 +44,49 @@
     <changeSet author="dm-comp" id="Add-Table-DOCTOR_TYPE" objectQuotingStrategy="LEGACY" runOnChange="true">
         <createTable tableName="DOCTOR_TYPE">
             <column name="ID" type="UUID">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints nullable="false"/>
             </column>
             <column name="NAME" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <addPrimaryKey columnNames="ID" tableName="DOCTOR_TYPE"/>
+    </changeSet>
+    <changeSet author="dm-comp" id="Add-Table-DOCTOR" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="DOCTOR">
+            <column name="ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DOCTOR_TYPE" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="DOCTOR"/>
+        <addForeignKeyConstraint baseColumnNames="DOCTOR_TYPE" baseTableName="DOCTOR" constraintName="FK_DOCTOR_DOCTOR_TYPE_TO_DOCTOR_TYPE" referencedColumnNames="ID" referencedTableName="DOCTOR_TYPE"/>
+    </changeSet>
+    <changeSet author="dm-comp" id="Add-Table-DOCTORCONSULTATION" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="DOCTOR_CONSULTATION">
+            <column name="DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TIME" type="TIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="REASON" type="LONGVARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DOCTOR" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="DOCTOR_CONSULTATION"/>
+        <addForeignKeyConstraint baseColumnNames="DOCTOR" baseTableName="DOCTOR_CONSULTATION" constraintName="FK_DOCTOR_CONSULTATION_DOCTOR_TO_DOCTOR" referencedColumnNames="ID" referencedTableName="DOCTOR"/>
     </changeSet>
 </databaseChangeLog>
 

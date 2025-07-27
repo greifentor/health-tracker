@@ -11,7 +11,7 @@ class DoctorTypeToStringMapperImpl implements DoctorTypeToStringMapper {
 
 	@Override
 	public String getHeadLine() {
-		return "(ID)                                   Content";
+		return "(ID)                                   Name";
 	}
 
 	@Override
