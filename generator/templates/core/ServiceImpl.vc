@@ -23,7 +23,7 @@ import ${Import};
  */
 @Named
 @RequiredArgsConstructor
-public class ${ClassName}ServiceImpl implements ${ClassName}Service {
+class ${ClassName}ServiceImpl implements ${ClassName}Service {
 
 	private final ${ClassName}PersistencePort ${ClassNameAsAttribute}PersistencePort;
 

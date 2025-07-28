@@ -2,17 +2,24 @@ package ${PackageName};
 
 import static de.ollie.baselib.util.Check.ensure;
 
+import ${Properties.get("core-exception-package")}.TooManyElementsException;
 import ${Properties.get("core-model-package")}.${ClassName};
 #foreach($Attribute in $Attributes)
-#if (${Attribute.hasPropertyWithValue("reference", "true")})
+#if (${Attribute.isReference()})
 import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
 #end
+#end
+#if (!$Class.getAttributesWithPropertySet("findable").isEmpty())
+import ${Properties.get("jpa-entity-package")}.${ClassName}Dbo;
 #end
 import ${Properties.get("core-port-persistence-package")}.${ClassName}PersistencePort;
 import ${Properties.get("jpa-mapper-package")}.${ClassName}DboMapper;
 import ${Properties.get("jpa-repository-package")}.${ClassName}DboRepository;
 import jakarta.inject.Named;
 import java.util.List;
+#if (!$Class.getAttributesWithPropertySet("findable").isEmpty())
+import java.util.Optional;
+#end
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +43,7 @@ class ${ClassName}PersistenceJpaAdapter implements ${ClassName}PersistencePort {
 
 	@Override
 	public ${ClassName} create(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})${Attribute.getTypeName()} ${Attribute.getName()}#if($foreach.hasNext), #end#end) {
-		return mapper.toModel(repository.save(dboFactory.create${ClassName}(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})${Attribute.getName()}#if($foreach.hasNext), #end#end)));
+		return mapper.toModel(repository.save(dboFactory.create${ClassName}(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})${Attribute.getName()}#if($Attribute.isReference()).get${Attribute.getTypeClassType().getAttributeNameByTypePropertyNameCamelCase("id")}()#end#if($foreach.hasNext), #end#end)));
 	}
 
 	@Override
@@ -44,6 +51,31 @@ class ${ClassName}PersistenceJpaAdapter implements ${ClassName}PersistencePort {
 		ensure(id != null, "id cannot be null!");
 		repository.deleteById(id);
 	}
+#foreach($Attribute in ${Class.getAttributesWithPropertySet("findable")})
+
+	@Override
+	public Optional<${ClassName}> findByIdOr${Attribute.getNameCamelCase()}Particle(String nameParticleOrId) {
+		ensure(nameParticleOrId != null, "name particle or id cannot be null");
+		Optional<${ClassName}Dbo> dbo = Optional.empty();
+		try {
+			UUID uuid = UUID.fromString(nameParticleOrId);
+			dbo = repository.findById(uuid);
+		} catch (Exception e) {
+			// NOP
+		}
+		return Optional.ofNullable(
+			mapper.toModel(
+				dbo.orElseGet(() -> {
+					List<${ClassName}Dbo> found = repository.findAllBy${Attribute.getNameCamelCase()}Match(nameParticleOrId);
+					if (found.size() < 2) {
+						return found.size() == 0 ? null : found.get(0);
+					}
+					throw new TooManyElementsException();
+				})
+			)
+		);
+	}
+#end
 
 	@Override
 	public List<${ClassName}> list() {

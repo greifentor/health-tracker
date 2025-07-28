@@ -3,11 +3,11 @@ package de.ollie.healthtracker.persistence.jpa;
 import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
-import de.ollie.healthtracker.core.service.model.DoctorType;
-import de.ollie.healthtracker.core.service.port.persistence.DoctorTypePersistencePort;
-import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
-import de.ollie.healthtracker.persistence.jpa.mapper.DoctorTypeDboMapper;
-import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
+import de.ollie.healthtracker.core.service.model.MedicationUnit;
+import de.ollie.healthtracker.core.service.port.persistence.MedicationUnitPersistencePort;
+import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
+import de.ollie.healthtracker.persistence.jpa.mapper.MedicationUnitDboMapper;
+import de.ollie.healthtracker.persistence.jpa.repository.MedicationUnitDboRepository;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
@@ -23,15 +23,15 @@ import lombok.RequiredArgsConstructor;
 @Generated
 @Named
 @RequiredArgsConstructor
-class DoctorTypePersistenceJpaAdapter implements DoctorTypePersistencePort {
+class MedicationUnitPersistenceJpaAdapter implements MedicationUnitPersistencePort {
 
 	private final DboFactory dboFactory;
-	private final DoctorTypeDboMapper mapper;
-	private final DoctorTypeDboRepository repository;
+	private final MedicationUnitDboMapper mapper;
+	private final MedicationUnitDboRepository repository;
 
 	@Override
-	public DoctorType create(String name) {
-		return mapper.toModel(repository.save(dboFactory.createDoctorType(name)));
+	public MedicationUnit create(String name, String token) {
+		return mapper.toModel(repository.save(dboFactory.createMedicationUnit(name, token)));
 	}
 
 	@Override
@@ -41,9 +41,9 @@ class DoctorTypePersistenceJpaAdapter implements DoctorTypePersistencePort {
 	}
 
 	@Override
-	public Optional<DoctorType> findByIdOrNameParticle(String nameParticleOrId) {
+	public Optional<MedicationUnit> findByIdOrTokenParticle(String nameParticleOrId) {
 		ensure(nameParticleOrId != null, "name particle or id cannot be null");
-		Optional<DoctorTypeDbo> dbo = Optional.empty();
+		Optional<MedicationUnitDbo> dbo = Optional.empty();
 		try {
 			UUID uuid = UUID.fromString(nameParticleOrId);
 			dbo = repository.findById(uuid);
@@ -53,7 +53,7 @@ class DoctorTypePersistenceJpaAdapter implements DoctorTypePersistencePort {
 		return Optional.ofNullable(
 			mapper.toModel(
 				dbo.orElseGet(() -> {
-					List<DoctorTypeDbo> found = repository.findAllByNameMatch(nameParticleOrId);
+					List<MedicationUnitDbo> found = repository.findAllByTokenMatch(nameParticleOrId);
 					if (found.size() < 2) {
 						return found.size() == 0 ? null : found.get(0);
 					}
@@ -64,7 +64,7 @@ class DoctorTypePersistenceJpaAdapter implements DoctorTypePersistencePort {
 	}
 
 	@Override
-	public List<DoctorType> list() {
+	public List<MedicationUnit> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
 }

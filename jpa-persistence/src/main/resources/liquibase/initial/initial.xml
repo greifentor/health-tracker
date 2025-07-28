@@ -88,5 +88,64 @@
         <addPrimaryKey columnNames="ID" tableName="DOCTOR_CONSULTATION"/>
         <addForeignKeyConstraint baseColumnNames="DOCTOR" baseTableName="DOCTOR_CONSULTATION" constraintName="FK_DOCTOR_CONSULTATION_DOCTOR_TO_DOCTOR" referencedColumnNames="ID" referencedTableName="DOCTOR"/>
     </changeSet>
+        <changeSet author="dm-comp" id="Add-Medication-Tables" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="MEDICATION">
+            <column name="ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MANUFACTURER" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="MEDICATION"/>
+        <createTable tableName="MEDICATION_LOG">
+            <column name="MEDICATION" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DATE_OF_INTAKE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TIME_OF_INTAKE" type="TIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MEDICATION_UNIT" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UNIT_COUNT" type="NUMERIC(5, 2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="MEDICATION_LOG"/>
+        <createTable tableName="MEDICATION_UNIT">
+            <column name="ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TOKEN" type="VARCHAR(5)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="MEDICATION_UNIT"/>
+        <createTable tableName="MANUFACTURER">
+            <column name="ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="MANUFACTURER"/>
+        <addForeignKeyConstraint baseColumnNames="MANUFACTURER" baseTableName="MEDICATION" constraintName="FK_MEDICATION_MANUFACTURER_TO_MANUFACTURER" referencedColumnNames="ID" referencedTableName="MANUFACTURER"/>
+        <addForeignKeyConstraint baseColumnNames="MEDICATION_UNIT" baseTableName="MEDICATION_LOG" constraintName="FK_MEDICATION_LOG_MEDICATION_UNIT_TO_MEDICATION_UNIT" referencedColumnNames="ID" referencedTableName="MEDICATION_UNIT"/>
+        <addForeignKeyConstraint baseColumnNames="MEDICATION" baseTableName="MEDICATION_LOG" constraintName="FK_MEDICATION_LOG_MEDICATION_TO_MEDICATION" referencedColumnNames="ID" referencedTableName="MEDICATION"/>
+    </changeSet>
 </databaseChangeLog>
 

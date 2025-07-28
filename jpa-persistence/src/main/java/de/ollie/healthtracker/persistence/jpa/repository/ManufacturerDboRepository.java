@@ -1,6 +1,6 @@
 package de.ollie.healthtracker.persistence.jpa.repository;
 
-import de.ollie.healthtracker.persistence.jpa.dbo.DoctorDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +13,10 @@ import org.springframework.stereotype.Repository;
  * Remove this comment to suspend class from generation process.
  */
 @Repository
-public interface DoctorDboRepository extends JpaRepository<DoctorDbo, UUID> {
-	@Query("SELECT dbo FROM DoctorDbo dbo")
-	List<DoctorDbo> findAllOrdered();
+public interface ManufacturerDboRepository extends JpaRepository<ManufacturerDbo, UUID> {
+	@Query("SELECT dbo FROM ManufacturerDbo dbo")
+	List<ManufacturerDbo> findAllOrdered();
+
+	@Query("SELECT dbo FROM ManufacturerDbo dbo WHERE dbo.name LIKE CONCAT('%', :name, '%')")
+	List<ManufacturerDbo> findAllByNameMatch(String name);
 }

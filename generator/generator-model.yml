@@ -1,62 +1,169 @@
 classes:
-  - class:
-      name: DoctorType
-      attributes:
-        - attribute:
-            name: id
-            properties:
-              - property:
-                  name: nullable
-                  value: false
-              - property:
-                  name: id
-                  value: true
-            type:
-              name: UUID
-              properties:
-                - property:
-                    name: import
-                    value: java.util.UUID
-        - attribute:
-            name: name
-            properties:
-              - property:
-                  name: nullable
-                  value: false
-            type:
-              name: String
-  - class:
-      name: Doctor
-      attributes:
-        - attribute:
-            name: id
-            properties:
-              - property:
-                  name: nullable
-                  value: false
-              - property:
-                  name: id
-                  value: true
-            type:
-              name: UUID
-              properties:
-                - property:
-                    name: import
-                    value: java.util.UUID
-        - attribute:
-            name: name
-            properties:
-              - property:
-                  name: nullable
-                  value: false
-            type:
-              name: String
-        - attribute:
-            name: doctorType
-            reference: true
-            properties:
-              - property:
-                  name: nullable
-                  value: false
-            type:
-              name: DoctorType
+  - name: DoctorType
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+    - attribute:
+        name: name
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+        type:
+          name: String
+  - name: Doctor
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: String
+      - name: doctorType
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: DoctorType
+  - name: Doctor
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: String
+      - name: doctorType
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: DoctorType
+  - name: DoctorConsultation
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: date
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: LocalDate
+          properties:
+            - name: import
+              value: java.time.LocalDate
+      - name: time
+        properties:
+          - property:
+              name: nullable
+              value: false
+        type:
+          name: LocalTime
+          properties:
+            - name: import
+              value: java.time.LocalTime
+      - name: doctor
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: Doctor
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: String
+  - name: Manufacturer
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+        type:
+          name: String
+  - name: Medication
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+        type:
+          name: String
+      - name: manufacturer
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: Manufacturer

@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Named
 @RequiredArgsConstructor
-public class DoctorServiceImpl implements DoctorService {
+class DoctorServiceImpl implements DoctorService {
 
 	private final DoctorPersistencePort doctorPersistencePort;
 

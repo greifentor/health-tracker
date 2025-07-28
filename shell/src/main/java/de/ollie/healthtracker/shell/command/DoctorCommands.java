@@ -16,6 +16,7 @@ import org.springframework.shell.standard.ShellOption;
 public class DoctorCommands {
 
 	static final String MSG_NO_SUCH_DOCTOR_TYPE_FOUND = "No doctor type found for: ";
+
 	private final DoctorService doctorService;
 	private final DoctorTypeService doctorTypeService;
 	private final DoctorToStringMapper doctorToStringMapper;

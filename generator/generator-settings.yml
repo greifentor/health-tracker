@@ -1,5 +1,7 @@
 default-target-path: tmp
 properties:
+  - name: core-exception-package
+    value: de.ollie.healthtracker.core.service.exception
   - name: core-model-package
     value: de.ollie.healthtracker.core.service.model
   - name: core-port-persistence-package

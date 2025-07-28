@@ -17,6 +17,11 @@ import ${Import};
  */
 @Repository
 public interface ${ClassName}DboRepository extends JpaRepository<${ClassName}Dbo, ${Class.getAttributeTypeNameByPropertyName("id")}> {
-	@Query("SELECT c FROM ${ClassName}Dbo c")
+	@Query("SELECT dbo FROM ${ClassName}Dbo dbo")
 	List<${ClassName}Dbo> findAllOrdered();
+#foreach($Attribute in ${Class.getAttributesWithPropertySet("findable")})
+
+	@Query("SELECT dbo FROM ${ClassName}Dbo dbo WHERE dbo.${Attribute.getName()} LIKE CONCAT('%', :${Attribute.getName()}, '%')")
+	List<${ClassName}Dbo> findAllBy${Attribute.getNameCamelCase()}Match(String ${Attribute.getName()});
+#end
 }

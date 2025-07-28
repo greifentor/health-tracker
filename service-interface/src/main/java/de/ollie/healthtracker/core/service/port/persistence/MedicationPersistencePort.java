@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.core.service.port.persistence;
 
-import de.ollie.healthtracker.core.service.model.MedicationUnit;
+import de.ollie.healthtracker.core.service.model.Manufacturer;
+import de.ollie.healthtracker.core.service.model.Medication;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
@@ -14,12 +15,12 @@ import lombok.Generated;
  */
 @Generated
 @Named
-public interface MedicationUnitPersistencePort {
-	MedicationUnit create(String name, String token);
+public interface MedicationPersistencePort {
+	Medication create(String name, Manufacturer manufacturer);
 
 	void deleteById(UUID id);
 
-	Optional<MedicationUnit> findByIdOrTokenParticle(String token);
+	Optional<Medication> findByIdOrNameParticle(String name);
 
-	List<MedicationUnit> list();
+	List<Medication> list();
 }

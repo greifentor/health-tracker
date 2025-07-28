@@ -8,7 +8,11 @@ import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementStatus
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.ManufacturerDboRepository;
 import jakarta.inject.Named;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 class DboFactory {
 
 	private final DoctorTypeDboRepository doctorTypeRepository;
+	private final ManufacturerDboRepository manufacturerDboRepository;
 	private final UuidFactory uuidFactory;
 
 	BloodPressureMeasurementDbo createBloodPressureMeasurement(
@@ -60,9 +65,9 @@ class DboFactory {
 	}
 
 	DoctorDbo createDoctor(String name, UUID doctorTypeId) {
-		ensure(name != null, "name be null!");
-		ensure(!name.isBlank(), "name be blank!");
-		ensure(doctorTypeId != null, "doctor type id be null!");
+		ensure(name != null, "name cannot be null!");
+		ensure(!name.isBlank(), "name cannot be blank!");
+		ensure(doctorTypeId != null, "doctor type id cannot be null!");
 		DoctorTypeDbo doctorType = doctorTypeRepository
 			.findById(doctorTypeId)
 			.orElseThrow(() -> new NoSuchElementException("no doctor type found with id: " + doctorTypeId));
@@ -70,8 +75,32 @@ class DboFactory {
 	}
 
 	DoctorTypeDbo createDoctorType(String name) {
-		ensure(name != null, "name be null!");
-		ensure(!name.isBlank(), "name be blank!");
+		ensure(name != null, "name cannot be null!");
+		ensure(!name.isBlank(), "name cannot be blank!");
 		return new DoctorTypeDbo().setId(uuidFactory.create()).setName(name);
+	}
+
+	ManufacturerDbo createManufacturer(String name) {
+		ensure(name != null, "name cannot be null!");
+		ensure(!name.isBlank(), "name cannot be blank!");
+		return new ManufacturerDbo().setId(uuidFactory.create()).setName(name);
+	}
+
+	MedicationDbo createMedication(String name, UUID manufacturerId) {
+		ensure(name != null, "name cannot be null!");
+		ensure(!name.isBlank(), "name cannot be blank!");
+		ensure(manufacturerId != null, "manufacturer id cannot be null!");
+		ManufacturerDbo manufacturer = manufacturerDboRepository
+			.findById(manufacturerId)
+			.orElseThrow(() -> new NoSuchElementException("no manufacturer found with id: " + manufacturerId));
+		return new MedicationDbo().setId(uuidFactory.create()).setManufacturer(manufacturer).setName(name);
+	}
+
+	MedicationUnitDbo createMedicationUnit(String name, String token) {
+		ensure(name != null, "name cannot be null!");
+		ensure(!name.isBlank(), "name cannot be blank!");
+		ensure(token != null, "doctor type id cannot be null!");
+		ensure(!token.isBlank(), "token cannot be blank!");
+		return new MedicationUnitDbo().setId(uuidFactory.create()).setName(name).setToken(token);
 	}
 }
