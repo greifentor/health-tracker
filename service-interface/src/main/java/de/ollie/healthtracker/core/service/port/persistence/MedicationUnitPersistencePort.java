@@ -19,7 +19,7 @@ public interface MedicationUnitPersistencePort {
 
 	void deleteById(UUID id);
 
-	Optional<MedicationUnit> findByIdOrTokenParticle(String token);
+	Optional<MedicationUnit> findByIdOrNameParticle(String name);
 
 	List<MedicationUnit> list();
 }

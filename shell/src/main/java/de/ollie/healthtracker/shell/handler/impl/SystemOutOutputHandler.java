@@ -2,7 +2,9 @@ package de.ollie.healthtracker.shell.handler.impl;
 
 import de.ollie.healthtracker.shell.handler.OutputHandler;
 import jakarta.inject.Named;
+import lombok.Generated;
 
+@Generated
 @Named
 public class SystemOutOutputHandler implements OutputHandler {
 

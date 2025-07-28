@@ -10,11 +10,19 @@ import de.ollie.healthtracker.core.service.UuidFactory;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementStatusDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.DoctorConsultationDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.DoctorDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
+import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.ManufacturerDboRepository;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -27,15 +35,37 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class DboFactoryTest {
 
 	private static final String CONTENT = "content";
+	private static final LocalDate DATE = LocalDate.of(2025, 7, 28);
 	private static final LocalDate DATE_OF_RECORDING = LocalDate.of(2025, 6, 17);
 	private static final int DIA_MM_HG = 70;
 	private static final UUID ID = UUID.randomUUID();
 	private static final String NAME = "name";
 	private static final int PULSE_PER_MINUTE = 60;
+	private static final String REASON = "reason";
+	private static final String RESULT = "result";
 	private static final BloodPressureMeasurementStatusDbo STATUS = BloodPressureMeasurementStatusDbo.GREEN;
 	private static final int SYS_MM_HG = 130;
+	private static final LocalTime TIME = LocalTime.of(12, 52, 42);
 	private static final LocalTime TIME_OF_RECORDING = LocalTime.of(23, 31, 42);
 	private static final String TOKEN = "token";
+
+	@Mock
+	private DoctorDbo doctorDbo;
+
+	@Mock
+	private DoctorDboRepository doctorRepository;
+
+	@Mock
+	private DoctorTypeDbo doctorTypeDbo;
+
+	@Mock
+	private DoctorTypeDboRepository doctorTypeRepository;
+
+	@Mock
+	private ManufacturerDbo manufacturerDbo;
+
+	@Mock
+	private ManufacturerDboRepository manufacturerDboRepository;
 
 	@Mock
 	private UuidFactory uuidFactory;
@@ -262,6 +292,165 @@ class DboFactoryTest {
 	}
 
 	@Nested
+	class createDoctor_String_UUID {
+
+		@Test
+		void throwsAnException_passingABlankString_asName() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createDoctor("\n\t\r ", ID));
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asName() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createDoctor(null, ID));
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asDoctorTypeId() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createDoctor(NAME, null));
+		}
+
+		@Test
+		void returnANewObject() {
+			// Prepare
+			when(doctorTypeRepository.findById(ID)).thenReturn(Optional.of(doctorTypeDbo));
+			// Run & Check
+			assertNotNull(unitUnderTest.createDoctor(NAME, ID));
+		}
+
+		@Test
+		void returnANewObject_onEachCall() {
+			// Prepare
+			when(doctorTypeRepository.findById(ID)).thenReturn(Optional.of(doctorTypeDbo));
+			// Run & Check
+			assertNotSame(unitUnderTest.createDoctor(NAME, ID), unitUnderTest.createDoctor(NAME, ID));
+		}
+
+		@Test
+		void returnANewObject_withCorrectlySetAttributes() {
+			// Prepare
+			DoctorDbo expected = new DoctorDbo().setDoctorType(doctorTypeDbo).setId(ID).setName(NAME);
+			when(doctorTypeRepository.findById(ID)).thenReturn(Optional.of(doctorTypeDbo));
+			when(uuidFactory.create()).thenReturn(ID);
+			// Run & Check
+			assertEquals(expected, unitUnderTest.createDoctor(NAME, ID));
+		}
+
+		@Test
+		void throwsAnException_whenThereIsNoDoctorTypeForThePassedId() {
+			// Prepare
+			when(doctorTypeRepository.findById(ID)).thenReturn(Optional.empty());
+			// Run & Check
+			assertThrows(NoSuchElementException.class, () -> unitUnderTest.createDoctor(NAME, ID));
+		}
+	}
+
+	@Nested
+	class createDoctorConsultation_LocalDate_LocalTime_UUID_String_String {
+
+		@Test
+		void throwsAnException_passingANullValue_asDate() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createDoctorConsultation(null, TIME, ID, REASON, RESULT)
+			);
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asDoctorId() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, null, REASON, RESULT)
+			);
+		}
+
+		@Test
+		void throwsAnException_passingABlankString_asReason() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, "\n\t\r ", RESULT)
+			);
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asResult() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, null, RESULT)
+			);
+		}
+
+		@Test
+		void throwsAnException_passingABlankString_asResult() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, REASON, "\n\t\r ")
+			);
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asReason() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, REASON, null)
+			);
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asTime() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createDoctorConsultation(DATE, null, ID, REASON, RESULT)
+			);
+		}
+
+		@Test
+		void returnANewObject() {
+			// Prepare
+			when(doctorRepository.findById(ID)).thenReturn(Optional.of(doctorDbo));
+			// Run & Check
+			assertNotNull(unitUnderTest.createDoctorConsultation(DATE, TIME, ID, REASON, RESULT));
+		}
+
+		@Test
+		void returnANewObject_onEachCall() {
+			// Prepare
+			when(doctorRepository.findById(ID)).thenReturn(Optional.of(doctorDbo));
+			// Run & Check
+			assertNotSame(
+				unitUnderTest.createDoctorConsultation(DATE, TIME, ID, REASON, RESULT),
+				unitUnderTest.createDoctorConsultation(DATE, TIME, ID, REASON, RESULT)
+			);
+		}
+
+		@Test
+		void returnANewObject_withCorrectlySetAttributes() {
+			// Prepare
+			DoctorConsultationDbo expected = new DoctorConsultationDbo()
+				.setDate(DATE)
+				.setDoctor(doctorDbo)
+				.setId(ID)
+				.setReason(REASON)
+				.setResult(RESULT)
+				.setTime(TIME);
+			when(doctorRepository.findById(ID)).thenReturn(Optional.of(doctorDbo));
+			when(uuidFactory.create()).thenReturn(ID);
+			// Run & Check
+			assertEquals(expected, unitUnderTest.createDoctorConsultation(DATE, TIME, ID, REASON, RESULT));
+		}
+
+		@Test
+		void throwsAnException_whenThereIsNoDoctorForThePassedId() {
+			// Prepare
+			when(doctorRepository.findById(ID)).thenReturn(Optional.empty());
+			// Run & Check
+			assertThrows(
+				NoSuchElementException.class,
+				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, REASON, RESULT)
+			);
+		}
+	}
+
+	@Nested
 	class createDoctorType_String {
 
 		@Test
@@ -319,6 +508,59 @@ class DboFactoryTest {
 			when(uuidFactory.create()).thenReturn(ID);
 			// Run & Check
 			assertEquals(expected, unitUnderTest.createManufacturer(NAME));
+		}
+	}
+
+	@Nested
+	class createMedication_String_UUID {
+
+		@Test
+		void throwsAnException_passingABlankString_asName() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createMedication("\n\t\r ", ID));
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asName() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createMedication(null, ID));
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asManufacturerId() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createMedication(NAME, null));
+		}
+
+		@Test
+		void returnANewObject() {
+			// Prepare
+			when(manufacturerDboRepository.findById(ID)).thenReturn(Optional.of(manufacturerDbo));
+			// Run & Check
+			assertNotNull(unitUnderTest.createMedication(NAME, ID));
+		}
+
+		@Test
+		void returnANewObject_onEachCall() {
+			// Prepare
+			when(manufacturerDboRepository.findById(ID)).thenReturn(Optional.of(manufacturerDbo));
+			// Run & Check
+			assertNotSame(unitUnderTest.createMedication(NAME, ID), unitUnderTest.createMedication(NAME, ID));
+		}
+
+		@Test
+		void returnANewObject_withCorrectlySetAttributes() {
+			// Prepare
+			MedicationDbo expected = new MedicationDbo().setId(ID).setManufacturer(manufacturerDbo).setName(NAME);
+			when(manufacturerDboRepository.findById(ID)).thenReturn(Optional.of(manufacturerDbo));
+			when(uuidFactory.create()).thenReturn(ID);
+			// Run & Check
+			assertEquals(expected, unitUnderTest.createMedication(NAME, ID));
+		}
+
+		@Test
+		void throwsAnException_whenThereIsNoManufacturerForThePassedId() {
+			// Prepare
+			when(manufacturerDboRepository.findById(ID)).thenReturn(Optional.empty());
+			// Run & Check
+			assertThrows(NoSuchElementException.class, () -> unitUnderTest.createMedication(NAME, ID));
 		}
 	}
 

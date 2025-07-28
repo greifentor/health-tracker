@@ -6,7 +6,9 @@ import de.ollie.healthtracker.core.service.model.Medication;
 import de.ollie.healthtracker.core.service.port.persistence.MedicationPersistencePort;
 import jakarta.inject.Named;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
  *
  * Remove this comment to suspend class from generation process.
  */
+@Generated
 @Named
 @RequiredArgsConstructor
 class MedicationServiceImpl implements MedicationService {
@@ -28,6 +31,11 @@ class MedicationServiceImpl implements MedicationService {
 	@Override
 	public void deleteMedication(UUID id) {
 		medicationPersistencePort.deleteById(id);
+	}
+
+	@Override
+	public Optional<Medication> findByIdOrNameParticle(String namePartOrId) {
+		return medicationPersistencePort.findByIdOrNameParticle(namePartOrId);
 	}
 
 	@Override

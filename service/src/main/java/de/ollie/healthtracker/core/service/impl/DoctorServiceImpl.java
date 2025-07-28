@@ -7,6 +7,7 @@ import de.ollie.healthtracker.core.service.port.persistence.DoctorPersistencePor
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.UUID;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
  *
  * Remove this comment to suspend class from generation process.
  */
+@Generated
 @Named
 @RequiredArgsConstructor
 class DoctorServiceImpl implements DoctorService {

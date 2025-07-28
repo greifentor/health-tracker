@@ -2,17 +2,24 @@ package de.ollie.healthtracker.persistence.jpa;
 
 import static de.ollie.baselib.util.Check.ensure;
 
+import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.Doctor;
 import de.ollie.healthtracker.core.service.model.DoctorType;
 import de.ollie.healthtracker.core.service.port.persistence.DoctorPersistencePort;
-import de.ollie.healthtracker.persistence.jpa.dbo.DoctorDbo;
 import de.ollie.healthtracker.persistence.jpa.mapper.DoctorDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.UUID;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
 @Named
 @RequiredArgsConstructor
 class DoctorPersistenceJpaAdapter implements DoctorPersistencePort {
@@ -23,9 +30,7 @@ class DoctorPersistenceJpaAdapter implements DoctorPersistencePort {
 
 	@Override
 	public Doctor create(String name, DoctorType doctorType) {
-		DoctorDbo dbo = dboFactory.createDoctor(name, doctorType.getId());
-		System.out.println("\n\n ---- " + dbo);
-		return mapper.toModel(repository.save(dbo));
+		return mapper.toModel(repository.save(dboFactory.createDoctor(name, doctorType.getId())));
 	}
 
 	@Override

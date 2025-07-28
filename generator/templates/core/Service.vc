@@ -29,7 +29,7 @@ public interface ${ClassName}Service {
 	void delete${ClassName}(${Class.getAttributeTypeNameByPropertyName("id")} id);
 #foreach($Attribute in ${Class.getAttributesWithPropertySet("findable")})
 
-	Optional<${ClassName}> findByIdOr${Attribute.getNameCamelCase()}Particle(String ${Attribute.getName()});
+	Optional<${ClassName}> findByIdOr${Attribute.getNameCamelCase()}Particle(String namePartOrId);
 #end
 
 	List<${ClassName}> list${ClassName}s();

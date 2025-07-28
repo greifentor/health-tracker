@@ -12,8 +12,7 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
-    - attribute:
-        name: name
+      - name: name
         properties:
           - name: nullable
             value: false
@@ -21,32 +20,6 @@ classes:
             value: true
         type:
           name: String
-  - name: Doctor
-    attributes:
-      - name: id
-        properties:
-          - name: nullable
-            value: false
-          - name: id
-            value: true
-        type:
-          name: UUID
-          properties:
-            - name: import
-              value: java.util.UUID
-      - name: name
-        properties:
-          - name: nullable
-            value: false
-        type:
-          name: String
-      - name: doctorType
-        reference: true
-        properties:
-          - name: nullable
-            value: false
-        type:
-          name: DoctorType
   - name: Doctor
     attributes:
       - name: id
@@ -97,9 +70,8 @@ classes:
               value: java.time.LocalDate
       - name: time
         properties:
-          - property:
-              name: nullable
-              value: false
+          - name: nullable
+            value: false
         type:
           name: LocalTime
           properties:
@@ -112,7 +84,13 @@ classes:
             value: false
         type:
           name: Doctor
-      - name: name
+      - name: reason
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: String
+      - name: result
         properties:
           - name: nullable
             value: false
@@ -167,3 +145,31 @@ classes:
             value: false
         type:
           name: Manufacturer
+  - name: MedicationUnit
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+        type:
+          name: String
+      - name: token
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: String
+

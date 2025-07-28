@@ -41,7 +41,7 @@ class MedicationUnitPersistenceJpaAdapter implements MedicationUnitPersistencePo
 	}
 
 	@Override
-	public Optional<MedicationUnit> findByIdOrTokenParticle(String nameParticleOrId) {
+	public Optional<MedicationUnit> findByIdOrNameParticle(String nameParticleOrId) {
 		ensure(nameParticleOrId != null, "name particle or id cannot be null");
 		Optional<MedicationUnitDbo> dbo = Optional.empty();
 		try {
@@ -53,7 +53,7 @@ class MedicationUnitPersistenceJpaAdapter implements MedicationUnitPersistencePo
 		return Optional.ofNullable(
 			mapper.toModel(
 				dbo.orElseGet(() -> {
-					List<MedicationUnitDbo> found = repository.findAllByTokenMatch(nameParticleOrId);
+					List<MedicationUnitDbo> found = repository.findAllByNameMatch(nameParticleOrId);
 					if (found.size() < 2) {
 						return found.size() == 0 ? null : found.get(0);
 					}

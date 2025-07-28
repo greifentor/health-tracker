@@ -17,6 +17,6 @@ public interface MedicationUnitDboRepository extends JpaRepository<MedicationUni
 	@Query("SELECT dbo FROM MedicationUnitDbo dbo")
 	List<MedicationUnitDbo> findAllOrdered();
 
-	@Query("SELECT dbo FROM MedicationUnitDbo dbo WHERE dbo.token LIKE CONCAT('%', :token, '%')")
-	List<MedicationUnitDbo> findAllByTokenMatch(String token);
+	@Query("SELECT dbo FROM MedicationUnitDbo dbo WHERE dbo.name LIKE CONCAT('%', :name, '%')")
+	List<MedicationUnitDbo> findAllByNameMatch(String name);
 }

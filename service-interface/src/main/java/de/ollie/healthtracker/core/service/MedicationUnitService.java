@@ -17,7 +17,7 @@ public interface MedicationUnitService {
 
 	void deleteMedicationUnit(UUID id);
 
-	Optional<MedicationUnit> findByIdOrTokenParticle(String token);
+	Optional<MedicationUnit> findByIdOrNameParticle(String namePartOrId);
 
 	List<MedicationUnit> listMedicationUnits();
 }

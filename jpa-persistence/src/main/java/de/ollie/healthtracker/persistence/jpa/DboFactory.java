@@ -6,11 +6,13 @@ import de.ollie.healthtracker.core.service.UuidFactory;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementStatusDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.DoctorConsultationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
+import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.ManufacturerDboRepository;
 import jakarta.inject.Named;
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class DboFactory {
 
+	private final DoctorDboRepository doctorRepository;
 	private final DoctorTypeDboRepository doctorTypeRepository;
 	private final ManufacturerDboRepository manufacturerDboRepository;
 	private final UuidFactory uuidFactory;
@@ -72,6 +75,32 @@ class DboFactory {
 			.findById(doctorTypeId)
 			.orElseThrow(() -> new NoSuchElementException("no doctor type found with id: " + doctorTypeId));
 		return new DoctorDbo().setDoctorType(doctorType).setId(uuidFactory.create()).setName(name);
+	}
+
+	DoctorConsultationDbo createDoctorConsultation(
+		LocalDate date,
+		LocalTime time,
+		UUID doctorId,
+		String reason,
+		String result
+	) {
+		ensure(date != null, "date cannot be null!");
+		ensure(doctorId != null, "doctor id cannot be null!");
+		ensure(reason != null, "reason cannot be null!");
+		ensure(!reason.isBlank(), "reason cannot be blank!");
+		ensure(result != null, "result cannot be null!");
+		ensure(!result.isBlank(), "result cannot be blank!");
+		ensure(time != null, "time cannot be null!");
+		DoctorDbo doctor = doctorRepository
+			.findById(doctorId)
+			.orElseThrow(() -> new NoSuchElementException("no doctor found with id: " + doctorId));
+		return new DoctorConsultationDbo()
+			.setDate(date)
+			.setDoctor(doctor)
+			.setId(uuidFactory.create())
+			.setReason(reason)
+			.setResult(result)
+			.setTime(time);
 	}
 
 	DoctorTypeDbo createDoctorType(String name) {
