@@ -8,11 +8,8 @@ import de.ollie.healthtracker.shell.handler.OutputHandler;
 import de.ollie.healthtracker.shell.mapper.BloodPressureMeasurementToStringMapper;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.util.Locale;
 import java.util.UUID;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -20,19 +17,17 @@ import org.springframework.shell.standard.ShellOption;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class BloodPressureMeasurementCommands {
-
-	private static final DateTimeFormatter DE_DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.GERMAN);
-	private static final DateTimeFormatter DE_TIME_FORMAT = new DateTimeFormatterBuilder()
-		.appendValue(ChronoField.HOUR_OF_DAY, 1, 2, java.time.format.SignStyle.NOT_NEGATIVE)
-		.appendLiteral(':')
-		.appendValue(ChronoField.MINUTE_OF_HOUR, 2)
-		.toFormatter();
+public class BloodPressureMeasurementCommands implements CommandsWithTimeOrDate {
 
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final BloodPressureMeasurementToStringMapper bloodPressureMeasurementToStringMapper;
+
+	@Getter
 	private final LocalDateFactory localDateFactory;
+
+	@Getter
 	private final LocalTimeFactory localTimeFactory;
+
 	private final OutputHandler outputHandler;
 
 	@ShellMethod(value = "Adds a blood preasure measurement.", key = { "add-blood-pressure-measurement", "abpm" })
@@ -77,24 +72,6 @@ public class BloodPressureMeasurementCommands {
 			return BloodPressureMeasurementStatus.ofValue(value);
 		} catch (Exception e) {}
 		return BloodPressureMeasurementStatus.valueOf(statusStr);
-	}
-
-	private LocalDate getDateFromParameter(String dateOfMeasurementStr) {
-		if (
-			(dateOfMeasurementStr == null) ||
-			"TODAY".equalsIgnoreCase(dateOfMeasurementStr) ||
-			"TD".equalsIgnoreCase(dateOfMeasurementStr)
-		) {
-			return localDateFactory.now();
-		}
-		return LocalDate.parse(dateOfMeasurementStr, DE_DATE_FORMAT);
-	}
-
-	private LocalTime getTimeFromParameter(String timeOfMeasurementStr) {
-		if ((timeOfMeasurementStr == null) || "NOW".equalsIgnoreCase(timeOfMeasurementStr)) {
-			return localTimeFactory.now();
-		}
-		return LocalTime.parse(timeOfMeasurementStr, DE_TIME_FORMAT);
 	}
 
 	@ShellMethod(value = "Lists blood preasure measurements.", key = { "list-blood-pressure-measurements", "lbpm" })

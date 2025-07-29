@@ -23,7 +23,7 @@ public class MedicationCommands {
 	private final OutputHandler outputHandler;
 
 	@ShellMethod(value = "Adds a medication.", key = { "add-medication", "amc" })
-	public String addDoctor(
+	public String addMedication(
 		@ShellOption(help = "The name of the medcation.", value = "name") String name,
 		@ShellOption(help = "The manufacturers name part or id.", value = "manufacturer") String manufacturerNamePartOrId
 	) {
@@ -43,7 +43,7 @@ public class MedicationCommands {
 	}
 
 	@ShellMethod(value = "Lists medications.", key = { "list-medications", "lmc" })
-	public String listDoctors() {
+	public String listMedications() {
 		try {
 			outputHandler.println(medicationToStringMapper.getHeadLine());
 			outputHandler.println(medicationToStringMapper.getUnderLine());
@@ -55,7 +55,7 @@ public class MedicationCommands {
 	}
 
 	@ShellMethod(value = "Removes the medication with the passed id.", key = { "remove-medication", "rmc" })
-	public String removeDoctor(@ShellOption(help = "The id of the medication to remove.", value = "id") String id) {
+	public String removeMedication(@ShellOption(help = "The id of the medication to remove.", value = "id") String id) {
 		try {
 			medicationService.deleteMedication(UUID.fromString(id));
 			return Constants.OK;

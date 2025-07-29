@@ -7,11 +7,8 @@ import de.ollie.healthtracker.shell.handler.OutputHandler;
 import de.ollie.healthtracker.shell.mapper.CommentToStringMapper;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.util.Locale;
 import java.util.UUID;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -19,19 +16,17 @@ import org.springframework.shell.standard.ShellOption;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class CommentCommands {
-
-	private static final DateTimeFormatter DE_DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.GERMAN);
-	private static final DateTimeFormatter DE_TIME_FORMAT = new DateTimeFormatterBuilder()
-		.appendValue(ChronoField.HOUR_OF_DAY, 1, 2, java.time.format.SignStyle.NOT_NEGATIVE)
-		.appendLiteral(':')
-		.appendValue(ChronoField.MINUTE_OF_HOUR, 2)
-		.toFormatter();
+public class CommentCommands implements CommandsWithTimeOrDate {
 
 	private final CommentService commentService;
 	private final CommentToStringMapper commentToStringMapper;
+
+	@Getter
 	private final LocalDateFactory localDateFactory;
+
+	@Getter
 	private final LocalTimeFactory localTimeFactory;
+
 	private final OutputHandler outputHandler;
 
 	@ShellMethod(value = "Adds a comment.", key = { "add-comment", "ac" })
@@ -57,24 +52,6 @@ public class CommentCommands {
 			e.printStackTrace();
 			return Constants.ERROR + e.getMessage();
 		}
-	}
-
-	private LocalDate getDateFromParameter(String dateOfMeasurementStr) {
-		if (
-			(dateOfMeasurementStr == null) ||
-			"TODAY".equalsIgnoreCase(dateOfMeasurementStr) ||
-			"TD".equalsIgnoreCase(dateOfMeasurementStr)
-		) {
-			return localDateFactory.now();
-		}
-		return LocalDate.parse(dateOfMeasurementStr, DE_DATE_FORMAT);
-	}
-
-	private LocalTime getTimeFromParameter(String timeOfMeasurementStr) {
-		if ((timeOfMeasurementStr == null) || "NOW".equalsIgnoreCase(timeOfMeasurementStr)) {
-			return localTimeFactory.now();
-		}
-		return LocalTime.parse(timeOfMeasurementStr, DE_TIME_FORMAT);
 	}
 
 	@ShellMethod(value = "Lists comments.", key = { "list-comments", "lc" })
