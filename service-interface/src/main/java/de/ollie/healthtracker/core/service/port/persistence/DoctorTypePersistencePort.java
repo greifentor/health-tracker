@@ -7,6 +7,11 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.Generated;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
 @Generated
 @Named
 public interface DoctorTypePersistencePort {
@@ -14,7 +19,7 @@ public interface DoctorTypePersistencePort {
 
 	void deleteById(UUID id);
 
-	Optional<DoctorType> findByIdOrNameParticle(String namePartOrId);
+	Optional<DoctorType> findByIdOrNameParticle(String name);
 
 	List<DoctorType> list();
 }

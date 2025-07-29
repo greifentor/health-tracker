@@ -6,6 +6,7 @@ import de.ollie.healthtracker.core.service.model.DoctorType;
 import de.ollie.healthtracker.core.service.port.persistence.DoctorPersistencePort;
 import jakarta.inject.Named;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,11 @@ class DoctorServiceImpl implements DoctorService {
 	@Override
 	public void deleteDoctor(UUID id) {
 		doctorPersistencePort.deleteById(id);
+	}
+
+	@Override
+	public Optional<Doctor> findByIdOrNameParticle(String namePartOrId) {
+		return doctorPersistencePort.findByIdOrNameParticle(namePartOrId);
 	}
 
 	@Override

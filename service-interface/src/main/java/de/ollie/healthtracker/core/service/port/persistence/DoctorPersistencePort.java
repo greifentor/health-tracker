@@ -4,6 +4,7 @@ import de.ollie.healthtracker.core.service.model.Doctor;
 import de.ollie.healthtracker.core.service.model.DoctorType;
 import jakarta.inject.Named;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.Generated;
 
@@ -18,6 +19,8 @@ public interface DoctorPersistencePort {
 	Doctor create(String name, DoctorType doctorType);
 
 	void deleteById(UUID id);
+
+	Optional<Doctor> findByIdOrNameParticle(String name);
 
 	List<Doctor> list();
 }

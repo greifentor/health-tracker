@@ -37,6 +37,8 @@ classes:
         properties:
           - name: nullable
             value: false
+          - name: findable
+            value: true
         type:
           name: String
       - name: doctorType

@@ -47,7 +47,7 @@ class DoctorConsultationToStringMapperImplTest {
 		@Test
 		void returnsTheCorrectHeadLine() {
 			assertEquals(
-				"(ID)                                   Date     Time  Doctor                         Doctor Type\n" +
+				"(ID)                                   Date       Time  Doctor                         Doctor Type\n" +
 				"Reason\n" +
 				"Result",
 				unitUnderTest.getHeadLine()
@@ -79,7 +79,9 @@ class DoctorConsultationToStringMapperImplTest {
 		void returnsACorrectString_passingDoctorConsultationWithNoSetAttributes() {
 			// Prepare
 			String expected =
-				"(                                   -) -        -     -                              -\n" + "null\n" + "null";
+				"(                                   -) -          -     -                              -\n" +
+				"null\n" +
+				"null";
 			// Run
 			String returned = unitUnderTest.map(doctorConsultation);
 			// Check

@@ -7,11 +7,11 @@ import jakarta.inject.Named;
 @Named
 class DoctorConsultationToStringMapperImpl implements DoctorConsultationToStringMapper {
 
-	private static final String LINE_FORMAT = "(%36s) %-8s %-5s %-30s %s\n%s\n%s";
+	private static final String LINE_FORMAT = "(%36s) %-10s %-5s %-30s %s\n%s\n%s";
 
 	@Override
 	public String getHeadLine() {
-		return "(ID)                                   Date     Time  Doctor                         Doctor Type\nReason\nResult";
+		return "(ID)                                   Date       Time  Doctor                         Doctor Type\nReason\nResult";
 	}
 
 	@Override
