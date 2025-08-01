@@ -17,7 +17,7 @@ import ${Import};
  */
 @Repository
 public interface ${ClassName}DboRepository extends JpaRepository<${ClassName}Dbo, ${Class.getAttributeTypeNameByPropertyName("id")}> {
-	@Query("SELECT dbo FROM ${ClassName}Dbo dbo")
+	@Query("SELECT dbo FROM ${ClassName}Dbo dbo#if((!$Class.getPropertiesWithName("order").isEmpty())) ORDER BY #foreach($Property in $Class.getPropertiesWithName("order"))dbo.$Property.getValue()#if($foreach.hasNext), #end#end#end")
 	List<${ClassName}Dbo> findAllOrdered();
 #foreach($Attribute in ${Class.getAttributesWithPropertySet("findable")})
 

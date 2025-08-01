@@ -17,6 +17,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.ManufacturerDboRepository;
@@ -42,6 +43,7 @@ class DboFactoryTest {
 	private static final String CONTENT = "content";
 	private static final LocalDate DATE = LocalDate.of(2025, 7, 28);
 	private static final LocalDate DATE_OF_RECORDING = LocalDate.of(2025, 6, 17);
+	private static final String DESCRIPTION = "description";
 	private static final int DIA_MM_HG = 70;
 	private static final UUID ID = UUID.randomUUID();
 	private static final String NAME = "name";
@@ -729,6 +731,62 @@ class DboFactoryTest {
 			when(uuidFactory.create()).thenReturn(ID);
 			// Run & Check
 			assertEquals(expected, unitUnderTest.createMedicationUnit(NAME, TOKEN));
+		}
+	}
+
+	@Nested
+	class createSymptom_String_LocalDate_LocalTime {
+
+		@Test
+		void throwsAnException_passingABlankString_asContent() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createSymptom("\n\t\r ", DATE_OF_RECORDING, TIME_OF_RECORDING)
+			);
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asContent() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createSymptom(null, DATE_OF_RECORDING, TIME_OF_RECORDING)
+			);
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asDateOfRecording() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createSymptom(CONTENT, null, TIME_OF_RECORDING));
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asTimeOfRecording() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING, null));
+		}
+
+		@Test
+		void returnANewObject() {
+			assertNotNull(unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING));
+		}
+
+		@Test
+		void returnANewObject_onEachCall() {
+			assertNotSame(
+				unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING),
+				unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING)
+			);
+		}
+
+		@Test
+		void returnANewObject_withCorrectlySetAttributes() {
+			// Prepare
+			SymptomDbo expected = new SymptomDbo()
+				.setDateOfRecording(DATE_OF_RECORDING)
+				.setDescription(DESCRIPTION)
+				.setId(ID)
+				.setTimeOfRecording(TIME_OF_RECORDING);
+			when(uuidFactory.create()).thenReturn(ID);
+			// Run & Check
+			assertEquals(expected, unitUnderTest.createSymptom(DESCRIPTION, DATE_OF_RECORDING, TIME_OF_RECORDING));
 		}
 	}
 }

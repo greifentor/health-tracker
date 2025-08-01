@@ -1,7 +1,6 @@
 package de.ollie.healthtracker.persistence.jpa.repository;
 
-import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
-import java.math.BigDecimal;
+import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -16,7 +15,10 @@ import org.springframework.stereotype.Repository;
  * Remove this comment to suspend class from generation process.
  */
 @Repository
-public interface MedicationLogDboRepository extends JpaRepository<MedicationLogDbo, UUID> {
-	@Query("SELECT dbo FROM MedicationLogDbo dbo ORDER BY dbo.dateOfIntake, dbo.timeOfIntake")
-	List<MedicationLogDbo> findAllOrdered();
+public interface SymptomDboRepository extends JpaRepository<SymptomDbo, UUID> {
+	@Query("SELECT dbo FROM SymptomDbo dbo ORDER BY dbo.dateOfRecording, dbo.timeOfRecording")
+	List<SymptomDbo> findAllOrdered();
+
+	@Query("SELECT dbo FROM SymptomDbo dbo WHERE dbo.description LIKE CONCAT('%', :description, '%')")
+	List<SymptomDbo> findAllByDescriptionMatch(String description);
 }

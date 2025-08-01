@@ -175,6 +175,11 @@ classes:
         type:
           name: String
   - name: MedicationLog
+    properties:
+      - name: order
+        value: dateOfIntake
+      - name: order
+        value: timeOfIntake
     attributes:
       - name: id
         properties:
@@ -228,3 +233,47 @@ classes:
           properties:
             - name: import
               value: java.math.BigDecimal
+  - name: Symptom
+    properties:
+      - name: order
+        value: dateOfRecording
+      - name: order
+        value: timeOfRecording
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: description
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+        type:
+          name: String
+      - name: dateOfRecording
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: LocalDate
+          properties:
+            - name: import
+              value: java.time.LocalDate
+      - name: timeOfRecording
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: LocalTime
+          properties:
+            - name: import
+              value: java.time.LocalTime

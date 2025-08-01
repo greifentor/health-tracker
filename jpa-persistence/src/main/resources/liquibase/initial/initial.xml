@@ -154,5 +154,31 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet author="dm-comp" id="Add-SYMPTOM-Table" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="SYMPTOM">
+            <column name="DATE_OF_RECORDING" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="LONGVARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ID" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TIME_OF_RECORDING" type="TIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="SYMPTOM"/>
+    </changeSet>
+    <changeSet author="dm-comp" id="Add-Copy-Data-to-SYMPTOM-Table-and-Remove-Data-from-COMMENT-Table" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <sql>
+            INSERT INTO SYMPTOM (ID, DATE_OF_RECORDING, DESCRIPTION, TIME_OF_RECORDING)
+            SELECT ID, DATE_OF_RECORDING, CONTENT, TIME_OF_RECORDING FROM COMMENT;
+        </sql>
+        <sql>
+            DELETE FROM COMMENT;
+        </sql>
+    </changeSet>
 </databaseChangeLog>
 
