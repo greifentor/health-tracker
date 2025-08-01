@@ -30,3 +30,4 @@ target/
 tmp/
 tmp0/
 /start.sh
+/pom.xml.versionsBackup

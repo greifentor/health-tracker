@@ -174,4 +174,57 @@ classes:
             value: false
         type:
           name: String
-
+  - name: MedicationLog
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: medication
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: Medication
+      - name: medicationUnit
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: MedicationUnit
+      - name: dateOfIntake
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: LocalDate
+          properties:
+            - name: import
+              value: java.time.LocalDate
+      - name: timeOfIntake
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: LocalTime
+          properties:
+            - name: import
+              value: java.time.LocalTime
+      - name: unitCount
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: BigDecimal
+          properties:
+            - name: import
+              value: java.math.BigDecimal

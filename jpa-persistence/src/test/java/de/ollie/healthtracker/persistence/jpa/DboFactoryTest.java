@@ -15,10 +15,14 @@ import de.ollie.healthtracker.persistence.jpa.dbo.DoctorDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.ManufacturerDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.MedicationDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.MedicationUnitDboRepository;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.NoSuchElementException;
@@ -34,6 +38,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class DboFactoryTest {
 
+	private static final UUID ANOTHER_ID = UUID.randomUUID();
 	private static final String CONTENT = "content";
 	private static final LocalDate DATE = LocalDate.of(2025, 7, 28);
 	private static final LocalDate DATE_OF_RECORDING = LocalDate.of(2025, 6, 17);
@@ -48,6 +53,7 @@ class DboFactoryTest {
 	private static final LocalTime TIME = LocalTime.of(12, 52, 42);
 	private static final LocalTime TIME_OF_RECORDING = LocalTime.of(23, 31, 42);
 	private static final String TOKEN = "token";
+	private static final BigDecimal UNIT_COUNT = new BigDecimal(42);
 
 	@Mock
 	private DoctorDbo doctorDbo;
@@ -66,6 +72,18 @@ class DboFactoryTest {
 
 	@Mock
 	private ManufacturerDboRepository manufacturerDboRepository;
+
+	@Mock
+	private MedicationDbo medicationDbo;
+
+	@Mock
+	private MedicationDboRepository medicationDboRepository;
+
+	@Mock
+	private MedicationUnitDbo medicationUnitDbo;
+
+	@Mock
+	private MedicationUnitDboRepository medicationUnitDboRepository;
 
 	@Mock
 	private UuidFactory uuidFactory;
@@ -561,6 +579,113 @@ class DboFactoryTest {
 			when(manufacturerDboRepository.findById(ID)).thenReturn(Optional.empty());
 			// Run & Check
 			assertThrows(NoSuchElementException.class, () -> unitUnderTest.createMedication(NAME, ID));
+		}
+	}
+
+	@Nested
+	class createLog_UUID_UUID_LocalDate_LocalTime_BigDecimal {
+
+		@Test
+		void throwsAnException_passingANullValue_asMedicationId() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createMedicationLog(null, ID, DATE, TIME, UNIT_COUNT)
+			);
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asMedicationUnitId() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createMedicationLog(ID, null, DATE, TIME, UNIT_COUNT)
+			);
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asDateOfIntake() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, null, TIME, UNIT_COUNT)
+			);
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asTimeOfIntake() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, null, UNIT_COUNT)
+			);
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asUnitCount() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, TIME, null)
+			);
+		}
+
+		@Test
+		void returnANewObject() {
+			// Prepare
+			when(medicationDboRepository.findById(ID)).thenReturn(Optional.of(medicationDbo));
+			when(medicationUnitDboRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(medicationUnitDbo));
+			when(uuidFactory.create()).thenReturn(ID);
+			// Run & Check
+			assertNotNull(unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, TIME, UNIT_COUNT));
+		}
+
+		@Test
+		void returnANewObject_onEachCall() {
+			// Prepare
+			when(medicationDboRepository.findById(ID)).thenReturn(Optional.of(medicationDbo));
+			when(medicationUnitDboRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(medicationUnitDbo));
+			when(uuidFactory.create()).thenReturn(ID);
+			// Run & Check
+			assertNotSame(
+				unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, TIME, UNIT_COUNT),
+				unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, TIME, UNIT_COUNT)
+			);
+		}
+
+		@Test
+		void returnANewObject_withCorrectlySetAttributes() {
+			// Prepare
+			MedicationLogDbo expected = new MedicationLogDbo()
+				.setDateOfIntake(DATE)
+				.setId(ID)
+				.setMedication(medicationDbo)
+				.setMedicationUnit(medicationUnitDbo)
+				.setTimeOfIntake(TIME)
+				.setUnitCount(UNIT_COUNT);
+			when(medicationDboRepository.findById(ID)).thenReturn(Optional.of(medicationDbo));
+			when(medicationUnitDboRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(medicationUnitDbo));
+			when(uuidFactory.create()).thenReturn(ID);
+			// Run & Check
+			assertEquals(expected, unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, TIME, UNIT_COUNT));
+		}
+
+		@Test
+		void throwsAnException_whenThereIsNoMedicationForThePassedId() {
+			// Prepare
+			when(medicationDboRepository.findById(ID)).thenReturn(Optional.empty());
+			// Run & Check
+			assertThrows(
+				NoSuchElementException.class,
+				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, TIME, UNIT_COUNT)
+			);
+		}
+
+		@Test
+		void throwsAnException_whenThereIsNoMedicationUnitForThePassedId() {
+			// Prepare
+			when(medicationDboRepository.findById(ID)).thenReturn(Optional.of(medicationDbo));
+			when(medicationUnitDboRepository.findById(ANOTHER_ID)).thenReturn(Optional.empty());
+			// Run & Check
+			assertThrows(
+				NoSuchElementException.class,
+				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, TIME, UNIT_COUNT)
+			);
 		}
 	}
 

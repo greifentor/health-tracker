@@ -11,11 +11,15 @@ import de.ollie.healthtracker.persistence.jpa.dbo.DoctorDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.ManufacturerDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.MedicationDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.MedicationUnitDboRepository;
 import jakarta.inject.Named;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.NoSuchElementException;
@@ -29,6 +33,8 @@ class DboFactory {
 	private final DoctorDboRepository doctorRepository;
 	private final DoctorTypeDboRepository doctorTypeRepository;
 	private final ManufacturerDboRepository manufacturerDboRepository;
+	private final MedicationDboRepository medicationDboRepository;
+	private final MedicationUnitDboRepository medicationUnitDboRepository;
 	private final UuidFactory uuidFactory;
 
 	BloodPressureMeasurementDbo createBloodPressureMeasurement(
@@ -123,6 +129,33 @@ class DboFactory {
 			.findById(manufacturerId)
 			.orElseThrow(() -> new NoSuchElementException("no manufacturer found with id: " + manufacturerId));
 		return new MedicationDbo().setId(uuidFactory.create()).setManufacturer(manufacturer).setName(name);
+	}
+
+	MedicationLogDbo createMedicationLog(
+		UUID medicationId,
+		UUID medicationUnitId,
+		LocalDate dateOfIntake,
+		LocalTime timeOfIntake,
+		BigDecimal unitCount
+	) {
+		ensure(dateOfIntake != null, "date of intake cannot be null!");
+		ensure(medicationId != null, "medication id cannot be null!");
+		ensure(medicationUnitId != null, "medication unit id cannot be null!");
+		ensure(timeOfIntake != null, "time of intake cannot be null!");
+		ensure(unitCount != null, "unit count cannot be null!");
+		MedicationDbo medication = medicationDboRepository
+			.findById(medicationId)
+			.orElseThrow(() -> new NoSuchElementException("no medication found with id: " + medicationId));
+		MedicationUnitDbo medicationUnit = medicationUnitDboRepository
+			.findById(medicationUnitId)
+			.orElseThrow(() -> new NoSuchElementException("no medication unit found with id: " + medicationUnitId));
+		return new MedicationLogDbo()
+			.setDateOfIntake(dateOfIntake)
+			.setId(uuidFactory.create())
+			.setMedication(medication)
+			.setMedicationUnit(medicationUnit)
+			.setTimeOfIntake(timeOfIntake)
+			.setUnitCount(unitCount);
 	}
 
 	MedicationUnitDbo createMedicationUnit(String name, String token) {
