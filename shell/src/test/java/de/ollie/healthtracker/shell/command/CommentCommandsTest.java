@@ -15,7 +15,6 @@ import de.ollie.healthtracker.core.service.model.Comment;
 import de.ollie.healthtracker.shell.handler.OutputHandler;
 import de.ollie.healthtracker.shell.mapper.CommentToStringMapper;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
@@ -36,8 +35,6 @@ class CommentCommandsTest {
 	private static final UUID ID = UUID.randomUUID();
 	private static final String MESSAGE = "message";
 	private static final String STRING = "string";
-	private static final LocalTime TIME_OF_RECORDING = LocalTime.of(8, 0);
-	private static final String TIME_OF_RECORDING_STR = "8:00";
 
 	@Mock
 	private LocalDateFactory localDateFactory;
@@ -70,9 +67,9 @@ class CommentCommandsTest {
 		void returnAnErrorMessage_whenServiceCallThrowsAnException() {
 			// Prepare
 			RuntimeException exception = new RuntimeException(MESSAGE);
-			when(service.createComment(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING)).thenThrow(exception);
+			when(service.createComment(CONTENT, DATE_OF_RECORDING)).thenThrow(exception);
 			// Run
-			String returned = unitUnderTest.addComment(CONTENT, TIME_OF_RECORDING_STR, DATE_OF_RECORDING_STR);
+			String returned = unitUnderTest.addComment(CONTENT, DATE_OF_RECORDING_STR);
 			// Check
 			assertEquals(Constants.ERROR + MESSAGE, returned);
 		}
@@ -80,9 +77,9 @@ class CommentCommandsTest {
 		@Test
 		void returnsOk_whenNoErrorIsDetected() {
 			// Prepare
-			when(service.createComment(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING)).thenReturn(comment0);
+			when(service.createComment(CONTENT, DATE_OF_RECORDING)).thenReturn(comment0);
 			// Run
-			String returned = unitUnderTest.addComment(CONTENT, TIME_OF_RECORDING_STR, DATE_OF_RECORDING_STR);
+			String returned = unitUnderTest.addComment(CONTENT, DATE_OF_RECORDING_STR);
 			// Check
 			assertEquals(Constants.OK, returned);
 		}
@@ -91,9 +88,9 @@ class CommentCommandsTest {
 		void returnsOk_whenDateOfMeasurementNotSet() {
 			// Prepare
 			when(localDateFactory.now()).thenReturn(DATE_OF_RECORDING);
-			when(service.createComment(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING)).thenReturn(comment0);
+			when(service.createComment(CONTENT, DATE_OF_RECORDING)).thenReturn(comment0);
 			// Run
-			String returned = unitUnderTest.addComment(CONTENT, TIME_OF_RECORDING_STR, null);
+			String returned = unitUnderTest.addComment(CONTENT, null);
 			// Check
 			assertEquals(Constants.OK, returned);
 		}
@@ -103,32 +100,9 @@ class CommentCommandsTest {
 		void returnsOk_whenDateOfMeasurementIsToday(String today) {
 			// Prepare
 			when(localDateFactory.now()).thenReturn(DATE_OF_RECORDING);
-			when(service.createComment(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING)).thenReturn(comment0);
+			when(service.createComment(CONTENT, DATE_OF_RECORDING)).thenReturn(comment0);
 			// Run
-			String returned = unitUnderTest.addComment(CONTENT, TIME_OF_RECORDING_STR, today);
-			// Check
-			assertEquals(Constants.OK, returned);
-		}
-
-		@Test
-		void returnsOk_whenTimeOfMeasurementNotSet() {
-			// Prepare
-			when(localTimeFactory.now()).thenReturn(TIME_OF_RECORDING);
-			when(service.createComment(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING)).thenReturn(comment0);
-			// Run
-			String returned = unitUnderTest.addComment(CONTENT, null, DATE_OF_RECORDING_STR);
-			// Check
-			assertEquals(Constants.OK, returned);
-		}
-
-		@ParameterizedTest
-		@CsvSource({ "Now", "now", "NOW" })
-		void returnsOk_whenTimeOfMeasurementIsNow(String now) {
-			// Prepare
-			when(localTimeFactory.now()).thenReturn(TIME_OF_RECORDING);
-			when(service.createComment(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING)).thenReturn(comment0);
-			// Run
-			String returned = unitUnderTest.addComment(CONTENT, now, DATE_OF_RECORDING_STR);
+			String returned = unitUnderTest.addComment(CONTENT, today);
 			// Check
 			assertEquals(Constants.OK, returned);
 		}

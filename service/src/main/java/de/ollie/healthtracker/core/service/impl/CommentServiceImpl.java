@@ -5,25 +5,37 @@ import de.ollie.healthtracker.core.service.model.Comment;
 import de.ollie.healthtracker.core.service.port.persistence.CommentPersistencePort;
 import jakarta.inject.Named;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
 @Named
 @RequiredArgsConstructor
-public class CommentServiceImpl implements CommentService {
+class CommentServiceImpl implements CommentService {
 
 	private final CommentPersistencePort commentPersistencePort;
 
 	@Override
-	public Comment createComment(String content, LocalDate dateOfRecording, LocalTime timeOfRecording) {
-		return commentPersistencePort.create(content, dateOfRecording, timeOfRecording);
+	public Comment createComment(String content, LocalDate dateOfRecording) {
+		return commentPersistencePort.create(content, dateOfRecording);
 	}
 
 	@Override
 	public void deleteComment(UUID id) {
 		commentPersistencePort.deleteById(id);
+	}
+
+	@Override
+	public Optional<Comment> findByIdOrContentParticle(String namePartOrId) {
+		return commentPersistencePort.findByIdOrContentParticle(namePartOrId);
 	}
 
 	@Override

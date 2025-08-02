@@ -2,7 +2,6 @@ package de.ollie.healthtracker.core.service;
 
 import de.ollie.healthtracker.core.service.model.Symptom;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -15,7 +14,7 @@ import lombok.Generated;
  */
 @Generated
 public interface SymptomService {
-	Symptom createSymptom(String description, LocalDate dateOfRecording, LocalTime timeOfRecording);
+	Symptom createSymptom(String description, LocalDate dateOfRecording);
 
 	void deleteSymptom(UUID id);
 

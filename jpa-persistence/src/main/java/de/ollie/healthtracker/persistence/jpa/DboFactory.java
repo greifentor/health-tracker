@@ -62,16 +62,11 @@ class DboFactory {
 			.setTimeOfRecording(timeOfRecording);
 	}
 
-	CommentDbo createComment(String content, LocalDate dateOfRecording, LocalTime timeOfRecording) {
+	CommentDbo createComment(String content, LocalDate dateOfRecording) {
 		ensure(content != null, "content cannot be null!");
 		ensure(!content.isBlank(), "content cannot be blank!");
 		ensure(dateOfRecording != null, "date of recording cannot be null!");
-		ensure(timeOfRecording != null, "time of recording cannot be null!");
-		return new CommentDbo()
-			.setContent(content)
-			.setDateOfRecording(dateOfRecording)
-			.setId(uuidFactory.create())
-			.setTimeOfRecording(timeOfRecording);
+		return new CommentDbo().setContent(content).setDateOfRecording(dateOfRecording).setId(uuidFactory.create());
 	}
 
 	DoctorDbo createDoctor(String name, UUID doctorTypeId) {
@@ -167,15 +162,10 @@ class DboFactory {
 		return new MedicationUnitDbo().setId(uuidFactory.create()).setName(name).setToken(token);
 	}
 
-	SymptomDbo createSymptom(String description, LocalDate dateOfRecording, LocalTime timeOfRecording) {
+	SymptomDbo createSymptom(String description, LocalDate dateOfRecording) {
 		ensure(description != null, "description cannot be null!");
 		ensure(!description.isBlank(), "description cannot be blank!");
 		ensure(dateOfRecording != null, "date of recording cannot be null!");
-		ensure(timeOfRecording != null, "time of recording cannot be null!");
-		return new SymptomDbo()
-			.setDateOfRecording(dateOfRecording)
-			.setDescription(description)
-			.setId(uuidFactory.create())
-			.setTimeOfRecording(timeOfRecording);
+		return new SymptomDbo().setDateOfRecording(dateOfRecording).setDescription(description).setId(uuidFactory.create());
 	}
 }

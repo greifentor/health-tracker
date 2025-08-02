@@ -1,7 +1,6 @@
 package de.ollie.healthtracker.core.service.model;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
@@ -20,5 +19,4 @@ public class Symptom {
 	private UUID id;
 	private String description;
 	private LocalDate dateOfRecording;
-	private LocalTime timeOfRecording;
 }

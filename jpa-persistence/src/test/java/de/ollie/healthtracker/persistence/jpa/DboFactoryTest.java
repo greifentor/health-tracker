@@ -260,54 +260,39 @@ class DboFactoryTest {
 
 		@Test
 		void throwsAnException_passingABlankString_asContent() {
-			assertThrows(
-				IllegalArgumentException.class,
-				() -> unitUnderTest.createComment("\n\t\r ", DATE_OF_RECORDING, TIME_OF_RECORDING)
-			);
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createComment("\n\t\r ", DATE_OF_RECORDING));
 		}
 
 		@Test
 		void throwsAnException_passingANullValue_asContent() {
-			assertThrows(
-				IllegalArgumentException.class,
-				() -> unitUnderTest.createComment(null, DATE_OF_RECORDING, TIME_OF_RECORDING)
-			);
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createComment(null, DATE_OF_RECORDING));
 		}
 
 		@Test
 		void throwsAnException_passingANullValue_asDateOfRecording() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createComment(CONTENT, null, TIME_OF_RECORDING));
-		}
-
-		@Test
-		void throwsAnException_passingANullValue_asTimeOfRecording() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createComment(CONTENT, DATE_OF_RECORDING, null));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createComment(CONTENT, null));
 		}
 
 		@Test
 		void returnANewObject() {
-			assertNotNull(unitUnderTest.createComment(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING));
+			assertNotNull(unitUnderTest.createComment(CONTENT, DATE_OF_RECORDING));
 		}
 
 		@Test
 		void returnANewObject_onEachCall() {
 			assertNotSame(
-				unitUnderTest.createComment(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING),
-				unitUnderTest.createComment(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING)
+				unitUnderTest.createComment(CONTENT, DATE_OF_RECORDING),
+				unitUnderTest.createComment(CONTENT, DATE_OF_RECORDING)
 			);
 		}
 
 		@Test
 		void returnANewObject_withCorrectlySetAttributes() {
 			// Prepare
-			CommentDbo expected = new CommentDbo()
-				.setContent(CONTENT)
-				.setDateOfRecording(DATE_OF_RECORDING)
-				.setId(ID)
-				.setTimeOfRecording(TIME_OF_RECORDING);
+			CommentDbo expected = new CommentDbo().setContent(CONTENT).setDateOfRecording(DATE_OF_RECORDING).setId(ID);
 			when(uuidFactory.create()).thenReturn(ID);
 			// Run & Check
-			assertEquals(expected, unitUnderTest.createComment(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING));
+			assertEquals(expected, unitUnderTest.createComment(CONTENT, DATE_OF_RECORDING));
 		}
 	}
 
@@ -739,40 +724,29 @@ class DboFactoryTest {
 
 		@Test
 		void throwsAnException_passingABlankString_asContent() {
-			assertThrows(
-				IllegalArgumentException.class,
-				() -> unitUnderTest.createSymptom("\n\t\r ", DATE_OF_RECORDING, TIME_OF_RECORDING)
-			);
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createSymptom("\n\t\r ", DATE_OF_RECORDING));
 		}
 
 		@Test
 		void throwsAnException_passingANullValue_asContent() {
-			assertThrows(
-				IllegalArgumentException.class,
-				() -> unitUnderTest.createSymptom(null, DATE_OF_RECORDING, TIME_OF_RECORDING)
-			);
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createSymptom(null, DATE_OF_RECORDING));
 		}
 
 		@Test
 		void throwsAnException_passingANullValue_asDateOfRecording() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createSymptom(CONTENT, null, TIME_OF_RECORDING));
-		}
-
-		@Test
-		void throwsAnException_passingANullValue_asTimeOfRecording() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING, null));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createSymptom(CONTENT, null));
 		}
 
 		@Test
 		void returnANewObject() {
-			assertNotNull(unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING));
+			assertNotNull(unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING));
 		}
 
 		@Test
 		void returnANewObject_onEachCall() {
 			assertNotSame(
-				unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING),
-				unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING)
+				unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING),
+				unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING)
 			);
 		}
 
@@ -782,11 +756,10 @@ class DboFactoryTest {
 			SymptomDbo expected = new SymptomDbo()
 				.setDateOfRecording(DATE_OF_RECORDING)
 				.setDescription(DESCRIPTION)
-				.setId(ID)
-				.setTimeOfRecording(TIME_OF_RECORDING);
+				.setId(ID);
 			when(uuidFactory.create()).thenReturn(ID);
 			// Run & Check
-			assertEquals(expected, unitUnderTest.createSymptom(DESCRIPTION, DATE_OF_RECORDING, TIME_OF_RECORDING));
+			assertEquals(expected, unitUnderTest.createSymptom(DESCRIPTION, DATE_OF_RECORDING));
 		}
 	}
 }

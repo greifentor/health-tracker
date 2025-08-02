@@ -10,7 +10,6 @@ import de.ollie.healthtracker.persistence.jpa.mapper.SymptomDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.SymptomDboRepository;
 import jakarta.inject.Named;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,8 +31,8 @@ class SymptomPersistenceJpaAdapter implements SymptomPersistencePort {
 	private final SymptomDboRepository repository;
 
 	@Override
-	public Symptom create(String description, LocalDate dateOfRecording, LocalTime timeOfRecording) {
-		return mapper.toModel(repository.save(dboFactory.createSymptom(description, dateOfRecording, timeOfRecording)));
+	public Symptom create(String description, LocalDate dateOfRecording) {
+		return mapper.toModel(repository.save(dboFactory.createSymptom(description, dateOfRecording)));
 	}
 
 	@Override

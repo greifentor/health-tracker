@@ -1,4 +1,37 @@
 classes:
+  - name: Comment
+    properties:
+      - name: order
+        value: dateOfRecording
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: content
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+        type:
+          name: String
+      - name: dateOfRecording
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: LocalDate
+          properties:
+            - name: import
+              value: java.time.LocalDate
   - name: DoctorType
     attributes:
       - name: id
@@ -237,8 +270,6 @@ classes:
     properties:
       - name: order
         value: dateOfRecording
-      - name: order
-        value: timeOfRecording
     attributes:
       - name: id
         properties:
@@ -268,12 +299,3 @@ classes:
           properties:
             - name: import
               value: java.time.LocalDate
-      - name: timeOfRecording
-        properties:
-          - name: nullable
-            value: false
-        type:
-          name: LocalTime
-          properties:
-            - name: import
-              value: java.time.LocalTime

@@ -180,5 +180,13 @@
             DELETE FROM COMMENT;
         </sql>
     </changeSet>
+    <changeSet author="dm-comp" id="Drop-Time-Fields-from-Tables-COMMENT-and-SYMPTOM" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <dropColumn tableName="COMMENT">
+            <column name="TIME_OF_RECORDING"/>
+        </dropColumn>
+        <dropColumn tableName="SYMPTOM">
+            <column name="TIME_OF_RECORDING"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>
 

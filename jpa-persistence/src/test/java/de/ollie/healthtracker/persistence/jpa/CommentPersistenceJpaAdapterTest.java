@@ -12,7 +12,6 @@ import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
 import de.ollie.healthtracker.persistence.jpa.mapper.CommentDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.CommentDboRepository;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
@@ -28,7 +27,6 @@ class CommentPersistenceJpaAdapterTest {
 	private static final String CONTENT = "content";
 	private static final LocalDate DATE_OF_RECORDING = LocalDate.of(2025, 6, 17);
 	private static final UUID ID = UUID.randomUUID();
-	private static final LocalTime TIME_OF_RECORDING = LocalTime.of(23, 31, 42);
 
 	@Mock
 	private Comment model;
@@ -57,11 +55,11 @@ class CommentPersistenceJpaAdapterTest {
 		@Test
 		void returnsANewSavedObject() {
 			// Prepare
-			when(dboFactory.createComment(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING)).thenReturn(dbo);
+			when(dboFactory.createComment(CONTENT, DATE_OF_RECORDING)).thenReturn(dbo);
 			when(mapper.toModel(dboSaved)).thenReturn(model);
 			when(repository.save(dbo)).thenReturn(dboSaved);
 			// Run & Check
-			assertSame(model, unitUnderTest.create(CONTENT, DATE_OF_RECORDING, TIME_OF_RECORDING));
+			assertSame(model, unitUnderTest.create(CONTENT, DATE_OF_RECORDING));
 		}
 	}
 

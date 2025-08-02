@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import de.ollie.healthtracker.core.service.model.Symptom;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,8 +20,6 @@ class SymptomToStringMapperImplTest {
 	private static final String DATE_OF_RECORDING_STR = "25.06.2025";
 	private static final String DESCRIPTION = "description";
 	private static final UUID ID = UUID.randomUUID();
-	private static final LocalTime TIME_OF_RECORDING = LocalTime.of(8, 0);
-	private static final String TIME_OF_RECORDING_STR = "08:00";
 
 	@Mock
 	private Symptom symptom;
@@ -35,7 +32,7 @@ class SymptomToStringMapperImplTest {
 
 		@Test
 		void returnsTheCorrectHeadLine() {
-			assertEquals("Date       Time  (ID)                                   Description", unitUnderTest.getHeadLine());
+			assertEquals("Date       (ID)                                   Description", unitUnderTest.getHeadLine());
 		}
 	}
 
@@ -45,7 +42,7 @@ class SymptomToStringMapperImplTest {
 		@Test
 		void returnsTheCorrectUnderLine() {
 			assertEquals(
-				"--------------------------------------------------------------------------------------------------",
+				"--------------------------------------------------------------------------------------------",
 				unitUnderTest.getUnderLine()
 			);
 		}
@@ -62,7 +59,7 @@ class SymptomToStringMapperImplTest {
 		@Test
 		void returnsACorrectString_passingASymptomWithNoSetAttributes() {
 			// Prepare
-			String expected = "         -     - (                                null) -";
+			String expected = "         - (                                null) -";
 			// Run
 			String returned = unitUnderTest.map(symptom);
 			// Check
@@ -72,13 +69,8 @@ class SymptomToStringMapperImplTest {
 		@Test
 		void returnsACorrectString_passingASymptomWithAllSetAttributes() {
 			// Prepare
-			String expected = DATE_OF_RECORDING_STR + " " + TIME_OF_RECORDING_STR + " (" + ID + ") " + DESCRIPTION;
-			symptom =
-				new Symptom()
-					.setDateOfRecording(DATE_OF_RECORDING)
-					.setDescription(DESCRIPTION)
-					.setId(ID)
-					.setTimeOfRecording(TIME_OF_RECORDING);
+			String expected = DATE_OF_RECORDING_STR + " (" + ID + ") " + DESCRIPTION;
+			symptom = new Symptom().setDateOfRecording(DATE_OF_RECORDING).setDescription(DESCRIPTION).setId(ID);
 			// Run
 			String returned = unitUnderTest.map(symptom);
 			// Check

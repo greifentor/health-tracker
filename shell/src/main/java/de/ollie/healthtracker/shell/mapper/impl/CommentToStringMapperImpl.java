@@ -7,16 +7,16 @@ import jakarta.inject.Named;
 @Named
 class CommentToStringMapperImpl implements CommentToStringMapper {
 
-	private static final String LINE_FORMAT = "%10s %5s (%36s) %s";
+	private static final String LINE_FORMAT = "%10s (%36s) %s";
 
 	@Override
 	public String getHeadLine() {
-		return "Date       Time  (ID)                                   Content";
+		return "Date       (ID)                                   Content";
 	}
 
 	@Override
 	public String getUnderLine() {
-		return "----------------------------------------------------------------------------------------------------";
+		return "----------------------------------------------------------------------------------------------";
 	}
 
 	@Override
@@ -26,7 +26,6 @@ class CommentToStringMapperImpl implements CommentToStringMapper {
 			: String.format(
 				LINE_FORMAT,
 				dateToString(comment.getDateOfRecording()),
-				timeToString(comment.getTimeOfRecording()),
 				comment.getId(),
 				(comment.getContent() == null ? "-" : comment.getContent())
 			);

@@ -7,16 +7,16 @@ import jakarta.inject.Named;
 @Named
 class SymptomToStringMapperImpl implements SymptomToStringMapper {
 
-	private static final String LINE_FORMAT = "%10s %5s (%36s) %s";
+	private static final String LINE_FORMAT = "%10s (%36s) %s";
 
 	@Override
 	public String getHeadLine() {
-		return "Date       Time  (ID)                                   Description";
+		return "Date       (ID)                                   Description";
 	}
 
 	@Override
 	public String getUnderLine() {
-		return "--------------------------------------------------------------------------------------------------";
+		return "--------------------------------------------------------------------------------------------";
 	}
 
 	@Override
@@ -26,7 +26,6 @@ class SymptomToStringMapperImpl implements SymptomToStringMapper {
 			: String.format(
 				LINE_FORMAT,
 				dateToString(model.getDateOfRecording()),
-				timeToString(model.getTimeOfRecording()),
 				model.getId(),
 				(model.getDescription() == null ? "-" : model.getDescription())
 			);

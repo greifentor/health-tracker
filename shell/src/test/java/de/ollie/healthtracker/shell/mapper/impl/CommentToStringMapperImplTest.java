@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import de.ollie.healthtracker.core.service.model.Comment;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,8 +20,6 @@ class CommentToStringMapperImplTest {
 	private static final LocalDate DATE_OF_RECORDING = LocalDate.of(2025, 06, 25);
 	private static final String DATE_OF_RECORDING_STR = "25.06.2025";
 	private static final UUID ID = UUID.randomUUID();
-	private static final LocalTime TIME_OF_RECORDING = LocalTime.of(8, 0);
-	private static final String TIME_OF_RECORDING_STR = "08:00";
 
 	@Mock
 	private Comment comment;
@@ -35,7 +32,7 @@ class CommentToStringMapperImplTest {
 
 		@Test
 		void returnsTheCorrectHeadLine() {
-			assertEquals("Date       Time  (ID)                                   Content", unitUnderTest.getHeadLine());
+			assertEquals("Date       (ID)                                   Content", unitUnderTest.getHeadLine());
 		}
 	}
 
@@ -45,7 +42,7 @@ class CommentToStringMapperImplTest {
 		@Test
 		void returnsTheCorrectUnderLine() {
 			assertEquals(
-				"----------------------------------------------------------------------------------------------------",
+				"----------------------------------------------------------------------------------------------",
 				unitUnderTest.getUnderLine()
 			);
 		}
@@ -62,7 +59,7 @@ class CommentToStringMapperImplTest {
 		@Test
 		void returnsACorrectString_passingACommentWithNoSetAttributes() {
 			// Prepare
-			String expected = "         -     - (                                null) -";
+			String expected = "         - (                                null) -";
 			// Run
 			String returned = unitUnderTest.map(comment);
 			// Check
@@ -72,13 +69,8 @@ class CommentToStringMapperImplTest {
 		@Test
 		void returnsACorrectString_passingACommentWithAllSetAttributes() {
 			// Prepare
-			String expected = DATE_OF_RECORDING_STR + " " + TIME_OF_RECORDING_STR + " (" + ID + ") " + CONTENT;
-			comment =
-				new Comment()
-					.setContent(CONTENT)
-					.setDateOfRecording(DATE_OF_RECORDING)
-					.setId(ID)
-					.setTimeOfRecording(TIME_OF_RECORDING);
+			String expected = DATE_OF_RECORDING_STR + " (" + ID + ") " + CONTENT;
+			comment = new Comment().setContent(CONTENT).setDateOfRecording(DATE_OF_RECORDING).setId(ID);
 			// Run
 			String returned = unitUnderTest.map(comment);
 			// Check

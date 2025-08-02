@@ -6,7 +6,6 @@ import de.ollie.healthtracker.core.service.SymptomService;
 import de.ollie.healthtracker.shell.handler.OutputHandler;
 import de.ollie.healthtracker.shell.mapper.SymptomToStringMapper;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +32,6 @@ public class SymptomCommands implements CommandsWithTimeOrDate {
 	public String addSymptom(
 		@ShellOption(help = "The content of the symptom.", value = "content") String content,
 		@ShellOption(
-			help = "The time of measurement (HH:MM or NOW).",
-			value = "time",
-			defaultValue = "NOW"
-		) String timeOfMeasurementStr,
-		@ShellOption(
 			help = "The date of measurement (DD.MM.JJJJ or TODAY or TD).",
 			value = "date",
 			defaultValue = "TODAY"
@@ -45,8 +39,7 @@ public class SymptomCommands implements CommandsWithTimeOrDate {
 	) {
 		try {
 			LocalDate dateOfMeasurement = getDateFromParameter(dateOfMeasurementStr);
-			LocalTime timeOfMeasurement = getTimeFromParameter(timeOfMeasurementStr);
-			symptomService.createSymptom(content, dateOfMeasurement, timeOfMeasurement);
+			symptomService.createSymptom(content, dateOfMeasurement);
 			return Constants.OK;
 		} catch (Exception e) {
 			e.printStackTrace();

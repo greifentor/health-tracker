@@ -5,7 +5,6 @@ import de.ollie.healthtracker.core.service.model.Symptom;
 import de.ollie.healthtracker.core.service.port.persistence.SymptomPersistencePort;
 import jakarta.inject.Named;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,8 +24,8 @@ class SymptomServiceImpl implements SymptomService {
 	private final SymptomPersistencePort symptomPersistencePort;
 
 	@Override
-	public Symptom createSymptom(String description, LocalDate dateOfRecording, LocalTime timeOfRecording) {
-		return symptomPersistencePort.create(description, dateOfRecording, timeOfRecording);
+	public Symptom createSymptom(String description, LocalDate dateOfRecording) {
+		return symptomPersistencePort.create(description, dateOfRecording);
 	}
 
 	@Override
