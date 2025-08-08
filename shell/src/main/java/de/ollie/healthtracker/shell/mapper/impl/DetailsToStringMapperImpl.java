@@ -7,11 +7,11 @@ import jakarta.inject.Named;
 @Named
 class DetailsToStringMapperImpl implements DetailsToStringMapper {
 
-	private static final String LINE_FORMAT = "%-20s %s";
+	private static final String LINE_FORMAT = "%-10s %s";
 
 	@Override
 	public String getHeadLine() {
-		return "Id                   Description";
+		return "Id         Description";
 	}
 
 	@Override

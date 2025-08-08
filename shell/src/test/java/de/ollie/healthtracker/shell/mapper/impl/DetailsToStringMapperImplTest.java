@@ -28,7 +28,7 @@ class DetailsToStringMapperImplTest {
 
 		@Test
 		void returnsTheCorrectHeadLine() {
-			assertEquals("Id                   Description", unitUnderTest.getHeadLine());
+			assertEquals("Id         Description", unitUnderTest.getHeadLine());
 		}
 	}
 
@@ -55,7 +55,7 @@ class DetailsToStringMapperImplTest {
 		@Test
 		void returnsACorrectString_passingACommentWithNoSetAttributes() {
 			// Prepare
-			String expected = "null                 null";
+			String expected = "null       null";
 			// Run
 			String returned = unitUnderTest.map(details);
 			// Check
@@ -65,7 +65,7 @@ class DetailsToStringMapperImplTest {
 		@Test
 		void returnsACorrectString_passingACommentWithAllSetAttributes() {
 			// Prepare
-			String expected = ID + "                   " + DESCRIPTION;
+			String expected = ID + "         " + DESCRIPTION;
 			details = new Details(ID, DESCRIPTION);
 			// Run
 			String returned = unitUnderTest.map(details);
