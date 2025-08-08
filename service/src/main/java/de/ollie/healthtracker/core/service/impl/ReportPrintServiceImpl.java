@@ -1,6 +1,9 @@
 package de.ollie.healthtracker.core.service.impl;
 
+import static de.ollie.baselib.util.Check.ensure;
+
 import de.ollie.healthtracker.core.service.ReportPrintService;
+import de.ollie.healthtracker.core.service.ReportService;
 import de.ollie.healthtracker.core.service.port.print.PrintPort;
 import de.ollie.healthtracker.core.service.port.print.PrintPort.Details;
 import jakarta.annotation.PostConstruct;
@@ -17,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 class ReportPrintServiceImpl implements ReportPrintService {
 
 	private final List<PrintPort> printPortList;
+	private final ReportService reportService;
 
 	private final Map<String, PrintPort> printPorts = new HashMap<>();
 
@@ -41,7 +45,13 @@ class ReportPrintServiceImpl implements ReportPrintService {
 	}
 
 	@Override
-	public void printForTimeInterval(LocalDate from, LocalDate to, Map<String, String> parameters) {
-		// TODO Auto-generated method stub
+	public void printForTimeInterval(LocalDate from, LocalDate to, String printPortId, Map<String, String> parameters) {
+		ensure(from != null, "from cannot be null!");
+		ensure(parameters != null, "parameters cannot be null!");
+		ensure(printPortId != null, "print port id cannot be null!");
+		ensure(to != null, "to cannot be null!");
+		PrintPort printPort = printPorts.get(printPortId);
+		ensure(printPort != null, "print port id is not found in configured print ports!");
+		printPort.print(reportService.collectData(from, to), parameters);
 	}
 }

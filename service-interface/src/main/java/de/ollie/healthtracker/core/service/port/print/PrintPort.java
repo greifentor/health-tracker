@@ -16,5 +16,5 @@ public interface PrintPort {
 
 	Details getDetails();
 
-	void print(HealthTrackingReport report, String portId, Map<String, String> parameters);
+	void print(HealthTrackingReport report, Map<String, String> parameters);
 }

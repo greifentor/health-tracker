@@ -8,5 +8,5 @@ import java.util.Map;
 public interface ReportPrintService {
 	List<PrintPort.Details> getDetails();
 
-	void printForTimeInterval(LocalDate from, LocalDate to, Map<String, String> parameters);
+	void printForTimeInterval(LocalDate from, LocalDate to, String printPortId, Map<String, String> parameters);
 }
