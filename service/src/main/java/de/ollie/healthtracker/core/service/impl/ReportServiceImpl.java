@@ -11,6 +11,6 @@ class ReportServiceImpl implements ReportService {
 	@Override
 	public HealthTrackingReport collectData(LocalDate from, LocalDate to) {
 		// TODO Auto-generated method stub
-		return null;
+		return new HealthTrackingReport(from, to);
 	}
 }
