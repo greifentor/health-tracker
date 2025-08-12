@@ -24,7 +24,6 @@ public class PrintCommands implements CommandsWithTimeOrDate {
 
 	@ShellMethod(value = "Prints the health tracking report.", key = { "print-report", "pr" })
 	public String print(
-		@ShellOption(help = "Id of the print port to use.", value = "ppid", defaultValue = "CON") String printPortId,
 		@ShellOption(
 			help = "The date where the report starts (DD.MM.JJJJ, TODAY or TD).",
 			value = "from",
@@ -34,7 +33,8 @@ public class PrintCommands implements CommandsWithTimeOrDate {
 			help = "The date where the report ends (DD.MM.JJJJ, TODAY or TD).",
 			value = "to",
 			defaultValue = "TODAY"
-		) String dateToStr
+		) String dateToStr,
+		@ShellOption(help = "Id of the print port to use.", value = "ppid", defaultValue = "CON") String printPortId
 	) {
 		reportPrintService.printForTimeInterval(
 			getDateFromParameter(dateFromStr),
