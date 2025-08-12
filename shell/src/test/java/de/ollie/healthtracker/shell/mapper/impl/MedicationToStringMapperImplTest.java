@@ -35,7 +35,7 @@ class MedicationToStringMapperImplTest {
 		@Test
 		void returnsTheCorrectHeadLine() {
 			assertEquals(
-				"(ID)                                   Name                           Manufacturer",
+				"(ID)                                   Name                                     Manufacturer",
 				unitUnderTest.getHeadLine()
 			);
 		}
@@ -47,7 +47,7 @@ class MedicationToStringMapperImplTest {
 		@Test
 		void returnsTheCorrectUnderLine() {
 			assertEquals(
-				"---------------------------------------------------------------------------------------------------",
+				"--------------------------------------------------------------------------------------------------------",
 				unitUnderTest.getUnderLine()
 			);
 		}
@@ -64,7 +64,7 @@ class MedicationToStringMapperImplTest {
 		@Test
 		void returnsACorrectString_passingMedicationWithNoSetAttributes() {
 			// Prepare
-			String expected = "(                                null) null                           -";
+			String expected = "(                                null) null                                     -";
 			// Run
 			String returned = unitUnderTest.map(medication);
 			// Check
@@ -74,7 +74,7 @@ class MedicationToStringMapperImplTest {
 		@Test
 		void returnsACorrectString_passingAManufacturerWithAllSetAttributes() {
 			// Prepare
-			String expected = "(" + ID + ") " + NAME + "                           " + MANUFACTURER_NAME;
+			String expected = "(" + ID + ") " + NAME + "                                     " + MANUFACTURER_NAME;
 			manufacturer = new Manufacturer().setName(MANUFACTURER_NAME);
 			medication = new Medication().setId(ID).setManufacturer(manufacturer).setName(NAME);
 			// Run

@@ -7,16 +7,16 @@ import jakarta.inject.Named;
 @Named
 class MedicationToStringMapperImpl implements MedicationToStringMapper {
 
-	private static final String LINE_FORMAT = "(%36s) %-30s %s";
+	private static final String LINE_FORMAT = "(%36s) %-40s %s";
 
 	@Override
 	public String getHeadLine() {
-		return "(ID)                                   Name                           Manufacturer";
+		return "(ID)                                   Name                                     Manufacturer";
 	}
 
 	@Override
 	public String getUnderLine() {
-		return "---------------------------------------------------------------------------------------------------";
+		return "--------------------------------------------------------------------------------------------------------";
 	}
 
 	@Override
