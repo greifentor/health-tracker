@@ -8,6 +8,7 @@ import de.ollie.healthtracker.shell.handler.OutputHandler;
 import de.ollie.healthtracker.shell.mapper.DoctorConsultationToStringMapper;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import javax.swing.JOptionPane;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
@@ -68,6 +69,17 @@ public class DoctorConsultationCommands implements CommandsWithTimeOrDate {
 		} catch (Exception e) {
 			return Constants.ERROR + e.getMessage();
 		}
+	}
+
+	@ShellMethod(
+		value = "Opens a GUI dialog to edit doctor consultation with passed id.",
+		key = { "edit-doctor-consultation", "edc" }
+	)
+	public String editDoctorConsultation(
+		@ShellOption(help = "The id of the doctor consultation to edit.", value = "id") String id
+	) {
+		JOptionPane.showConfirmDialog(null, "edit doctor consultation: " + id, "POC", JOptionPane.OK_OPTION);
+		return Constants.OK;
 	}
 
 	@ShellMethod(value = "Lists doctor consultations.", key = { "list-doctor-consultations", "ldc" })
