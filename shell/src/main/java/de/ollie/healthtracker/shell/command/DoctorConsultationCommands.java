@@ -4,11 +4,12 @@ import de.ollie.healthtracker.core.service.DoctorConsultationService;
 import de.ollie.healthtracker.core.service.DoctorService;
 import de.ollie.healthtracker.core.service.LocalDateFactory;
 import de.ollie.healthtracker.core.service.LocalTimeFactory;
+import de.ollie.healthtracker.gui.swing.BaseEditDialog;
 import de.ollie.healthtracker.shell.handler.OutputHandler;
 import de.ollie.healthtracker.shell.mapper.DoctorConsultationToStringMapper;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
@@ -78,7 +79,25 @@ public class DoctorConsultationCommands implements CommandsWithTimeOrDate {
 	public String editDoctorConsultation(
 		@ShellOption(help = "The id of the doctor consultation to edit.", value = "id") String id
 	) {
-		JOptionPane.showConfirmDialog(null, "edit doctor consultation: " + id, "POC", JOptionPane.OK_OPTION);
+		BaseEditDialog.Observer<String> observer = new BaseEditDialog.Observer<String>() {
+			@Override
+			public void onCancel() {
+				outputHandler.println("Canceled!");
+			}
+
+			@Override
+			public void onDelete(String toDelete) {
+				outputHandler.println("Deleted! " + toDelete);
+			}
+
+			@Override
+			public void onSave(String toSave) {
+				outputHandler.println("Saved! " + toSave);
+			}
+		};
+		SwingUtilities.invokeLater(() -> {
+			new BaseEditDialog<String>("Doctor Consultation", ";op", observer);
+		});
 		return Constants.OK;
 	}
 
