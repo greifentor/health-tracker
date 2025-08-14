@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import lombok.Getter;
 
 public class BaseEditDialog<T> extends JDialog {
 
@@ -20,10 +21,14 @@ public class BaseEditDialog<T> extends JDialog {
 		void onSave(T toSave);
 	}
 
+	@Getter
 	private T toEdit;
 
-	public BaseEditDialog(String title, T toEdit, Observer<T> observer) {
+	private EditDialogComponentFactory componentFactory;
+
+	public BaseEditDialog(String title, T toEdit, EditDialogComponentFactory componentFactory, Observer<T> observer) {
 		super((JDialog) null, title);
+		this.componentFactory = componentFactory;
 		setContentPane(createContentPanel(observer));
 		pack();
 		setVisible(true);
@@ -41,7 +46,7 @@ public class BaseEditDialog<T> extends JDialog {
 		p.add(new JLabel("     "));
 		p.add(createDeleteButton(observer));
 		p.add(new JLabel("     "));
-		p.add(createSaveButton(observer));
+		p.add(componentFactory.createSaveButton(observer, this));
 		return p;
 	}
 
@@ -56,7 +61,7 @@ public class BaseEditDialog<T> extends JDialog {
 		return b;
 	}
 
-	private void closeDialog() {
+	public void closeDialog() {
 		setVisible(false);
 		dispose();
 	}
@@ -66,17 +71,6 @@ public class BaseEditDialog<T> extends JDialog {
 		if (observer != null) {
 			b.addActionListener(e -> {
 				observer.onDelete(toEdit);
-				closeDialog();
-			});
-		}
-		return b;
-	}
-
-	private JButton createSaveButton(Observer<T> observer) {
-		JButton b = new JButton("Save");
-		if (observer != null) {
-			b.addActionListener(e -> {
-				observer.onSave(toEdit);
 				closeDialog();
 			});
 		}

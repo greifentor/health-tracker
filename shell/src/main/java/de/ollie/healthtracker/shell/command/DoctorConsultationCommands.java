@@ -5,6 +5,7 @@ import de.ollie.healthtracker.core.service.DoctorService;
 import de.ollie.healthtracker.core.service.LocalDateFactory;
 import de.ollie.healthtracker.core.service.LocalTimeFactory;
 import de.ollie.healthtracker.gui.swing.BaseEditDialog;
+import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.shell.handler.OutputHandler;
 import de.ollie.healthtracker.shell.mapper.DoctorConsultationToStringMapper;
 import java.util.NoSuchElementException;
@@ -22,6 +23,7 @@ public class DoctorConsultationCommands implements CommandsWithTimeOrDate {
 
 	static final String MSG_NO_SUCH_DOCTOR_FOUND = "No doctor found for: ";
 
+	private final EditDialogComponentFactory componentFactory;
 	private final DoctorConsultationService doctorConsultationService;
 	private final DoctorService doctorService;
 	private final DoctorConsultationToStringMapper doctorConsultationToStringMapper;
@@ -96,7 +98,7 @@ public class DoctorConsultationCommands implements CommandsWithTimeOrDate {
 			}
 		};
 		SwingUtilities.invokeLater(() -> {
-			new BaseEditDialog<String>("Doctor Consultation", ";op", observer);
+			new BaseEditDialog<String>("Doctor Consultation", ";op", componentFactory, observer);
 		});
 		return Constants.OK;
 	}
