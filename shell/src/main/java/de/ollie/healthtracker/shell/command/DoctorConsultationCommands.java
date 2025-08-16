@@ -11,6 +11,7 @@ import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.shell.handler.OutputHandler;
 import de.ollie.healthtracker.shell.mapper.DoctorConsultationToStringMapper;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 import javax.swing.SwingUtilities;
 import lombok.Getter;
@@ -24,6 +25,7 @@ import org.springframework.shell.standard.ShellOption;
 public class DoctorConsultationCommands implements CommandsWithTimeOrDate {
 
 	static final String MSG_NO_SUCH_DOCTOR_FOUND = "No doctor found for: ";
+	static final String MSG_NO_SUCH_DOCTOR_CONSULTATION_FOUND = "No doctor consultation found for: ";
 
 	private final EditDialogComponentFactory componentFactory;
 	private final DoctorConsultationService doctorConsultationService;
@@ -81,7 +83,7 @@ public class DoctorConsultationCommands implements CommandsWithTimeOrDate {
 		key = { "edit-doctor-consultation", "edc" }
 	)
 	public String editDoctorConsultation(
-		@ShellOption(help = "The id of the doctor consultation to edit.", value = "id") String id
+		@ShellOption(help = "The id of the doctor consultation to edit.", value = "id", defaultValue = "unknown") String id
 	) {
 		try {
 			BaseEditDialog.Observer<DoctorConsultation> observer = new BaseEditDialog.Observer<DoctorConsultation>() {
@@ -100,23 +102,30 @@ public class DoctorConsultationCommands implements CommandsWithTimeOrDate {
 					doctorConsultationService.updateDoctorConsultation(toSave);
 				}
 			};
-			doctorConsultationService
-				.findById(UUID.fromString(id))
-				.ifPresentOrElse(
-					dc ->
-						SwingUtilities.invokeLater(() -> {
-							System.out.println(dc);
-							new DoctorConsultationEditDialog(
-								"Doctor Consultation",
-								dc,
-								componentFactory,
-								observer,
-								() -> doctorService.listDoctors()
-							);
-						}),
-					() -> {
-						throw new NoSuchElementException(MSG_NO_SUCH_DOCTOR_FOUND + id);
-					}
+			DoctorConsultation doctorConsultation = new DoctorConsultation()
+				.setDate(getLocalDateFactory().now())
+				.setId(UUID.randomUUID())
+				.setTime(getLocalTimeFactory().now());
+			if (!"unknown".equals(id)) {
+				doctorConsultation =
+					doctorConsultationService
+						.findById(UUID.fromString(id))
+						.orElseThrow(() -> new NoSuchElementException(MSG_NO_SUCH_DOCTOR_CONSULTATION_FOUND + id));
+			}
+			Optional
+				.ofNullable(doctorConsultation)
+				.ifPresent(dc ->
+					SwingUtilities.invokeLater(() -> {
+						System.out.println(dc);
+						new DoctorConsultationEditDialog(
+							"Doctor Consultation",
+							dc,
+							componentFactory,
+							observer,
+							() ->
+								doctorService.listDoctors().stream().sorted((d0, d1) -> d0.getName().compareTo(d1.getName())).toList()
+						);
+					})
 				);
 			return Constants.OK;
 		} catch (Exception e) {
