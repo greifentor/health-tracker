@@ -79,6 +79,7 @@ public class DoctorConsultationEditDialog extends BaseEditDialog<DoctorConsultat
 		textFieldTime = new JTextField(DateTimeUtil.DE_TIME_FORMAT.format(toEdit.getTime()));
 		List<Doctor> doctorList = doctors.getItem();
 		comboBoxDoctor = new JComboBox<>(doctorList.toArray(new Doctor[doctorList.size()]));
+		comboBoxDoctor.setSelectedItem(toEdit.getDoctor());
 		p.add(textFieldDate);
 		p.add(textFieldTime);
 		p.add(comboBoxDoctor);
