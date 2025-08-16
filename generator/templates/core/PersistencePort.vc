@@ -8,9 +8,7 @@ import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
 #end
 import jakarta.inject.Named;
 import java.util.List;
-#if (!$Class.getAttributesWithPropertySet("findable").isEmpty())
 import java.util.Optional;
-#end
 import lombok.Generated;
 
 #foreach($Import in $Imports)
@@ -29,10 +27,14 @@ public interface ${ClassName}PersistencePort {
 	${ClassName} create(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})${Attribute.getTypeName()} ${Attribute.getName()}#if($foreach.hasNext), #end#end);
 
 	void deleteById(${Class.getAttributeTypeNameByPropertyName("id")} id);
+
+	Optional<${ClassName}> findById(${Class.getAttributeTypeNameByPropertyName("id")} id);
 #foreach($Attribute in ${Class.getAttributesWithPropertySet("findable")})
 
 	Optional<${ClassName}> findByIdOr${Attribute.getNameCamelCase()}Particle(String ${Attribute.getName()});
 #end
 
 	List<${ClassName}> list();
+	
+	${ClassName} update(${ClassName} toSave);
 }

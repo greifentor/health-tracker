@@ -8,6 +8,7 @@ import jakarta.inject.Named;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +42,17 @@ class DoctorConsultationServiceImpl implements DoctorConsultationService {
 	}
 
 	@Override
+	public Optional<DoctorConsultation> findById(UUID id) {
+		return doctorConsultationPersistencePort.findById(id);
+	}
+
+	@Override
 	public List<DoctorConsultation> listDoctorConsultations() {
 		return doctorConsultationPersistencePort.list();
+	}
+
+	@Override
+	public DoctorConsultation updateDoctorConsultation(DoctorConsultation toSave) {
+		return doctorConsultationPersistencePort.update(toSave);
 	}
 }

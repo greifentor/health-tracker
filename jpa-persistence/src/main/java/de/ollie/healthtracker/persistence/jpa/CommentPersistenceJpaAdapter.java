@@ -42,6 +42,12 @@ class CommentPersistenceJpaAdapter implements CommentPersistencePort {
 	}
 
 	@Override
+	public Optional<Comment> findById(UUID id) {
+		ensure(id != null, "id cannot be null!");
+		return repository.findById(id).map(mapper::toModel);
+	}
+
+	@Override
 	public Optional<Comment> findByIdOrContentParticle(String nameParticleOrId) {
 		ensure(nameParticleOrId != null, "name particle or id cannot be null");
 		Optional<CommentDbo> dbo = Optional.empty();
@@ -67,5 +73,10 @@ class CommentPersistenceJpaAdapter implements CommentPersistencePort {
 	@Override
 	public List<Comment> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
+	}
+
+	@Override
+	public Comment update(Comment toSave) {
+		return mapper.toModel(repository.save(mapper.toDbo(toSave)));
 	}
 }

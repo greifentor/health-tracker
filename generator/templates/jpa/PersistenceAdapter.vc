@@ -17,9 +17,7 @@ import ${Properties.get("jpa-mapper-package")}.${ClassName}DboMapper;
 import ${Properties.get("jpa-repository-package")}.${ClassName}DboRepository;
 import jakarta.inject.Named;
 import java.util.List;
-#if (!$Class.getAttributesWithPropertySet("findable").isEmpty())
 import java.util.Optional;
-#end
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
@@ -51,6 +49,12 @@ class ${ClassName}PersistenceJpaAdapter implements ${ClassName}PersistencePort {
 		ensure(id != null, "id cannot be null!");
 		repository.deleteById(id);
 	}
+
+	@Override
+	public Optional<${ClassName}> findById(${Class.getAttributeTypeNameByPropertyName("id")} id) {
+		ensure(id != null, "id cannot be null!");
+		return repository.findById(id).map(mapper::toModel);
+	}
 #foreach($Attribute in ${Class.getAttributesWithPropertySet("findable")})
 
 	@Override
@@ -80,5 +84,10 @@ class ${ClassName}PersistenceJpaAdapter implements ${ClassName}PersistencePort {
 	@Override
 	public List<${ClassName}> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
+	}
+	
+	@Override
+	public ${ClassName} update(${ClassName} toSave) {
+		return mapper.toModel(repository.save(mapper.toDbo(toSave)));
 	}
 }

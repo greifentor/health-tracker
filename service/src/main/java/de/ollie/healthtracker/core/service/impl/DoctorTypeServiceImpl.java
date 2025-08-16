@@ -33,6 +33,11 @@ class DoctorTypeServiceImpl implements DoctorTypeService {
 	}
 
 	@Override
+	public Optional<DoctorType> findById(UUID id) {
+		return doctorTypePersistencePort.findById(id);
+	}
+
+	@Override
 	public Optional<DoctorType> findByIdOrNameParticle(String namePartOrId) {
 		return doctorTypePersistencePort.findByIdOrNameParticle(namePartOrId);
 	}
@@ -40,5 +45,10 @@ class DoctorTypeServiceImpl implements DoctorTypeService {
 	@Override
 	public List<DoctorType> listDoctorTypes() {
 		return doctorTypePersistencePort.list();
+	}
+
+	@Override
+	public DoctorType updateDoctorType(DoctorType toSave) {
+		return doctorTypePersistencePort.update(toSave);
 	}
 }

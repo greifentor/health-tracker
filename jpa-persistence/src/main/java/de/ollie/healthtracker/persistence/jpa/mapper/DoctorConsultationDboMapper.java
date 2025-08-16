@@ -11,5 +11,7 @@ import org.mapstruct.Mapper;
  */
 @Mapper(componentModel = "spring")
 public interface DoctorConsultationDboMapper {
+	DoctorConsultationDbo toDbo(DoctorConsultation model);
+
 	DoctorConsultation toModel(DoctorConsultationDbo dbo);
 }

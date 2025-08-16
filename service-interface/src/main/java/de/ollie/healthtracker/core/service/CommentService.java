@@ -18,7 +18,11 @@ public interface CommentService {
 
 	void deleteComment(UUID id);
 
+	Optional<Comment> findById(UUID id);
+
 	Optional<Comment> findByIdOrContentParticle(String namePartOrId);
 
 	List<Comment> listComments();
+
+	Comment updateComment(Comment toSave);
 }

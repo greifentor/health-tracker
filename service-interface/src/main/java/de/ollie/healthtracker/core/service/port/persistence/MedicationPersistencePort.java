@@ -20,7 +20,11 @@ public interface MedicationPersistencePort {
 
 	void deleteById(UUID id);
 
+	Optional<Medication> findById(UUID id);
+
 	Optional<Medication> findByIdOrNameParticle(String name);
 
 	List<Medication> list();
+
+	Medication update(Medication toSave);
 }

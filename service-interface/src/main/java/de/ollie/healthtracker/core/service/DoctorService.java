@@ -18,7 +18,11 @@ public interface DoctorService {
 
 	void deleteDoctor(UUID id);
 
+	Optional<Doctor> findById(UUID id);
+
 	Optional<Doctor> findByIdOrNameParticle(String namePartOrId);
 
 	List<Doctor> listDoctors();
+
+	Doctor updateDoctor(Doctor toSave);
 }

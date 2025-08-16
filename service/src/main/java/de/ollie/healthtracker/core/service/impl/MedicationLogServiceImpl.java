@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,17 @@ class MedicationLogServiceImpl implements MedicationLogService {
 	}
 
 	@Override
+	public Optional<MedicationLog> findById(UUID id) {
+		return medicationLogPersistencePort.findById(id);
+	}
+
+	@Override
 	public List<MedicationLog> listMedicationLogs() {
 		return medicationLogPersistencePort.list();
+	}
+
+	@Override
+	public MedicationLog updateMedicationLog(MedicationLog toSave) {
+		return medicationLogPersistencePort.update(toSave);
 	}
 }

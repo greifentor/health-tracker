@@ -18,7 +18,11 @@ public interface SymptomService {
 
 	void deleteSymptom(UUID id);
 
+	Optional<Symptom> findById(UUID id);
+
 	Optional<Symptom> findByIdOrDescriptionParticle(String namePartOrId);
 
 	List<Symptom> listSymptoms();
+
+	Symptom updateSymptom(Symptom toSave);
 }

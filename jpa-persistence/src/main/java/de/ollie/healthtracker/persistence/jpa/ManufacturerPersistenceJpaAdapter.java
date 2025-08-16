@@ -41,6 +41,12 @@ class ManufacturerPersistenceJpaAdapter implements ManufacturerPersistencePort {
 	}
 
 	@Override
+	public Optional<Manufacturer> findById(UUID id) {
+		ensure(id != null, "id cannot be null!");
+		return repository.findById(id).map(mapper::toModel);
+	}
+
+	@Override
 	public Optional<Manufacturer> findByIdOrNameParticle(String nameParticleOrId) {
 		ensure(nameParticleOrId != null, "name particle or id cannot be null");
 		Optional<ManufacturerDbo> dbo = Optional.empty();
@@ -66,5 +72,10 @@ class ManufacturerPersistenceJpaAdapter implements ManufacturerPersistencePort {
 	@Override
 	public List<Manufacturer> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
+	}
+
+	@Override
+	public Manufacturer update(Manufacturer toSave) {
+		return mapper.toModel(repository.save(mapper.toDbo(toSave)));
 	}
 }

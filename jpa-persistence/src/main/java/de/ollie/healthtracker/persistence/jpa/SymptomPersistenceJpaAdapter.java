@@ -42,6 +42,12 @@ class SymptomPersistenceJpaAdapter implements SymptomPersistencePort {
 	}
 
 	@Override
+	public Optional<Symptom> findById(UUID id) {
+		ensure(id != null, "id cannot be null!");
+		return repository.findById(id).map(mapper::toModel);
+	}
+
+	@Override
 	public Optional<Symptom> findByIdOrDescriptionParticle(String nameParticleOrId) {
 		ensure(nameParticleOrId != null, "name particle or id cannot be null");
 		Optional<SymptomDbo> dbo = Optional.empty();
@@ -67,5 +73,10 @@ class SymptomPersistenceJpaAdapter implements SymptomPersistencePort {
 	@Override
 	public List<Symptom> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
+	}
+
+	@Override
+	public Symptom update(Symptom toSave) {
+		return mapper.toModel(repository.save(mapper.toDbo(toSave)));
 	}
 }

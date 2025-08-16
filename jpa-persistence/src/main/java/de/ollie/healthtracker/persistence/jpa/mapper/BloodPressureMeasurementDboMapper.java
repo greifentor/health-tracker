@@ -10,5 +10,7 @@ import org.mapstruct.Mapper;
 public interface BloodPressureMeasurementDboMapper {
 	BloodPressureMeasurementStatusDbo toDbo(BloodPressureMeasurementStatus model);
 
+	BloodPressureMeasurementDbo toDbo(BloodPressureMeasurement model);
+
 	BloodPressureMeasurement toModel(BloodPressureMeasurementDbo dbo);
 }

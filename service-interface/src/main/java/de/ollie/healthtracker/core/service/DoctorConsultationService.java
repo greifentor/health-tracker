@@ -5,6 +5,7 @@ import de.ollie.healthtracker.core.service.model.DoctorConsultation;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.Generated;
 
@@ -25,5 +26,9 @@ public interface DoctorConsultationService {
 
 	void deleteDoctorConsultation(UUID id);
 
+	Optional<DoctorConsultation> findById(UUID id);
+
 	List<DoctorConsultation> listDoctorConsultations();
+
+	DoctorConsultation updateDoctorConsultation(DoctorConsultation toSave);
 }

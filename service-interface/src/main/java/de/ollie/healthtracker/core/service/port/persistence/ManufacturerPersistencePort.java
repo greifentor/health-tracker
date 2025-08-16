@@ -19,7 +19,11 @@ public interface ManufacturerPersistencePort {
 
 	void deleteById(UUID id);
 
+	Optional<Manufacturer> findById(UUID id);
+
 	Optional<Manufacturer> findByIdOrNameParticle(String name);
 
 	List<Manufacturer> list();
+
+	Manufacturer update(Manufacturer toSave);
 }

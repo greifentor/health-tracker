@@ -19,7 +19,7 @@ class EditDialogComponentFactoryImpl implements EditDialogComponentFactory {
 		JButton b = componentFactory.createButton("Save");
 		if (observer != null) {
 			b.addActionListener(e -> {
-				observer.onSave(dialog.getToEdit());
+				observer.onSave(dialog.getCurrentContent());
 				dialog.closeDialog();
 			});
 		}

@@ -4,7 +4,9 @@ import de.ollie.healthtracker.core.service.DoctorConsultationService;
 import de.ollie.healthtracker.core.service.DoctorService;
 import de.ollie.healthtracker.core.service.LocalDateFactory;
 import de.ollie.healthtracker.core.service.LocalTimeFactory;
+import de.ollie.healthtracker.core.service.model.DoctorConsultation;
 import de.ollie.healthtracker.gui.swing.BaseEditDialog;
+import de.ollie.healthtracker.gui.swing.DoctorConsultationEditDialog;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.shell.handler.OutputHandler;
 import de.ollie.healthtracker.shell.mapper.DoctorConsultationToStringMapper;
@@ -81,26 +83,45 @@ public class DoctorConsultationCommands implements CommandsWithTimeOrDate {
 	public String editDoctorConsultation(
 		@ShellOption(help = "The id of the doctor consultation to edit.", value = "id") String id
 	) {
-		BaseEditDialog.Observer<String> observer = new BaseEditDialog.Observer<String>() {
-			@Override
-			public void onCancel() {
-				outputHandler.println("Canceled!");
-			}
+		try {
+			BaseEditDialog.Observer<DoctorConsultation> observer = new BaseEditDialog.Observer<DoctorConsultation>() {
+				@Override
+				public void onCancel() {
+					outputHandler.println("Canceled!");
+				}
 
-			@Override
-			public void onDelete(String toDelete) {
-				outputHandler.println("Deleted! " + toDelete);
-			}
+				@Override
+				public void onDelete(DoctorConsultation toDelete) {
+					outputHandler.println("Deleted! " + toDelete);
+				}
 
-			@Override
-			public void onSave(String toSave) {
-				outputHandler.println("Saved! " + toSave);
-			}
-		};
-		SwingUtilities.invokeLater(() -> {
-			new BaseEditDialog<String>("Doctor Consultation", ";op", componentFactory, observer);
-		});
-		return Constants.OK;
+				@Override
+				public void onSave(DoctorConsultation toSave) {
+					doctorConsultationService.updateDoctorConsultation(toSave);
+				}
+			};
+			doctorConsultationService
+				.findById(UUID.fromString(id))
+				.ifPresentOrElse(
+					dc ->
+						SwingUtilities.invokeLater(() -> {
+							System.out.println(dc);
+							new DoctorConsultationEditDialog(
+								"Doctor Consultation",
+								dc,
+								componentFactory,
+								observer,
+								() -> doctorService.listDoctors()
+							);
+						}),
+					() -> {
+						throw new NoSuchElementException(MSG_NO_SUCH_DOCTOR_FOUND + id);
+					}
+				);
+			return Constants.OK;
+		} catch (Exception e) {
+			return Constants.ERROR + e.getMessage();
+		}
 	}
 
 	@ShellMethod(value = "Lists doctor consultations.", key = { "list-doctor-consultations", "ldc" })

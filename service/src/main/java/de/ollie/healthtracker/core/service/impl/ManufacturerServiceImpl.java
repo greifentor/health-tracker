@@ -33,6 +33,11 @@ class ManufacturerServiceImpl implements ManufacturerService {
 	}
 
 	@Override
+	public Optional<Manufacturer> findById(UUID id) {
+		return manufacturerPersistencePort.findById(id);
+	}
+
+	@Override
 	public Optional<Manufacturer> findByIdOrNameParticle(String namePartOrId) {
 		return manufacturerPersistencePort.findByIdOrNameParticle(namePartOrId);
 	}
@@ -40,5 +45,10 @@ class ManufacturerServiceImpl implements ManufacturerService {
 	@Override
 	public List<Manufacturer> listManufacturers() {
 		return manufacturerPersistencePort.list();
+	}
+
+	@Override
+	public Manufacturer updateManufacturer(Manufacturer toSave) {
+		return manufacturerPersistencePort.update(toSave);
 	}
 }

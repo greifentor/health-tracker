@@ -17,7 +17,11 @@ public interface ManufacturerService {
 
 	void deleteManufacturer(UUID id);
 
+	Optional<Manufacturer> findById(UUID id);
+
 	Optional<Manufacturer> findByIdOrNameParticle(String namePartOrId);
 
 	List<Manufacturer> listManufacturers();
+
+	Manufacturer updateManufacturer(Manufacturer toSave);
 }

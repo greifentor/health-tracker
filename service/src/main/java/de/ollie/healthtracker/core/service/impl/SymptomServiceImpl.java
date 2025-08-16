@@ -34,6 +34,11 @@ class SymptomServiceImpl implements SymptomService {
 	}
 
 	@Override
+	public Optional<Symptom> findById(UUID id) {
+		return symptomPersistencePort.findById(id);
+	}
+
+	@Override
 	public Optional<Symptom> findByIdOrDescriptionParticle(String namePartOrId) {
 		return symptomPersistencePort.findByIdOrDescriptionParticle(namePartOrId);
 	}
@@ -41,5 +46,10 @@ class SymptomServiceImpl implements SymptomService {
 	@Override
 	public List<Symptom> listSymptoms() {
 		return symptomPersistencePort.list();
+	}
+
+	@Override
+	public Symptom updateSymptom(Symptom toSave) {
+		return symptomPersistencePort.update(toSave);
 	}
 }

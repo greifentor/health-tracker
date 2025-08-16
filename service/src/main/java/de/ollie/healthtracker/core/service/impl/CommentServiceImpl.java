@@ -34,6 +34,11 @@ class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
+	public Optional<Comment> findById(UUID id) {
+		return commentPersistencePort.findById(id);
+	}
+
+	@Override
 	public Optional<Comment> findByIdOrContentParticle(String namePartOrId) {
 		return commentPersistencePort.findByIdOrContentParticle(namePartOrId);
 	}
@@ -41,5 +46,10 @@ class CommentServiceImpl implements CommentService {
 	@Override
 	public List<Comment> listComments() {
 		return commentPersistencePort.list();
+	}
+
+	@Override
+	public Comment updateComment(Comment toSave) {
+		return commentPersistencePort.update(toSave);
 	}
 }

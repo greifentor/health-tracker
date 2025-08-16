@@ -10,9 +10,7 @@ import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
 import ${Properties.get("core-port-persistence-package")}.${ClassName}PersistencePort;
 import jakarta.inject.Named;
 import java.util.List;
-#if (!$Class.getAttributesWithPropertySet("findable").isEmpty())
 import java.util.Optional;
-#end
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
@@ -41,6 +39,11 @@ class ${ClassName}ServiceImpl implements ${ClassName}Service {
 	public void delete${ClassName}(UUID id) {
 		${ClassNameAsAttribute}PersistencePort.deleteById(id);
 	}
+
+	@Override
+	public Optional<${ClassName}> findById(${Class.getAttributeTypeNameByPropertyName("id")} id) {
+		return ${ClassNameAsAttribute}PersistencePort.findById(id);
+	}
 #foreach($Attribute in ${Class.getAttributesWithPropertySet("findable")})
 
 	@Override
@@ -52,5 +55,10 @@ class ${ClassName}ServiceImpl implements ${ClassName}Service {
 	@Override
 	public List<${ClassName}> list${ClassName}s() {
 		return ${ClassNameAsAttribute}PersistencePort.list();
+	}
+	
+	@Override
+	public ${ClassName} update${ClassName}(${ClassName} toSave) {
+		return ${ClassNameAsAttribute}PersistencePort.update(toSave);
 	}
 }

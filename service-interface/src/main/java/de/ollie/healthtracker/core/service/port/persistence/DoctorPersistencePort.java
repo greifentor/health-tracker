@@ -20,7 +20,11 @@ public interface DoctorPersistencePort {
 
 	void deleteById(UUID id);
 
+	Optional<Doctor> findById(UUID id);
+
 	Optional<Doctor> findByIdOrNameParticle(String name);
 
 	List<Doctor> list();
+
+	Doctor update(Doctor toSave);
 }

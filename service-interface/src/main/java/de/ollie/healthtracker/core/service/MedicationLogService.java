@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.Generated;
 
@@ -27,5 +28,9 @@ public interface MedicationLogService {
 
 	void deleteMedicationLog(UUID id);
 
+	Optional<MedicationLog> findById(UUID id);
+
 	List<MedicationLog> listMedicationLogs();
+
+	MedicationLog updateMedicationLog(MedicationLog toSave);
 }

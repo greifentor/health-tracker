@@ -20,7 +20,11 @@ public interface CommentPersistencePort {
 
 	void deleteById(UUID id);
 
+	Optional<Comment> findById(UUID id);
+
 	Optional<Comment> findByIdOrContentParticle(String content);
 
 	List<Comment> list();
+
+	Comment update(Comment toSave);
 }

@@ -41,6 +41,12 @@ class DoctorTypePersistenceJpaAdapter implements DoctorTypePersistencePort {
 	}
 
 	@Override
+	public Optional<DoctorType> findById(UUID id) {
+		ensure(id != null, "id cannot be null!");
+		return repository.findById(id).map(mapper::toModel);
+	}
+
+	@Override
 	public Optional<DoctorType> findByIdOrNameParticle(String nameParticleOrId) {
 		ensure(nameParticleOrId != null, "name particle or id cannot be null");
 		Optional<DoctorTypeDbo> dbo = Optional.empty();
@@ -66,5 +72,10 @@ class DoctorTypePersistenceJpaAdapter implements DoctorTypePersistencePort {
 	@Override
 	public List<DoctorType> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
+	}
+
+	@Override
+	public DoctorType update(DoctorType toSave) {
+		return mapper.toModel(repository.save(mapper.toDbo(toSave)));
 	}
 }

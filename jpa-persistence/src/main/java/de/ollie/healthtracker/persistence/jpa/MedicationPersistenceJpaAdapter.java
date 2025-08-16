@@ -42,6 +42,12 @@ class MedicationPersistenceJpaAdapter implements MedicationPersistencePort {
 	}
 
 	@Override
+	public Optional<Medication> findById(UUID id) {
+		ensure(id != null, "id cannot be null!");
+		return repository.findById(id).map(mapper::toModel);
+	}
+
+	@Override
 	public Optional<Medication> findByIdOrNameParticle(String nameParticleOrId) {
 		ensure(nameParticleOrId != null, "name particle or id cannot be null");
 		Optional<MedicationDbo> dbo = Optional.empty();
@@ -67,5 +73,10 @@ class MedicationPersistenceJpaAdapter implements MedicationPersistencePort {
 	@Override
 	public List<Medication> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
+	}
+
+	@Override
+	public Medication update(Medication toSave) {
+		return mapper.toModel(repository.save(mapper.toDbo(toSave)));
 	}
 }

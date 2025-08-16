@@ -20,7 +20,11 @@ public interface SymptomPersistencePort {
 
 	void deleteById(UUID id);
 
+	Optional<Symptom> findById(UUID id);
+
 	Optional<Symptom> findByIdOrDescriptionParticle(String description);
 
 	List<Symptom> list();
+
+	Symptom update(Symptom toSave);
 }

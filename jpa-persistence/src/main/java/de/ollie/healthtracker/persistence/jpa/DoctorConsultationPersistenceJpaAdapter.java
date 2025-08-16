@@ -12,6 +12,7 @@ import jakarta.inject.Named;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,18 @@ class DoctorConsultationPersistenceJpaAdapter implements DoctorConsultationPersi
 	}
 
 	@Override
+	public Optional<DoctorConsultation> findById(UUID id) {
+		ensure(id != null, "id cannot be null!");
+		return repository.findById(id).map(mapper::toModel);
+	}
+
+	@Override
 	public List<DoctorConsultation> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
+	}
+
+	@Override
+	public DoctorConsultation update(DoctorConsultation toSave) {
+		return mapper.toModel(repository.save(mapper.toDbo(toSave)));
 	}
 }

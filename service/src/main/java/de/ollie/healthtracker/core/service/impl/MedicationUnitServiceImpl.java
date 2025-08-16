@@ -33,6 +33,11 @@ class MedicationUnitServiceImpl implements MedicationUnitService {
 	}
 
 	@Override
+	public Optional<MedicationUnit> findById(UUID id) {
+		return medicationUnitPersistencePort.findById(id);
+	}
+
+	@Override
 	public Optional<MedicationUnit> findByIdOrNameParticle(String namePartOrId) {
 		return medicationUnitPersistencePort.findByIdOrNameParticle(namePartOrId);
 	}
@@ -40,5 +45,10 @@ class MedicationUnitServiceImpl implements MedicationUnitService {
 	@Override
 	public List<MedicationUnit> listMedicationUnits() {
 		return medicationUnitPersistencePort.list();
+	}
+
+	@Override
+	public MedicationUnit updateMedicationUnit(MedicationUnit toSave) {
+		return medicationUnitPersistencePort.update(toSave);
 	}
 }

@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +61,18 @@ class MedicationLogPersistenceJpaAdapter implements MedicationLogPersistencePort
 	}
 
 	@Override
+	public Optional<MedicationLog> findById(UUID id) {
+		ensure(id != null, "id cannot be null!");
+		return repository.findById(id).map(mapper::toModel);
+	}
+
+	@Override
 	public List<MedicationLog> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
+	}
+
+	@Override
+	public MedicationLog update(MedicationLog toSave) {
+		return mapper.toModel(repository.save(mapper.toDbo(toSave)));
 	}
 }
