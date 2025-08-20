@@ -32,6 +32,18 @@
 			<artifactId>health-tracker-service-interface</artifactId>
 			<version>0.3.0</version>
 		</dependency>
+		<dependency>
+			<groupId>de.ollie</groupId>
+			<artifactId>health-tracker-service</artifactId>
+			<version>0.3.0</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.ollie</groupId>
+			<artifactId>health-tracker-jpa-persistence</artifactId>
+			<version>0.3.0</version>
+			<scope>runtime</scope>
+		</dependency>
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -130,6 +142,10 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>com.hubspot.maven.plugins</groupId>

@@ -1,18 +1,21 @@
-package de.ollie.healthtracker.gui.swing;
+package de.ollie.healthtracker.gui.swing.edit;
 
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
+import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
+import de.ollie.healthtracker.gui.swing.ItemProvider;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.util.Map;
 import javax.swing.JButton;
-import javax.swing.JDialog;
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import lombok.Getter;
 
-public abstract class BaseEditDialog<T> extends JDialog {
+public abstract class BaseEditInternalFrame<T> extends JInternalFrame {
 
 	public interface Observer<T> {
 		void onCancel();
@@ -27,18 +30,25 @@ public abstract class BaseEditDialog<T> extends JDialog {
 
 	private EditDialogComponentFactory componentFactory;
 
-	public BaseEditDialog(
+	public BaseEditInternalFrame(
+		JDesktopPane desktopPane,
 		String title,
 		T toEdit,
 		EditDialogComponentFactory componentFactory,
 		Observer<T> observer,
 		Map<String, ItemProvider<?>> itemProviders
 	) {
-		super((JDialog) null, title);
+		super(title, true, true, true, true);
 		this.componentFactory = componentFactory;
 		this.toEdit = toEdit;
+		setBounds(20, 20, 600, 400);
 		setContentPane(createContentPanel(toEdit, observer, itemProviders));
-		pack();
+		desktopPane.add(this);
+		try {
+			setSelected(true);
+		} catch (java.beans.PropertyVetoException e) {
+			e.printStackTrace();
+		}
 		setVisible(true);
 	}
 
@@ -57,7 +67,7 @@ public abstract class BaseEditDialog<T> extends JDialog {
 		p.add(new JLabel("     "));
 		p.add(createDeleteButton(observer));
 		p.add(new JLabel("     "));
-		// p.add(componentFactory.createSaveButton(observer, this));
+		p.add(componentFactory.createSaveButton(observer, this));
 		return p;
 	}
 

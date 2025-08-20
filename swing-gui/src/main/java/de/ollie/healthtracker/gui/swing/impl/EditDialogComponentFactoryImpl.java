@@ -1,9 +1,9 @@
 package de.ollie.healthtracker.gui.swing.impl;
 
-import de.ollie.healthtracker.gui.swing.BaseEditDialog;
-import de.ollie.healthtracker.gui.swing.BaseEditDialog.Observer;
 import de.ollie.healthtracker.gui.swing.ComponentFactory;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
+import de.ollie.healthtracker.gui.swing.edit.BaseEditInternalFrame;
+import de.ollie.healthtracker.gui.swing.edit.BaseEditInternalFrame.Observer;
 import jakarta.inject.Named;
 import javax.swing.JButton;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +15,12 @@ class EditDialogComponentFactoryImpl implements EditDialogComponentFactory {
 	private final ComponentFactory componentFactory;
 
 	@Override
-	public <T> JButton createSaveButton(Observer<T> observer, BaseEditDialog<T> dialog) {
+	public <T> JButton createSaveButton(Observer<T> observer, BaseEditInternalFrame<T> internalFrame) {
 		JButton b = componentFactory.createButton("Save");
 		if (observer != null) {
 			b.addActionListener(e -> {
-				observer.onSave(dialog.getCurrentContent());
-				dialog.closeDialog();
+				observer.onSave(internalFrame.getCurrentContent());
+				internalFrame.closeDialog();
 			});
 		}
 		return b;

@@ -4,16 +4,10 @@ import de.ollie.healthtracker.core.service.DoctorConsultationService;
 import de.ollie.healthtracker.core.service.DoctorService;
 import de.ollie.healthtracker.core.service.LocalDateFactory;
 import de.ollie.healthtracker.core.service.LocalTimeFactory;
-import de.ollie.healthtracker.core.service.model.DoctorConsultation;
-import de.ollie.healthtracker.gui.swing.BaseEditDialog;
-import de.ollie.healthtracker.gui.swing.DoctorConsultationEditDialog;
-import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.shell.handler.OutputHandler;
 import de.ollie.healthtracker.shell.mapper.DoctorConsultationToStringMapper;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.UUID;
-import javax.swing.SwingUtilities;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
@@ -27,7 +21,7 @@ public class DoctorConsultationCommands implements CommandsWithTimeOrDate {
 	static final String MSG_NO_SUCH_DOCTOR_FOUND = "No doctor found for: ";
 	static final String MSG_NO_SUCH_DOCTOR_CONSULTATION_FOUND = "No doctor consultation found for: ";
 
-	private final EditDialogComponentFactory componentFactory;
+	//	private final EditDialogComponentFactory componentFactory;
 	private final DoctorConsultationService doctorConsultationService;
 	private final DoctorService doctorService;
 	private final DoctorConsultationToStringMapper doctorConsultationToStringMapper;
@@ -78,60 +72,64 @@ public class DoctorConsultationCommands implements CommandsWithTimeOrDate {
 		}
 	}
 
-	@ShellMethod(
-		value = "Opens a GUI dialog to edit doctor consultation with passed id.",
-		key = { "edit-doctor-consultation", "edc" }
-	)
-	public String editDoctorConsultation(
-		@ShellOption(help = "The id of the doctor consultation to edit.", value = "id", defaultValue = "unknown") String id
-	) {
-		try {
-			BaseEditDialog.Observer<DoctorConsultation> observer = new BaseEditDialog.Observer<DoctorConsultation>() {
-				@Override
-				public void onCancel() {
-					outputHandler.println("Canceled!");
-				}
-
-				@Override
-				public void onDelete(DoctorConsultation toDelete) {
-					outputHandler.println("Deleted! " + toDelete);
-				}
-
-				@Override
-				public void onSave(DoctorConsultation toSave) {
-					doctorConsultationService.updateDoctorConsultation(toSave);
-				}
-			};
-			DoctorConsultation doctorConsultation = new DoctorConsultation()
-				.setDate(getLocalDateFactory().now())
-				.setId(UUID.randomUUID())
-				.setTime(getLocalTimeFactory().now());
-			if (!"unknown".equals(id)) {
-				doctorConsultation =
-					doctorConsultationService
-						.findById(UUID.fromString(id))
-						.orElseThrow(() -> new NoSuchElementException(MSG_NO_SUCH_DOCTOR_CONSULTATION_FOUND + id));
-			}
-			Optional
-				.ofNullable(doctorConsultation)
-				.ifPresent(dc ->
-					SwingUtilities.invokeLater(() -> {
-						System.out.println(dc);
-						new DoctorConsultationEditDialog(
-							"Doctor Consultation",
-							dc,
-							componentFactory,
-							observer,
-							() ->
-								doctorService.listDoctors().stream().sorted((d0, d1) -> d0.getName().compareTo(d1.getName())).toList()
-						);
-					})
-				);
-			return Constants.OK;
-		} catch (Exception e) {
-			return Constants.ERROR + e.getMessage();
-		}
-	}
+	// @ShellMethod(
+	// value = "Opens a GUI dialog to edit doctor consultation with passed id.",
+	// key = { "edit-doctor-consultation", "edc" }
+	// )
+	// public String editDoctorConsultation(
+	// @ShellOption(help = "The id of the doctor consultation to edit.", value =
+	// "id", defaultValue = "unknown") String id
+	// ) {
+	// try {
+	// BaseEditDialog.Observer<DoctorConsultation> observer = new
+	// BaseEditDialog.Observer<DoctorConsultation>() {
+	// @Override
+	// public void onCancel() {
+	// outputHandler.println("Canceled!");
+	// }
+	//
+	// @Override
+	// public void onDelete(DoctorConsultation toDelete) {
+	// outputHandler.println("Deleted! " + toDelete);
+	// }
+	//
+	// @Override
+	// public void onSave(DoctorConsultation toSave) {
+	// doctorConsultationService.updateDoctorConsultation(toSave);
+	// }
+	// };
+	// DoctorConsultation doctorConsultation = new DoctorConsultation()
+	// .setDate(getLocalDateFactory().now())
+	// .setId(UUID.randomUUID())
+	// .setTime(getLocalTimeFactory().now());
+	// if (!"unknown".equals(id)) {
+	// doctorConsultation =
+	// doctorConsultationService
+	// .findById(UUID.fromString(id))
+	// .orElseThrow(() -> new
+	// NoSuchElementException(MSG_NO_SUCH_DOCTOR_CONSULTATION_FOUND + id));
+	// }
+	// Optional
+	// .ofNullable(doctorConsultation)
+	// .ifPresent(dc ->
+	// SwingUtilities.invokeLater(() -> {
+	// System.out.println(dc);
+	// new DoctorConsultationEditDialog(
+	// "Doctor Consultation",
+	// dc,
+	// componentFactory,
+	// observer,
+	// () ->
+	// doctorService.listDoctors().stream().sorted((d0, d1) ->
+	// d0.getName().compareTo(d1.getName())).toList()
+	// );
+	// })
+	// );
+	// return Constants.OK;
+	// } catch (Exception e) {
+	// return Constants.ERROR + e.getMessage();
+	// }
+	// }
 
 	@ShellMethod(value = "Lists doctor consultations.", key = { "list-doctor-consultations", "ldc" })
 	public String listDoctorConsultations() {
