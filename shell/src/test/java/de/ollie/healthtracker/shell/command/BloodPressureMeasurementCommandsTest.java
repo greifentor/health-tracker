@@ -36,6 +36,7 @@ class BloodPressureMeasurementCommandsTest {
 	private static final String DATE_OF_RECORDING_STR = "25.06.2025";
 	private static final int DIA_MM_HG = 80;
 	private static final UUID ID = UUID.randomUUID();
+	private static final boolean IRREGULAR_HEARTBEAT = true;
 	private static final String MESSAGE = "message";
 	private static final int PULSE_PER_MINUTE = 70;
 	private static final BloodPressureMeasurementStatus STATUS = BloodPressureMeasurementStatus.ORANGE;
@@ -80,6 +81,7 @@ class BloodPressureMeasurementCommandsTest {
 					SYS_MM_HG,
 					PULSE_PER_MINUTE,
 					DIA_MM_HG,
+					IRREGULAR_HEARTBEAT,
 					STATUS,
 					DATE_OF_RECORDING,
 					TIME_OF_RECORDING
@@ -91,6 +93,7 @@ class BloodPressureMeasurementCommandsTest {
 				SYS_MM_HG,
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
+				"Y",
 				STATUS.name(),
 				TIME_OF_RECORDING_STR,
 				DATE_OF_RECORDING_STR
@@ -107,6 +110,7 @@ class BloodPressureMeasurementCommandsTest {
 					SYS_MM_HG,
 					PULSE_PER_MINUTE,
 					DIA_MM_HG,
+					IRREGULAR_HEARTBEAT,
 					STATUS,
 					DATE_OF_RECORDING,
 					TIME_OF_RECORDING
@@ -118,6 +122,7 @@ class BloodPressureMeasurementCommandsTest {
 				SYS_MM_HG,
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
+				"Y",
 				STATUS.name(),
 				TIME_OF_RECORDING_STR,
 				DATE_OF_RECORDING_STR
@@ -135,6 +140,7 @@ class BloodPressureMeasurementCommandsTest {
 					SYS_MM_HG,
 					PULSE_PER_MINUTE,
 					DIA_MM_HG,
+					IRREGULAR_HEARTBEAT,
 					STATUS,
 					DATE_OF_RECORDING,
 					TIME_OF_RECORDING
@@ -146,6 +152,7 @@ class BloodPressureMeasurementCommandsTest {
 				SYS_MM_HG,
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
+				"Y",
 				STATUS.name(),
 				TIME_OF_RECORDING_STR,
 				null
@@ -164,6 +171,7 @@ class BloodPressureMeasurementCommandsTest {
 					SYS_MM_HG,
 					PULSE_PER_MINUTE,
 					DIA_MM_HG,
+					IRREGULAR_HEARTBEAT,
 					STATUS,
 					DATE_OF_RECORDING,
 					TIME_OF_RECORDING
@@ -175,6 +183,7 @@ class BloodPressureMeasurementCommandsTest {
 				SYS_MM_HG,
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
+				"Y",
 				STATUS.name(),
 				TIME_OF_RECORDING_STR,
 				today
@@ -192,6 +201,7 @@ class BloodPressureMeasurementCommandsTest {
 					SYS_MM_HG,
 					PULSE_PER_MINUTE,
 					DIA_MM_HG,
+					IRREGULAR_HEARTBEAT,
 					STATUS,
 					DATE_OF_RECORDING,
 					TIME_OF_RECORDING
@@ -203,6 +213,7 @@ class BloodPressureMeasurementCommandsTest {
 				SYS_MM_HG,
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
+				"Y",
 				STATUS.name(),
 				null,
 				DATE_OF_RECORDING_STR
@@ -221,6 +232,7 @@ class BloodPressureMeasurementCommandsTest {
 					SYS_MM_HG,
 					PULSE_PER_MINUTE,
 					DIA_MM_HG,
+					IRREGULAR_HEARTBEAT,
 					STATUS,
 					DATE_OF_RECORDING,
 					TIME_OF_RECORDING
@@ -232,6 +244,7 @@ class BloodPressureMeasurementCommandsTest {
 				SYS_MM_HG,
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
+				"Y",
 				STATUS.name(),
 				now,
 				DATE_OF_RECORDING_STR
@@ -249,6 +262,7 @@ class BloodPressureMeasurementCommandsTest {
 					SYS_MM_HG,
 					PULSE_PER_MINUTE,
 					DIA_MM_HG,
+					IRREGULAR_HEARTBEAT,
 					status,
 					DATE_OF_RECORDING,
 					TIME_OF_RECORDING
@@ -260,6 +274,7 @@ class BloodPressureMeasurementCommandsTest {
 				SYS_MM_HG,
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
+				"Y",
 				status.name(),
 				TIME_OF_RECORDING_STR,
 				DATE_OF_RECORDING_STR
@@ -277,6 +292,7 @@ class BloodPressureMeasurementCommandsTest {
 					SYS_MM_HG,
 					PULSE_PER_MINUTE,
 					DIA_MM_HG,
+					IRREGULAR_HEARTBEAT,
 					status,
 					DATE_OF_RECORDING,
 					TIME_OF_RECORDING
@@ -288,6 +304,7 @@ class BloodPressureMeasurementCommandsTest {
 				SYS_MM_HG,
 				PULSE_PER_MINUTE,
 				DIA_MM_HG,
+				"Y",
 				"" + status.getValue(),
 				TIME_OF_RECORDING_STR,
 				DATE_OF_RECORDING_STR

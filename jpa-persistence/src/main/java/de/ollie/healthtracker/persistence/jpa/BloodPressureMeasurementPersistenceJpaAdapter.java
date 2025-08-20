@@ -27,6 +27,7 @@ class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeas
 		int sysMmHg,
 		int diaMmHg,
 		int pulsePerMinute,
+		boolean irregularHeartbeat,
 		BloodPressureMeasurementStatus status,
 		LocalDate dateOfRecording,
 		LocalTime timeOfRecording
@@ -37,6 +38,7 @@ class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeas
 					sysMmHg,
 					diaMmHg,
 					pulsePerMinute,
+					irregularHeartbeat,
 					mapper.toDbo(status),
 					dateOfRecording,
 					timeOfRecording

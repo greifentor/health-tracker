@@ -30,6 +30,7 @@ class BloodPressureMeasurementPersistenceJpaAdapterTest {
 	private static final LocalDate DATE_OF_RECORDING = LocalDate.of(2025, 6, 17);
 	private static final int DIA_MM_HG = 70;
 	private static final UUID ID = UUID.randomUUID();
+	private static final boolean IRREGULAR_HEARTBEAT = true;
 	private static final int PULSE_PER_MINUTE = 60;
 	private static final BloodPressureMeasurementStatus STATE = BloodPressureMeasurementStatus.GREEN;
 	private static final BloodPressureMeasurementStatusDbo STATE_DBO = BloodPressureMeasurementStatusDbo.GREEN;
@@ -68,6 +69,7 @@ class BloodPressureMeasurementPersistenceJpaAdapterTest {
 					SYS_MM_HG,
 					PULSE_PER_MINUTE,
 					DIA_MM_HG,
+					IRREGULAR_HEARTBEAT,
 					STATE_DBO,
 					DATE_OF_RECORDING,
 					TIME_OF_RECORDING
@@ -80,7 +82,15 @@ class BloodPressureMeasurementPersistenceJpaAdapterTest {
 			// Run & Check
 			assertSame(
 				model,
-				unitUnderTest.create(SYS_MM_HG, PULSE_PER_MINUTE, DIA_MM_HG, STATE, DATE_OF_RECORDING, TIME_OF_RECORDING)
+				unitUnderTest.create(
+					SYS_MM_HG,
+					PULSE_PER_MINUTE,
+					DIA_MM_HG,
+					IRREGULAR_HEARTBEAT,
+					STATE,
+					DATE_OF_RECORDING,
+					TIME_OF_RECORDING
+				)
 			);
 		}
 	}

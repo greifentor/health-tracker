@@ -22,6 +22,7 @@ public class BloodPressureMeasurementServiceImpl implements BloodPressureMeasure
 		int sysMmHg,
 		int diaMmHg,
 		int pulsePerMinute,
+		boolean irregularHeartbeat,
 		BloodPressureMeasurementStatus status,
 		LocalDate dateOfRecording,
 		LocalTime timeOfRecording
@@ -30,6 +31,7 @@ public class BloodPressureMeasurementServiceImpl implements BloodPressureMeasure
 			sysMmHg,
 			diaMmHg,
 			pulsePerMinute,
+			irregularHeartbeat,
 			status,
 			dateOfRecording,
 			timeOfRecording

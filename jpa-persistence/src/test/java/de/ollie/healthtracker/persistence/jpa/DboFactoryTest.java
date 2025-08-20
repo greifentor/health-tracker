@@ -46,6 +46,7 @@ class DboFactoryTest {
 	private static final String DESCRIPTION = "description";
 	private static final int DIA_MM_HG = 70;
 	private static final UUID ID = UUID.randomUUID();
+	private static final boolean IRREGULAR_HEARTBEAT = false;
 	private static final String NAME = "name";
 	private static final int PULSE_PER_MINUTE = 60;
 	private static final String REASON = "reason";
@@ -105,6 +106,7 @@ class DboFactoryTest {
 						SYS_MM_HG,
 						DIA_MM_HG,
 						PULSE_PER_MINUTE,
+						IRREGULAR_HEARTBEAT,
 						STATUS,
 						null,
 						TIME_OF_RECORDING
@@ -121,6 +123,7 @@ class DboFactoryTest {
 						SYS_MM_HG,
 						0,
 						PULSE_PER_MINUTE,
+						IRREGULAR_HEARTBEAT,
 						STATUS,
 						DATE_OF_RECORDING,
 						TIME_OF_RECORDING
@@ -137,6 +140,7 @@ class DboFactoryTest {
 						SYS_MM_HG,
 						DIA_MM_HG,
 						0,
+						IRREGULAR_HEARTBEAT,
 						STATUS,
 						DATE_OF_RECORDING,
 						TIME_OF_RECORDING
@@ -153,6 +157,7 @@ class DboFactoryTest {
 						SYS_MM_HG,
 						DIA_MM_HG,
 						PULSE_PER_MINUTE,
+						IRREGULAR_HEARTBEAT,
 						null,
 						DATE_OF_RECORDING,
 						TIME_OF_RECORDING
@@ -169,6 +174,7 @@ class DboFactoryTest {
 						0,
 						DIA_MM_HG,
 						PULSE_PER_MINUTE,
+						IRREGULAR_HEARTBEAT,
 						STATUS,
 						DATE_OF_RECORDING,
 						TIME_OF_RECORDING
@@ -185,6 +191,7 @@ class DboFactoryTest {
 						SYS_MM_HG,
 						DIA_MM_HG,
 						PULSE_PER_MINUTE,
+						IRREGULAR_HEARTBEAT,
 						STATUS,
 						DATE_OF_RECORDING,
 						null
@@ -197,8 +204,9 @@ class DboFactoryTest {
 			assertNotNull(
 				unitUnderTest.createBloodPressureMeasurement(
 					SYS_MM_HG,
-					PULSE_PER_MINUTE,
 					DIA_MM_HG,
+					PULSE_PER_MINUTE,
+					IRREGULAR_HEARTBEAT,
 					STATUS,
 					DATE_OF_RECORDING,
 					TIME_OF_RECORDING
@@ -211,16 +219,18 @@ class DboFactoryTest {
 			assertNotSame(
 				unitUnderTest.createBloodPressureMeasurement(
 					SYS_MM_HG,
-					PULSE_PER_MINUTE,
 					DIA_MM_HG,
+					PULSE_PER_MINUTE,
+					IRREGULAR_HEARTBEAT,
 					STATUS,
 					DATE_OF_RECORDING,
 					TIME_OF_RECORDING
 				),
 				unitUnderTest.createBloodPressureMeasurement(
 					SYS_MM_HG,
-					PULSE_PER_MINUTE,
 					DIA_MM_HG,
+					PULSE_PER_MINUTE,
+					IRREGULAR_HEARTBEAT,
 					STATUS,
 					DATE_OF_RECORDING,
 					TIME_OF_RECORDING
@@ -247,6 +257,7 @@ class DboFactoryTest {
 					SYS_MM_HG,
 					DIA_MM_HG,
 					PULSE_PER_MINUTE,
+					IRREGULAR_HEARTBEAT,
 					STATUS,
 					DATE_OF_RECORDING,
 					TIME_OF_RECORDING

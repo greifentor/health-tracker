@@ -39,7 +39,7 @@ class BloodPressureMeasurementToStringMapperImplTest {
 
 		@Test
 		void returnsTheCorrectHeadLine() {
-			assertEquals("Date       Time  SYS DIA  PP Status (ID)", unitUnderTest.getHeadLine());
+			assertEquals("Date       Time  SYS DIA  PP Status IHB (ID)", unitUnderTest.getHeadLine());
 		}
 	}
 
@@ -49,7 +49,7 @@ class BloodPressureMeasurementToStringMapperImplTest {
 		@Test
 		void returnsTheCorrectUnderLine() {
 			assertEquals(
-				"--------------------------------------------------------------------------",
+				"------------------------------------------------------------------------------",
 				unitUnderTest.getUnderLine()
 			);
 		}
@@ -66,7 +66,7 @@ class BloodPressureMeasurementToStringMapperImplTest {
 		@Test
 		void returnsACorrectString_passingABloodPressureMeasurementWithNoSetAttributes() {
 			// Prepare
-			String expected = "         -     -   0   0   0 -      (null)";
+			String expected = "         -     -   0   0   0 -       N  (null)";
 			// Run
 			String returned = unitUnderTest.map(bloodPressureMeasurement);
 			// Check
@@ -88,6 +88,7 @@ class BloodPressureMeasurementToStringMapperImplTest {
 				PULSE_PER_MINUTE +
 				" " +
 				STATUS.name() +
+				"  Y " +
 				" (" +
 				ID +
 				")";
@@ -95,6 +96,7 @@ class BloodPressureMeasurementToStringMapperImplTest {
 				.setDateOfRecording(DATE_OF_RECORDING)
 				.setDiaMmHg(DIA_MM_HG)
 				.setId(ID)
+				.setIrregularHeartbeat(true)
 				.setPulsePerMinute(PULSE_PER_MINUTE)
 				.setStatus(STATUS)
 				.setSysMmHg(SYS_MM_HG)

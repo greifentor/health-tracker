@@ -8,16 +8,16 @@ import jakarta.inject.Named;
 @Named
 class BloodPressureMeasurementToStringMapperImpl implements BloodPressureMeasurementToStringMapper {
 
-	private static final String LINE_FORMAT = "%10s %5s %3d %3d %3d %-6s (%s)";
+	private static final String LINE_FORMAT = "%10s %5s %3d %3d %3d %-6s  %1s  (%s)";
 
 	@Override
 	public String getHeadLine() {
-		return "Date       Time  SYS DIA  PP Status (ID)";
+		return "Date       Time  SYS DIA  PP Status IHB (ID)";
 	}
 
 	@Override
 	public String getUnderLine() {
-		return "--------------------------------------------------------------------------";
+		return "------------------------------------------------------------------------------";
 	}
 
 	@Override
@@ -32,6 +32,7 @@ class BloodPressureMeasurementToStringMapperImpl implements BloodPressureMeasure
 				bloodPressureMeasurement.getDiaMmHg(),
 				bloodPressureMeasurement.getPulsePerMinute(),
 				statusToString(bloodPressureMeasurement.getStatus()),
+				bloodPressureMeasurement.isIrregularHeartbeat() ? 'Y' : 'N',
 				bloodPressureMeasurement.getId()
 			);
 	}

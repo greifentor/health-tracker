@@ -12,6 +12,7 @@ public interface BloodPressureMeasurementPersistencePort {
 		int sysMmHg,
 		int diaMmHg,
 		int pulsePerMinute,
+		boolean irregularHeartbeat,
 		BloodPressureMeasurementStatus state,
 		LocalDate dateOfRecording,
 		LocalTime timeOfRecording

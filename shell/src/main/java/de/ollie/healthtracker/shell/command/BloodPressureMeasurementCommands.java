@@ -35,6 +35,7 @@ public class BloodPressureMeasurementCommands implements CommandsWithTimeOrDate 
 		@ShellOption(help = "The SYS mmHg value.", value = "sys") int sysMmHg,
 		@ShellOption(help = "The DIA mmHg value.", value = "dia") int diaMmHg,
 		@ShellOption(help = "The pulse per minute value.", value = "ppm") int pulsePerMinute,
+		@ShellOption(help = "Set flag for irregular heartbeat ('y' or 'yes').", value = "n") String irregularHeartbeatStr,
 		@ShellOption(help = "The status of the measurement.", value = "status") String statusStr,
 		@ShellOption(
 			help = "The time of measurement (HH:MM or NOW).",
@@ -55,6 +56,7 @@ public class BloodPressureMeasurementCommands implements CommandsWithTimeOrDate 
 				sysMmHg,
 				diaMmHg,
 				pulsePerMinute,
+				getBooleanFromString(irregularHeartbeatStr),
 				status,
 				dateOfMeasurement,
 				timeOfMeasurement
@@ -64,6 +66,11 @@ public class BloodPressureMeasurementCommands implements CommandsWithTimeOrDate 
 			e.printStackTrace();
 			return Constants.ERROR + e.getMessage();
 		}
+	}
+
+	boolean getBooleanFromString(String s) {
+		s = s != null ? s.toLowerCase() : null;
+		return "y".equals(s) || "yes".equals(s);
 	}
 
 	private BloodPressureMeasurementStatus getStatusFromParameter(String statusStr) {

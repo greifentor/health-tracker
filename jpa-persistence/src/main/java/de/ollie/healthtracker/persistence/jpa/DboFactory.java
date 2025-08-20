@@ -42,6 +42,7 @@ class DboFactory {
 		int sysMmHg,
 		int diaMmHg,
 		int pulsePerMinute,
+		boolean irregularHeartbeat,
 		BloodPressureMeasurementStatusDbo state,
 		LocalDate dateOfRecording,
 		LocalTime timeOfRecording
@@ -56,6 +57,7 @@ class DboFactory {
 			.setDateOfRecording(dateOfRecording)
 			.setDiaMmHg(diaMmHg)
 			.setId(uuidFactory.create())
+			.setIrregularHeartbeat(irregularHeartbeat)
 			.setPulsePerMinute(pulsePerMinute)
 			.setStatus(state)
 			.setSysMmHg(sysMmHg)

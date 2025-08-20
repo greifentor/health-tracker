@@ -42,4 +42,7 @@ public class BloodPressureMeasurementDbo {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "STATUS", nullable = false)
 	private BloodPressureMeasurementStatusDbo status;
+
+	@Column(name = "IRREGULAR_HEARTBEAT", nullable = false)
+	private boolean irregularHeartbeat;
 }

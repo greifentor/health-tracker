@@ -17,4 +17,5 @@ public class BloodPressureMeasurement {
 	private int sysMmHg;
 	private LocalTime timeOfRecording;
 	private BloodPressureMeasurementStatus status;
+	private boolean irregularHeartbeat;
 }
