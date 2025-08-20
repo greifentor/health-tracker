@@ -3,12 +3,10 @@ package de.ollie.healthtracker.gui.swing.select;
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
-import de.ollie.healthtracker.core.service.DoctorConsultationService;
-import de.ollie.healthtracker.core.service.DoctorService;
-import de.ollie.healthtracker.core.service.model.DoctorConsultation;
+import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
+import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.edit.BaseEditInternalFrame;
-import de.ollie.healthtracker.gui.swing.edit.DoctorConsultationEditJInternalFrame;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.util.List;
@@ -20,61 +18,55 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-public class DoctorConsultationSelectPanel
+public class BloodPressureMeasurementSelectPanel
 	extends JPanel
-	implements BaseEditInternalFrame.Observer<DoctorConsultation> {
+	implements BaseEditInternalFrame.Observer<BloodPressureMeasurement> {
 
 	public interface Observer {
 		void onCancel();
 	}
 
 	private final JDesktopPane desktopPane;
-	private final DoctorConsultationService doctorConsultationService;
-	private final DoctorService doctorService;
+	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final EditDialogComponentFactory editDialogComponentFactory;
 
-	private List<DoctorConsultation> doctorConsultations;
+	private List<BloodPressureMeasurement> bloodPressureMeasurements;
 	private JTable tableSelection;
 	private Observer observer;
 
-	public DoctorConsultationSelectPanel(
-		DoctorConsultationService doctorConsultationService,
-		DoctorService doctorService,
+	public BloodPressureMeasurementSelectPanel(
+		BloodPressureMeasurementService bloodPressureMeasurementService,
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory,
 		Observer observer
 	) {
 		super(new BorderLayout(HGAP, VGAP));
 		this.desktopPane = desktopPane;
-		this.doctorService = doctorService;
-		this.doctorConsultationService = doctorConsultationService;
+		this.bloodPressureMeasurementService = bloodPressureMeasurementService;
 		this.editDialogComponentFactory = editDialogComponentFactory;
 		this.observer = observer;
-		doctorConsultations = getDoctorConsultations();
+		bloodPressureMeasurements = getBloodPressureMeasurements();
 		add(createSelectionPanel(), BorderLayout.CENTER);
 		add(createButtonPanel(), BorderLayout.SOUTH);
 	}
 
 	private void updateTableSelection() {
-		doctorConsultations = getDoctorConsultations();
-		tableSelection.setModel(new DoctorConsultationSelectionTableModel(doctorConsultations));
+		bloodPressureMeasurements = getBloodPressureMeasurements();
+		tableSelection.setModel(new BloodPressureMeasurementSelectionTableModel(bloodPressureMeasurements));
 	}
 
-	private List<DoctorConsultation> getDoctorConsultations() {
-		return doctorConsultationService
-			.listDoctorConsultations()
+	private List<BloodPressureMeasurement> getBloodPressureMeasurements() {
+		return bloodPressureMeasurementService
+			.listRecordings()
 			.stream()
-			.sorted((dc0, dc1) -> compare(dc0, dc1))
+			.sorted((bpm0, bpm1) -> compare(bpm0, bpm1))
 			.toList();
 	}
 
-	private int compare(DoctorConsultation dc0, DoctorConsultation dc1) {
-		int r = dc0.getDate().compareTo(dc1.getDate());
+	private int compare(BloodPressureMeasurement bpm0, BloodPressureMeasurement bpm1) {
+		int r = bpm0.getDateOfRecording().compareTo(bpm1.getDateOfRecording());
 		if (r == 0) {
-			r = dc0.getTime().compareTo(dc1.getTime());
-			if (r == 0) {
-				r = dc0.getDoctor().getName().compareTo(dc1.getDoctor().getName());
-			}
+			r = bpm0.getTimeOfRecording().compareTo(bpm1.getTimeOfRecording());
 		}
 		return r;
 	}
@@ -89,7 +81,7 @@ public class DoctorConsultationSelectPanel
 
 	private JPanel createSelectionPanel() {
 		JPanel p = new JPanel(new BorderLayout(HGAP, VGAP));
-		tableSelection = new JTable(new DoctorConsultationSelectionTableModel(doctorConsultations));
+		tableSelection = new JTable(new BloodPressureMeasurementSelectionTableModel(bloodPressureMeasurements));
 		p.add(new JScrollPane(tableSelection), BorderLayout.CENTER);
 		return p;
 	}
@@ -122,14 +114,15 @@ public class DoctorConsultationSelectPanel
 	private void select() {
 		int[] selectedIndices = tableSelection.getSelectedRows();
 		for (int i = 0, leni = selectedIndices.length; i < leni; i++) {
-			DoctorConsultation dc = doctorConsultations.get(selectedIndices[i]);
-			new DoctorConsultationEditJInternalFrame(
-				dc,
-				() -> doctorService.listDoctors().stream().sorted((d0, d1) -> d0.getName().compareTo(d1.getName())).toList(),
-				editDialogComponentFactory,
-				this,
-				desktopPane
-			);
+			BloodPressureMeasurement bpm = bloodPressureMeasurements.get(selectedIndices[i]);
+			// TODO new DoctorConsultationEditJInternalFrame(
+			// dc,
+			// () -> doctorService.listDoctors().stream().sorted((d0, d1) ->
+			// d0.getName().compareTo(d1.getName())).toList(),
+			// editDialogComponentFactory,
+			// this,
+			// desktopPane
+			// );
 		}
 	}
 
@@ -143,7 +136,7 @@ public class DoctorConsultationSelectPanel
 	public void onCancel() {}
 
 	@Override
-	public void onDelete(DoctorConsultation toDelete) {
+	public void onDelete(BloodPressureMeasurement toDelete) {
 		if (
 			JOptionPane.showConfirmDialog(
 				this,
@@ -153,14 +146,14 @@ public class DoctorConsultationSelectPanel
 			) ==
 			JOptionPane.YES_OPTION
 		) {
-			doctorConsultationService.deleteDoctorConsultation(toDelete.getId());
+			bloodPressureMeasurementService.deleteRecording(toDelete.getId());
 			updateTableSelection();
 		}
 	}
 
 	@Override
-	public void onSave(DoctorConsultation toSave) {
-		doctorConsultationService.updateDoctorConsultation(toSave);
+	public void onSave(BloodPressureMeasurement toSave) {
+		// TODO bloodPressureMeasurementService.update(toSave);
 		updateTableSelection();
 	}
 }

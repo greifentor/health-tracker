@@ -3,8 +3,10 @@ package de.ollie.healthtracker.gui.swing;
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
+import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.DoctorConsultationService;
 import de.ollie.healthtracker.core.service.DoctorService;
+import de.ollie.healthtracker.gui.swing.select.BloodPressureMeasurementSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.DoctorConsultationSelectJInternalFrame;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Named;
@@ -26,12 +28,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 
+	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final DoctorConsultationService doctorConsultationService;
 	private final DoctorService doctorService;
 	private final EditDialogComponentFactory editDialogComponentFactory;
 
 	private JDesktopPane desktopPane;
 	private JMenuItem menuItemFileQuit;
+	private JMenuItem menuItemEditBloodPressureMeasurement;
 	private JMenuItem menuItemEditDoctorConsultation;
 
 	@PostConstruct
@@ -63,6 +67,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemFileQuit);
 		menuBar.add(menu);
 		menu = new JMenu("Edit");
+		menuItemEditBloodPressureMeasurement = createMenuItem("Blood Pressure Measurement", this);
+		menu.add(menuItemEditBloodPressureMeasurement);
 		menuItemEditDoctorConsultation = createMenuItem("Doctor Consultation", this);
 		menu.add(menuItemEditDoctorConsultation);
 		menuBar.add(menu);
@@ -77,7 +83,14 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == menuItemEditDoctorConsultation) {
+		if (e.getSource() == menuItemEditBloodPressureMeasurement) {
+			new BloodPressureMeasurementSelectJInternalFrame(
+				bloodPressureMeasurementService,
+				doctorService,
+				desktopPane,
+				editDialogComponentFactory
+			);
+		} else if (e.getSource() == menuItemEditDoctorConsultation) {
 			new DoctorConsultationSelectJInternalFrame(
 				doctorConsultationService,
 				doctorService,
