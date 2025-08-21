@@ -5,12 +5,15 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
 import de.ollie.healthtracker.core.service.DoctorConsultationService;
 import de.ollie.healthtracker.core.service.DoctorService;
+import de.ollie.healthtracker.core.service.model.Doctor;
 import de.ollie.healthtracker.core.service.model.DoctorConsultation;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.edit.BaseEditInternalFrame;
 import de.ollie.healthtracker.gui.swing.edit.DoctorConsultationEditJInternalFrame;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
@@ -83,6 +86,8 @@ public class DoctorConsultationSelectPanel
 		JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT, HGAP, VGAP));
 		p.add(createCancelButton(() -> cancel()));
 		p.add(new JLabel("     "));
+		p.add(createNewButton(() -> create()));
+		p.add(new JLabel("     "));
 		p.add(createSelectButton(() -> select()));
 		return p;
 	}
@@ -96,6 +101,16 @@ public class DoctorConsultationSelectPanel
 
 	private JButton createCancelButton(Runnable action) {
 		JButton b = new JButton("Cancel");
+		if (action != null) {
+			b.addActionListener(e -> {
+				action.run();
+			});
+		}
+		return b;
+	}
+
+	private JButton createNewButton(Runnable action) {
+		JButton b = new JButton("New");
 		if (action != null) {
 			b.addActionListener(e -> {
 				action.run();
@@ -131,6 +146,38 @@ public class DoctorConsultationSelectPanel
 				desktopPane
 			);
 		}
+	}
+
+	private void create() {
+		List<Doctor> doctors = doctorService.listDoctors();
+		if (
+			doctors.isEmpty() &&
+			(
+				JOptionPane.showConfirmDialog(
+					this,
+					"No Doctors Found",
+					"There are no doctors found in your system. Cannot create a new consultation!",
+					JOptionPane.OK_OPTION
+				) ==
+				JOptionPane.OK_OPTION
+			)
+		) {
+			return;
+		}
+		DoctorConsultation dc = doctorConsultationService.createDoctorConsultation(
+			LocalDate.now(),
+			LocalTime.now(),
+			doctors.get(0),
+			"-",
+			"-"
+		);
+		new DoctorConsultationEditJInternalFrame(
+			dc,
+			() -> doctorService.listDoctors().stream().sorted((d0, d1) -> d0.getName().compareTo(d1.getName())).toList(),
+			editDialogComponentFactory,
+			this,
+			desktopPane
+		);
 	}
 
 	private void cancel() {

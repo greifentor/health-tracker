@@ -33,7 +33,7 @@ class BloodPressureMeasurementSelectionTableModel extends AbstractTableModel {
 			case 3 -> bpm.getDiaMmHg();
 			case 4 -> bpm.getPulsePerMinute();
 			case 5 -> bpm.isIrregularHeartbeat() ? "Y" : "N";
-			case 6 -> bpm.getStatus() != null ? "-" : bpm.getStatus().name();
+			case 6 -> bpm.getStatus() == null ? "-" : bpm.getStatus().name();
 			default -> null;
 		};
 	}

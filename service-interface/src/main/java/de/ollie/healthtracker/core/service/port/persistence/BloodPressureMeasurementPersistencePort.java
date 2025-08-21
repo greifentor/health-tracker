@@ -21,4 +21,6 @@ public interface BloodPressureMeasurementPersistencePort {
 	void deleteById(UUID id);
 
 	List<BloodPressureMeasurement> list();
+
+	BloodPressureMeasurement update(BloodPressureMeasurement bloodPressureMeasurement);
 }

@@ -21,4 +21,6 @@ public interface BloodPressureMeasurementService {
 	void deleteRecording(UUID id);
 
 	List<BloodPressureMeasurement> listRecordings();
+
+	BloodPressureMeasurement update(BloodPressureMeasurement bloodPressureMeasurement);
 }

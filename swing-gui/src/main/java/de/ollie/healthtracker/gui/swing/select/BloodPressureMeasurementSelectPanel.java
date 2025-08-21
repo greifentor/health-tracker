@@ -5,10 +5,14 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
+import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.edit.BaseEditInternalFrame;
+import de.ollie.healthtracker.gui.swing.edit.BloodPressureMeasurementEditJInternalFrame;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
@@ -59,7 +63,7 @@ public class BloodPressureMeasurementSelectPanel
 		return bloodPressureMeasurementService
 			.listRecordings()
 			.stream()
-			.sorted((bpm0, bpm1) -> compare(bpm0, bpm1))
+			.sorted((bpm0, bpm1) -> compare(bpm1, bpm0))
 			.toList();
 	}
 
@@ -75,6 +79,8 @@ public class BloodPressureMeasurementSelectPanel
 		JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT, HGAP, VGAP));
 		p.add(createCancelButton(() -> cancel()));
 		p.add(new JLabel("     "));
+		p.add(createNewButton(() -> create()));
+		p.add(new JLabel("     "));
 		p.add(createSelectButton(() -> select()));
 		return p;
 	}
@@ -88,6 +94,16 @@ public class BloodPressureMeasurementSelectPanel
 
 	private JButton createCancelButton(Runnable action) {
 		JButton b = new JButton("Cancel");
+		if (action != null) {
+			b.addActionListener(e -> {
+				action.run();
+			});
+		}
+		return b;
+	}
+
+	private JButton createNewButton(Runnable action) {
+		JButton b = new JButton("New");
 		if (action != null) {
 			b.addActionListener(e -> {
 				action.run();
@@ -115,15 +131,21 @@ public class BloodPressureMeasurementSelectPanel
 		int[] selectedIndices = tableSelection.getSelectedRows();
 		for (int i = 0, leni = selectedIndices.length; i < leni; i++) {
 			BloodPressureMeasurement bpm = bloodPressureMeasurements.get(selectedIndices[i]);
-			// TODO new DoctorConsultationEditJInternalFrame(
-			// dc,
-			// () -> doctorService.listDoctors().stream().sorted((d0, d1) ->
-			// d0.getName().compareTo(d1.getName())).toList(),
-			// editDialogComponentFactory,
-			// this,
-			// desktopPane
-			// );
+			new BloodPressureMeasurementEditJInternalFrame(bpm, editDialogComponentFactory, this, desktopPane);
 		}
+	}
+
+	private void create() {
+		BloodPressureMeasurement bpm = bloodPressureMeasurementService.createRecording(
+			130,
+			80,
+			60,
+			false,
+			BloodPressureMeasurementStatus.YELLOW,
+			LocalDate.now(),
+			LocalTime.now()
+		);
+		new BloodPressureMeasurementEditJInternalFrame(bpm, editDialogComponentFactory, this, desktopPane);
 	}
 
 	private void cancel() {
@@ -140,8 +162,8 @@ public class BloodPressureMeasurementSelectPanel
 		if (
 			JOptionPane.showConfirmDialog(
 				this,
-				"Delete Doctor Consultation",
-				"Do you really want to delete this doctor consultation?",
+				"Delete Blood Pressure Measurement",
+				"Do you really want to delete this blood pressure measurement?",
 				JOptionPane.YES_NO_OPTION
 			) ==
 			JOptionPane.YES_OPTION
@@ -153,7 +175,7 @@ public class BloodPressureMeasurementSelectPanel
 
 	@Override
 	public void onSave(BloodPressureMeasurement toSave) {
-		// TODO bloodPressureMeasurementService.update(toSave);
+		bloodPressureMeasurementService.update(toSave);
 		updateTableSelection();
 	}
 }

@@ -16,14 +16,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = "de.ollie.healthtracker.persistence.jpa.repository")
 public class HealthTrackerSwingGUIStarter {
 
-	// public static void main(String[] args) {
-	// var ctx = new
-	// SpringApplicationBuilder(HealthTrackerSwingGUIStarter.class).headless(false).run(args);
-	// EventQueue.invokeLater(() -> {
-	// var ex0 = ctx.getBean(HealthTrackerMainFrame.class);
-	// ex0.setVisible(true);
-	// });
-	// }
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(HealthTrackerSwingGUIStarter.class);
 		app.setHeadless(false); // GUI erlauben

@@ -1,4 +1,4 @@
-package de.ollie.healthtracker.gui.swing;
+package de.ollie.healthtracker.gui.swing.edit;
 
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
@@ -6,6 +6,8 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.model.Doctor;
 import de.ollie.healthtracker.core.service.model.DoctorConsultation;
+import de.ollie.healthtracker.gui.swing.Editor;
+import de.ollie.healthtracker.gui.swing.ItemProvider;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -46,17 +48,15 @@ public class DoctorConsultationEditPanel extends JPanel implements Editor<Doctor
 
 	private JPanel createLabelPanel() {
 		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
-		p.add(createLabelSubPanel("Date of Consuldation:", "Time ot Consultation:", "Doctor:"));
-		p.add(createLabelSubPanel("Reason:", "", ""));
-		p.add(createLabelSubPanel("Result:", "", ""));
+		p.add(createLabelSubPanel("Date of Measurement:", "Time of Measurement:", "Doctor:"));
 		return p;
 	}
 
-	private JPanel createLabelSubPanel(String label0, String label1, String label2) {
-		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
-		p.add(new JLabel(label0));
-		p.add(new JLabel(label1));
-		p.add(new JLabel(label2));
+	private JPanel createLabelSubPanel(String... labels) {
+		JPanel p = new JPanel(new GridLayout(labels.length, 1, HGAP, VGAP));
+		for (String label : labels) {
+			p.add(new JLabel(label));
+		}
 		return p;
 	}
 

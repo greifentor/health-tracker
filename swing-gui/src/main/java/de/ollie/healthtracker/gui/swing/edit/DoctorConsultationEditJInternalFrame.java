@@ -2,7 +2,6 @@ package de.ollie.healthtracker.gui.swing.edit;
 
 import de.ollie.healthtracker.core.service.model.Doctor;
 import de.ollie.healthtracker.core.service.model.DoctorConsultation;
-import de.ollie.healthtracker.gui.swing.DoctorConsultationEditPanel;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import java.util.Map;

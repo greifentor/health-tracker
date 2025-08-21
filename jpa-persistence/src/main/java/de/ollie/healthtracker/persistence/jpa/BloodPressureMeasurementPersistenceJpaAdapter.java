@@ -57,4 +57,9 @@ class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeas
 	public List<BloodPressureMeasurement> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
+
+	@Override
+	public BloodPressureMeasurement update(BloodPressureMeasurement bloodPressureMeasurement) {
+		return mapper.toModel(repository.save(mapper.toDbo(bloodPressureMeasurement)));
+	}
 }

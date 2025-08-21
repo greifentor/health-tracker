@@ -47,4 +47,9 @@ public class BloodPressureMeasurementServiceImpl implements BloodPressureMeasure
 	public List<BloodPressureMeasurement> listRecordings() {
 		return bloodPressureMeasurementPersistencePort.list();
 	}
+
+	@Override
+	public BloodPressureMeasurement update(BloodPressureMeasurement bloodPressureMeasurement) {
+		return bloodPressureMeasurementPersistencePort.update(bloodPressureMeasurement);
+	}
 }
