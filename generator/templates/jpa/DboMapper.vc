@@ -12,5 +12,6 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ${ClassName}DboMapper {
 	${ClassName} toModel(${ClassName}Dbo dbo);
+
 	${ClassName}Dbo toDbo(${ClassName} model);
 }
