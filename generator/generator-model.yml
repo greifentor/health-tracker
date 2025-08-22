@@ -1,4 +1,58 @@
 classes:
+  - name: BloodPressureMeasurement
+    properties:
+      - name: order
+        value: dateOfRecording
+      - name: order
+        value: timeOfRecording
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: dateOfRecording
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: LocalDate
+          properties:
+            - name: import
+              value: java.time.LocalDate
+      - name: diaMmHg
+        type:
+          name: int
+      - name: pulsePerMinute
+        type:
+          name: int
+      - name: sysMmHg
+        type:
+          name: int
+      - name: timeOfRecording
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: LocalTime
+          properties:
+            - name: import
+              value: java.time.LocalTime
+      - name: status
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: BloodPressureMeasurementStatus
+      - name: irregularHeartBeat
+        type:
+          name: boolean
   - name: Comment
     properties:
       - name: order
@@ -32,28 +86,10 @@ classes:
           properties:
             - name: import
               value: java.time.LocalDate
-  - name: DoctorType
-    attributes:
-      - name: id
-        properties:
-          - name: nullable
-            value: false
-          - name: id
-            value: true
-        type:
-          name: UUID
-          properties:
-            - name: import
-              value: java.util.UUID
-      - name: name
-        properties:
-          - name: nullable
-            value: false
-          - name: findable
-            value: true
-        type:
-          name: String
   - name: Doctor
+    properties:
+      - name: order
+        value: name
     attributes:
       - name: id
         properties:
@@ -82,6 +118,11 @@ classes:
         type:
           name: DoctorType
   - name: DoctorConsultation
+    properties:
+      - name: order
+        value: date
+      - name: order
+        value: time
     attributes:
       - name: id
         properties:
@@ -131,7 +172,34 @@ classes:
             value: false
         type:
           name: String
+  - name: DoctorType
+    properties:
+      - name: order
+        value: name
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+        type:
+          name: String
   - name: Manufacturer
+    properties:
+      - name: order
+        value: name
     attributes:
       - name: id
         properties:
@@ -153,6 +221,9 @@ classes:
         type:
           name: String
   - name: Medication
+    properties:
+      - name: order
+        value: name
     attributes:
       - name: id
         properties:
@@ -180,33 +251,6 @@ classes:
             value: false
         type:
           name: Manufacturer
-  - name: MedicationUnit
-    attributes:
-      - name: id
-        properties:
-          - name: nullable
-            value: false
-          - name: id
-            value: true
-        type:
-          name: UUID
-          properties:
-            - name: import
-              value: java.util.UUID
-      - name: name
-        properties:
-          - name: nullable
-            value: false
-          - name: findable
-            value: true
-        type:
-          name: String
-      - name: token
-        properties:
-          - name: nullable
-            value: false
-        type:
-          name: String
   - name: MedicationLog
     properties:
       - name: order
@@ -266,6 +310,36 @@ classes:
           properties:
             - name: import
               value: java.math.BigDecimal
+  - name: MedicationUnit
+    properties:
+      - name: order
+        value: name
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+        type:
+          name: String
+      - name: token
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: String
   - name: Symptom
     properties:
       - name: order

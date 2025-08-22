@@ -49,6 +49,7 @@ generators:
     properties:
       - name: target-path
         value: service/src/main/java
+# --- JPA ---
   - type: CLASS
     package: de.ollie.healthtracker.persistence.jpa.dbo
     resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
@@ -59,13 +60,12 @@ generators:
         value: jpa-persistence/src/main/java
   - type: CLASS
     package: de.ollie.healthtracker.persistence.jpa.mapper
-    resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+    path: generator
     target-file-name: ${UnitName}DboMapper
-    template: templates/persistence/jpa/DboMapper.vc
+    template: templates/jpa/DboMapper.vc
     properties:
       - name: target-path
         value: jpa-persistence/src/main/java
-# --- JPA ---
   - type: CLASS
     package: de.ollie.healthtracker.persistence.jpa.repository
     target-file-name: ${UnitName}DboRepository
