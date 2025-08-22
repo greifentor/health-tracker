@@ -12,6 +12,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface CommentDboMapper {
 	Comment toModel(CommentDbo dbo);
-
 	CommentDbo toDbo(Comment model);
 }
