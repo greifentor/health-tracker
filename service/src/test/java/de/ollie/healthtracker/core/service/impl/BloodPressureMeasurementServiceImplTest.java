@@ -25,7 +25,7 @@ class BloodPressureMeasurementServiceImplTest {
 	private static final LocalDate DATE_OF_RECORDING = LocalDate.of(2025, 6, 17);
 	private static final int DIA_MM_HG = 70;
 	private static final UUID ID = UUID.randomUUID();
-	private static final boolean IRREGULAR_BLOOD_PRESSURE_MEASUREMENT = true;
+	private static final boolean IRREGULAR_HEARTBEAT = true;
 	private static final int PULSE_PER_MINUTE = 60;
 	private static final BloodPressureMeasurementStatus STATE = BloodPressureMeasurementStatus.GREEN;
 	private static final int SYS_MM_HG = 130;
@@ -48,25 +48,25 @@ class BloodPressureMeasurementServiceImplTest {
 			// Prepare
 			when(
 				recordingPersistencePort.create(
-					SYS_MM_HG,
-					PULSE_PER_MINUTE,
-					DIA_MM_HG,
-					IRREGULAR_BLOOD_PRESSURE_MEASUREMENT,
-					STATE,
 					DATE_OF_RECORDING,
-					TIME_OF_RECORDING
+					DIA_MM_HG,
+					PULSE_PER_MINUTE,
+					SYS_MM_HG,
+					TIME_OF_RECORDING,
+					STATE,
+					IRREGULAR_HEARTBEAT
 				)
 			)
 				.thenReturn(recording);
 			// Run
-			BloodPressureMeasurement returned = unitUnderTest.createRecording(
-				SYS_MM_HG,
-				PULSE_PER_MINUTE,
-				DIA_MM_HG,
-				IRREGULAR_BLOOD_PRESSURE_MEASUREMENT,
-				STATE,
+			BloodPressureMeasurement returned = unitUnderTest.createBloodPressureMeasurement(
 				DATE_OF_RECORDING,
-				TIME_OF_RECORDING
+				DIA_MM_HG,
+				PULSE_PER_MINUTE,
+				SYS_MM_HG,
+				TIME_OF_RECORDING,
+				STATE,
+				IRREGULAR_HEARTBEAT
 			);
 			// Check
 			assertSame(recording, returned);
@@ -79,7 +79,7 @@ class BloodPressureMeasurementServiceImplTest {
 		@Test
 		void callsThePersistencePortMethodCorrectly() {
 			// Run
-			unitUnderTest.deleteRecording(ID);
+			unitUnderTest.deleteBloodPressureMeasurement(ID);
 			// Check
 			verify(recordingPersistencePort, times(1)).deleteById(ID);
 		}
@@ -94,7 +94,7 @@ class BloodPressureMeasurementServiceImplTest {
 			List<BloodPressureMeasurement> list = List.of(recording);
 			when(recordingPersistencePort.list()).thenReturn(list);
 			// Run
-			List<BloodPressureMeasurement> returned = unitUnderTest.listRecordings();
+			List<BloodPressureMeasurement> returned = unitUnderTest.listBloodPressureMeasurements();
 			// Check
 			assertSame(list, returned);
 		}

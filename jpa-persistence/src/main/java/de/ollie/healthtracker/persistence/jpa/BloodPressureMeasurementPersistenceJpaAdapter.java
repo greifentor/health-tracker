@@ -11,6 +11,7 @@ import jakarta.inject.Named;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
@@ -24,24 +25,24 @@ class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeas
 
 	@Override
 	public BloodPressureMeasurement create(
-		int sysMmHg,
+		LocalDate dateOfRecording,
 		int diaMmHg,
 		int pulsePerMinute,
-		boolean irregularHeartbeat,
+		int sysMmHg,
+		LocalTime timeOfRecording,
 		BloodPressureMeasurementStatus status,
-		LocalDate dateOfRecording,
-		LocalTime timeOfRecording
+		boolean irregularHeartBeat
 	) {
 		return mapper.toModel(
 			repository.save(
 				dboFactory.createBloodPressureMeasurement(
-					sysMmHg,
+					dateOfRecording,
 					diaMmHg,
 					pulsePerMinute,
-					irregularHeartbeat,
+					sysMmHg,
+					timeOfRecording,
 					mapper.toDbo(status),
-					dateOfRecording,
-					timeOfRecording
+					irregularHeartBeat
 				)
 			)
 		);
@@ -54,12 +55,18 @@ class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeas
 	}
 
 	@Override
+	public Optional<BloodPressureMeasurement> findById(UUID id) {
+		ensure(id != null, "id cannot be null!");
+		return repository.findById(id).map(mapper::toModel);
+	}
+
+	@Override
 	public List<BloodPressureMeasurement> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
 
 	@Override
-	public BloodPressureMeasurement update(BloodPressureMeasurement bloodPressureMeasurement) {
-		return mapper.toModel(repository.save(mapper.toDbo(bloodPressureMeasurement)));
+	public BloodPressureMeasurement update(BloodPressureMeasurement toSave) {
+		return mapper.toModel(repository.save(mapper.toDbo(toSave)));
 	}
 }

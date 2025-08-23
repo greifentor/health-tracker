@@ -103,13 +103,13 @@ class DboFactoryTest {
 				IllegalArgumentException.class,
 				() ->
 					unitUnderTest.createBloodPressureMeasurement(
-						SYS_MM_HG,
+						null,
 						DIA_MM_HG,
 						PULSE_PER_MINUTE,
-						IRREGULAR_HEARTBEAT,
+						SYS_MM_HG,
+						TIME_OF_RECORDING,
 						STATUS,
-						null,
-						TIME_OF_RECORDING
+						IRREGULAR_HEARTBEAT
 					)
 			);
 		}
@@ -120,13 +120,13 @@ class DboFactoryTest {
 				IllegalArgumentException.class,
 				() ->
 					unitUnderTest.createBloodPressureMeasurement(
-						SYS_MM_HG,
+						DATE_OF_RECORDING,
 						0,
 						PULSE_PER_MINUTE,
-						IRREGULAR_HEARTBEAT,
+						SYS_MM_HG,
+						TIME_OF_RECORDING,
 						STATUS,
-						DATE_OF_RECORDING,
-						TIME_OF_RECORDING
+						IRREGULAR_HEARTBEAT
 					)
 			);
 		}
@@ -137,13 +137,13 @@ class DboFactoryTest {
 				IllegalArgumentException.class,
 				() ->
 					unitUnderTest.createBloodPressureMeasurement(
-						SYS_MM_HG,
+						DATE_OF_RECORDING,
 						DIA_MM_HG,
 						0,
-						IRREGULAR_HEARTBEAT,
+						SYS_MM_HG,
+						TIME_OF_RECORDING,
 						STATUS,
-						DATE_OF_RECORDING,
-						TIME_OF_RECORDING
+						IRREGULAR_HEARTBEAT
 					)
 			);
 		}
@@ -154,13 +154,13 @@ class DboFactoryTest {
 				IllegalArgumentException.class,
 				() ->
 					unitUnderTest.createBloodPressureMeasurement(
-						SYS_MM_HG,
+						DATE_OF_RECORDING,
 						DIA_MM_HG,
 						PULSE_PER_MINUTE,
-						IRREGULAR_HEARTBEAT,
+						SYS_MM_HG,
+						TIME_OF_RECORDING,
 						null,
-						DATE_OF_RECORDING,
-						TIME_OF_RECORDING
+						IRREGULAR_HEARTBEAT
 					)
 			);
 		}
@@ -171,13 +171,13 @@ class DboFactoryTest {
 				IllegalArgumentException.class,
 				() ->
 					unitUnderTest.createBloodPressureMeasurement(
-						0,
+						DATE_OF_RECORDING,
 						DIA_MM_HG,
 						PULSE_PER_MINUTE,
-						IRREGULAR_HEARTBEAT,
+						0,
+						TIME_OF_RECORDING,
 						STATUS,
-						DATE_OF_RECORDING,
-						TIME_OF_RECORDING
+						IRREGULAR_HEARTBEAT
 					)
 			);
 		}
@@ -188,13 +188,13 @@ class DboFactoryTest {
 				IllegalArgumentException.class,
 				() ->
 					unitUnderTest.createBloodPressureMeasurement(
-						SYS_MM_HG,
+						DATE_OF_RECORDING,
 						DIA_MM_HG,
 						PULSE_PER_MINUTE,
-						IRREGULAR_HEARTBEAT,
+						SYS_MM_HG,
+						null,
 						STATUS,
-						DATE_OF_RECORDING,
-						null
+						IRREGULAR_HEARTBEAT
 					)
 			);
 		}
@@ -203,13 +203,13 @@ class DboFactoryTest {
 		void returnANewObject() {
 			assertNotNull(
 				unitUnderTest.createBloodPressureMeasurement(
-					SYS_MM_HG,
+					DATE_OF_RECORDING,
 					DIA_MM_HG,
 					PULSE_PER_MINUTE,
-					IRREGULAR_HEARTBEAT,
+					SYS_MM_HG,
+					TIME_OF_RECORDING,
 					STATUS,
-					DATE_OF_RECORDING,
-					TIME_OF_RECORDING
+					IRREGULAR_HEARTBEAT
 				)
 			);
 		}
@@ -218,22 +218,22 @@ class DboFactoryTest {
 		void returnANewObject_onEachCall() {
 			assertNotSame(
 				unitUnderTest.createBloodPressureMeasurement(
-					SYS_MM_HG,
+					DATE_OF_RECORDING,
 					DIA_MM_HG,
 					PULSE_PER_MINUTE,
-					IRREGULAR_HEARTBEAT,
+					SYS_MM_HG,
+					TIME_OF_RECORDING,
 					STATUS,
-					DATE_OF_RECORDING,
-					TIME_OF_RECORDING
+					IRREGULAR_HEARTBEAT
 				),
 				unitUnderTest.createBloodPressureMeasurement(
-					SYS_MM_HG,
+					DATE_OF_RECORDING,
 					DIA_MM_HG,
 					PULSE_PER_MINUTE,
-					IRREGULAR_HEARTBEAT,
+					SYS_MM_HG,
+					TIME_OF_RECORDING,
 					STATUS,
-					DATE_OF_RECORDING,
-					TIME_OF_RECORDING
+					IRREGULAR_HEARTBEAT
 				)
 			);
 		}
@@ -254,13 +254,13 @@ class DboFactoryTest {
 			assertEquals(
 				expected,
 				unitUnderTest.createBloodPressureMeasurement(
-					SYS_MM_HG,
+					DATE_OF_RECORDING,
 					DIA_MM_HG,
 					PULSE_PER_MINUTE,
-					IRREGULAR_HEARTBEAT,
+					SYS_MM_HG,
+					TIME_OF_RECORDING,
 					STATUS,
-					DATE_OF_RECORDING,
-					TIME_OF_RECORDING
+					IRREGULAR_HEARTBEAT
 				)
 			);
 		}

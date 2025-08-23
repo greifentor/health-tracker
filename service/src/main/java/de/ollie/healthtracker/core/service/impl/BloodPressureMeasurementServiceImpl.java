@@ -8,48 +8,61 @@ import jakarta.inject.Named;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
 @Named
 @RequiredArgsConstructor
-public class BloodPressureMeasurementServiceImpl implements BloodPressureMeasurementService {
+class BloodPressureMeasurementServiceImpl implements BloodPressureMeasurementService {
 
 	private final BloodPressureMeasurementPersistencePort bloodPressureMeasurementPersistencePort;
 
 	@Override
-	public BloodPressureMeasurement createRecording(
-		int sysMmHg,
+	public BloodPressureMeasurement createBloodPressureMeasurement(
+		LocalDate dateOfRecording,
 		int diaMmHg,
 		int pulsePerMinute,
-		boolean irregularHeartbeat,
+		int sysMmHg,
+		LocalTime timeOfRecording,
 		BloodPressureMeasurementStatus status,
-		LocalDate dateOfRecording,
-		LocalTime timeOfRecording
+		boolean irregularHeartBeat
 	) {
 		return bloodPressureMeasurementPersistencePort.create(
-			sysMmHg,
+			dateOfRecording,
 			diaMmHg,
 			pulsePerMinute,
-			irregularHeartbeat,
+			sysMmHg,
+			timeOfRecording,
 			status,
-			dateOfRecording,
-			timeOfRecording
+			irregularHeartBeat
 		);
 	}
 
 	@Override
-	public void deleteRecording(UUID id) {
+	public void deleteBloodPressureMeasurement(UUID id) {
 		bloodPressureMeasurementPersistencePort.deleteById(id);
 	}
 
 	@Override
-	public List<BloodPressureMeasurement> listRecordings() {
+	public Optional<BloodPressureMeasurement> findById(UUID id) {
+		return bloodPressureMeasurementPersistencePort.findById(id);
+	}
+
+	@Override
+	public List<BloodPressureMeasurement> listBloodPressureMeasurements() {
 		return bloodPressureMeasurementPersistencePort.list();
 	}
 
 	@Override
-	public BloodPressureMeasurement update(BloodPressureMeasurement bloodPressureMeasurement) {
-		return bloodPressureMeasurementPersistencePort.update(bloodPressureMeasurement);
+	public BloodPressureMeasurement updateBloodPressureMeasurement(BloodPressureMeasurement toSave) {
+		return bloodPressureMeasurementPersistencePort.update(toSave);
 	}
 }

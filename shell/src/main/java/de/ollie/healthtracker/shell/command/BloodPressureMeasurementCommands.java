@@ -52,14 +52,14 @@ public class BloodPressureMeasurementCommands implements CommandsWithTimeOrDate 
 			BloodPressureMeasurementStatus status = getStatusFromParameter(statusStr);
 			LocalDate dateOfMeasurement = getDateFromParameter(dateOfMeasurementStr);
 			LocalTime timeOfMeasurement = getTimeFromParameter(timeOfMeasurementStr);
-			bloodPressureMeasurementService.createRecording(
-				sysMmHg,
+			bloodPressureMeasurementService.createBloodPressureMeasurement(
+				dateOfMeasurement,
 				diaMmHg,
 				pulsePerMinute,
-				getBooleanFromString(irregularHeartbeatStr),
+				sysMmHg,
+				timeOfMeasurement,
 				status,
-				dateOfMeasurement,
-				timeOfMeasurement
+				getBooleanFromString(irregularHeartbeatStr)
 			);
 			return Constants.OK;
 		} catch (Exception e) {
@@ -87,7 +87,7 @@ public class BloodPressureMeasurementCommands implements CommandsWithTimeOrDate 
 			outputHandler.println(bloodPressureMeasurementToStringMapper.getHeadLine());
 			outputHandler.println(bloodPressureMeasurementToStringMapper.getUnderLine());
 			bloodPressureMeasurementService
-				.listRecordings()
+				.listBloodPressureMeasurements()
 				.forEach(bpm -> outputHandler.println(bloodPressureMeasurementToStringMapper.map(bpm)));
 			return Constants.OK;
 		} catch (Exception e) {
@@ -103,7 +103,7 @@ public class BloodPressureMeasurementCommands implements CommandsWithTimeOrDate 
 		@ShellOption(help = "The id of the blood pressure measurement to remove.", value = "id") String id
 	) {
 		try {
-			bloodPressureMeasurementService.deleteRecording(UUID.fromString(id));
+			bloodPressureMeasurementService.deleteBloodPressureMeasurement(UUID.fromString(id));
 			return Constants.OK;
 		} catch (Exception e) {
 			return Constants.ERROR + e.getMessage();

@@ -50,6 +50,9 @@ classes:
             value: false
         type:
           name: BloodPressureMeasurementStatus
+          properties:
+            - name: import
+              value: de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus
       - name: irregularHeartBeat
         type:
           name: boolean

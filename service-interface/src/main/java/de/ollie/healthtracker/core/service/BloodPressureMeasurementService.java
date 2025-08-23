@@ -5,22 +5,32 @@ import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import lombok.Generated;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
 public interface BloodPressureMeasurementService {
-	BloodPressureMeasurement createRecording(
-		int sysMmHg,
+	BloodPressureMeasurement createBloodPressureMeasurement(
+		LocalDate dateOfRecording,
 		int diaMmHg,
 		int pulsePerMinute,
-		boolean irregularHeartbeat,
-		BloodPressureMeasurementStatus state,
-		LocalDate dateOfRecording,
-		LocalTime timeOfRecording
+		int sysMmHg,
+		LocalTime timeOfRecording,
+		BloodPressureMeasurementStatus status,
+		boolean irregularHeartBeat
 	);
 
-	void deleteRecording(UUID id);
+	void deleteBloodPressureMeasurement(UUID id);
 
-	List<BloodPressureMeasurement> listRecordings();
+	Optional<BloodPressureMeasurement> findById(UUID id);
 
-	BloodPressureMeasurement update(BloodPressureMeasurement bloodPressureMeasurement);
+	List<BloodPressureMeasurement> listBloodPressureMeasurements();
+
+	BloodPressureMeasurement updateBloodPressureMeasurement(BloodPressureMeasurement toSave);
 }

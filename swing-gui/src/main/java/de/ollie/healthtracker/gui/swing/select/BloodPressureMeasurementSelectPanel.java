@@ -61,7 +61,7 @@ public class BloodPressureMeasurementSelectPanel
 
 	private List<BloodPressureMeasurement> getBloodPressureMeasurements() {
 		return bloodPressureMeasurementService
-			.listRecordings()
+			.listBloodPressureMeasurements()
 			.stream()
 			.sorted((bpm0, bpm1) -> compare(bpm1, bpm0))
 			.toList();
@@ -136,14 +136,14 @@ public class BloodPressureMeasurementSelectPanel
 	}
 
 	private void create() {
-		BloodPressureMeasurement bpm = bloodPressureMeasurementService.createRecording(
-			130,
+		BloodPressureMeasurement bpm = bloodPressureMeasurementService.createBloodPressureMeasurement(
+			LocalDate.now(),
 			80,
 			60,
-			false,
+			130,
+			LocalTime.now(),
 			BloodPressureMeasurementStatus.YELLOW,
-			LocalDate.now(),
-			LocalTime.now()
+			false
 		);
 		new BloodPressureMeasurementEditJInternalFrame(bpm, editDialogComponentFactory, this, desktopPane);
 	}
@@ -168,14 +168,14 @@ public class BloodPressureMeasurementSelectPanel
 			) ==
 			JOptionPane.YES_OPTION
 		) {
-			bloodPressureMeasurementService.deleteRecording(toDelete.getId());
+			bloodPressureMeasurementService.deleteBloodPressureMeasurement(toDelete.getId());
 			updateTableSelection();
 		}
 	}
 
 	@Override
 	public void onSave(BloodPressureMeasurement toSave) {
-		bloodPressureMeasurementService.update(toSave);
+		bloodPressureMeasurementService.updateBloodPressureMeasurement(toSave);
 		updateTableSelection();
 	}
 }

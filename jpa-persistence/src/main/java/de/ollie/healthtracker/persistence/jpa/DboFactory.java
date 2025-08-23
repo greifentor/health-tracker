@@ -39,13 +39,13 @@ class DboFactory {
 	private final UuidFactory uuidFactory;
 
 	BloodPressureMeasurementDbo createBloodPressureMeasurement(
-		int sysMmHg,
+		LocalDate dateOfRecording,
 		int diaMmHg,
 		int pulsePerMinute,
-		boolean irregularHeartbeat,
+		int sysMmHg,
+		LocalTime timeOfRecording,
 		BloodPressureMeasurementStatusDbo state,
-		LocalDate dateOfRecording,
-		LocalTime timeOfRecording
+		boolean irregularHeartbeat
 	) {
 		ensure(diaMmHg > 0, "DiaMmHg cannot be lesser then 1!");
 		ensure(pulsePerMinute > 0, "PulsePerMinute cannot be lesser then 1!");

@@ -66,13 +66,13 @@ class BloodPressureMeasurementPersistenceJpaAdapterTest {
 			// Prepare
 			when(
 				dboFactory.createBloodPressureMeasurement(
-					SYS_MM_HG,
-					PULSE_PER_MINUTE,
-					DIA_MM_HG,
-					IRREGULAR_HEARTBEAT,
-					STATE_DBO,
 					DATE_OF_RECORDING,
-					TIME_OF_RECORDING
+					DIA_MM_HG,
+					PULSE_PER_MINUTE,
+					SYS_MM_HG,
+					TIME_OF_RECORDING,
+					STATE_DBO,
+					IRREGULAR_HEARTBEAT
 				)
 			)
 				.thenReturn(dbo);
@@ -83,13 +83,13 @@ class BloodPressureMeasurementPersistenceJpaAdapterTest {
 			assertSame(
 				model,
 				unitUnderTest.create(
-					SYS_MM_HG,
-					PULSE_PER_MINUTE,
-					DIA_MM_HG,
-					IRREGULAR_HEARTBEAT,
-					STATE,
 					DATE_OF_RECORDING,
-					TIME_OF_RECORDING
+					DIA_MM_HG,
+					PULSE_PER_MINUTE,
+					SYS_MM_HG,
+					TIME_OF_RECORDING,
+					STATE,
+					IRREGULAR_HEARTBEAT
 				)
 			);
 		}

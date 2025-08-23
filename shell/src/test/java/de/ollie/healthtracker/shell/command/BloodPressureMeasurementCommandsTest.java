@@ -77,22 +77,22 @@ class BloodPressureMeasurementCommandsTest {
 			// Prepare
 			RuntimeException exception = new RuntimeException(MESSAGE);
 			when(
-				bloodPressureMeasurementService.createRecording(
-					SYS_MM_HG,
-					PULSE_PER_MINUTE,
-					DIA_MM_HG,
-					IRREGULAR_HEARTBEAT,
-					STATUS,
+				bloodPressureMeasurementService.createBloodPressureMeasurement(
 					DATE_OF_RECORDING,
-					TIME_OF_RECORDING
+					DIA_MM_HG,
+					PULSE_PER_MINUTE,
+					SYS_MM_HG,
+					TIME_OF_RECORDING,
+					STATUS,
+					IRREGULAR_HEARTBEAT
 				)
 			)
 				.thenThrow(exception);
 			// Run
 			String returned = unitUnderTest.addBloodPressureMeasurement(
 				SYS_MM_HG,
-				PULSE_PER_MINUTE,
 				DIA_MM_HG,
+				PULSE_PER_MINUTE,
 				"Y",
 				STATUS.name(),
 				TIME_OF_RECORDING_STR,
@@ -106,22 +106,22 @@ class BloodPressureMeasurementCommandsTest {
 		void returnsOk_whenNoErrorIsDetected() {
 			// Prepare
 			when(
-				bloodPressureMeasurementService.createRecording(
-					SYS_MM_HG,
-					PULSE_PER_MINUTE,
-					DIA_MM_HG,
-					IRREGULAR_HEARTBEAT,
-					STATUS,
+				bloodPressureMeasurementService.createBloodPressureMeasurement(
 					DATE_OF_RECORDING,
-					TIME_OF_RECORDING
+					DIA_MM_HG,
+					PULSE_PER_MINUTE,
+					SYS_MM_HG,
+					TIME_OF_RECORDING,
+					STATUS,
+					IRREGULAR_HEARTBEAT
 				)
 			)
 				.thenReturn(bloodPressureMeasurement0);
 			// Run
 			String returned = unitUnderTest.addBloodPressureMeasurement(
 				SYS_MM_HG,
-				PULSE_PER_MINUTE,
 				DIA_MM_HG,
+				PULSE_PER_MINUTE,
 				"Y",
 				STATUS.name(),
 				TIME_OF_RECORDING_STR,
@@ -136,22 +136,22 @@ class BloodPressureMeasurementCommandsTest {
 			// Prepare
 			when(localDateFactory.now()).thenReturn(DATE_OF_RECORDING);
 			when(
-				bloodPressureMeasurementService.createRecording(
-					SYS_MM_HG,
-					PULSE_PER_MINUTE,
-					DIA_MM_HG,
-					IRREGULAR_HEARTBEAT,
-					STATUS,
+				bloodPressureMeasurementService.createBloodPressureMeasurement(
 					DATE_OF_RECORDING,
-					TIME_OF_RECORDING
+					DIA_MM_HG,
+					PULSE_PER_MINUTE,
+					SYS_MM_HG,
+					TIME_OF_RECORDING,
+					STATUS,
+					IRREGULAR_HEARTBEAT
 				)
 			)
 				.thenReturn(bloodPressureMeasurement0);
 			// Run
 			String returned = unitUnderTest.addBloodPressureMeasurement(
 				SYS_MM_HG,
-				PULSE_PER_MINUTE,
 				DIA_MM_HG,
+				PULSE_PER_MINUTE,
 				"Y",
 				STATUS.name(),
 				TIME_OF_RECORDING_STR,
@@ -167,22 +167,22 @@ class BloodPressureMeasurementCommandsTest {
 			// Prepare
 			when(localDateFactory.now()).thenReturn(DATE_OF_RECORDING);
 			when(
-				bloodPressureMeasurementService.createRecording(
-					SYS_MM_HG,
-					PULSE_PER_MINUTE,
-					DIA_MM_HG,
-					IRREGULAR_HEARTBEAT,
-					STATUS,
+				bloodPressureMeasurementService.createBloodPressureMeasurement(
 					DATE_OF_RECORDING,
-					TIME_OF_RECORDING
+					DIA_MM_HG,
+					PULSE_PER_MINUTE,
+					SYS_MM_HG,
+					TIME_OF_RECORDING,
+					STATUS,
+					IRREGULAR_HEARTBEAT
 				)
 			)
 				.thenReturn(bloodPressureMeasurement0);
 			// Run
 			String returned = unitUnderTest.addBloodPressureMeasurement(
 				SYS_MM_HG,
-				PULSE_PER_MINUTE,
 				DIA_MM_HG,
+				PULSE_PER_MINUTE,
 				"Y",
 				STATUS.name(),
 				TIME_OF_RECORDING_STR,
@@ -197,22 +197,22 @@ class BloodPressureMeasurementCommandsTest {
 			// Prepare
 			when(localTimeFactory.now()).thenReturn(TIME_OF_RECORDING);
 			when(
-				bloodPressureMeasurementService.createRecording(
-					SYS_MM_HG,
-					PULSE_PER_MINUTE,
-					DIA_MM_HG,
-					IRREGULAR_HEARTBEAT,
-					STATUS,
+				bloodPressureMeasurementService.createBloodPressureMeasurement(
 					DATE_OF_RECORDING,
-					TIME_OF_RECORDING
+					DIA_MM_HG,
+					PULSE_PER_MINUTE,
+					SYS_MM_HG,
+					TIME_OF_RECORDING,
+					STATUS,
+					IRREGULAR_HEARTBEAT
 				)
 			)
 				.thenReturn(bloodPressureMeasurement0);
 			// Run
 			String returned = unitUnderTest.addBloodPressureMeasurement(
 				SYS_MM_HG,
-				PULSE_PER_MINUTE,
 				DIA_MM_HG,
+				PULSE_PER_MINUTE,
 				"Y",
 				STATUS.name(),
 				null,
@@ -228,22 +228,22 @@ class BloodPressureMeasurementCommandsTest {
 			// Prepare
 			when(localTimeFactory.now()).thenReturn(TIME_OF_RECORDING);
 			when(
-				bloodPressureMeasurementService.createRecording(
-					SYS_MM_HG,
-					PULSE_PER_MINUTE,
-					DIA_MM_HG,
-					IRREGULAR_HEARTBEAT,
-					STATUS,
+				bloodPressureMeasurementService.createBloodPressureMeasurement(
 					DATE_OF_RECORDING,
-					TIME_OF_RECORDING
+					DIA_MM_HG,
+					PULSE_PER_MINUTE,
+					SYS_MM_HG,
+					TIME_OF_RECORDING,
+					STATUS,
+					IRREGULAR_HEARTBEAT
 				)
 			)
 				.thenReturn(bloodPressureMeasurement0);
 			// Run
 			String returned = unitUnderTest.addBloodPressureMeasurement(
 				SYS_MM_HG,
-				PULSE_PER_MINUTE,
 				DIA_MM_HG,
+				PULSE_PER_MINUTE,
 				"Y",
 				STATUS.name(),
 				now,
@@ -258,22 +258,22 @@ class BloodPressureMeasurementCommandsTest {
 		void returnsOk_whenNoErrorIsDetected_StatusNamePassed(BloodPressureMeasurementStatus status) {
 			// Prepare
 			when(
-				bloodPressureMeasurementService.createRecording(
-					SYS_MM_HG,
-					PULSE_PER_MINUTE,
-					DIA_MM_HG,
-					IRREGULAR_HEARTBEAT,
-					status,
+				bloodPressureMeasurementService.createBloodPressureMeasurement(
 					DATE_OF_RECORDING,
-					TIME_OF_RECORDING
+					DIA_MM_HG,
+					PULSE_PER_MINUTE,
+					SYS_MM_HG,
+					TIME_OF_RECORDING,
+					status,
+					IRREGULAR_HEARTBEAT
 				)
 			)
 				.thenReturn(bloodPressureMeasurement0);
 			// Run
 			String returned = unitUnderTest.addBloodPressureMeasurement(
 				SYS_MM_HG,
-				PULSE_PER_MINUTE,
 				DIA_MM_HG,
+				PULSE_PER_MINUTE,
 				"Y",
 				status.name(),
 				TIME_OF_RECORDING_STR,
@@ -288,22 +288,22 @@ class BloodPressureMeasurementCommandsTest {
 		void returnsOk_whenNoErrorIsDetected_StatusNumberPassed(BloodPressureMeasurementStatus status) {
 			// Prepare
 			when(
-				bloodPressureMeasurementService.createRecording(
-					SYS_MM_HG,
-					PULSE_PER_MINUTE,
-					DIA_MM_HG,
-					IRREGULAR_HEARTBEAT,
-					status,
+				bloodPressureMeasurementService.createBloodPressureMeasurement(
 					DATE_OF_RECORDING,
-					TIME_OF_RECORDING
+					DIA_MM_HG,
+					PULSE_PER_MINUTE,
+					SYS_MM_HG,
+					TIME_OF_RECORDING,
+					status,
+					IRREGULAR_HEARTBEAT
 				)
 			)
 				.thenReturn(bloodPressureMeasurement0);
 			// Run
 			String returned = unitUnderTest.addBloodPressureMeasurement(
 				SYS_MM_HG,
-				PULSE_PER_MINUTE,
 				DIA_MM_HG,
+				PULSE_PER_MINUTE,
 				"Y",
 				"" + status.getValue(),
 				TIME_OF_RECORDING_STR,
@@ -321,7 +321,7 @@ class BloodPressureMeasurementCommandsTest {
 		void returnsExceptionMessage_whenAnExceptionIsThrownWhileRunningServiceMethod() {
 			// Prepare
 			RuntimeException exception = new RuntimeException(MESSAGE);
-			doThrow(exception).when(bloodPressureMeasurementService).deleteRecording(ID);
+			doThrow(exception).when(bloodPressureMeasurementService).deleteBloodPressureMeasurement(ID);
 			// Run
 			String returned = unitUnderTest.removeBloodPressureMeasurement(ID.toString());
 			// Check
@@ -341,7 +341,7 @@ class BloodPressureMeasurementCommandsTest {
 			// Run
 			unitUnderTest.removeBloodPressureMeasurement(ID.toString());
 			// Check
-			verify(bloodPressureMeasurementService, times(1)).deleteRecording(UUID.fromString(ID.toString()));
+			verify(bloodPressureMeasurementService, times(1)).deleteBloodPressureMeasurement(ID);
 		}
 	}
 
@@ -352,7 +352,7 @@ class BloodPressureMeasurementCommandsTest {
 		void returnsExceptionMessage_whenAnExceptionIsThrownWhileRunningServiceMethod() {
 			// Prepare
 			RuntimeException exception = new RuntimeException(MESSAGE);
-			when(bloodPressureMeasurementService.listRecordings()).thenThrow(exception);
+			when(bloodPressureMeasurementService.listBloodPressureMeasurements()).thenThrow(exception);
 			// Run
 			String returned = unitUnderTest.listBloodPressureMeasurements();
 			// Check
@@ -371,7 +371,7 @@ class BloodPressureMeasurementCommandsTest {
 		void callsTheOutputHandlerForEachRecordReturnedByServiceMethodCall() {
 			// Prepare
 			when(bloodPressureMeasurementToStringMapper.map(any(BloodPressureMeasurement.class))).thenReturn(STRING);
-			when(bloodPressureMeasurementService.listRecordings())
+			when(bloodPressureMeasurementService.listBloodPressureMeasurements())
 				.thenReturn(List.of(bloodPressureMeasurement0, bloodPressureMeasurement1));
 			// Run
 			unitUnderTest.listBloodPressureMeasurements();
@@ -384,7 +384,7 @@ class BloodPressureMeasurementCommandsTest {
 			// Prepare
 			when(bloodPressureMeasurementToStringMapper.map(bloodPressureMeasurement0)).thenReturn(STRING);
 			when(bloodPressureMeasurementToStringMapper.map(bloodPressureMeasurement1)).thenReturn(STRING);
-			when(bloodPressureMeasurementService.listRecordings())
+			when(bloodPressureMeasurementService.listBloodPressureMeasurements())
 				.thenReturn(List.of(bloodPressureMeasurement0, bloodPressureMeasurement1));
 			// Run
 			unitUnderTest.listBloodPressureMeasurements();
