@@ -1,6 +1,5 @@
 package de.ollie.healthtracker.persistence.jpa.repository;
 
-import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import java.time.LocalDate;
 import java.time.LocalTime;

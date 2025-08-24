@@ -3,6 +3,7 @@ package de.ollie.healthtracker.persistence.jpa;
 import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.UuidFactory;
+import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementStatusDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
@@ -44,7 +45,7 @@ class DboFactory {
 		int pulsePerMinute,
 		int sysMmHg,
 		LocalTime timeOfRecording,
-		BloodPressureMeasurementStatusDbo state,
+		BloodPressureMeasurementStatus state,
 		boolean irregularHeartbeat
 	) {
 		ensure(diaMmHg > 0, "DiaMmHg cannot be lesser then 1!");
@@ -59,7 +60,7 @@ class DboFactory {
 			.setId(uuidFactory.create())
 			.setIrregularHeartbeat(irregularHeartbeat)
 			.setPulsePerMinute(pulsePerMinute)
-			.setStatus(state)
+			.setStatus(state == null ? null : BloodPressureMeasurementStatusDbo.valueOf(state.name()))
 			.setSysMmHg(sysMmHg)
 			.setTimeOfRecording(timeOfRecording);
 	}

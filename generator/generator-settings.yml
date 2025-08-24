@@ -25,6 +25,8 @@ generators:
     properties:
       - name: target-path
         value: service-interface/src/main/java
+      - name: suppress-project-type-imports
+        value: true
   - type: CLASS
     package: de.ollie.healthtracker.core.service.port.persistence
     target-file-name: ${UnitName}PersistencePort

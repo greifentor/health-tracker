@@ -25,7 +25,7 @@ public interface BloodPressureMeasurementPersistencePort {
 		int sysMmHg,
 		LocalTime timeOfRecording,
 		BloodPressureMeasurementStatus status,
-		boolean irregularHeartBeat
+		boolean irregularHeartbeat
 	);
 
 	void deleteById(UUID id);

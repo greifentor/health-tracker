@@ -48,12 +48,13 @@ classes:
         properties:
           - name: nullable
             value: false
+        enum: true
         type:
           name: BloodPressureMeasurementStatus
           properties:
-            - name: import
-              value: de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus
-      - name: irregularHeartBeat
+            - name: project-type
+              value: true
+      - name: irregularHeartbeat
         type:
           name: boolean
   - name: Comment

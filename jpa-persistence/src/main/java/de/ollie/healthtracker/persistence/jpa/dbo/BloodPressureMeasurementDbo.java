@@ -13,6 +13,11 @@ import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
 @Accessors(chain = true)
 @Data
 @Generated
@@ -27,22 +32,22 @@ public class BloodPressureMeasurementDbo {
 	@Column(name = "DATE_OF_RECORDING", nullable = false)
 	private LocalDate dateOfRecording;
 
-	@Column(name = "TIME_OF_RECORDING", nullable = false)
-	private LocalTime timeOfRecording;
-
-	@Column(name = "DIA_MM_HG", nullable = false)
+	@Column(name = "DIA_MM_HG", nullable = true)
 	private int diaMmHg;
 
-	@Column(name = "SYS_MM_HG", nullable = false)
+	@Column(name = "PULSE_PER_MINUTE", nullable = true)
+	private int pulsePerMinute;
+
+	@Column(name = "SYS_MM_HG", nullable = true)
 	private int sysMmHg;
 
-	@Column(name = "PULSE_PER_MINUTE", nullable = false)
-	private int pulsePerMinute;
+	@Column(name = "TIME_OF_RECORDING", nullable = false)
+	private LocalTime timeOfRecording;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "STATUS", nullable = false)
 	private BloodPressureMeasurementStatusDbo status;
 
-	@Column(name = "IRREGULAR_HEARTBEAT", nullable = false)
+	@Column(name = "IRREGULAR_HEARTBEAT", nullable = true)
 	private boolean irregularHeartbeat;
 }

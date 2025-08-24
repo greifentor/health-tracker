@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import de.ollie.healthtracker.core.service.UuidFactory;
+import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementStatusDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
@@ -51,7 +52,8 @@ class DboFactoryTest {
 	private static final int PULSE_PER_MINUTE = 60;
 	private static final String REASON = "reason";
 	private static final String RESULT = "result";
-	private static final BloodPressureMeasurementStatusDbo STATUS = BloodPressureMeasurementStatusDbo.GREEN;
+	private static final BloodPressureMeasurementStatus STATUS = BloodPressureMeasurementStatus.GREEN;
+	private static final BloodPressureMeasurementStatusDbo STATUS_DBO = BloodPressureMeasurementStatusDbo.GREEN;
 	private static final int SYS_MM_HG = 130;
 	private static final LocalTime TIME = LocalTime.of(12, 52, 42);
 	private static final LocalTime TIME_OF_RECORDING = LocalTime.of(23, 31, 42);
@@ -246,7 +248,7 @@ class DboFactoryTest {
 				.setDiaMmHg(DIA_MM_HG)
 				.setId(ID)
 				.setPulsePerMinute(PULSE_PER_MINUTE)
-				.setStatus(STATUS)
+				.setStatus(STATUS_DBO)
 				.setSysMmHg(SYS_MM_HG)
 				.setTimeOfRecording(TIME_OF_RECORDING);
 			when(uuidFactory.create()).thenReturn(ID);

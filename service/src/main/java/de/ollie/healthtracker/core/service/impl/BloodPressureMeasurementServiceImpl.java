@@ -33,7 +33,7 @@ class BloodPressureMeasurementServiceImpl implements BloodPressureMeasurementSer
 		int sysMmHg,
 		LocalTime timeOfRecording,
 		BloodPressureMeasurementStatus status,
-		boolean irregularHeartBeat
+		boolean irregularHeartbeat
 	) {
 		return bloodPressureMeasurementPersistencePort.create(
 			dateOfRecording,
@@ -42,7 +42,7 @@ class BloodPressureMeasurementServiceImpl implements BloodPressureMeasurementSer
 			sysMmHg,
 			timeOfRecording,
 			status,
-			irregularHeartBeat
+			irregularHeartbeat
 		);
 	}
 

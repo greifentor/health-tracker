@@ -71,12 +71,11 @@ class BloodPressureMeasurementPersistenceJpaAdapterTest {
 					PULSE_PER_MINUTE,
 					SYS_MM_HG,
 					TIME_OF_RECORDING,
-					STATE_DBO,
+					STATE,
 					IRREGULAR_HEARTBEAT
 				)
 			)
 				.thenReturn(dbo);
-			when(mapper.toDbo(STATE)).thenReturn(STATE_DBO);
 			when(mapper.toModel(dboSaved)).thenReturn(model);
 			when(repository.save(dbo)).thenReturn(dboSaved);
 			// Run & Check

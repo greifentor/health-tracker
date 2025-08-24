@@ -6,6 +6,9 @@ import ${Properties.get("core-model-package")}.${ClassName};
 #if (${Attribute.isReference()})
 import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
 #end
+#if (${Attribute.isTypeEnum()})
+import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
+#end
 #end
 import ${Properties.get("core-port-persistence-package")}.${ClassName}PersistencePort;
 import jakarta.inject.Named;

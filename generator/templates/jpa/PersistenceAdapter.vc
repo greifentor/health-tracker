@@ -8,6 +8,9 @@ import ${Properties.get("core-model-package")}.${ClassName};
 #if (${Attribute.isReference()})
 import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
 #end
+#if (${Attribute.isTypeEnum()})
+import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
+#end
 #end
 #if (!$Class.getAttributesWithPropertySet("findable").isEmpty())
 import ${Properties.get("jpa-entity-package")}.${ClassName}Dbo;

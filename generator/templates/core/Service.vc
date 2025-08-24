@@ -5,6 +5,9 @@ import ${Properties.get("core-model-package")}.${ClassName};
 #if (${Attribute.isReference()})
 import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
 #end
+#if (${Attribute.isTypeEnum()})
+import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
+#end
 #end
 import java.util.List;
 import java.util.Optional;

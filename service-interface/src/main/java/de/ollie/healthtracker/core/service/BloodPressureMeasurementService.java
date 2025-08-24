@@ -23,7 +23,7 @@ public interface BloodPressureMeasurementService {
 		int sysMmHg,
 		LocalTime timeOfRecording,
 		BloodPressureMeasurementStatus status,
-		boolean irregularHeartBeat
+		boolean irregularHeartbeat
 	);
 
 	void deleteBloodPressureMeasurement(UUID id);
