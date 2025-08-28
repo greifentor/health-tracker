@@ -6,21 +6,18 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
-import de.ollie.healthtracker.gui.swing.Editor;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
-import java.awt.BorderLayout;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
 import java.awt.GridLayout;
 import java.util.Map;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.border.EmptyBorder;
 
-public class BloodPressureMeasurementEditPanel extends JPanel implements Editor<BloodPressureMeasurement> {
+public class BloodPressureMeasurementEditPanel extends AbstractSelectPanel<BloodPressureMeasurement> {
 
 	private JCheckBox checkBoxIrregularHeartbeat;
 	private JComboBox<BloodPressureMeasurementStatus> comboBoxStatus;
@@ -30,22 +27,15 @@ public class BloodPressureMeasurementEditPanel extends JPanel implements Editor<
 	private JTextField textFieldDateOfRecording;
 	private JTextField textFieldTimeOfRecording;
 
-	private BloodPressureMeasurement toEdit;
-
 	public BloodPressureMeasurementEditPanel(
 		BloodPressureMeasurement toEdit,
 		Map<String, ItemProvider<?>> itemProviders
 	) {
-		super(new BorderLayout(HGAP, VGAP));
-		this.toEdit = toEdit;
-		setBorder(new EmptyBorder(VGAP, HGAP, VGAP, HGAP));
-		JPanel psub = new JPanel(new BorderLayout(HGAP, VGAP));
-		psub.add(createLabelPanel(), BorderLayout.WEST);
-		psub.add(createComponentPanel(toEdit), BorderLayout.CENTER);
-		add(psub, BorderLayout.NORTH);
+		super(toEdit, itemProviders);
 	}
 
-	private JPanel createLabelPanel() {
+	@Override
+	protected JPanel createLabelPanel() {
 		JPanel p = new JPanel(new GridLayout(1, 1, HGAP, VGAP));
 		p.add(
 			createLabelSubPanel(
@@ -61,15 +51,8 @@ public class BloodPressureMeasurementEditPanel extends JPanel implements Editor<
 		return p;
 	}
 
-	private JPanel createLabelSubPanel(String... labels) {
-		JPanel p = new JPanel(new GridLayout(labels.length, 1, HGAP, VGAP));
-		for (String label : labels) {
-			p.add(new JLabel(label));
-		}
-		return p;
-	}
-
-	private JPanel createComponentPanel(BloodPressureMeasurement toEdit) {
+	@Override
+	protected JPanel createComponentPanel(BloodPressureMeasurement toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		JPanel p = new JPanel(new GridLayout(7, 1, HGAP, VGAP));
 		checkBoxIrregularHeartbeat = new JCheckBox();
 		checkBoxIrregularHeartbeat.setSelected(toEdit.isIrregularHeartbeat());

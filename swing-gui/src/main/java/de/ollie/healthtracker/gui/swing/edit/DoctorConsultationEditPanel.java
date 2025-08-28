@@ -6,9 +6,8 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.model.Doctor;
 import de.ollie.healthtracker.core.service.model.DoctorConsultation;
-import de.ollie.healthtracker.gui.swing.Editor;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
-import java.awt.BorderLayout;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.List;
@@ -18,10 +17,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-public class DoctorConsultationEditPanel extends JPanel implements Editor<DoctorConsultation> {
+public class DoctorConsultationEditPanel extends AbstractSelectPanel<DoctorConsultation> {
 
 	public static final String DOCTORS_ITEM_PROVIDER_ID = "doctors-item-provider";
 
@@ -31,38 +29,21 @@ public class DoctorConsultationEditPanel extends JPanel implements Editor<Doctor
 	private JTextField textFieldDate;
 	private JTextField textFieldTime;
 
-	private DoctorConsultation toEdit;
-
 	public DoctorConsultationEditPanel(DoctorConsultation toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		super(new BorderLayout(HGAP, VGAP));
-		this.toEdit = toEdit;
-		setBorder(new EmptyBorder(VGAP, HGAP, VGAP, HGAP));
-		JPanel psub = new JPanel(new BorderLayout(HGAP, VGAP));
-		psub.add(createLabelPanel(), BorderLayout.WEST);
-		psub.add(
-			createComponentPanel(toEdit, (ItemProvider<Doctor>) itemProviders.get(DOCTORS_ITEM_PROVIDER_ID)),
-			BorderLayout.CENTER
-		);
-		add(psub, BorderLayout.NORTH);
+		super(toEdit, itemProviders);
 	}
 
-	private JPanel createLabelPanel() {
+	@Override
+	protected JPanel createLabelPanel() {
 		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
 		p.add(createLabelSubPanel("Date of Measurement:", "Time of Measurement:", "Doctor:"));
 		return p;
 	}
 
-	private JPanel createLabelSubPanel(String... labels) {
-		JPanel p = new JPanel(new GridLayout(labels.length, 1, HGAP, VGAP));
-		for (String label : labels) {
-			p.add(new JLabel(label));
-		}
-		return p;
-	}
-
-	private JPanel createComponentPanel(DoctorConsultation toEdit, ItemProvider<Doctor> doctors) {
+	@Override
+	protected JPanel createComponentPanel(DoctorConsultation toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
-		p.add(createDateTimeAndDoctorPanel(toEdit, doctors));
+		p.add(createDateTimeAndDoctorPanel(toEdit, (ItemProvider<Doctor>) itemProviders.get(DOCTORS_ITEM_PROVIDER_ID)));
 		p.add(createReasonPanel(toEdit));
 		p.add(createResultPanel(toEdit));
 		return p;
