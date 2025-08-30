@@ -1,4 +1,4 @@
-package de.ollie.healthtracker.gui.swing.edit;
+package de.ollie.healthtracker.gui.swing.edit.bloodpressuremeasurement;
 
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
@@ -7,7 +7,7 @@ import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
-import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
 import java.awt.GridLayout;
 import java.util.Map;
 import javax.swing.JCheckBox;
@@ -17,7 +17,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
-public class BloodPressureMeasurementEditPanel extends AbstractSelectPanel<BloodPressureMeasurement> {
+public class BloodPressureMeasurementEditPanel extends AbstractEditPanel<BloodPressureMeasurement> {
 
 	private JCheckBox checkBoxIrregularHeartbeat;
 	private JComboBox<BloodPressureMeasurementStatus> comboBoxStatus;

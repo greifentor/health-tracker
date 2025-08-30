@@ -1,4 +1,4 @@
-package de.ollie.healthtracker.gui.swing.select;
+package de.ollie.healthtracker.gui.swing.edit;
 
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
@@ -12,11 +12,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public abstract class AbstractSelectPanel<T> extends JPanel implements Editor<T> {
+public abstract class AbstractEditPanel<T> extends JPanel implements Editor<T> {
 
 	protected T toEdit;
 
-	public AbstractSelectPanel(T toEdit, Map<String, ItemProvider<?>> itemProviders) {
+	public AbstractEditPanel(T toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		super(new BorderLayout(HGAP, VGAP));
 		this.toEdit = toEdit;
 		setBorder(new EmptyBorder(VGAP, HGAP, VGAP, HGAP));

@@ -1,4 +1,4 @@
-package de.ollie.healthtracker.gui.swing.edit;
+package de.ollie.healthtracker.gui.swing.edit.doctorconsultation;
 
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
@@ -7,7 +7,7 @@ import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.model.Doctor;
 import de.ollie.healthtracker.core.service.model.DoctorConsultation;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
-import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.List;
@@ -19,7 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-public class DoctorConsultationEditPanel extends AbstractSelectPanel<DoctorConsultation> {
+public class DoctorConsultationEditPanel extends AbstractEditPanel<DoctorConsultation> {
 
 	public static final String DOCTORS_ITEM_PROVIDER_ID = "doctors-item-provider";
 

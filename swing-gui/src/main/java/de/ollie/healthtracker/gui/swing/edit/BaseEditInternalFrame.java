@@ -49,6 +49,7 @@ public abstract class BaseEditInternalFrame<T> extends JInternalFrame {
 		} catch (java.beans.PropertyVetoException e) {
 			e.printStackTrace();
 		}
+		pack();
 		setVisible(true);
 	}
 
@@ -59,7 +60,7 @@ public abstract class BaseEditInternalFrame<T> extends JInternalFrame {
 		return p;
 	}
 
-	abstract JPanel createEditorPanel(T toEdit, Map<String, ItemProvider<?>> itemProviders);
+	protected abstract JPanel createEditorPanel(T toEdit, Map<String, ItemProvider<?>> itemProviders);
 
 	private JPanel createButtonPanel(Observer<T> observer) {
 		JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT, HGAP, VGAP));

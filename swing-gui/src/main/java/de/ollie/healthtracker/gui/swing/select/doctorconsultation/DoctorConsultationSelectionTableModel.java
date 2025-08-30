@@ -1,4 +1,4 @@
-package de.ollie.healthtracker.gui.swing.select;
+package de.ollie.healthtracker.gui.swing.select.doctorconsultation;
 
 import de.ollie.healthtracker.core.service.model.DoctorConsultation;
 import java.util.List;

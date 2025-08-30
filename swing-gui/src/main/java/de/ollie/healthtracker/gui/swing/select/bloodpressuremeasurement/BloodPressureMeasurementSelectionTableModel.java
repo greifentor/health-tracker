@@ -1,4 +1,4 @@
-package de.ollie.healthtracker.gui.swing.select;
+package de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement;
 
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import java.util.List;

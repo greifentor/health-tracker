@@ -1,4 +1,4 @@
-package de.ollie.healthtracker.gui.swing.select;
+package de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement;
 
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
@@ -8,7 +8,7 @@ import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.edit.BaseEditInternalFrame;
-import de.ollie.healthtracker.gui.swing.edit.BloodPressureMeasurementEditJInternalFrame;
+import de.ollie.healthtracker.gui.swing.edit.bloodpressuremeasurement.BloodPressureMeasurementEditJInternalFrame;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.time.LocalDate;

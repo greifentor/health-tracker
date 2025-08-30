@@ -6,8 +6,10 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.DoctorConsultationService;
 import de.ollie.healthtracker.core.service.DoctorService;
-import de.ollie.healthtracker.gui.swing.select.BloodPressureMeasurementSelectJInternalFrame;
-import de.ollie.healthtracker.gui.swing.select.DoctorConsultationSelectJInternalFrame;
+import de.ollie.healthtracker.core.service.DoctorTypeService;
+import de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement.BloodPressureMeasurementSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.doctor.DoctorSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.doctorconsultation.DoctorConsultationSelectJInternalFrame;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Named;
 import java.awt.BorderLayout;
@@ -31,11 +33,13 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final DoctorConsultationService doctorConsultationService;
 	private final DoctorService doctorService;
+	private final DoctorTypeService doctorTypeService;
 	private final EditDialogComponentFactory editDialogComponentFactory;
 
 	private JDesktopPane desktopPane;
 	private JMenuItem menuItemFileQuit;
 	private JMenuItem menuItemEditBloodPressureMeasurement;
+	private JMenuItem menuItemEditDoctor;
 	private JMenuItem menuItemEditDoctorConsultation;
 
 	@PostConstruct
@@ -69,6 +73,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu = new JMenu("Edit");
 		menuItemEditBloodPressureMeasurement = createMenuItem("Blood Pressure Measurement", this);
 		menu.add(menuItemEditBloodPressureMeasurement);
+		menuItemEditDoctor = createMenuItem("Doctor", this);
+		menu.add(menuItemEditDoctor);
 		menuItemEditDoctorConsultation = createMenuItem("Doctor Consultation", this);
 		menu.add(menuItemEditDoctorConsultation);
 		menuBar.add(menu);
@@ -90,6 +96,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				desktopPane,
 				editDialogComponentFactory
 			);
+		} else if (e.getSource() == menuItemEditDoctor) {
+			new DoctorSelectJInternalFrame(doctorService, doctorTypeService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditDoctorConsultation) {
 			new DoctorConsultationSelectJInternalFrame(
 				doctorConsultationService,

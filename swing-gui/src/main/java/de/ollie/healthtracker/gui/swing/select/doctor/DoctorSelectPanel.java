@@ -1,19 +1,16 @@
-package de.ollie.healthtracker.gui.swing.select;
+package de.ollie.healthtracker.gui.swing.select.doctor;
 
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
-import de.ollie.healthtracker.core.service.DoctorConsultationService;
 import de.ollie.healthtracker.core.service.DoctorService;
+import de.ollie.healthtracker.core.service.DoctorTypeService;
 import de.ollie.healthtracker.core.service.model.Doctor;
-import de.ollie.healthtracker.core.service.model.DoctorConsultation;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.edit.BaseEditInternalFrame;
-import de.ollie.healthtracker.gui.swing.edit.DoctorConsultationEditJInternalFrame;
+import de.ollie.healthtracker.gui.swing.edit.doctor.DoctorEditJInternalFrame;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
@@ -23,26 +20,24 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-public class DoctorConsultationSelectPanel
-	extends JPanel
-	implements BaseEditInternalFrame.Observer<DoctorConsultation> {
+public class DoctorSelectPanel extends JPanel implements BaseEditInternalFrame.Observer<Doctor> {
 
 	public interface Observer {
 		void onCancel();
 	}
 
 	private final JDesktopPane desktopPane;
-	private final DoctorConsultationService doctorConsultationService;
 	private final DoctorService doctorService;
+	private final DoctorTypeService doctorTypeService;
 	private final EditDialogComponentFactory editDialogComponentFactory;
 
-	private List<DoctorConsultation> doctorConsultations;
+	private List<Doctor> doctors;
 	private JTable tableSelection;
 	private Observer observer;
 
-	public DoctorConsultationSelectPanel(
-		DoctorConsultationService doctorConsultationService,
+	public DoctorSelectPanel(
 		DoctorService doctorService,
+		DoctorTypeService doctorTypeService,
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory,
 		Observer observer
@@ -50,36 +45,21 @@ public class DoctorConsultationSelectPanel
 		super(new BorderLayout(HGAP, VGAP));
 		this.desktopPane = desktopPane;
 		this.doctorService = doctorService;
-		this.doctorConsultationService = doctorConsultationService;
+		this.doctorTypeService = doctorTypeService;
 		this.editDialogComponentFactory = editDialogComponentFactory;
 		this.observer = observer;
-		doctorConsultations = getDoctorConsultations();
+		doctors = getDoctors();
 		add(createSelectionPanel(), BorderLayout.CENTER);
 		add(createButtonPanel(), BorderLayout.SOUTH);
 	}
 
 	private void updateTableSelection() {
-		doctorConsultations = getDoctorConsultations();
-		tableSelection.setModel(new DoctorConsultationSelectionTableModel(doctorConsultations));
+		doctors = getDoctors();
+		tableSelection.setModel(new DoctorSelectionTableModel(doctors));
 	}
 
-	private List<DoctorConsultation> getDoctorConsultations() {
-		return doctorConsultationService
-			.listDoctorConsultations()
-			.stream()
-			.sorted((dc0, dc1) -> compare(dc0, dc1))
-			.toList();
-	}
-
-	private int compare(DoctorConsultation dc0, DoctorConsultation dc1) {
-		int r = dc0.getDate().compareTo(dc1.getDate());
-		if (r == 0) {
-			r = dc0.getTime().compareTo(dc1.getTime());
-			if (r == 0) {
-				r = dc0.getDoctor().getName().compareTo(dc1.getDoctor().getName());
-			}
-		}
-		return r;
+	private List<Doctor> getDoctors() {
+		return doctorService.listDoctors().stream().sorted((d0, d1) -> d0.getName().compareTo(d1.getName())).toList();
 	}
 
 	private JPanel createButtonPanel() {
@@ -94,7 +74,7 @@ public class DoctorConsultationSelectPanel
 
 	private JPanel createSelectionPanel() {
 		JPanel p = new JPanel(new BorderLayout(HGAP, VGAP));
-		tableSelection = new JTable(new DoctorConsultationSelectionTableModel(doctorConsultations));
+		tableSelection = new JTable(new DoctorSelectionTableModel(doctors));
 		p.add(new JScrollPane(tableSelection), BorderLayout.CENTER);
 		return p;
 	}
@@ -137,10 +117,15 @@ public class DoctorConsultationSelectPanel
 	private void select() {
 		int[] selectedIndices = tableSelection.getSelectedRows();
 		for (int i = 0, leni = selectedIndices.length; i < leni; i++) {
-			DoctorConsultation dc = doctorConsultations.get(selectedIndices[i]);
-			new DoctorConsultationEditJInternalFrame(
-				dc,
-				() -> doctorService.listDoctors().stream().sorted((d0, d1) -> d0.getName().compareTo(d1.getName())).toList(),
+			Doctor d = doctors.get(selectedIndices[i]);
+			new DoctorEditJInternalFrame(
+				d,
+				() ->
+					doctorTypeService
+						.listDoctorTypes()
+						.stream()
+						.sorted((d0, d1) -> d0.getName().compareTo(d1.getName()))
+						.toList(),
 				editDialogComponentFactory,
 				this,
 				desktopPane
@@ -164,16 +149,11 @@ public class DoctorConsultationSelectPanel
 		) {
 			return;
 		}
-		DoctorConsultation dc = doctorConsultationService.createDoctorConsultation(
-			LocalDate.now(),
-			LocalTime.now(),
-			doctors.get(0),
-			"-",
-			"-"
-		);
-		new DoctorConsultationEditJInternalFrame(
-			dc,
-			() -> doctorService.listDoctors().stream().sorted((d0, d1) -> d0.getName().compareTo(d1.getName())).toList(),
+		Doctor d = doctorService.createDoctor("", null);
+		new DoctorEditJInternalFrame(
+			d,
+			() ->
+				doctorTypeService.listDoctorTypes().stream().sorted((d0, d1) -> d0.getName().compareTo(d1.getName())).toList(),
 			editDialogComponentFactory,
 			this,
 			desktopPane
@@ -190,24 +170,24 @@ public class DoctorConsultationSelectPanel
 	public void onCancel() {}
 
 	@Override
-	public void onDelete(DoctorConsultation toDelete) {
+	public void onDelete(Doctor toDelete) {
 		if (
 			JOptionPane.showConfirmDialog(
 				this,
-				"Delete Doctor Consultation",
-				"Do you really want to delete this doctor consultation?",
+				"Do you really want to delete this doctor?",
+				"Delete Doctor",
 				JOptionPane.YES_NO_OPTION
 			) ==
 			JOptionPane.YES_OPTION
 		) {
-			doctorConsultationService.deleteDoctorConsultation(toDelete.getId());
+			doctorService.deleteDoctor(toDelete.getId());
 			updateTableSelection();
 		}
 	}
 
 	@Override
-	public void onSave(DoctorConsultation toSave) {
-		doctorConsultationService.updateDoctorConsultation(toSave);
+	public void onSave(Doctor toSave) {
+		doctorService.updateDoctor(toSave);
 		updateTableSelection();
 	}
 }
