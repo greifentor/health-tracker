@@ -28,7 +28,7 @@ public class DoctorEditPanel extends AbstractEditPanel<Doctor> {
 
 	@Override
 	protected JPanel createLabelPanel() {
-		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
+		JPanel p = new JPanel(new GridLayout(1, 1, HGAP, VGAP));
 		p.add(createLabelSubPanel("Name:", "Doctor Type:"));
 		return p;
 	}
@@ -55,6 +55,7 @@ public class DoctorEditPanel extends AbstractEditPanel<Doctor> {
 	@Override
 	public Doctor getCurrentContent() {
 		return new Doctor()
+			.setId(toEdit.getId())
 			.setName(textFieldName.getText())
 			.setDoctorType((DoctorType) comboBoxDoctorType.getSelectedItem());
 	}

@@ -1,70 +1,44 @@
 package de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement;
 
-import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
-import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
-
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
-import de.ollie.healthtracker.gui.swing.edit.BaseEditInternalFrame;
-import de.ollie.healthtracker.gui.swing.edit.bloodpressuremeasurement.BloodPressureMeasurementEditJInternalFrame;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import de.ollie.healthtracker.gui.swing.edit.bloodpressuremeasurement.BloodPressureMeasurementEditInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
+import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import javax.swing.JButton;
 import javax.swing.JDesktopPane;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 public class BloodPressureMeasurementSelectPanel
-	extends JPanel
-	implements BaseEditInternalFrame.Observer<BloodPressureMeasurement> {
+	extends AbstractSelectPanel<BloodPressureMeasurement>
+	implements SelectionPanelObserver {
 
-	public interface Observer {
-		void onCancel();
-	}
-
-	private final JDesktopPane desktopPane;
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
-	private final EditDialogComponentFactory editDialogComponentFactory;
-
-	private List<BloodPressureMeasurement> bloodPressureMeasurements;
-	private JTable tableSelection;
-	private Observer observer;
 
 	public BloodPressureMeasurementSelectPanel(
 		BloodPressureMeasurementService bloodPressureMeasurementService,
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory,
-		Observer observer
+		SelectionPanelObserver observer
 	) {
-		super(new BorderLayout(HGAP, VGAP));
-		this.desktopPane = desktopPane;
+		super(desktopPane, "Blood Pressure Measurement", editDialogComponentFactory, observer);
 		this.bloodPressureMeasurementService = bloodPressureMeasurementService;
-		this.editDialogComponentFactory = editDialogComponentFactory;
-		this.observer = observer;
-		bloodPressureMeasurements = getBloodPressureMeasurements();
-		add(createSelectionPanel(), BorderLayout.CENTER);
-		add(createButtonPanel(), BorderLayout.SOUTH);
+		updateTableSelection();
 	}
 
-	private void updateTableSelection() {
-		bloodPressureMeasurements = getBloodPressureMeasurements();
-		tableSelection.setModel(new BloodPressureMeasurementSelectionTableModel(bloodPressureMeasurements));
-	}
-
-	private List<BloodPressureMeasurement> getBloodPressureMeasurements() {
-		return bloodPressureMeasurementService
-			.listBloodPressureMeasurements()
-			.stream()
-			.sorted((bpm0, bpm1) -> compare(bpm1, bpm0))
-			.toList();
+	@Override
+	protected List<BloodPressureMeasurement> getObjectsToSelect() {
+		return bloodPressureMeasurementService != null
+			? bloodPressureMeasurementService
+				.listBloodPressureMeasurements()
+				.stream()
+				.sorted((bpm0, bpm1) -> compare(bpm0, bpm1))
+				.toList()
+			: List.of();
 	}
 
 	private int compare(BloodPressureMeasurement bpm0, BloodPressureMeasurement bpm1) {
@@ -75,107 +49,59 @@ public class BloodPressureMeasurementSelectPanel
 		return r;
 	}
 
-	private JPanel createButtonPanel() {
-		JPanel p = new JPanel(new FlowLayout(FlowLayout.RIGHT, HGAP, VGAP));
-		p.add(createCancelButton(() -> cancel()));
-		p.add(new JLabel("     "));
-		p.add(createNewButton(() -> create()));
-		p.add(new JLabel("     "));
-		p.add(createSelectButton(() -> select()));
-		return p;
+	@Override
+	protected AbstractSelectionTableModel<BloodPressureMeasurement> createSelectionModel() {
+		return new AbstractSelectionTableModel<BloodPressureMeasurement>(
+			getObjectsToSelect(),
+			"Date",
+			"Time",
+			"SYS mmHg",
+			"DIA mmHg",
+			"PP",
+			"IHB",
+			"Status"
+		) {
+			@Override
+			protected Object getColumnValueFor(BloodPressureMeasurement bpm, int columnIndex) {
+				return switch (columnIndex) {
+					case 0 -> bpm.getDateOfRecording();
+					case 1 -> bpm.getTimeOfRecording();
+					case 2 -> bpm.getSysMmHg();
+					case 3 -> bpm.getDiaMmHg();
+					case 4 -> bpm.getPulsePerMinute();
+					case 5 -> bpm.isIrregularHeartbeat() ? "Y" : "N";
+					case 6 -> bpm.getStatus() == null ? "-" : bpm.getStatus().name();
+					default -> null;
+				};
+			}
+		};
 	}
 
-	private JPanel createSelectionPanel() {
-		JPanel p = new JPanel(new BorderLayout(HGAP, VGAP));
-		tableSelection = new JTable(new BloodPressureMeasurementSelectionTableModel(bloodPressureMeasurements));
-		p.add(new JScrollPane(tableSelection), BorderLayout.CENTER);
-		return p;
+	@Override
+	protected void createEditInternalFrame(BloodPressureMeasurement selected) {
+		new BloodPressureMeasurementEditInternalFrame(selected, getEditDialogComponentFactory(), this, getDesktopPane());
 	}
 
-	private JButton createCancelButton(Runnable action) {
-		JButton b = new JButton("Cancel");
-		if (action != null) {
-			b.addActionListener(e -> {
-				action.run();
-			});
-		}
-		return b;
-	}
-
-	private JButton createNewButton(Runnable action) {
-		JButton b = new JButton("New");
-		if (action != null) {
-			b.addActionListener(e -> {
-				action.run();
-			});
-		}
-		return b;
-	}
-
-	public void closeDialog() {
-		setVisible(false);
-		desktopPane.remove(this);
-	}
-
-	private JButton createSelectButton(Runnable action) {
-		JButton b = new JButton("Select");
-		if (action != null) {
-			b.addActionListener(e -> {
-				action.run();
-			});
-		}
-		return b;
-	}
-
-	private void select() {
-		int[] selectedIndices = tableSelection.getSelectedRows();
-		for (int i = 0, leni = selectedIndices.length; i < leni; i++) {
-			BloodPressureMeasurement bpm = bloodPressureMeasurements.get(selectedIndices[i]);
-			new BloodPressureMeasurementEditJInternalFrame(bpm, editDialogComponentFactory, this, desktopPane);
-		}
-	}
-
-	private void create() {
-		BloodPressureMeasurement bpm = bloodPressureMeasurementService.createBloodPressureMeasurement(
+	@Override
+	protected BloodPressureMeasurement createNewObject() {
+		return bloodPressureMeasurementService.createBloodPressureMeasurement(
 			LocalDate.now(),
 			80,
 			60,
 			130,
 			LocalTime.now(),
 			BloodPressureMeasurementStatus.YELLOW,
-			false
+			true
 		);
-		new BloodPressureMeasurementEditJInternalFrame(bpm, editDialogComponentFactory, this, desktopPane);
-	}
-
-	private void cancel() {
-		if (observer != null) {
-			observer.onCancel();
-		}
 	}
 
 	@Override
-	public void onCancel() {}
-
-	@Override
-	public void onDelete(BloodPressureMeasurement toDelete) {
-		if (
-			JOptionPane.showConfirmDialog(
-				this,
-				"Delete Blood Pressure Measurement",
-				"Do you really want to delete this blood pressure measurement?",
-				JOptionPane.YES_NO_OPTION
-			) ==
-			JOptionPane.YES_OPTION
-		) {
-			bloodPressureMeasurementService.deleteBloodPressureMeasurement(toDelete.getId());
-			updateTableSelection();
-		}
+	protected void delete(BloodPressureMeasurement toDelete) {
+		bloodPressureMeasurementService.deleteBloodPressureMeasurement(toDelete.getId());
 	}
 
 	@Override
-	public void onSave(BloodPressureMeasurement toSave) {
+	protected void save(BloodPressureMeasurement toSave) {
 		bloodPressureMeasurementService.updateBloodPressureMeasurement(toSave);
-		updateTableSelection();
 	}
 }

@@ -92,7 +92,6 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		if (e.getSource() == menuItemEditBloodPressureMeasurement) {
 			new BloodPressureMeasurementSelectJInternalFrame(
 				bloodPressureMeasurementService,
-				doctorService,
 				desktopPane,
 				editDialogComponentFactory
 			);

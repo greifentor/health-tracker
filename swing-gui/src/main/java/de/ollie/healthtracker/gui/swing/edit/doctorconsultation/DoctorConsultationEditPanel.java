@@ -37,6 +37,8 @@ public class DoctorConsultationEditPanel extends AbstractEditPanel<DoctorConsult
 	protected JPanel createLabelPanel() {
 		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
 		p.add(createLabelSubPanel("Date of Measurement:", "Time of Measurement:", "Doctor:"));
+		p.add(createLabelSubPanel("Reason:", "", ""));
+		p.add(createLabelSubPanel("Result:", "", ""));
 		return p;
 	}
 
@@ -51,8 +53,8 @@ public class DoctorConsultationEditPanel extends AbstractEditPanel<DoctorConsult
 
 	private JPanel createDateTimeAndDoctorPanel(DoctorConsultation toEdit, ItemProvider<Doctor> doctors) {
 		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
-		textFieldDate = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.getDate()));
-		textFieldTime = new JTextField(DateTimeUtil.DE_TIME_FORMAT.format(toEdit.getTime()));
+		textFieldDate = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.getDate()), 50);
+		textFieldTime = new JTextField(DateTimeUtil.DE_TIME_FORMAT.format(toEdit.getTime()), 50);
 		List<Doctor> doctorList = doctors.getItem();
 		comboBoxDoctor = new JComboBox<>(doctorList.toArray(new Doctor[doctorList.size()]));
 		comboBoxDoctor.setSelectedItem(toEdit.getDoctor());

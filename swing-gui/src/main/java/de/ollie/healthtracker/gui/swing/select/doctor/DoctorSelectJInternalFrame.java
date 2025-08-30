@@ -2,13 +2,17 @@ package de.ollie.healthtracker.gui.swing.select.doctor;
 
 import de.ollie.healthtracker.core.service.DoctorService;
 import de.ollie.healthtracker.core.service.DoctorTypeService;
+import de.ollie.healthtracker.core.service.model.Doctor;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
 
-public class DoctorSelectJInternalFrame extends JInternalFrame implements DoctorSelectPanel.Observer {
+public class DoctorSelectJInternalFrame extends AbstractSelectJInternalFrame<Doctor> implements SelectionPanelObserver {
 
-	public JDesktopPane desktopPane;
+	private final DoctorService doctorService;
+	private final DoctorTypeService doctorTypeService;
 
 	public DoctorSelectJInternalFrame(
 		DoctorService doctorService,
@@ -16,24 +20,14 @@ public class DoctorSelectJInternalFrame extends JInternalFrame implements Doctor
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
-		super("Doctors", true, true, true, true);
-		this.desktopPane = desktopPane;
-		setBounds(10, 10, 600, 400);
-		setContentPane(
-			new DoctorSelectPanel(doctorService, doctorTypeService, desktopPane, editDialogComponentFactory, this)
-		);
-		desktopPane.add(this);
-		try {
-			setSelected(true);
-		} catch (java.beans.PropertyVetoException e) {
-			e.printStackTrace();
-		}
-		setVisible(true);
+		super(desktopPane, "Doctors", editDialogComponentFactory);
+		this.doctorService = doctorService;
+		this.doctorTypeService = doctorTypeService;
+		finishConstruct();
 	}
 
 	@Override
-	public void onCancel() {
-		setVisible(false);
-		desktopPane.remove(this);
+	protected AbstractSelectPanel<Doctor> createSelectPanel() {
+		return new DoctorSelectPanel(doctorService, doctorTypeService, desktopPane, editDialogComponentFactory, this);
 	}
 }

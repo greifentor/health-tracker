@@ -2,15 +2,19 @@ package de.ollie.healthtracker.gui.swing.select.doctorconsultation;
 
 import de.ollie.healthtracker.core.service.DoctorConsultationService;
 import de.ollie.healthtracker.core.service.DoctorService;
+import de.ollie.healthtracker.core.service.model.DoctorConsultation;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
 
 public class DoctorConsultationSelectJInternalFrame
-	extends JInternalFrame
-	implements DoctorConsultationSelectPanel.Observer {
+	extends AbstractSelectJInternalFrame<DoctorConsultation>
+	implements SelectionPanelObserver {
 
-	public JDesktopPane desktopPane;
+	private final DoctorConsultationService doctorConsultationService;
+	private final DoctorService doctorService;
 
 	public DoctorConsultationSelectJInternalFrame(
 		DoctorConsultationService doctorConsultationService,
@@ -18,30 +22,20 @@ public class DoctorConsultationSelectJInternalFrame
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
-		super("Doctor Consultations", true, true, true, true);
-		this.desktopPane = desktopPane;
-		setBounds(10, 10, 600, 400);
-		setContentPane(
-			new DoctorConsultationSelectPanel(
-				doctorConsultationService,
-				doctorService,
-				desktopPane,
-				editDialogComponentFactory,
-				this
-			)
-		);
-		desktopPane.add(this);
-		try {
-			setSelected(true);
-		} catch (java.beans.PropertyVetoException e) {
-			e.printStackTrace();
-		}
-		setVisible(true);
+		super(desktopPane, "Doctor Consultations", editDialogComponentFactory);
+		this.doctorConsultationService = doctorConsultationService;
+		this.doctorService = doctorService;
+		finishConstruct();
 	}
 
 	@Override
-	public void onCancel() {
-		setVisible(false);
-		desktopPane.remove(this);
+	protected AbstractSelectPanel<DoctorConsultation> createSelectPanel() {
+		return new DoctorConsultationSelectPanel(
+			doctorConsultationService,
+			doctorService,
+			desktopPane,
+			editDialogComponentFactory,
+			this
+		);
 	}
 }

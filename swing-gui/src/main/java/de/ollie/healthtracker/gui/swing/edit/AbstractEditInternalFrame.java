@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import lombok.Getter;
 
-public abstract class BaseEditInternalFrame<T> extends JInternalFrame {
+public abstract class AbstractEditInternalFrame<T> extends JInternalFrame {
 
 	public interface Observer<T> {
 		void onCancel();
@@ -28,9 +28,12 @@ public abstract class BaseEditInternalFrame<T> extends JInternalFrame {
 	@Getter
 	private T toEdit;
 
+	@Getter
+	protected AbstractEditPanel<T> editPanel;
+
 	private EditDialogComponentFactory componentFactory;
 
-	public BaseEditInternalFrame(
+	public AbstractEditInternalFrame(
 		JDesktopPane desktopPane,
 		String title,
 		T toEdit,
@@ -99,5 +102,7 @@ public abstract class BaseEditInternalFrame<T> extends JInternalFrame {
 		return b;
 	}
 
-	public abstract T getCurrentContent();
+	public T getCurrentContent() {
+		return editPanel.getCurrentContent();
+	}
 }

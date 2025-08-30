@@ -4,16 +4,14 @@ import de.ollie.healthtracker.core.service.model.Doctor;
 import de.ollie.healthtracker.core.service.model.DoctorType;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
-import de.ollie.healthtracker.gui.swing.edit.BaseEditInternalFrame;
+import de.ollie.healthtracker.gui.swing.edit.AbstractEditInternalFrame;
 import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 
-public class DoctorEditJInternalFrame extends BaseEditInternalFrame<Doctor> {
+public class DoctorEditInternalFrame extends AbstractEditInternalFrame<Doctor> {
 
-	private DoctorEditPanel editPanel;
-
-	public DoctorEditJInternalFrame(
+	public DoctorEditInternalFrame(
 		Doctor toEdit,
 		ItemProvider<DoctorType> doctorTypes,
 		EditDialogComponentFactory editDialogComponentFactory,
@@ -34,10 +32,5 @@ public class DoctorEditJInternalFrame extends BaseEditInternalFrame<Doctor> {
 	protected JPanel createEditorPanel(Doctor toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		editPanel = new DoctorEditPanel(toEdit, itemProviders);
 		return editPanel;
-	}
-
-	@Override
-	public Doctor getCurrentContent() {
-		return editPanel.getCurrentContent();
 	}
 }
