@@ -20,11 +20,12 @@ public class DoctorSelectPanel extends AbstractSelectPanel<Doctor> implements Se
 	public DoctorSelectPanel(
 		DoctorService doctorService,
 		DoctorTypeService doctorTypeService,
+		String className,
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory,
 		SelectionPanelObserver observer
 	) {
-		super(desktopPane, "Doctor", editDialogComponentFactory, observer);
+		super(desktopPane, className, editDialogComponentFactory, observer);
 		this.doctorService = doctorService;
 		this.doctorTypeService = doctorTypeService;
 		updateTableSelection();

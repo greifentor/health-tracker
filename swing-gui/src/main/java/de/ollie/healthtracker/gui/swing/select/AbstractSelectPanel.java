@@ -26,7 +26,9 @@ public abstract class AbstractSelectPanel<T> extends JPanel implements AbstractE
 	@Getter(AccessLevel.PROTECTED)
 	private final EditDialogComponentFactory editDialogComponentFactory;
 
+	@Getter(AccessLevel.PROTECTED)
 	private String className;
+
 	private List<T> objectsToSelect;
 
 	@Getter(AccessLevel.PROTECTED)

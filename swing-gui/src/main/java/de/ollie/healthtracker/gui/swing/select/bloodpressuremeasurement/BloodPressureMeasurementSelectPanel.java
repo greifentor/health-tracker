@@ -21,11 +21,12 @@ public class BloodPressureMeasurementSelectPanel
 
 	public BloodPressureMeasurementSelectPanel(
 		BloodPressureMeasurementService bloodPressureMeasurementService,
+		String className,
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory,
 		SelectionPanelObserver observer
 	) {
-		super(desktopPane, "Blood Pressure Measurement", editDialogComponentFactory, observer);
+		super(desktopPane, className + "s", editDialogComponentFactory, observer);
 		this.bloodPressureMeasurementService = bloodPressureMeasurementService;
 		updateTableSelection();
 	}

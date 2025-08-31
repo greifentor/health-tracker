@@ -11,6 +11,8 @@ import javax.swing.JDesktopPane;
 
 public class DoctorSelectJInternalFrame extends AbstractSelectJInternalFrame<Doctor> implements SelectionPanelObserver {
 
+	private static final String CLASS_NAME = "Doctor";
+
 	private final DoctorService doctorService;
 	private final DoctorTypeService doctorTypeService;
 
@@ -20,7 +22,7 @@ public class DoctorSelectJInternalFrame extends AbstractSelectJInternalFrame<Doc
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
-		super(desktopPane, "Doctors", editDialogComponentFactory);
+		super(desktopPane, CLASS_NAME + "s", editDialogComponentFactory);
 		this.doctorService = doctorService;
 		this.doctorTypeService = doctorTypeService;
 		finishConstruct();
@@ -28,6 +30,13 @@ public class DoctorSelectJInternalFrame extends AbstractSelectJInternalFrame<Doc
 
 	@Override
 	protected AbstractSelectPanel<Doctor> createSelectPanel() {
-		return new DoctorSelectPanel(doctorService, doctorTypeService, desktopPane, editDialogComponentFactory, this);
+		return new DoctorSelectPanel(
+			doctorService,
+			doctorTypeService,
+			CLASS_NAME,
+			desktopPane,
+			editDialogComponentFactory,
+			this
+		);
 	}
 }

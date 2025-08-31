@@ -14,6 +14,8 @@ public class MedicationLogSelectJInternalFrame
 	extends AbstractSelectJInternalFrame<MedicationLog>
 	implements SelectionPanelObserver {
 
+	private static final String CLASS_NAME = "Medication Log";
+
 	private final MedicationLogService medicationLogService;
 	private final MedicationService medicationService;
 	private final MedicationUnitService medicationUnitService;
@@ -25,7 +27,7 @@ public class MedicationLogSelectJInternalFrame
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
-		super(desktopPane, "Medication Logs", editDialogComponentFactory);
+		super(desktopPane, CLASS_NAME + "s", editDialogComponentFactory);
 		this.medicationService = medicationService;
 		this.medicationLogService = medicationLogService;
 		this.medicationUnitService = medicationUnitService;
@@ -38,6 +40,7 @@ public class MedicationLogSelectJInternalFrame
 			medicationService,
 			medicationLogService,
 			medicationUnitService,
+			CLASS_NAME,
 			desktopPane,
 			editDialogComponentFactory,
 			this

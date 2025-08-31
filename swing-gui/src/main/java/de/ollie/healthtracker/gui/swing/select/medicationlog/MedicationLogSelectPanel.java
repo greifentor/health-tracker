@@ -27,11 +27,12 @@ public class MedicationLogSelectPanel extends AbstractSelectPanel<MedicationLog>
 		MedicationService medicationService,
 		MedicationLogService medicationLogService,
 		MedicationUnitService medicationUnitService,
+		String className,
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory,
 		SelectionPanelObserver observer
 	) {
-		super(desktopPane, "Medication Log", editDialogComponentFactory, observer);
+		super(desktopPane, className, editDialogComponentFactory, observer);
 		this.medicationService = medicationService;
 		this.medicationLogService = medicationLogService;
 		this.medicationUnitService = medicationUnitService;

@@ -12,6 +12,8 @@ public class BloodPressureMeasurementSelectJInternalFrame
 	extends AbstractSelectJInternalFrame<BloodPressureMeasurement>
 	implements SelectionPanelObserver {
 
+	private static final String CLASS_NAME = "Blood Pressure Measurement";
+
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 
 	public BloodPressureMeasurementSelectJInternalFrame(
@@ -19,7 +21,7 @@ public class BloodPressureMeasurementSelectJInternalFrame
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
-		super(desktopPane, "Blood Pressure Measurements", editDialogComponentFactory);
+		super(desktopPane, CLASS_NAME + "s", editDialogComponentFactory);
 		this.bloodPressureMeasurementService = bloodPressureMeasurementService;
 		finishConstruct();
 	}
@@ -28,6 +30,7 @@ public class BloodPressureMeasurementSelectJInternalFrame
 	protected AbstractSelectPanel<BloodPressureMeasurement> createSelectPanel() {
 		return new BloodPressureMeasurementSelectPanel(
 			bloodPressureMeasurementService,
+			CLASS_NAME,
 			desktopPane,
 			editDialogComponentFactory,
 			this
