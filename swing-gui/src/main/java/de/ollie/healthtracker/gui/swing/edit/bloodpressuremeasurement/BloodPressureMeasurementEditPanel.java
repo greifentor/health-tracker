@@ -44,8 +44,8 @@ public class BloodPressureMeasurementEditPanel extends AbstractEditPanel<BloodPr
 				"SYS mmHg",
 				"DIA mmHg",
 				"Pulse per Minute",
-				"Irregular Heartbeat",
-				"Status"
+				"Status",
+				"Irregular Heartbeat"
 			)
 		);
 		return p;
@@ -61,8 +61,8 @@ public class BloodPressureMeasurementEditPanel extends AbstractEditPanel<BloodPr
 		spinnerDiaMmHg = new JSpinner(new SpinnerNumberModel(toEdit.getDiaMmHg(), 0, 150, 1));
 		spinnerPulsePerMinute = new JSpinner(new SpinnerNumberModel(toEdit.getPulsePerMinute(), 0, 250, 1));
 		spinnerSysMmHg = new JSpinner(new SpinnerNumberModel(toEdit.getSysMmHg(), 0, 250, 1));
-		textFieldDateOfRecording = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.getDateOfRecording()));
-		textFieldTimeOfRecording = new JTextField(DateTimeUtil.DE_TIME_FORMAT.format(toEdit.getTimeOfRecording()));
+		textFieldDateOfRecording = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.getDateOfRecording()), 40);
+		textFieldTimeOfRecording = new JTextField(DateTimeUtil.DE_TIME_FORMAT.format(toEdit.getTimeOfRecording()), 40);
 		p.add(textFieldDateOfRecording);
 		p.add(textFieldTimeOfRecording);
 		p.add(spinnerSysMmHg);

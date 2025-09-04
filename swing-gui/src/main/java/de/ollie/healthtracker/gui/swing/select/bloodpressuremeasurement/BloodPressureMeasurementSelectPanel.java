@@ -43,9 +43,9 @@ public class BloodPressureMeasurementSelectPanel
 	}
 
 	private int compare(BloodPressureMeasurement bpm0, BloodPressureMeasurement bpm1) {
-		int r = bpm0.getDateOfRecording().compareTo(bpm1.getDateOfRecording());
+		int r = bpm1.getDateOfRecording().compareTo(bpm0.getDateOfRecording());
 		if (r == 0) {
-			r = bpm0.getTimeOfRecording().compareTo(bpm1.getTimeOfRecording());
+			r = bpm1.getTimeOfRecording().compareTo(bpm0.getTimeOfRecording());
 		}
 		return r;
 	}
@@ -80,7 +80,13 @@ public class BloodPressureMeasurementSelectPanel
 
 	@Override
 	protected void createEditInternalFrame(BloodPressureMeasurement selected) {
-		new BloodPressureMeasurementEditInternalFrame(selected, getEditDialogComponentFactory(), this, getDesktopPane());
+		new BloodPressureMeasurementEditInternalFrame(
+			selected,
+			getClassName(),
+			getEditDialogComponentFactory(),
+			this,
+			getDesktopPane()
+		);
 	}
 
 	@Override
@@ -92,7 +98,7 @@ public class BloodPressureMeasurementSelectPanel
 			130,
 			LocalTime.now(),
 			BloodPressureMeasurementStatus.YELLOW,
-			true
+			false
 		);
 	}
 

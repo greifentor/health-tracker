@@ -12,11 +12,12 @@ public class BloodPressureMeasurementEditInternalFrame extends AbstractEditInter
 
 	public BloodPressureMeasurementEditInternalFrame(
 		BloodPressureMeasurement toEdit,
+		String className,
 		EditDialogComponentFactory editDialogComponentFactory,
 		Observer<BloodPressureMeasurement> observer,
 		JDesktopPane desktopPane
 	) {
-		super(desktopPane, "Doctor Consultation", toEdit, editDialogComponentFactory, observer, Map.of());
+		super(desktopPane, className, toEdit, editDialogComponentFactory, observer, Map.of());
 	}
 
 	@Override

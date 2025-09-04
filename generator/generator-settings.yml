@@ -1,4 +1,5 @@
 default-target-path: tmp
+ucg-version: 1.0
 properties:
   - name: core-exception-package
     value: de.ollie.healthtracker.core.service.exception
@@ -16,6 +17,8 @@ properties:
     value: de.ollie.healthtracker.persistence.jpa.repository
   - name: shell-mapper-package
     value: de.ollie.healthtracker.shell.mapper
+  - name: swing-gui-package
+    value: de.ollie.healthtracker.gui.swing
 generators:
 # --- Service ---
   - type: CLASS
@@ -101,4 +104,20 @@ generators:
     properties:
       - name: target-path
         value: shell/src/main/java
-
+# --- Swing-GUI ---
+  - type: CLASS
+    package: de.ollie.healthtracker.gui.swing.select.${UnitNameLowerCase}
+    target-file-name: ${UnitName}SelectJInternalFrame
+    path: generator
+    template: templates/swing-gui/SelectJInternalFrame.vc
+    properties:
+      - name: target-path
+        value: swing-gui/src/main/java
+  - type: CLASS
+    package: de.ollie.healthtracker.gui.swing.select.${UnitNameLowerCase}
+    target-file-name: ${UnitName}SelectPanel
+    path: generator
+    template: templates/swing-gui/SelectPanel.vc
+    properties:
+      - name: target-path
+        value: swing-gui/src/main/java

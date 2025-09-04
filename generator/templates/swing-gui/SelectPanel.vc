@@ -1,0 +1,92 @@
+package ${PackageName};
+
+import de.ollie.healthtracker.core.service.${ClassName}Service;
+import de.ollie.healthtracker.core.service.model.${ClassName};
+import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
+import de.ollie.healthtracker.gui.swing.edit.${ClassName.toLowerCase()}.${ClassName}EditInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
+import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
+import java.time.LocalDate;
+import java.util.List;
+import javax.swing.JDesktopPane;
+import lombok.Generated;
+
+#foreach($Import in $Imports)
+import ${Import};
+#end
+
+/**
+ * ${GeneratedCodeMarker}
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
+public class ${ClassName}SelectPanel extends AbstractSelectPanel<${ClassName}> implements SelectionPanelObserver {
+
+	private final ${ClassName}Service ${ClassNameAsAttribute}Service;
+
+	public ${ClassName}SelectPanel(
+		${ClassName}Service ${ClassNameAsAttribute}Service,
+		String className,
+		JDesktopPane desktopPane,
+		EditDialogComponentFactory editDialogComponentFactory,
+		SelectionPanelObserver observer
+	) {
+		super(desktopPane, className + "s", editDialogComponentFactory, observer);
+		this.${ClassNameAsAttribute}Service = ${ClassNameAsAttribute}Service;
+		updateTableSelection();
+	}
+
+	@Override
+	protected List<${ClassName}> getObjectsToSelect() {
+		return ${ClassNameAsAttribute}Service != null
+			? ${ClassNameAsAttribute}Service
+				.list${ClassName}s()
+				.stream()
+#if (${Class.getAllPropertiesByName("order").size()} > 0)
+	#foreach($Attribute in $Class.getAttributesWithPropertySet("order"))
+				.sorted((d0, d1) -> d1.get${Attribute.getNameCamelCase()}().compareTo(d0.get${Attribute.getNameCamelCase()}()))
+	#end
+#end
+				.toList()
+			: List.of();
+	}
+
+	@Override
+	protected AbstractSelectionTableModel<${ClassName}> createSelectionModel() {
+		return new AbstractSelectionTableModel<${ClassName}>(getObjectsToSelect(), #foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))"${Attribute.getNameCamelCase()}"#if($foreach.hasNext), #end#end) {
+			@Override
+			protected Object getColumnValueFor(${ClassName} t, int columnIndex) {
+				return switch (columnIndex) {
+					#set($count = 0)
+					#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+					case $count -> t.get${Attribute.getNameCamelCase()}();
+					#set($count = $count + 1)
+					#end
+					default -> null;
+				};
+			}
+		};
+	}
+
+	@Override
+	protected void createEditInternalFrame(${ClassName} selected) {
+		new ${ClassName}EditInternalFrame(selected, getClassName(), getEditDialogComponentFactory(), this, getDesktopPane());
+	}
+
+	@Override
+	protected ${ClassName} createNewObject() {
+		return ${ClassNameAsAttribute}Service.create${ClassName}("?", LocalDate.now());
+	}
+
+	@Override
+	protected void delete(${ClassName} toDelete) {
+		${ClassNameAsAttribute}Service.delete${ClassName}(toDelete.getId());
+	}
+
+	@Override
+	protected void save(${ClassName} toSave) {
+		${ClassNameAsAttribute}Service.update${ClassName}(toSave);
+	}
+}

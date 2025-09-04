@@ -348,6 +348,8 @@ classes:
     properties:
       - name: order
         value: dateOfRecording
+      - name: gui
+        value: true
     attributes:
       - name: id
         properties:
@@ -366,12 +368,16 @@ classes:
             value: false
           - name: findable
             value: true
+          - name: editor-position
+            value: 2
         type:
           name: String
       - name: dateOfRecording
         properties:
           - name: nullable
             value: false
+          - name: editor-position
+            value: 1
         type:
           name: LocalDate
           properties:

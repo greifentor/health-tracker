@@ -16,6 +16,7 @@ import de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement.BloodPre
 import de.ollie.healthtracker.gui.swing.select.comment.CommentSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.doctor.DoctorSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.doctorconsultation.DoctorConsultationSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.doctortype.DoctorTypeSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.medicationlog.MedicationLogSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.symptom.SymptomSelectJInternalFrame;
 import jakarta.annotation.PostConstruct;
@@ -55,6 +56,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemEditComment;
 	private JMenuItem menuItemEditDoctor;
 	private JMenuItem menuItemEditDoctorConsultation;
+	private JMenuItem menuItemEditDoctorType;
 	private JMenuItem menuItemEditMedicationLog;
 	private JMenuItem menuItemEditSymptom;
 
@@ -93,6 +95,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemEditComment);
 		menuItemEditDoctor = createMenuItem("Doctor", this);
 		menu.add(menuItemEditDoctor);
+		menuItemEditDoctorType = createMenuItem("Doctor Type", this);
+		menu.add(menuItemEditDoctorType);
 		menuItemEditDoctorConsultation = createMenuItem("Doctor Consultation", this);
 		menu.add(menuItemEditDoctorConsultation);
 		menuItemEditMedicationLog = createMenuItem("Medication Log", this);
@@ -128,6 +132,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				desktopPane,
 				editDialogComponentFactory
 			);
+		} else if (e.getSource() == menuItemEditDoctorType) {
+			new DoctorTypeSelectJInternalFrame(doctorTypeService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditMedicationLog) {
 			new MedicationLogSelectJInternalFrame(
 				medicationService,

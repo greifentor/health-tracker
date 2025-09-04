@@ -7,6 +7,8 @@ import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditInternalFrame;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
@@ -18,7 +20,9 @@ import javax.swing.JTable;
 import lombok.AccessLevel;
 import lombok.Getter;
 
-public abstract class AbstractSelectPanel<T> extends JPanel implements AbstractEditInternalFrame.Observer<T> {
+public abstract class AbstractSelectPanel<T>
+	extends JPanel
+	implements AbstractEditInternalFrame.Observer<T>, MouseListener {
 
 	@Getter(AccessLevel.PROTECTED)
 	private final JDesktopPane desktopPane;
@@ -73,6 +77,7 @@ public abstract class AbstractSelectPanel<T> extends JPanel implements AbstractE
 	private JPanel createSelectionPanel() {
 		JPanel p = new JPanel(new BorderLayout(HGAP, VGAP));
 		tableSelection = new JTable(createSelectionModel());
+		tableSelection.addMouseListener(this);
 		p.add(new JScrollPane(tableSelection), BorderLayout.CENTER);
 		return p;
 	}
@@ -161,4 +166,23 @@ public abstract class AbstractSelectPanel<T> extends JPanel implements AbstractE
 	}
 
 	protected abstract void save(T toSave);
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		if (e.getClickCount() == 2) {
+			select();
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {}
+
+	@Override
+	public void mouseExited(MouseEvent e) {}
 }
