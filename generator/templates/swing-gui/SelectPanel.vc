@@ -77,7 +77,7 @@ public class ${ClassName}SelectPanel extends AbstractSelectPanel<${ClassName}> i
 
 	@Override
 	protected ${ClassName} createNewObject() {
-		return ${ClassNameAsAttribute}Service.create${ClassName}("?", LocalDate.now());
+		return ${ClassNameAsAttribute}Service.create${ClassName}(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})"?"#if($foreach.hasNext), #end#end);
 	}
 
 	@Override

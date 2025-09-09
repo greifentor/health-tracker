@@ -318,6 +318,8 @@ classes:
     properties:
       - name: order
         value: name
+      - name: gui
+        value: true
     attributes:
       - name: id
         properties:
@@ -336,12 +338,16 @@ classes:
             value: false
           - name: findable
             value: true
+          - name: editor-position
+            value: 1
         type:
           name: String
       - name: token
         properties:
           - name: nullable
             value: false
+          - name: editor-position
+            value: 2
         type:
           name: String
   - name: Symptom

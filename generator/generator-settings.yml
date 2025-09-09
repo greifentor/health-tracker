@@ -106,6 +106,7 @@ generators:
         value: shell/src/main/java
 # --- Swing-GUI ---
   - type: CLASS
+    generate-when: classModel Load gui HasProperty
     package: de.ollie.healthtracker.gui.swing.select.${UnitNameLowerCase}
     target-file-name: ${UnitName}SelectJInternalFrame
     path: generator
@@ -114,6 +115,7 @@ generators:
       - name: target-path
         value: swing-gui/src/main/java
   - type: CLASS
+    generate-when: classModel Load gui HasProperty
     package: de.ollie.healthtracker.gui.swing.select.${UnitNameLowerCase}
     target-file-name: ${UnitName}SelectPanel
     path: generator
