@@ -4,7 +4,7 @@ import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
-import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import javax.swing.JDesktopPane;
 
@@ -27,8 +27,8 @@ public class BloodPressureMeasurementSelectJInternalFrame
 	}
 
 	@Override
-	protected AbstractSelectPanel<BloodPressureMeasurement> createSelectPanel() {
-		return new BloodPressureMeasurementSelectPanel(
+	protected AbstractSelectJPanel<BloodPressureMeasurement> createSelectPanel() {
+		return new BloodPressureMeasurementSelectJPanel(
 			bloodPressureMeasurementService,
 			CLASS_NAME,
 			desktopPane,

@@ -5,19 +5,19 @@ import de.ollie.healthtracker.core.service.DoctorTypeService;
 import de.ollie.healthtracker.core.service.model.Doctor;
 import de.ollie.healthtracker.core.service.model.DoctorType;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
-import de.ollie.healthtracker.gui.swing.edit.doctor.DoctorEditInternalFrame;
-import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.edit.doctor.DoctorEditJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.util.List;
 import javax.swing.JDesktopPane;
 
-public class DoctorSelectPanel extends AbstractSelectPanel<Doctor> implements SelectionPanelObserver {
+public class DoctorSelectJPanel extends AbstractSelectJPanel<Doctor> implements SelectionPanelObserver {
 
 	private final DoctorService doctorService;
 	private final DoctorTypeService doctorTypeService;
 
-	public DoctorSelectPanel(
+	public DoctorSelectJPanel(
 		DoctorService doctorService,
 		DoctorTypeService doctorTypeService,
 		String className,
@@ -54,7 +54,7 @@ public class DoctorSelectPanel extends AbstractSelectPanel<Doctor> implements Se
 
 	@Override
 	protected void createEditInternalFrame(Doctor selected) {
-		new DoctorEditInternalFrame(
+		new DoctorEditJInternalFrame(
 			selected,
 			() ->
 				doctorTypeService.listDoctorTypes().stream().sorted((d0, d1) -> d0.getName().compareTo(d1.getName())).toList(),

@@ -15,14 +15,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class DoctorEditPanel extends AbstractEditPanel<Doctor> {
+public class DoctorEditJPanel extends AbstractEditPanel<Doctor> {
 
 	public static final String DOCTOR_TYPES_ITEM_PROVIDER_ID = "doctor-types-provider";
 
 	private JComboBox<DoctorType> comboBoxDoctorType;
 	private JTextField textFieldName;
 
-	public DoctorEditPanel(Doctor toEdit, Map<String, ItemProvider<?>> itemProviders) {
+	public DoctorEditJPanel(Doctor toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		super(toEdit, itemProviders);
 	}
 

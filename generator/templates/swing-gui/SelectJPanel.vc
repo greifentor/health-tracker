@@ -3,8 +3,8 @@ package ${PackageName};
 import de.ollie.healthtracker.core.service.${ClassName}Service;
 import de.ollie.healthtracker.core.service.model.${ClassName};
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
-import de.ollie.healthtracker.gui.swing.edit.${ClassName.toLowerCase()}.${ClassName}EditInternalFrame;
-import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.edit.${ClassName.toLowerCase()}.${ClassName}EditJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.time.LocalDate;
@@ -22,11 +22,11 @@ import ${Import};
  * Remove this comment to suspend class from generation process.
  */
 @Generated
-public class ${ClassName}SelectPanel extends AbstractSelectPanel<${ClassName}> implements SelectionPanelObserver {
+public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}> implements SelectionPanelObserver {
 
 	private final ${ClassName}Service ${ClassNameAsAttribute}Service;
 
-	public ${ClassName}SelectPanel(
+	public ${ClassName}SelectJPanel(
 		${ClassName}Service ${ClassNameAsAttribute}Service,
 		String className,
 		JDesktopPane desktopPane,
@@ -72,7 +72,7 @@ public class ${ClassName}SelectPanel extends AbstractSelectPanel<${ClassName}> i
 
 	@Override
 	protected void createEditInternalFrame(${ClassName} selected) {
-		new ${ClassName}EditInternalFrame(selected, getClassName(), getEditDialogComponentFactory(), this, getDesktopPane());
+		new ${ClassName}EditJInternalFrame(selected, getClassName(), getEditDialogComponentFactory(), this, getDesktopPane());
 	}
 
 	@Override

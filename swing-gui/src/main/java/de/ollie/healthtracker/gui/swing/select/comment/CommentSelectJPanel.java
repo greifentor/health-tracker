@@ -3,19 +3,19 @@ package de.ollie.healthtracker.gui.swing.select.comment;
 import de.ollie.healthtracker.core.service.CommentService;
 import de.ollie.healthtracker.core.service.model.Comment;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
-import de.ollie.healthtracker.gui.swing.edit.comment.CommentEditInternalFrame;
-import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.edit.comment.CommentEditJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.time.LocalDate;
 import java.util.List;
 import javax.swing.JDesktopPane;
 
-public class CommentSelectPanel extends AbstractSelectPanel<Comment> implements SelectionPanelObserver {
+public class CommentSelectJPanel extends AbstractSelectJPanel<Comment> implements SelectionPanelObserver {
 
 	private final CommentService commentService;
 
-	public CommentSelectPanel(
+	public CommentSelectJPanel(
 		CommentService commentService,
 		String className,
 		JDesktopPane desktopPane,
@@ -54,7 +54,7 @@ public class CommentSelectPanel extends AbstractSelectPanel<Comment> implements 
 
 	@Override
 	protected void createEditInternalFrame(Comment selected) {
-		new CommentEditInternalFrame(selected, getClassName(), getEditDialogComponentFactory(), this, getDesktopPane());
+		new CommentEditJInternalFrame(selected, getClassName(), getEditDialogComponentFactory(), this, getDesktopPane());
 	}
 
 	@Override

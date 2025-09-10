@@ -3,14 +3,14 @@ package de.ollie.healthtracker.gui.swing.edit.symptom;
 import de.ollie.healthtracker.core.service.model.Symptom;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
-import de.ollie.healthtracker.gui.swing.edit.AbstractEditInternalFrame;
+import de.ollie.healthtracker.gui.swing.edit.AbstractEditJInternalFrame;
 import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 
-public class SymptomEditInternalFrame extends AbstractEditInternalFrame<Symptom> {
+public class SymptomEditJInternalFrame extends AbstractEditJInternalFrame<Symptom> {
 
-	public SymptomEditInternalFrame(
+	public SymptomEditJInternalFrame(
 		Symptom toEdit,
 		String className,
 		EditDialogComponentFactory editDialogComponentFactory,
@@ -22,7 +22,7 @@ public class SymptomEditInternalFrame extends AbstractEditInternalFrame<Symptom>
 
 	@Override
 	protected JPanel createEditorPanel(Symptom toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		editPanel = new SymptomEditPanel(toEdit, itemProviders);
+		editPanel = new SymptomEditJPanel(toEdit, itemProviders);
 		return editPanel;
 	}
 }

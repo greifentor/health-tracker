@@ -20,7 +20,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
-public class MedicationLogEditPanel extends AbstractEditPanel<MedicationLog> {
+public class MedicationLogEditJPanel extends AbstractEditPanel<MedicationLog> {
 
 	public static final String MEDICATIONS_PROVIDER_ID = "medications-item-provider";
 	public static final String MEDICATION_UNITS_PROVIDER_ID = "medication-units-item-provider";
@@ -31,7 +31,7 @@ public class MedicationLogEditPanel extends AbstractEditPanel<MedicationLog> {
 	private JTextField textFieldDateOfIntake;
 	private JTextField textFieldTimeOfIntake;
 
-	public MedicationLogEditPanel(MedicationLog toEdit, Map<String, ItemProvider<?>> itemProviders) {
+	public MedicationLogEditJPanel(MedicationLog toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		super(toEdit, itemProviders);
 	}
 

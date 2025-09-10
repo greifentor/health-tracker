@@ -3,18 +3,18 @@ package de.ollie.healthtracker.gui.swing.select.doctortype;
 import de.ollie.healthtracker.core.service.DoctorTypeService;
 import de.ollie.healthtracker.core.service.model.DoctorType;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
-import de.ollie.healthtracker.gui.swing.edit.doctortype.DoctorTypeEditInternalFrame;
-import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.edit.doctortype.DoctorTypeEditJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.util.List;
 import javax.swing.JDesktopPane;
 
-public class DoctorTypeSelectPanel extends AbstractSelectPanel<DoctorType> implements SelectionPanelObserver {
+public class DoctorTypeSelectJPanel extends AbstractSelectJPanel<DoctorType> implements SelectionPanelObserver {
 
 	private final DoctorTypeService doctorTypeService;
 
-	public DoctorTypeSelectPanel(
+	public DoctorTypeSelectJPanel(
 		DoctorTypeService doctorTypeService,
 		String className,
 		JDesktopPane desktopPane,
@@ -48,7 +48,7 @@ public class DoctorTypeSelectPanel extends AbstractSelectPanel<DoctorType> imple
 
 	@Override
 	protected void createEditInternalFrame(DoctorType selected) {
-		new DoctorTypeEditInternalFrame(selected, getClassName(), getEditDialogComponentFactory(), this, getDesktopPane());
+		new DoctorTypeEditJInternalFrame(selected, getClassName(), getEditDialogComponentFactory(), this, getDesktopPane());
 	}
 
 	@Override

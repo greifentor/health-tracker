@@ -31,7 +31,7 @@ public abstract class AbstractSelectJInternalFrame<T> extends JInternalFrame imp
 		setVisible(true);
 	}
 
-	protected abstract AbstractSelectPanel<T> createSelectPanel();
+	protected abstract AbstractSelectJPanel<T> createSelectPanel();
 
 	@Override
 	public void onCancel() {

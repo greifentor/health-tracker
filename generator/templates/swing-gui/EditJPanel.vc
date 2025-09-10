@@ -1,0 +1,54 @@
+package ${PackageName};
+
+import static ${Properties.get("swing-gui-package")}.Constants.HGAP;
+import static ${Properties.get("swing-gui-package")}.Constants.VGAP;
+
+import ${Properties.get("core-model-package")}.${ClassName};
+import ${Properties.get("swing-gui-package")}.ItemProvider;
+import ${Properties.get("swing-gui-package")}.edit.AbstractEditPanel;
+import lombok.Generated;
+import java.awt.GridLayout;
+import java.util.Map;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+#foreach($Import in $Imports)
+import ${Import};
+#end
+
+/**
+ * ${GeneratedCodeMarker}
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
+public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
+
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+	private JTextField textField${Attribute.getNameCamelCase()};
+#end
+
+	public ${ClassName}EditJPanel(${ClassName} toEdit, Map<String, ItemProvider<?>> itemProviders) {
+		super(toEdit, itemProviders);
+	}
+
+	@Override
+	protected JPanel createLabelPanel() {
+		return createLabelSubPanel("Name:");
+	}
+
+	@Override
+	protected JPanel createComponentPanel(${ClassName} toEdit, Map<String, ItemProvider<?>> itemProviders) {
+		JPanel p = new JPanel(new GridLayout(1, 1, HGAP, VGAP));
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+		textField${Attribute.getNameCamelCase()} = new JTextField(toEdit.get${Attribute.getNameCamelCase()}(), 40);
+		p.add(textField${Attribute.getNameCamelCase()});
+#end
+		return p;
+	}
+
+	@Override
+	public ${ClassName} getCurrentContent() {
+		return new ${ClassName}().setId(toEdit.getId())#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position")).set${Attribute.getNameCamelCase()}(textField${Attribute.getNameCamelCase()}.getText())#end;
+	}
+}

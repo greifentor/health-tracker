@@ -19,7 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-public class DoctorConsultationEditPanel extends AbstractEditPanel<DoctorConsultation> {
+public class DoctorConsultationEditJPanel extends AbstractEditPanel<DoctorConsultation> {
 
 	public static final String DOCTORS_ITEM_PROVIDER_ID = "doctors-item-provider";
 
@@ -29,7 +29,7 @@ public class DoctorConsultationEditPanel extends AbstractEditPanel<DoctorConsult
 	private JTextField textFieldDate;
 	private JTextField textFieldTime;
 
-	public DoctorConsultationEditPanel(DoctorConsultation toEdit, Map<String, ItemProvider<?>> itemProviders) {
+	public DoctorConsultationEditJPanel(DoctorConsultation toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		super(toEdit, itemProviders);
 	}
 

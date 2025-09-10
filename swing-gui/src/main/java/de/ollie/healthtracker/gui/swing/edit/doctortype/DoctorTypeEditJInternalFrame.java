@@ -3,14 +3,14 @@ package de.ollie.healthtracker.gui.swing.edit.doctortype;
 import de.ollie.healthtracker.core.service.model.DoctorType;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
-import de.ollie.healthtracker.gui.swing.edit.AbstractEditInternalFrame;
+import de.ollie.healthtracker.gui.swing.edit.AbstractEditJInternalFrame;
 import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 
-public class DoctorTypeEditInternalFrame extends AbstractEditInternalFrame<DoctorType> {
+public class DoctorTypeEditJInternalFrame extends AbstractEditJInternalFrame<DoctorType> {
 
-	public DoctorTypeEditInternalFrame(
+	public DoctorTypeEditJInternalFrame(
 		DoctorType toEdit,
 		String className,
 		EditDialogComponentFactory editDialogComponentFactory,
@@ -22,7 +22,7 @@ public class DoctorTypeEditInternalFrame extends AbstractEditInternalFrame<Docto
 
 	@Override
 	protected JPanel createEditorPanel(DoctorType toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		editPanel = new DoctorTypeEditPanel(toEdit, itemProviders);
+		editPanel = new DoctorTypeEditJPanel(toEdit, itemProviders);
 		return editPanel;
 	}
 }

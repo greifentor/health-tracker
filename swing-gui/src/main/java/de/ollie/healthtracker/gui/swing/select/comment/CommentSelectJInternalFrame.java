@@ -4,7 +4,7 @@ import de.ollie.healthtracker.core.service.CommentService;
 import de.ollie.healthtracker.core.service.model.Comment;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
-import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import javax.swing.JDesktopPane;
 
@@ -27,7 +27,7 @@ public class CommentSelectJInternalFrame
 	}
 
 	@Override
-	protected AbstractSelectPanel<Comment> createSelectPanel() {
-		return new CommentSelectPanel(commentService, CLASS_NAME, desktopPane, editDialogComponentFactory, this);
+	protected AbstractSelectJPanel<Comment> createSelectPanel() {
+		return new CommentSelectJPanel(commentService, CLASS_NAME, desktopPane, editDialogComponentFactory, this);
 	}
 }

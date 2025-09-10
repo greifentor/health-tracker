@@ -6,7 +6,7 @@ import de.ollie.healthtracker.core.service.MedicationUnitService;
 import de.ollie.healthtracker.core.service.model.MedicationLog;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
-import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import javax.swing.JDesktopPane;
 
@@ -35,8 +35,8 @@ public class MedicationLogSelectJInternalFrame
 	}
 
 	@Override
-	protected AbstractSelectPanel<MedicationLog> createSelectPanel() {
-		return new MedicationLogSelectPanel(
+	protected AbstractSelectJPanel<MedicationLog> createSelectPanel() {
+		return new MedicationLogSelectJPanel(
 			medicationService,
 			medicationLogService,
 			medicationUnitService,

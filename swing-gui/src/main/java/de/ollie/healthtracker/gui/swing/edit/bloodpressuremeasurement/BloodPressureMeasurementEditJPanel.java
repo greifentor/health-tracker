@@ -17,7 +17,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
-public class BloodPressureMeasurementEditPanel extends AbstractEditPanel<BloodPressureMeasurement> {
+public class BloodPressureMeasurementEditJPanel extends AbstractEditPanel<BloodPressureMeasurement> {
 
 	private JCheckBox checkBoxIrregularHeartbeat;
 	private JComboBox<BloodPressureMeasurementStatus> comboBoxStatus;
@@ -27,7 +27,7 @@ public class BloodPressureMeasurementEditPanel extends AbstractEditPanel<BloodPr
 	private JTextField textFieldDateOfRecording;
 	private JTextField textFieldTimeOfRecording;
 
-	public BloodPressureMeasurementEditPanel(
+	public BloodPressureMeasurementEditJPanel(
 		BloodPressureMeasurement toEdit,
 		Map<String, ItemProvider<?>> itemProviders
 	) {

@@ -5,8 +5,8 @@ import de.ollie.healthtracker.core.service.DoctorService;
 import de.ollie.healthtracker.core.service.model.Doctor;
 import de.ollie.healthtracker.core.service.model.DoctorConsultation;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
-import de.ollie.healthtracker.gui.swing.edit.doctorconsultation.DoctorConsultationEditInternalFrame;
-import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.edit.doctorconsultation.DoctorConsultationEditJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.time.LocalDate;
@@ -14,14 +14,14 @@ import java.time.LocalTime;
 import java.util.List;
 import javax.swing.JDesktopPane;
 
-public class DoctorConsultationSelectPanel
-	extends AbstractSelectPanel<DoctorConsultation>
+public class DoctorConsultationSelectJPanel
+	extends AbstractSelectJPanel<DoctorConsultation>
 	implements SelectionPanelObserver {
 
 	private DoctorService doctorService;
 	private DoctorConsultationService doctorConsultationService;
 
-	public DoctorConsultationSelectPanel(
+	public DoctorConsultationSelectJPanel(
 		DoctorConsultationService doctorConsultationService,
 		DoctorService doctorService,
 		JDesktopPane desktopPane,
@@ -70,7 +70,7 @@ public class DoctorConsultationSelectPanel
 
 	@Override
 	protected void createEditInternalFrame(DoctorConsultation selected) {
-		new DoctorConsultationEditInternalFrame(
+		new DoctorConsultationEditJInternalFrame(
 			selected,
 			() -> doctorService.listDoctors().stream().sorted((d0, d1) -> d0.getName().compareTo(d1.getName())).toList(),
 			getEditDialogComponentFactory(),

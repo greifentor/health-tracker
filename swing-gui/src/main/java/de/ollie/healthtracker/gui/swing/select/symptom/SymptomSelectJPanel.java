@@ -3,19 +3,19 @@ package de.ollie.healthtracker.gui.swing.select.symptom;
 import de.ollie.healthtracker.core.service.SymptomService;
 import de.ollie.healthtracker.core.service.model.Symptom;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
-import de.ollie.healthtracker.gui.swing.edit.symptom.SymptomEditInternalFrame;
-import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.edit.symptom.SymptomEditJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.time.LocalDate;
 import java.util.List;
 import javax.swing.JDesktopPane;
 
-public class SymptomSelectPanel extends AbstractSelectPanel<Symptom> implements SelectionPanelObserver {
+public class SymptomSelectJPanel extends AbstractSelectJPanel<Symptom> implements SelectionPanelObserver {
 
 	private final SymptomService symptomService;
 
-	public SymptomSelectPanel(
+	public SymptomSelectJPanel(
 		SymptomService symptomService,
 		String className,
 		JDesktopPane desktopPane,
@@ -54,7 +54,7 @@ public class SymptomSelectPanel extends AbstractSelectPanel<Symptom> implements 
 
 	@Override
 	protected void createEditInternalFrame(Symptom selected) {
-		new SymptomEditInternalFrame(selected, getClassName(), getEditDialogComponentFactory(), this, getDesktopPane());
+		new SymptomEditJInternalFrame(selected, getClassName(), getEditDialogComponentFactory(), this, getDesktopPane());
 	}
 
 	@Override

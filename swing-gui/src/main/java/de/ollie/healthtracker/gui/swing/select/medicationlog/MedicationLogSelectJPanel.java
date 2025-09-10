@@ -7,8 +7,8 @@ import de.ollie.healthtracker.core.service.model.Medication;
 import de.ollie.healthtracker.core.service.model.MedicationLog;
 import de.ollie.healthtracker.core.service.model.MedicationUnit;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
-import de.ollie.healthtracker.gui.swing.edit.medicationlog.MedicationLogEditInternalFrame;
-import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.edit.medicationlog.MedicationLogEditJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.math.BigDecimal;
@@ -17,13 +17,13 @@ import java.time.LocalTime;
 import java.util.List;
 import javax.swing.JDesktopPane;
 
-public class MedicationLogSelectPanel extends AbstractSelectPanel<MedicationLog> implements SelectionPanelObserver {
+public class MedicationLogSelectJPanel extends AbstractSelectJPanel<MedicationLog> implements SelectionPanelObserver {
 
 	private MedicationService medicationService;
 	private MedicationLogService medicationLogService;
 	private MedicationUnitService medicationUnitService;
 
-	public MedicationLogSelectPanel(
+	public MedicationLogSelectJPanel(
 		MedicationService medicationService,
 		MedicationLogService medicationLogService,
 		MedicationUnitService medicationUnitService,
@@ -76,7 +76,7 @@ public class MedicationLogSelectPanel extends AbstractSelectPanel<MedicationLog>
 
 	@Override
 	protected void createEditInternalFrame(MedicationLog selected) {
-		new MedicationLogEditInternalFrame(
+		new MedicationLogEditJInternalFrame(
 			selected,
 			() ->
 				medicationService.listMedications().stream().sorted((m0, m1) -> m0.getName().compareTo(m1.getName())).toList(),

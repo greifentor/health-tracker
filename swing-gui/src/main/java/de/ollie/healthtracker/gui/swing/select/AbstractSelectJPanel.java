@@ -4,7 +4,7 @@ import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
-import de.ollie.healthtracker.gui.swing.edit.AbstractEditInternalFrame;
+import de.ollie.healthtracker.gui.swing.edit.AbstractEditJInternalFrame;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.MouseEvent;
@@ -20,9 +20,9 @@ import javax.swing.JTable;
 import lombok.AccessLevel;
 import lombok.Getter;
 
-public abstract class AbstractSelectPanel<T>
+public abstract class AbstractSelectJPanel<T>
 	extends JPanel
-	implements AbstractEditInternalFrame.Observer<T>, MouseListener {
+	implements AbstractEditJInternalFrame.Observer<T>, MouseListener {
 
 	@Getter(AccessLevel.PROTECTED)
 	private final JDesktopPane desktopPane;
@@ -40,7 +40,7 @@ public abstract class AbstractSelectPanel<T>
 
 	private JTable tableSelection;
 
-	public AbstractSelectPanel(
+	public AbstractSelectJPanel(
 		JDesktopPane desktopPane,
 		String className,
 		EditDialogComponentFactory editDialogComponentFactory,

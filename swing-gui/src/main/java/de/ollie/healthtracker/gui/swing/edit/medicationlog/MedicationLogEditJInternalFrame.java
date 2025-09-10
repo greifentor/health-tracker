@@ -5,14 +5,14 @@ import de.ollie.healthtracker.core.service.model.MedicationLog;
 import de.ollie.healthtracker.core.service.model.MedicationUnit;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
-import de.ollie.healthtracker.gui.swing.edit.AbstractEditInternalFrame;
+import de.ollie.healthtracker.gui.swing.edit.AbstractEditJInternalFrame;
 import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 
-public class MedicationLogEditInternalFrame extends AbstractEditInternalFrame<MedicationLog> {
+public class MedicationLogEditJInternalFrame extends AbstractEditJInternalFrame<MedicationLog> {
 
-	public MedicationLogEditInternalFrame(
+	public MedicationLogEditJInternalFrame(
 		MedicationLog toEdit,
 		ItemProvider<Medication> medications,
 		ItemProvider<MedicationUnit> medicationUnits,
@@ -27,9 +27,9 @@ public class MedicationLogEditInternalFrame extends AbstractEditInternalFrame<Me
 			editDialogComponentFactory,
 			observer,
 			Map.of(
-				MedicationLogEditPanel.MEDICATIONS_PROVIDER_ID,
+				MedicationLogEditJPanel.MEDICATIONS_PROVIDER_ID,
 				medications,
-				MedicationLogEditPanel.MEDICATION_UNITS_PROVIDER_ID,
+				MedicationLogEditJPanel.MEDICATION_UNITS_PROVIDER_ID,
 				medicationUnits
 			)
 		);
@@ -37,7 +37,7 @@ public class MedicationLogEditInternalFrame extends AbstractEditInternalFrame<Me
 
 	@Override
 	protected JPanel createEditorPanel(MedicationLog toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		editPanel = new MedicationLogEditPanel(toEdit, itemProviders);
+		editPanel = new MedicationLogEditJPanel(toEdit, itemProviders);
 		return editPanel;
 	}
 }

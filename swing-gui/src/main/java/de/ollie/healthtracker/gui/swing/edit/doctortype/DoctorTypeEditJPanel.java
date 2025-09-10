@@ -11,11 +11,11 @@ import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class DoctorTypeEditPanel extends AbstractEditPanel<DoctorType> {
+public class DoctorTypeEditJPanel extends AbstractEditPanel<DoctorType> {
 
 	private JTextField textFieldName;
 
-	public DoctorTypeEditPanel(DoctorType toEdit, Map<String, ItemProvider<?>> itemProviders) {
+	public DoctorTypeEditJPanel(DoctorType toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		super(toEdit, itemProviders);
 	}
 

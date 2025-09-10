@@ -4,7 +4,7 @@ import de.ollie.healthtracker.core.service.DoctorTypeService;
 import de.ollie.healthtracker.core.service.model.DoctorType;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
-import de.ollie.healthtracker.gui.swing.select.AbstractSelectPanel;
+import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import javax.swing.JDesktopPane;
 
@@ -27,7 +27,7 @@ public class DoctorTypeSelectJInternalFrame
 	}
 
 	@Override
-	protected AbstractSelectPanel<DoctorType> createSelectPanel() {
-		return new DoctorTypeSelectPanel(doctorTypeService, CLASS_NAME, desktopPane, editDialogComponentFactory, this);
+	protected AbstractSelectJPanel<DoctorType> createSelectPanel() {
+		return new DoctorTypeSelectJPanel(doctorTypeService, CLASS_NAME, desktopPane, editDialogComponentFactory, this);
 	}
 }

@@ -1,0 +1,41 @@
+package ${PackageName};
+
+import ${Properties.get("core-service-package")}.${ClassName}Service;
+import ${Properties.get("core-model-package")}.${ClassName};
+import ${Properties.get("swing-gui-package")}.EditDialogComponentFactory;
+import ${Properties.get("swing-gui-package")}.ItemProvider;
+import ${Properties.get("swing-gui-package")}.edit.AbstractEditJInternalFrame;
+
+import java.util.Map;
+import javax.swing.JDesktopPane;
+import javax.swing.JPanel;
+import lombok.Generated;
+
+#foreach($Import in $Imports)
+import ${Import};
+#end
+
+/**
+ * ${GeneratedCodeMarker}
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
+public class ${ClassName}EditJInternalFrame extends AbstractEditJInternalFrame<${ClassName}> {
+
+	public ${ClassName}EditJInternalFrame(
+		${ClassName} toEdit,
+		String className,
+		EditDialogComponentFactory editDialogComponentFactory,
+		Observer<${ClassName}> observer,
+		JDesktopPane desktopPane
+	) {
+		super(desktopPane, className, toEdit, editDialogComponentFactory, observer, Map.of());
+	}
+
+	@Override
+	protected JPanel createEditorPanel(${ClassName} toEdit, Map<String, ItemProvider<?>> itemProviders) {
+		editPanel = new ${ClassName}EditJPanel(toEdit, itemProviders);
+		return editPanel;
+	}
+}

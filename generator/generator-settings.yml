@@ -117,9 +117,27 @@ generators:
   - type: CLASS
     generate-when: classModel Load gui HasProperty
     package: de.ollie.healthtracker.gui.swing.select.${UnitNameLowerCase}
-    target-file-name: ${UnitName}SelectPanel
+    target-file-name: ${UnitName}SelectJPanel
     path: generator
-    template: templates/swing-gui/SelectPanel.vc
+    template: templates/swing-gui/SelectJPanel.vc
+    properties:
+      - name: target-path
+        value: swing-gui/src/main/java
+  - type: CLASS
+    generate-when: classModel Load gui HasProperty
+    package: de.ollie.healthtracker.gui.swing.edit.${UnitNameLowerCase}
+    target-file-name: ${UnitName}EditJInternalFrame
+    path: generator
+    template: templates/swing-gui/EditJInternalFrame.vc
+    properties:
+      - name: target-path
+        value: swing-gui/src/main/java
+  - type: CLASS
+    generate-when: classModel Load gui HasProperty
+    package: de.ollie.healthtracker.gui.swing.edit.${UnitNameLowerCase}
+    target-file-name: ${UnitName}EditJPanel
+    path: generator
+    template: templates/swing-gui/EditJPanel.vc
     properties:
       - name: target-path
         value: swing-gui/src/main/java

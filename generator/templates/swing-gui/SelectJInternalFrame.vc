@@ -4,7 +4,7 @@ import ${Properties.get("core-service-package")}.${ClassName}Service;
 import ${Properties.get("core-model-package")}.${ClassName};
 import ${Properties.get("swing-gui-package")}.EditDialogComponentFactory;
 import ${Properties.get("swing-gui-package")}.select.AbstractSelectJInternalFrame;
-import ${Properties.get("swing-gui-package")}.select.AbstractSelectPanel;
+import ${Properties.get("swing-gui-package")}.select.AbstractSelectJPanel;
 import ${Properties.get("swing-gui-package")}.select.SelectionPanelObserver;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
@@ -38,7 +38,7 @@ public class ${ClassName}SelectJInternalFrame
 	}
 
 	@Override
-	protected AbstractSelectPanel<${ClassName}> createSelectPanel() {
-		return new ${ClassName}SelectPanel(${ClassNameAsAttribute}Service, CLASS_NAME, desktopPane, editDialogComponentFactory, this);
+	protected AbstractSelectJPanel<${ClassName}> createSelectPanel() {
+		return new ${ClassName}SelectJPanel(${ClassNameAsAttribute}Service, CLASS_NAME, desktopPane, editDialogComponentFactory, this);
 	}
 }
