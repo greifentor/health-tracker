@@ -1,13 +1,15 @@
 package ${PackageName};
 
-import de.ollie.healthtracker.core.service.${ClassName}Service;
-import de.ollie.healthtracker.core.service.model.${ClassName};
-import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
-import de.ollie.healthtracker.gui.swing.edit.${ClassName.toLowerCase()}.${ClassName}EditJInternalFrame;
-import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
-import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
-import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
-import java.time.LocalDate;
+#if($Class.hasAnAttributeWithTypeName("LocalDate") || $Class.hasAnAttributeWithTypeName("LocalTime"))
+import ${Properties.get("baselib")}.util.DateTimeUtil;
+#end
+import ${Properties.get("core-service-package")}.${ClassName}Service;
+import ${Properties.get("core-model-package")}.${ClassName};
+import ${Properties.get("swing-gui-package")}.EditDialogComponentFactory;
+import ${Properties.get("swing-gui-package")}.edit.${ClassName.toLowerCase()}.${ClassName}EditJInternalFrame;
+import ${Properties.get("swing-gui-package")}.select.AbstractSelectJPanel;
+import ${Properties.get("swing-gui-package")}.select.AbstractSelectionTableModel;
+import ${Properties.get("swing-gui-package")}.select.SelectionPanelObserver;
 import java.util.List;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
@@ -44,11 +46,9 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 			? ${ClassNameAsAttribute}Service
 				.list${ClassName}s()
 				.stream()
-#if (${Class.getAllPropertiesByName("order").size()} > 0)
-	#foreach($Attribute in $Class.getAttributesWithPropertySet("order"))
+				#foreach($Attribute in $Class.getAttributesWithPropertySet("order"))
 				.sorted((d0, d1) -> d1.get${Attribute.getNameCamelCase()}().compareTo(d0.get${Attribute.getNameCamelCase()}()))
-	#end
-#end
+				#end
 				.toList()
 			: List.of();
 	}
@@ -61,7 +61,11 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 				return switch (columnIndex) {
 					#set($count = 0)
 					#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+					#if($Attribute.getTypeName() == "LocalDate")
+					case $count -> DateTimeUtil.DE_DATE_FORMAT.format(t.get$Attribute.getNameCamelCase()());
+					#else
 					case $count -> t.get${Attribute.getNameCamelCase()}();
+					#end
 					#set($count = $count + 1)
 					#end
 					default -> null;
@@ -77,7 +81,7 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 
 	@Override
 	protected ${ClassName} createNewObject() {
-		return ${ClassNameAsAttribute}Service.create${ClassName}(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})"?"#if($foreach.hasNext), #end#end);
+		return ${ClassNameAsAttribute}Service.create${ClassName}(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})#if($Attribute.getTypeName() == "LocalDate")LocalDate.now()#else"?"#end#if($foreach.hasNext), #end#end);
 	}
 
 	@Override

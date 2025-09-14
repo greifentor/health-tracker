@@ -1,6 +1,8 @@
 default-target-path: tmp
 ucg-version: 1.0
 properties:
+  - name: baselib
+    value: de.ollie.baselib
   - name: core-exception-package
     value: de.ollie.healthtracker.core.service.exception
   - name: core-model-package

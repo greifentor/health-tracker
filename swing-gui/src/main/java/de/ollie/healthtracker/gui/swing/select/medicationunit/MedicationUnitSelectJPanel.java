@@ -7,7 +7,6 @@ import de.ollie.healthtracker.gui.swing.edit.medicationunit.MedicationUnitEditJI
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import javax.swing.JDesktopPane;

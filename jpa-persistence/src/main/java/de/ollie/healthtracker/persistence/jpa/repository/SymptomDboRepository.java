@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface SymptomDboRepository extends JpaRepository<SymptomDbo, UUID> {
-	@Query("SELECT dbo FROM SymptomDbo dbo ORDER BY dbo.dateOfRecording")
+	@Query("SELECT dbo FROM SymptomDbo dbo")
 	List<SymptomDbo> findAllOrdered();
 
 	@Query("SELECT dbo FROM SymptomDbo dbo WHERE dbo.description LIKE CONCAT('%', :description, '%')")

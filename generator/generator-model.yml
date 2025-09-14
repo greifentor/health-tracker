@@ -384,6 +384,8 @@ classes:
             value: false
           - name: editor-position
             value: 1
+          - name: order
+            value: true
         type:
           name: LocalDate
           properties:
