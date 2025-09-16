@@ -10,7 +10,14 @@ import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.time.LocalDate;
 import java.util.List;
 import javax.swing.JDesktopPane;
+import lombok.Generated;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
 public class CommentSelectJPanel extends AbstractSelectJPanel<Comment> implements SelectionPanelObserver {
 
 	private final CommentService commentService;

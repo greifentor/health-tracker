@@ -257,6 +257,8 @@ classes:
           name: Manufacturer
   - name: MedicationLog
     properties:
+      - name: gui
+        value: true
       - name: order
         value: dateOfIntake
       - name: order

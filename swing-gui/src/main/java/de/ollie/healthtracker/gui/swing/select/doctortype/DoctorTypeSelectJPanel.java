@@ -9,7 +9,14 @@ import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.util.List;
 import javax.swing.JDesktopPane;
+import lombok.Generated;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
 public class DoctorTypeSelectJPanel extends AbstractSelectJPanel<DoctorType> implements SelectionPanelObserver {
 
 	private final DoctorTypeService doctorTypeService;

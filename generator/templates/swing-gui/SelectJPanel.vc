@@ -46,7 +46,8 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 			? ${ClassNameAsAttribute}Service
 				.list${ClassName}s()
 				.stream()
-				#foreach($Attribute in $Class.getAttributesWithPropertySet("order"))
+				#foreach($Property in $Class.getPropertiesWithName("order"))
+				#set ($Attribute = $Class.getAttributeByName($Property.getValue()))
 				.sorted((d0, d1) -> d1.get${Attribute.getNameCamelCase()}().compareTo(d0.get${Attribute.getNameCamelCase()}()))
 				#end
 				.toList()
@@ -63,6 +64,8 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 					#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
 					#if($Attribute.getTypeName() == "LocalDate")
 					case $count -> DateTimeUtil.DE_DATE_FORMAT.format(t.get$Attribute.getNameCamelCase()());
+					#elseif($Attribute.getTypeName() == "LocalTime")
+					case $count -> DateTimeUtil.DE_TIME_FORMAT.format(t.get$Attribute.getNameCamelCase()());
 					#else
 					case $count -> t.get${Attribute.getNameCamelCase()}();
 					#end
@@ -81,7 +84,16 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 
 	@Override
 	protected ${ClassName} createNewObject() {
-		return ${ClassNameAsAttribute}Service.create${ClassName}(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})#if($Attribute.getTypeName() == "LocalDate")LocalDate.now()#else"?"#end#if($foreach.hasNext), #end#end);
+		return ${ClassNameAsAttribute}Service.create${ClassName}(
+		#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})
+			#if($Attribute.getTypeName() == "LocalDate")
+				LocalDate.now()#if($foreach.hasNext),#end
+			#elseif($Attribute.getTypeName() == "LocalTime")
+				LocalTime.now()#if($foreach.hasNext),#end
+			#else
+				"?"#if($foreach.hasNext),#end
+			#end
+		#end);
 	}
 
 	@Override
