@@ -64,7 +64,7 @@ public class MedicationLogEditJPanel extends AbstractEditPanel<MedicationLog> {
 			}
 			return new JLabel("-");
 		});
-		spinnerUnitCount = new JSpinner(new SpinnerNumberModel(toEdit.getUnitCount().doubleValue(), 0, 100, 0.1));
+		spinnerUnitCount = new JSpinner(new SpinnerNumberModel(toEdit.getUnitCount().doubleValue(), -100, 100, 0.1));
 		p.add(textFieldDateOfIntake);
 		p.add(textFieldTimeOfIntake);
 		p.add(comboBoxMedication);
