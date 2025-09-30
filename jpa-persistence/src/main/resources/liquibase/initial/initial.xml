@@ -195,5 +195,51 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet author="dm-comp" id="Add-BodyPart-and-Exercise-Tables" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="GENERAL_BODY_PART">
+            <column name="ID" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="GENERAL_BODY_PART"/>
+        <createTable tableName="EXERCISE">
+            <column name="DESCRIPTION" type="LONGVARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BODY_PART" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ID" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="EXERCISE"/>
+        <createTable tableName="BODY_PART">
+            <column name="GENERAL_BODY_PART" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ID" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="BODY_PART"/>
+        <addColumn tableName="SYMPTOM">
+            <column name="BODY_PART" type="VARCHAR(40)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="dm-comp" id="Add-BodyPart-and-Exercise-Tables-Foreignkeys" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <addForeignKeyConstraint baseColumnNames="BODY_PART"         baseTableName="SYMPTOM"   constraintName="FK_SYMPTOM_BODY_PART_TO_BODY_PART"                   referencedColumnNames="ID" referencedTableName="BODY_PART"/>
+        <addForeignKeyConstraint baseColumnNames="BODY_PART"         baseTableName="EXERCISE"  constraintName="FK_EXERCISE_BODY_PART_TO_BODY_PART"                  referencedColumnNames="ID" referencedTableName="BODY_PART"/>
+        <addForeignKeyConstraint baseColumnNames="GENERAL_BODY_PART" baseTableName="BODY_PART" constraintName="FK_BODY_PART_GENERAL_BODY_PART_TO_GENERAL_BODY_PART" referencedColumnNames="ID" referencedTableName="GENERAL_BODY_PART"/>
+    </changeSet>
 </databaseChangeLog>
 

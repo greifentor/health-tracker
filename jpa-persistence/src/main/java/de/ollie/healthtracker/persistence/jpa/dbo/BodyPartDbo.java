@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
 import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
@@ -21,21 +20,18 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-@Entity(name = "SymptomDbo")
-@Table(name = "SYMPTOM")
-public class SymptomDbo {
+@Entity(name = "BodyPartDbo")
+@Table(name = "BODY_PART")
+public class BodyPartDbo {
 
 	@Id
 	@Column(name = "ID", nullable = false)
 	private UUID id;
 
-	@Column(name = "DESCRIPTION", nullable = false)
-	private String description;
-
-	@Column(name = "DATE_OF_RECORDING", nullable = false)
-	private LocalDate dateOfRecording;
-
-	@JoinColumn(name = "BODY_PART", referencedColumnName = "ID", nullable = false)
+	@JoinColumn(name = "GENERAL_BODY_PART", referencedColumnName = "ID", nullable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
-	private BodyPartDbo bodyPart;
+	private GeneralBodyPartDbo generalBodyPart;
+
+	@Column(name = "NAME", nullable = false)
+	private String name;
 }

@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.core.service.impl;
 
 import de.ollie.healthtracker.core.service.SymptomService;
+import de.ollie.healthtracker.core.service.model.BodyPart;
 import de.ollie.healthtracker.core.service.model.Symptom;
 import de.ollie.healthtracker.core.service.port.persistence.SymptomPersistencePort;
 import jakarta.inject.Named;
@@ -24,8 +25,8 @@ class SymptomServiceImpl implements SymptomService {
 	private final SymptomPersistencePort symptomPersistencePort;
 
 	@Override
-	public Symptom createSymptom(String description, LocalDate dateOfRecording) {
-		return symptomPersistencePort.create(description, dateOfRecording);
+	public Symptom createSymptom(String description, LocalDate dateOfRecording, BodyPart bodyPart) {
+		return symptomPersistencePort.create(description, dateOfRecording, bodyPart);
 	}
 
 	@Override

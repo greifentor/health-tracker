@@ -1,6 +1,5 @@
 package de.ollie.healthtracker.core.service.model;
 
-import java.time.LocalDate;
 import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
@@ -14,10 +13,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-public class Symptom {
+public class GeneralBodyPart {
 
 	private UUID id;
-	private String description;
-	private LocalDate dateOfRecording;
-	private BodyPart bodyPart;
+	private String name;
 }

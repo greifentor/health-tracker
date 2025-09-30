@@ -3,14 +3,12 @@ package de.ollie.healthtracker.persistence.jpa;
 import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
-import de.ollie.healthtracker.core.service.model.BodyPart;
-import de.ollie.healthtracker.core.service.model.Symptom;
-import de.ollie.healthtracker.core.service.port.persistence.SymptomPersistencePort;
-import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
-import de.ollie.healthtracker.persistence.jpa.mapper.SymptomDboMapper;
-import de.ollie.healthtracker.persistence.jpa.repository.SymptomDboRepository;
+import de.ollie.healthtracker.core.service.model.GeneralBodyPart;
+import de.ollie.healthtracker.core.service.port.persistence.GeneralBodyPartPersistencePort;
+import de.ollie.healthtracker.persistence.jpa.dbo.GeneralBodyPartDbo;
+import de.ollie.healthtracker.persistence.jpa.mapper.GeneralBodyPartDboMapper;
+import de.ollie.healthtracker.persistence.jpa.repository.GeneralBodyPartDboRepository;
 import jakarta.inject.Named;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,15 +23,15 @@ import lombok.RequiredArgsConstructor;
 @Generated
 @Named
 @RequiredArgsConstructor
-class SymptomPersistenceJpaAdapter implements SymptomPersistencePort {
+class GeneralBodyPartPersistenceJpaAdapter implements GeneralBodyPartPersistencePort {
 
 	private final DboFactory dboFactory;
-	private final SymptomDboMapper mapper;
-	private final SymptomDboRepository repository;
+	private final GeneralBodyPartDboMapper mapper;
+	private final GeneralBodyPartDboRepository repository;
 
 	@Override
-	public Symptom create(String description, LocalDate dateOfRecording, BodyPart bodyPart) {
-		return mapper.toModel(repository.save(dboFactory.createSymptom(description, dateOfRecording, bodyPart.getId())));
+	public GeneralBodyPart create(String name) {
+		return mapper.toModel(repository.save(dboFactory.createGeneralBodyPart(name)));
 	}
 
 	@Override
@@ -43,15 +41,15 @@ class SymptomPersistenceJpaAdapter implements SymptomPersistencePort {
 	}
 
 	@Override
-	public Optional<Symptom> findById(UUID id) {
+	public Optional<GeneralBodyPart> findById(UUID id) {
 		ensure(id != null, "id cannot be null!");
 		return repository.findById(id).map(mapper::toModel);
 	}
 
 	@Override
-	public Optional<Symptom> findByIdOrDescriptionParticle(String nameParticleOrId) {
+	public Optional<GeneralBodyPart> findByIdOrNameParticle(String nameParticleOrId) {
 		ensure(nameParticleOrId != null, "name particle or id cannot be null");
-		Optional<SymptomDbo> dbo = Optional.empty();
+		Optional<GeneralBodyPartDbo> dbo = Optional.empty();
 		try {
 			UUID uuid = UUID.fromString(nameParticleOrId);
 			dbo = repository.findById(uuid);
@@ -61,7 +59,7 @@ class SymptomPersistenceJpaAdapter implements SymptomPersistencePort {
 		return Optional.ofNullable(
 			mapper.toModel(
 				dbo.orElseGet(() -> {
-					List<SymptomDbo> found = repository.findAllByDescriptionMatch(nameParticleOrId);
+					List<GeneralBodyPartDbo> found = repository.findAllByNameMatch(nameParticleOrId);
 					if (found.size() < 2) {
 						return found.size() == 0 ? null : found.get(0);
 					}
@@ -72,12 +70,12 @@ class SymptomPersistenceJpaAdapter implements SymptomPersistencePort {
 	}
 
 	@Override
-	public List<Symptom> list() {
+	public List<GeneralBodyPart> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
 
 	@Override
-	public Symptom update(Symptom toSave) {
+	public GeneralBodyPart update(GeneralBodyPart toSave) {
 		return mapper.toModel(repository.save(mapper.toDbo(toSave)));
 	}
 }

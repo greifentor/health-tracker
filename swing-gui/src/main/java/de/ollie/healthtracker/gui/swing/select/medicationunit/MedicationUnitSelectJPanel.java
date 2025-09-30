@@ -61,18 +61,12 @@ public class MedicationUnitSelectJPanel extends AbstractSelectJPanel<MedicationU
 
 	@Override
 	protected void createEditInternalFrame(MedicationUnit selected) {
-		new MedicationUnitEditJInternalFrame(
-			selected,
-			getClassName(),
-			getEditDialogComponentFactory(),
-			this,
-			getDesktopPane()
-		);
+		new MedicationUnitEditJInternalFrame(selected, getEditDialogComponentFactory(), this, getDesktopPane());
 	}
 
 	@Override
 	protected MedicationUnit createNewObject() {
-		return medicationUnitService.createMedicationUnit("?", "?");
+		return medicationUnitService.createMedicationUnit(null, null);
 	}
 
 	@Override

@@ -255,6 +255,12 @@ classes:
             value: true
         type:
           name: String
+      - name: description
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: String
   - name: GeneralBodyPart
     properties:
       - name: order
@@ -279,24 +285,6 @@ classes:
             value: true
           - name: editor-position
             value: 1
-        type:
-          name: String
-      - name: bodyPart
-        properties:
-          - name: nullable
-            value: false
-          - name: editor-position
-            value: 2
-        type:
-          name: BodyPart
-      - name: description
-        properties:
-          - name: nullable
-            value: false
-          - name: findable
-            value: true
-          - name: editor-position
-            value: 3
         type:
           name: String
   - name: Manufacturer
@@ -497,5 +485,7 @@ classes:
         properties:
           - name: nullable
             value: false
+          - name: editor-position
+            value: 2
         type:
           name: BodyPart

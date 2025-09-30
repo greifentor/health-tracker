@@ -1,9 +1,8 @@
 package de.ollie.healthtracker.core.service.port.persistence;
 
 import de.ollie.healthtracker.core.service.model.BodyPart;
-import de.ollie.healthtracker.core.service.model.Symptom;
+import de.ollie.healthtracker.core.service.model.GeneralBodyPart;
 import jakarta.inject.Named;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,16 +15,16 @@ import lombok.Generated;
  */
 @Generated
 @Named
-public interface SymptomPersistencePort {
-	Symptom create(String description, LocalDate dateOfRecording, BodyPart bodyPart);
+public interface BodyPartPersistencePort {
+	BodyPart create(GeneralBodyPart generalBodyPart, String name);
 
 	void deleteById(UUID id);
 
-	Optional<Symptom> findById(UUID id);
+	Optional<BodyPart> findById(UUID id);
 
-	Optional<Symptom> findByIdOrDescriptionParticle(String description);
+	Optional<BodyPart> findByIdOrNameParticle(String name);
 
-	List<Symptom> list();
+	List<BodyPart> list();
 
-	Symptom update(Symptom toSave);
+	BodyPart update(BodyPart toSave);
 }

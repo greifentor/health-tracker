@@ -21,12 +21,11 @@ public class MedicationUnitEditJInternalFrame extends AbstractEditJInternalFrame
 
 	public MedicationUnitEditJInternalFrame(
 		MedicationUnit toEdit,
-		String className,
 		EditDialogComponentFactory editDialogComponentFactory,
 		Observer<MedicationUnit> observer,
 		JDesktopPane desktopPane
 	) {
-		super(desktopPane, className, toEdit, editDialogComponentFactory, observer, Map.of());
+		super(desktopPane, "Medication Unit", toEdit, editDialogComponentFactory, observer, Map.of());
 	}
 
 	@Override

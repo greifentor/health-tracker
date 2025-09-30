@@ -4,6 +4,7 @@ import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
+import de.ollie.healthtracker.core.service.BodyPartService;
 import de.ollie.healthtracker.core.service.CommentService;
 import de.ollie.healthtracker.core.service.DoctorConsultationService;
 import de.ollie.healthtracker.core.service.DoctorService;
@@ -40,6 +41,7 @@ import lombok.RequiredArgsConstructor;
 public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
+	private final BodyPartService bodyPartService;
 	private final CommentService commentService;
 	private final DoctorConsultationService doctorConsultationService;
 	private final DoctorService doctorService;
@@ -143,7 +145,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				editDialogComponentFactory
 			);
 		} else if (e.getSource() == menuItemEditSymptom) {
-			new SymptomSelectJInternalFrame(symptomService, desktopPane, editDialogComponentFactory);
+			new SymptomSelectJInternalFrame(symptomService, bodyPartService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemFileQuit) {
 			System.out.println("Cancel");
 			System.exit(0);

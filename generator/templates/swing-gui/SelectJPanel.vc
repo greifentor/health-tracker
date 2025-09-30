@@ -79,7 +79,7 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 
 	@Override
 	protected void createEditInternalFrame(${ClassName} selected) {
-		new ${ClassName}EditJInternalFrame(selected, getClassName(), getEditDialogComponentFactory(), this, getDesktopPane());
+		new ${ClassName}EditJInternalFrame(selected, getEditDialogComponentFactory(), this, getDesktopPane());
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 			#elseif($Attribute.getTypeName() == "LocalTime")
 				LocalTime.now()#if($foreach.hasNext),#end
 			#else
-				"?"#if($foreach.hasNext),#end
+				null#if($foreach.hasNext),#end
 			#end
 		#end);
 	}

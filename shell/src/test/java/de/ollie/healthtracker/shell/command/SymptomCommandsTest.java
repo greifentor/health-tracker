@@ -8,14 +8,17 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.ollie.healthtracker.core.service.BodyPartService;
 import de.ollie.healthtracker.core.service.LocalDateFactory;
 import de.ollie.healthtracker.core.service.LocalTimeFactory;
 import de.ollie.healthtracker.core.service.SymptomService;
+import de.ollie.healthtracker.core.service.model.BodyPart;
 import de.ollie.healthtracker.core.service.model.Symptom;
 import de.ollie.healthtracker.shell.handler.OutputHandler;
 import de.ollie.healthtracker.shell.mapper.SymptomToStringMapper;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -29,12 +32,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class SymptomCommandsTest {
 
+	private static final UUID ANOTHER_ID = UUID.randomUUID();
 	private static final String DESCRIPTION = "description";
 	private static final LocalDate DATE_OF_RECORDING = LocalDate.of(2025, 06, 25);
 	private static final String DATE_OF_RECORDING_STR = "25.06.2025";
 	private static final UUID ID = UUID.randomUUID();
 	private static final String MESSAGE = "message";
 	private static final String STRING = "string";
+
+	@Mock
+	private BodyPart bodyPart;
+
+	@Mock
+	private BodyPartService bodyPartService;
 
 	@Mock
 	private LocalDateFactory localDateFactory;
@@ -67,9 +77,10 @@ class SymptomCommandsTest {
 		void returnAnErrorMessage_whenServiceCallThrowsAnException() {
 			// Prepare
 			RuntimeException exception = new RuntimeException(MESSAGE);
-			when(service.createSymptom(DESCRIPTION, DATE_OF_RECORDING)).thenThrow(exception);
+			when(bodyPartService.findByIdOrNameParticle(ANOTHER_ID.toString())).thenReturn(Optional.of(bodyPart));
+			when(service.createSymptom(DESCRIPTION, DATE_OF_RECORDING, bodyPart)).thenThrow(exception);
 			// Run
-			String returned = unitUnderTest.addSymptom(DESCRIPTION, DATE_OF_RECORDING_STR);
+			String returned = unitUnderTest.addSymptom(DESCRIPTION, DATE_OF_RECORDING_STR, ANOTHER_ID.toString());
 			// Check
 			assertEquals(Constants.ERROR + MESSAGE, returned);
 		}
@@ -77,9 +88,10 @@ class SymptomCommandsTest {
 		@Test
 		void returnsOk_whenNoErrorIsDetected() {
 			// Prepare
-			when(service.createSymptom(DESCRIPTION, DATE_OF_RECORDING)).thenReturn(symptom0);
+			when(bodyPartService.findByIdOrNameParticle(ANOTHER_ID.toString())).thenReturn(Optional.of(bodyPart));
+			when(service.createSymptom(DESCRIPTION, DATE_OF_RECORDING, bodyPart)).thenReturn(symptom0);
 			// Run
-			String returned = unitUnderTest.addSymptom(DESCRIPTION, DATE_OF_RECORDING_STR);
+			String returned = unitUnderTest.addSymptom(DESCRIPTION, DATE_OF_RECORDING_STR, ANOTHER_ID.toString());
 			// Check
 			assertEquals(Constants.OK, returned);
 		}
@@ -87,10 +99,11 @@ class SymptomCommandsTest {
 		@Test
 		void returnsOk_whenDateOfMeasurementNotSet() {
 			// Prepare
+			when(bodyPartService.findByIdOrNameParticle(ANOTHER_ID.toString())).thenReturn(Optional.of(bodyPart));
 			when(localDateFactory.now()).thenReturn(DATE_OF_RECORDING);
-			when(service.createSymptom(DESCRIPTION, DATE_OF_RECORDING)).thenReturn(symptom0);
+			when(service.createSymptom(DESCRIPTION, DATE_OF_RECORDING, bodyPart)).thenReturn(symptom0);
 			// Run
-			String returned = unitUnderTest.addSymptom(DESCRIPTION, null);
+			String returned = unitUnderTest.addSymptom(DESCRIPTION, null, ANOTHER_ID.toString());
 			// Check
 			assertEquals(Constants.OK, returned);
 		}
@@ -99,10 +112,11 @@ class SymptomCommandsTest {
 		@CsvSource({ "Today", "today", "TODAY", "TD", "Td", "td" })
 		void returnsOk_whenDateOfMeasurementIsToday(String today) {
 			// Prepare
+			when(bodyPartService.findByIdOrNameParticle(ANOTHER_ID.toString())).thenReturn(Optional.of(bodyPart));
 			when(localDateFactory.now()).thenReturn(DATE_OF_RECORDING);
-			when(service.createSymptom(DESCRIPTION, DATE_OF_RECORDING)).thenReturn(symptom0);
+			when(service.createSymptom(DESCRIPTION, DATE_OF_RECORDING, bodyPart)).thenReturn(symptom0);
 			// Run
-			String returned = unitUnderTest.addSymptom(DESCRIPTION, today);
+			String returned = unitUnderTest.addSymptom(DESCRIPTION, today, ANOTHER_ID.toString());
 			// Check
 			assertEquals(Constants.OK, returned);
 		}
