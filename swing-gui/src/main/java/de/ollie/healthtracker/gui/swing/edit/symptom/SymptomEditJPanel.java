@@ -39,12 +39,12 @@ public class SymptomEditJPanel extends AbstractEditPanel<Symptom> {
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel("Name:");
+		return createLabelSubPanel("Date Of Recording:", "Description:", "Body Part:");
 	}
 
 	@Override
 	protected JPanel createComponentPanel(Symptom toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		JPanel p = new JPanel(new GridLayout(1, 1, HGAP, VGAP));
+		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
 		textFieldDateOfRecording = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.getDateOfRecording()), 40);
 		p.add(textFieldDateOfRecording);
 		textFieldDescription = new JTextField(toEdit.getDescription(), 40);

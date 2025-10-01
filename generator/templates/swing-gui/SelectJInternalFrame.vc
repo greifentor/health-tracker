@@ -1,6 +1,12 @@
 package ${PackageName};
 
 import ${Properties.get("core-service-package")}.${ClassName}Service;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+#if(${Attribute.isReference()} == true)
+#set($TypeClassName = $Attribute.getTypeClassType().getName())
+import ${Properties.get("core-service-package")}.${TypeClassName}Service;
+#end
+#end
 import ${Properties.get("core-model-package")}.${ClassName};
 import ${Properties.get("swing-gui-package")}.EditDialogComponentFactory;
 import ${Properties.get("swing-gui-package")}.select.AbstractSelectJInternalFrame;
@@ -26,19 +32,48 @@ public class ${ClassName}SelectJInternalFrame
 	private static final String CLASS_NAME = "${ClassName}";
 
 	private final ${ClassName}Service ${ClassNameAsAttribute}Service;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+#if(${Attribute.isReference()} == true)
+#set($TypeClassName = $Attribute.getTypeClassType())
+	private final ${TypeClassName.getName()}Service ${TypeClassName.getNameAsAttribute()}Service;
+#end
+#end
 
 	public ${ClassName}SelectJInternalFrame(
 		${ClassName}Service ${ClassNameAsAttribute}Service,
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+#if(${Attribute.isReference()} == true)
+#set($TypeClassName = $Attribute.getTypeClassType())
+		${TypeClassName.getName()}Service ${TypeClassName.getNameAsAttribute()}Service,
+#end
+#end
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
 		super(desktopPane, CLASS_NAME + "s", editDialogComponentFactory);
 		this.${ClassNameAsAttribute}Service = ${ClassNameAsAttribute}Service;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+#if(${Attribute.isReference()} == true)
+#set($TypeClassName = $Attribute.getTypeClassType())
+		this.${TypeClassName.getNameAsAttribute()}Service = ${TypeClassName.getNameAsAttribute()}Service;
+#end
+#end
 		finishConstruct();
 	}
 
 	@Override
 	protected AbstractSelectJPanel<${ClassName}> createSelectPanel() {
-		return new ${ClassName}SelectJPanel(${ClassNameAsAttribute}Service, CLASS_NAME, desktopPane, editDialogComponentFactory, this);
+		return new ${ClassName}SelectJPanel(
+				${ClassNameAsAttribute}Service,
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+#if(${Attribute.isReference()} == true)
+#set($TypeClassName = $Attribute.getTypeClassType())
+				${TypeClassName.getNameAsAttribute()}Service,
+#end
+#end
+				CLASS_NAME,
+				desktopPane,
+				editDialogComponentFactory,
+				this);
 	}
 }

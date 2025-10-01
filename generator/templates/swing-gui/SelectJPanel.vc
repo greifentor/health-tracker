@@ -4,6 +4,12 @@ package ${PackageName};
 import ${Properties.get("baselib")}.util.DateTimeUtil;
 #end
 import ${Properties.get("core-service-package")}.${ClassName}Service;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+#if(${Attribute.isReference()} == true)
+#set($TypeClassName = $Attribute.getTypeClassType().getName())
+import ${Properties.get("core-service-package")}.${TypeClassName}Service;
+#end
+#end
 import ${Properties.get("core-model-package")}.${ClassName};
 import ${Properties.get("swing-gui-package")}.EditDialogComponentFactory;
 import ${Properties.get("swing-gui-package")}.edit.${ClassName.toLowerCase()}.${ClassName}EditJInternalFrame;
@@ -27,9 +33,21 @@ import ${Import};
 public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}> implements SelectionPanelObserver {
 
 	private final ${ClassName}Service ${ClassNameAsAttribute}Service;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+#if(${Attribute.isReference()} == true)
+#set($TypeClassName = $Attribute.getTypeClassType())
+	private final ${TypeClassName.getName()}Service ${TypeClassName.getNameAsAttribute()}Service;
+#end
+#end
 
 	public ${ClassName}SelectJPanel(
 		${ClassName}Service ${ClassNameAsAttribute}Service,
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+#if(${Attribute.isReference()} == true)
+#set($TypeClassName = $Attribute.getTypeClassType())
+		${TypeClassName.getName()}Service ${TypeClassName.getNameAsAttribute()}Service,
+#end
+#end
 		String className,
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory,
@@ -37,6 +55,12 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 	) {
 		super(desktopPane, className + "s", editDialogComponentFactory, observer);
 		this.${ClassNameAsAttribute}Service = ${ClassNameAsAttribute}Service;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+#if(${Attribute.isReference()} == true)
+#set($TypeClassName = $Attribute.getTypeClassType())
+		this.${TypeClassName.getNameAsAttribute()}Service = ${TypeClassName.getNameAsAttribute()}Service;
+#end
+#end
 		updateTableSelection();
 	}
 
@@ -79,7 +103,18 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 
 	@Override
 	protected void createEditInternalFrame(${ClassName} selected) {
-		new ${ClassName}EditJInternalFrame(selected, getEditDialogComponentFactory(), this, getDesktopPane());
+		new ${ClassName}EditJInternalFrame(
+				selected,
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+#if(${Attribute.isReference()} == true)
+#set($TypeClassName = $Attribute.getTypeClassType())
+				() -> ${TypeClassName.getNameAsAttribute()}Service.list${TypeClassName.getName()}s(),
+#end
+#end
+				getEditDialogComponentFactory(),
+				this,
+				getDesktopPane()
+		);
 	}
 
 	@Override

@@ -30,12 +30,12 @@ public class MedicationUnitEditJPanel extends AbstractEditPanel<MedicationUnit> 
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel("Name:");
+		return createLabelSubPanel("Name:", "Token:");
 	}
 
 	@Override
 	protected JPanel createComponentPanel(MedicationUnit toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		JPanel p = new JPanel(new GridLayout(1, 1, HGAP, VGAP));
+		JPanel p = new JPanel(new GridLayout(2, 1, HGAP, VGAP));
 		textFieldName = new JTextField(toEdit.getName(), 40);
 		p.add(textFieldName);
 		textFieldToken = new JTextField(toEdit.getToken(), 40);

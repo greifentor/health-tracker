@@ -7,6 +7,8 @@ import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
+import java.time.LocalDate;
+import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
 

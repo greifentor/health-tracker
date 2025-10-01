@@ -59,12 +59,16 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel("Name:");
+		return createLabelSubPanel(
+		#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+				"${Attribute.getCamelCaseNameSeparated(" ")}:"#if($foreach.hasNext),#end
+		#end
+		);
 	}
 
 	@Override
 	protected JPanel createComponentPanel(${ClassName} toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		JPanel p = new JPanel(new GridLayout(1, 1, HGAP, VGAP));
+		JPanel p = new JPanel(new GridLayout(${Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position").size()}, 1, HGAP, VGAP));
 		#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
 		#if(${Attribute.isReference()} == true)
 		#set($ReferencedClassName = ${Attribute.getTypeClassType().getName()})
