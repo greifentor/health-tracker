@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.core.service.impl;
 
 import de.ollie.healthtracker.core.service.ExerciseService;
+import de.ollie.healthtracker.core.service.model.BodyPart;
 import de.ollie.healthtracker.core.service.model.Exercise;
 import de.ollie.healthtracker.core.service.port.persistence.ExercisePersistencePort;
 import jakarta.inject.Named;
@@ -23,8 +24,8 @@ class ExerciseServiceImpl implements ExerciseService {
 	private final ExercisePersistencePort exercisePersistencePort;
 
 	@Override
-	public Exercise createExercise(String name, String description) {
-		return exercisePersistencePort.create(name, description);
+	public Exercise createExercise(BodyPart bodyPart, String description, String name) {
+		return exercisePersistencePort.create(bodyPart, description, name);
 	}
 
 	@Override
@@ -35,11 +36,6 @@ class ExerciseServiceImpl implements ExerciseService {
 	@Override
 	public Optional<Exercise> findById(UUID id) {
 		return exercisePersistencePort.findById(id);
-	}
-
-	@Override
-	public Optional<Exercise> findByIdOrNameParticle(String namePartOrId) {
-		return exercisePersistencePort.findByIdOrNameParticle(namePartOrId);
 	}
 
 	@Override

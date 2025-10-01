@@ -4,10 +4,8 @@ import static ${Properties.get("swing-gui-package")}.Constants.HGAP;
 import static ${Properties.get("swing-gui-package")}.Constants.VGAP;
 
 import ${Properties.get("core-model-package")}.${ClassName};
-#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
-#if(${Attribute.isReference()} == true)
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
 import ${Properties.get("core-model-package")}.$Attribute.getTypeClassType().getName();
-#end
 #end
 import ${Properties.get("swing-gui-package")}.ItemProvider;
 import ${Properties.get("swing-gui-package")}.edit.AbstractEditPanel;
@@ -37,12 +35,10 @@ import ${Import};
 @Generated
 public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 
-#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
-	#if($Attribute.isReference() == true)
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
 	public static final String ${Attribute.getTypeClassType().getNameSeparated("_").toUpperCase()}_ITEM_PROVIDER_ID = "${Attribute.getTypeClassType().getNameSeparated("-").toLowerCase()}-item-provider";
 	#if($foreach.hasNext)#else
 
-	#end
 	#end
 #end
 #foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))

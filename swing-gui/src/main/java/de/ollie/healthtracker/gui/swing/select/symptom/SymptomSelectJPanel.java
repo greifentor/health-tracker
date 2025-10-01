@@ -84,7 +84,11 @@ public class SymptomSelectJPanel extends AbstractSelectJPanel<Symptom> implement
 
 	@Override
 	protected Symptom createNewObject() {
-		return symptomService.createSymptom(null, LocalDate.now(), null);
+		return new Symptom()
+			.setId(UUID.randomUUID())
+			.setDescription("")
+			.setDateOfRecording(LocalDate.now())
+			.setBodyPart(null);
 	}
 
 	@Override

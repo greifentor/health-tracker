@@ -18,6 +18,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
+import de.ollie.healthtracker.persistence.jpa.repository.BodyPartDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.GeneralBodyPartDboRepository;
@@ -36,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class DboFactory {
 
+	private final BodyPartDboRepository bodyPartRepository;
 	private final DoctorDboRepository doctorRepository;
 	private final DoctorTypeDboRepository doctorTypeRepository;
 	private final GeneralBodyPartDboRepository generalBodyPartRepository;
@@ -129,12 +131,20 @@ class DboFactory {
 		return new DoctorTypeDbo().setId(uuidFactory.create()).setName(name);
 	}
 
-	ExerciseDbo createExercise(String name, String description) {
+	ExerciseDbo createExercise(UUID bodyPartId, String name, String description) {
+		ensure(bodyPartId != null, "body part id cannot be null!");
 		ensure(description != null, "description cannot be null!");
 		ensure(!description.isBlank(), "description cannot be blank!");
 		ensure(name != null, "name cannot be null!");
 		ensure(!name.isBlank(), "name cannot be blank!");
-		return new ExerciseDbo().setId(uuidFactory.create()).setDescription(description).setName(name);
+		BodyPartDbo bodyPart = bodyPartRepository
+			.findById(bodyPartId)
+			.orElseThrow(() -> new NoSuchElementException("no body part found with id: " + bodyPartId));
+		return new ExerciseDbo()
+			.setId(uuidFactory.create())
+			.setBodyPart(bodyPart)
+			.setDescription(description)
+			.setName(name);
 	}
 
 	GeneralBodyPartDbo createGeneralBodyPart(String name) {
@@ -195,9 +205,17 @@ class DboFactory {
 	}
 
 	SymptomDbo createSymptom(String description, LocalDate dateOfRecording, UUID bodyPartId) {
+		ensure(bodyPartId != null, "body part id cannot be null!");
 		ensure(description != null, "description cannot be null!");
 		ensure(!description.isBlank(), "description cannot be blank!");
 		ensure(dateOfRecording != null, "date of recording cannot be null!");
-		return new SymptomDbo().setDateOfRecording(dateOfRecording).setDescription(description).setId(uuidFactory.create());
+		BodyPartDbo bodyPart = bodyPartRepository
+			.findById(bodyPartId)
+			.orElseThrow(() -> new NoSuchElementException("no body part found with id: " + bodyPartId));
+		return new SymptomDbo()
+			.setBodyPart(bodyPart)
+			.setDateOfRecording(dateOfRecording)
+			.setDescription(description)
+			.setId(uuidFactory.create());
 	}
 }

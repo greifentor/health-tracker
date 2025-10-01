@@ -1,5 +1,6 @@
 package de.ollie.healthtracker.core.service;
 
+import de.ollie.healthtracker.core.service.model.BodyPart;
 import de.ollie.healthtracker.core.service.model.Exercise;
 import java.util.List;
 import java.util.Optional;
@@ -13,13 +14,11 @@ import lombok.Generated;
  */
 @Generated
 public interface ExerciseService {
-	Exercise createExercise(String name, String description);
+	Exercise createExercise(BodyPart bodyPart, String description, String name);
 
 	void deleteExercise(UUID id);
 
 	Optional<Exercise> findById(UUID id);
-
-	Optional<Exercise> findByIdOrNameParticle(String namePartOrId);
 
 	List<Exercise> listExercises();
 

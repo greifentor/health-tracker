@@ -1,5 +1,6 @@
 package de.ollie.healthtracker.core.service.port.persistence;
 
+import de.ollie.healthtracker.core.service.model.BodyPart;
 import de.ollie.healthtracker.core.service.model.Exercise;
 import jakarta.inject.Named;
 import java.util.List;
@@ -15,13 +16,11 @@ import lombok.Generated;
 @Generated
 @Named
 public interface ExercisePersistencePort {
-	Exercise create(String name, String description);
+	Exercise create(BodyPart bodyPart, String description, String name);
 
 	void deleteById(UUID id);
 
 	Optional<Exercise> findById(UUID id);
-
-	Optional<Exercise> findByIdOrNameParticle(String name);
 
 	List<Exercise> list();
 

@@ -2,10 +2,8 @@ package ${PackageName};
 
 import ${Properties.get("core-service-package")}.${ClassName}Service;
 import ${Properties.get("core-model-package")}.${ClassName};
-#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
-#if(${Attribute.isReference()} == true)
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
 import ${Properties.get("core-model-package")}.$Attribute.getTypeClassType().getName();
-#end
 #end
 import ${Properties.get("swing-gui-package")}.EditDialogComponentFactory;
 import ${Properties.get("swing-gui-package")}.ItemProvider;
@@ -30,21 +28,17 @@ public class ${ClassName}EditJInternalFrame extends AbstractEditJInternalFrame<$
 
 	public ${ClassName}EditJInternalFrame(
 		${ClassName} toEdit,
-		#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
-		#if(${Attribute.isReference()} == true)
-		#set($TypeClassName = $Attribute.getTypeClassType().getName())
-		ItemProvider<$TypeClassName> ${TypeClassName}s,
-		#end
+		#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+		#set($TypeClass = $Attribute.getTypeClassType())
+		ItemProvider<${TypeClass.getName()}> ${TypeClass.getNameAsAttribute()}s,
 		#end
 		EditDialogComponentFactory editDialogComponentFactory,
 		Observer<${ClassName}> observer,
 		JDesktopPane desktopPane
 	) {
 		super(desktopPane, "${Class.getNameSeparated(" ")}", toEdit, editDialogComponentFactory, observer, Map.of(
-		#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
-		#if(${Attribute.isReference()} == true)
-		${ClassName}EditJPanel.${Attribute.getTypeClassType().getNameSeparated("_").toUpperCase()}_ITEM_PROVIDER_ID, ${Attribute.getTypeClassType().getName()}s#if($foreach.hasNext), #end
-		#end
+		#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+		${ClassName}EditJPanel.${Attribute.getTypeClassType().getNameSeparated("_").toUpperCase()}_ITEM_PROVIDER_ID, ${Attribute.getTypeClassType().getNameAsAttribute()}s#if($foreach.hasNext), #end
 		#end
 		));
 	}

@@ -16,7 +16,4 @@ import org.springframework.stereotype.Repository;
 public interface ExerciseDboRepository extends JpaRepository<ExerciseDbo, UUID> {
 	@Query("SELECT dbo FROM ExerciseDbo dbo ORDER BY dbo.name")
 	List<ExerciseDbo> findAllOrdered();
-
-	@Query("SELECT dbo FROM ExerciseDbo dbo WHERE dbo.name LIKE CONCAT('%', :name, '%')")
-	List<ExerciseDbo> findAllByNameMatch(String name);
 }

@@ -3,9 +3,9 @@ package de.ollie.healthtracker.persistence.jpa;
 import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
+import de.ollie.healthtracker.core.service.model.BodyPart;
 import de.ollie.healthtracker.core.service.model.Exercise;
 import de.ollie.healthtracker.core.service.port.persistence.ExercisePersistencePort;
-import de.ollie.healthtracker.persistence.jpa.dbo.ExerciseDbo;
 import de.ollie.healthtracker.persistence.jpa.mapper.ExerciseDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.ExerciseDboRepository;
 import jakarta.inject.Named;
@@ -30,8 +30,8 @@ class ExercisePersistenceJpaAdapter implements ExercisePersistencePort {
 	private final ExerciseDboRepository repository;
 
 	@Override
-	public Exercise create(String name, String description) {
-		return mapper.toModel(repository.save(dboFactory.createExercise(name, description)));
+	public Exercise create(BodyPart bodyPart, String description, String name) {
+		return mapper.toModel(repository.save(dboFactory.createExercise(bodyPart.getId(), description, name)));
 	}
 
 	@Override
@@ -44,29 +44,6 @@ class ExercisePersistenceJpaAdapter implements ExercisePersistencePort {
 	public Optional<Exercise> findById(UUID id) {
 		ensure(id != null, "id cannot be null!");
 		return repository.findById(id).map(mapper::toModel);
-	}
-
-	@Override
-	public Optional<Exercise> findByIdOrNameParticle(String nameParticleOrId) {
-		ensure(nameParticleOrId != null, "name particle or id cannot be null");
-		Optional<ExerciseDbo> dbo = Optional.empty();
-		try {
-			UUID uuid = UUID.fromString(nameParticleOrId);
-			dbo = repository.findById(uuid);
-		} catch (Exception e) {
-			// NOP
-		}
-		return Optional.ofNullable(
-			mapper.toModel(
-				dbo.orElseGet(() -> {
-					List<ExerciseDbo> found = repository.findAllByNameMatch(nameParticleOrId);
-					if (found.size() < 2) {
-						return found.size() == 0 ? null : found.get(0);
-					}
-					throw new TooManyElementsException();
-				})
-			)
-		);
 	}
 
 	@Override

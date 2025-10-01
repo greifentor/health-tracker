@@ -66,7 +66,7 @@ public class MedicationUnitSelectJPanel extends AbstractSelectJPanel<MedicationU
 
 	@Override
 	protected MedicationUnit createNewObject() {
-		return medicationUnitService.createMedicationUnit(null, null);
+		return new MedicationUnit().setId(UUID.randomUUID()).setName("").setToken("");
 	}
 
 	@Override

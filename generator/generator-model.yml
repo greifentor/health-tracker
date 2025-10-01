@@ -61,6 +61,8 @@ classes:
     properties:
       - name: order
         value: name
+      - name: gui
+        value: true
     attributes:
       - name: id
         properties:
@@ -78,6 +80,8 @@ classes:
         properties:
           - name: nullable
             value: false
+          - name: editor-position
+            value: 2
         type:
           name: GeneralBodyPart
       - name: name
@@ -86,6 +90,8 @@ classes:
             value: false
           - name: findable
             value: true
+          - name: editor-position
+            value: 1
         type:
           name: String
   - name: Comment
@@ -235,6 +241,8 @@ classes:
     properties:
       - name: order
         value: name
+      - name: gui
+        value: true
     attributes:
       - name: id
         properties:
@@ -247,24 +255,37 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
-      - name: name
+      - name: bodyPart
+        reference: true
         properties:
           - name: nullable
             value: false
-          - name: findable
-            value: true
+          - name: editor-position
+            value: 2
         type:
-          name: String
+          name: BodyPart
       - name: description
         properties:
           - name: nullable
             value: false
+          - name: editor-position
+            value: 3
+        type:
+          name: String
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 1
         type:
           name: String
   - name: GeneralBodyPart
     properties:
       - name: order
         value: name
+      - name: gui
+        value: true
     attributes:
       - name: id
         properties:

@@ -23,6 +23,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
+import de.ollie.healthtracker.persistence.jpa.repository.BodyPartDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.GeneralBodyPartDboRepository;
@@ -65,6 +66,12 @@ class DboFactoryTest {
 	private static final LocalTime TIME_OF_RECORDING = LocalTime.of(23, 31, 42);
 	private static final String TOKEN = "token";
 	private static final BigDecimal UNIT_COUNT = new BigDecimal(42);
+
+	@Mock
+	private BodyPartDbo bodyPartDbo;
+
+	@Mock
+	private BodyPartDboRepository bodyPartRepository;
 
 	@Mock
 	private DoctorDbo doctorDbo;
@@ -563,40 +570,57 @@ class DboFactoryTest {
 	class createExercise_String_String {
 
 		@Test
+		void throwsAnException_passingANullValue_AsBodyPartId() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createExercise(null, NAME, DESCRIPTION));
+		}
+
+		@Test
 		void throwsAnException_passingANullValue_AsDescription() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createExercise(NAME, null));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createExercise(ANOTHER_ID, NAME, null));
 		}
 
 		@Test
 		void throwsAnException_passingANullValue_AsName() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createExercise(null, DESCRIPTION));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createExercise(ANOTHER_ID, null, DESCRIPTION));
 		}
 
 		@Test
 		void throwsAnException_passingABlankString_AsDescription() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createExercise(NAME, BLANK_STR));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createExercise(ANOTHER_ID, NAME, BLANK_STR));
 		}
 
 		@Test
 		void throwsAnException_passingABlankString_AsName() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createExercise(BLANK_STR, DESCRIPTION));
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createExercise(ANOTHER_ID, BLANK_STR, DESCRIPTION)
+			);
 		}
 
 		@Test
 		void returnsACorrectObject() {
 			// Prepare
-			ExerciseDbo expected = new ExerciseDbo().setDescription(DESCRIPTION).setId(ID).setName(NAME);
+			ExerciseDbo expected = new ExerciseDbo()
+				.setBodyPart(bodyPartDbo)
+				.setDescription(DESCRIPTION)
+				.setId(ID)
+				.setName(NAME);
+			when(bodyPartRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(bodyPartDbo));
 			when(uuidFactory.create()).thenReturn(ID);
 			// RUn & Check
-			assertEquals(expected, unitUnderTest.createExercise(NAME, DESCRIPTION));
+			assertEquals(expected, unitUnderTest.createExercise(ANOTHER_ID, NAME, DESCRIPTION));
 		}
 
 		@Test
 		void returnsANewObjectOnEachCall() {
 			// Prepare
+			when(bodyPartRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(bodyPartDbo));
 			when(uuidFactory.create()).thenReturn(ID, ANOTHER_ID);
 			// RUn & Check
-			assertNotEquals(unitUnderTest.createExercise(NAME, DESCRIPTION), unitUnderTest.createExercise(NAME, DESCRIPTION));
+			assertNotEquals(
+				unitUnderTest.createExercise(ANOTHER_ID, NAME, DESCRIPTION),
+				unitUnderTest.createExercise(ANOTHER_ID, NAME, DESCRIPTION)
+			);
 		}
 	}
 
@@ -893,11 +917,17 @@ class DboFactoryTest {
 
 		@Test
 		void returnANewObject() {
+			// Prepare
+			when(bodyPartRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(bodyPartDbo));
+			// Run & Check
 			assertNotNull(unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING, ANOTHER_ID));
 		}
 
 		@Test
 		void returnANewObject_onEachCall() {
+			// Prepare
+			when(bodyPartRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(bodyPartDbo));
+			// Run & Check
 			assertNotSame(
 				unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING, ANOTHER_ID),
 				unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING, ANOTHER_ID)
@@ -908,9 +938,11 @@ class DboFactoryTest {
 		void returnANewObject_withCorrectlySetAttributes() {
 			// Prepare
 			SymptomDbo expected = new SymptomDbo()
+				.setBodyPart(bodyPartDbo)
 				.setDateOfRecording(DATE_OF_RECORDING)
 				.setDescription(DESCRIPTION)
 				.setId(ID);
+			when(bodyPartRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(bodyPartDbo));
 			when(uuidFactory.create()).thenReturn(ID);
 			// Run & Check
 			assertEquals(expected, unitUnderTest.createSymptom(DESCRIPTION, DATE_OF_RECORDING, ANOTHER_ID));

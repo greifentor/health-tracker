@@ -16,6 +16,7 @@ import lombok.experimental.Accessors;
 public class Exercise {
 
 	private UUID id;
-	private String name;
+	private BodyPart bodyPart;
 	private String description;
+	private String name;
 }
