@@ -473,6 +473,8 @@ classes:
             value: false
           - name: id
             value: true
+          - name: name-attribute
+            value: true
         type:
           name: UUID
           properties:

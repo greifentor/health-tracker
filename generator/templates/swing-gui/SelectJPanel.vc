@@ -72,13 +72,15 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 
 	@Override
 	protected AbstractSelectionTableModel<${ClassName}> createSelectionModel() {
-		return new AbstractSelectionTableModel<${ClassName}>(getObjectsToSelect(), #foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))"${Attribute.getNameCamelCase()}"#if($foreach.hasNext), #end#end) {
+		return new AbstractSelectionTableModel<${ClassName}>(getObjectsToSelect(), #foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))"${Attribute.getCamelCaseNameSeparated(" ")}"#if($foreach.hasNext), #end#end) {
 			@Override
 			protected Object getColumnValueFor(${ClassName} t, int columnIndex) {
 				return switch (columnIndex) {
 					#set($count = 0)
 					#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
-					#if($Attribute.getTypeName() == "LocalDate")
+					#if($Attribute.isReference() == true)
+					case $count -> (t.get${Attribute.getNameCamelCase()}() != null ? t.get${Attribute.getNameCamelCase()}().getName() : "-");
+					#elseif($Attribute.getTypeName() == "LocalDate")
 					case $count -> DateTimeUtil.DE_DATE_FORMAT.format(t.get$Attribute.getNameCamelCase()());
 					#elseif($Attribute.getTypeName() == "LocalTime")
 					case $count -> DateTimeUtil.DE_TIME_FORMAT.format(t.get$Attribute.getNameCamelCase()());

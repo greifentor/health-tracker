@@ -10,17 +10,16 @@ import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
 import java.awt.GridLayout;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import lombok.Generated;
 
 /**
- * GENERATED CODE - DO NOT TOUCH
- *
- * Remove this comment to suspend class from generation process.
+ * HANDMADE CODE
  */
 @Generated
 public class ExerciseEditJPanel extends AbstractEditPanel<Exercise> {
@@ -29,7 +28,7 @@ public class ExerciseEditJPanel extends AbstractEditPanel<Exercise> {
 
 	private JTextField textFieldName;
 	private JComboBox<BodyPart> comboBoxBodyPart;
-	private JTextField textFieldDescription;
+	private JTextArea textAreaDescription;
 
 	public ExerciseEditJPanel(Exercise toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		super(toEdit, itemProviders);
@@ -37,14 +36,18 @@ public class ExerciseEditJPanel extends AbstractEditPanel<Exercise> {
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel("Name:", "Body Part:", "Description:");
+		JPanel p = new JPanel(new GridLayout(2, 1, HGAP, VGAP));
+		p.add(createLabelSubPanel("Name:", "Body Part:"));
+		p.add(createLabelSubPanel("Desciption:"));
+		return p;
 	}
 
 	@Override
 	protected JPanel createComponentPanel(Exercise toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
+		JPanel p = new JPanel(new GridLayout(2, 1, HGAP, VGAP));
+		JPanel upper = new JPanel(new GridLayout(2, 1, HGAP, VGAP));
 		textFieldName = new JTextField(toEdit.getName(), 40);
-		p.add(textFieldName);
+		upper.add(textFieldName);
 		List<BodyPart> listBodyPart = ((ItemProvider<BodyPart>) itemProviders.get(BODY_PART_ITEM_PROVIDER_ID)).getItem();
 		comboBoxBodyPart = new JComboBox<>(listBodyPart.toArray(new BodyPart[listBodyPart.size()]));
 		comboBoxBodyPart.setSelectedItem(toEdit.getBodyPart());
@@ -54,9 +57,12 @@ public class ExerciseEditJPanel extends AbstractEditPanel<Exercise> {
 			}
 			return new JLabel("-");
 		});
-		p.add(comboBoxBodyPart);
-		textFieldDescription = new JTextField(toEdit.getDescription(), 40);
-		p.add(textFieldDescription);
+		upper.add(comboBoxBodyPart);
+		JPanel lower = new JPanel(new GridLayout(1, 1, HGAP, VGAP));
+		textAreaDescription = new JTextArea(toEdit.getDescription(), 5, 40);
+		lower.add(new JScrollPane(textAreaDescription));
+		p.add(upper);
+		p.add(lower);
 		return p;
 	}
 
@@ -66,6 +72,6 @@ public class ExerciseEditJPanel extends AbstractEditPanel<Exercise> {
 			.setId(toEdit.getId())
 			.setName(textFieldName.getText())
 			.setBodyPart(((BodyPart) comboBoxBodyPart.getSelectedItem()))
-			.setDescription(textFieldDescription.getText());
+			.setDescription(textAreaDescription.getText());
 	}
 }

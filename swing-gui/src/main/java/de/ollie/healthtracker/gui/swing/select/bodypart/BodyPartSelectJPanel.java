@@ -47,12 +47,12 @@ public class BodyPartSelectJPanel extends AbstractSelectJPanel<BodyPart> impleme
 
 	@Override
 	protected AbstractSelectionTableModel<BodyPart> createSelectionModel() {
-		return new AbstractSelectionTableModel<BodyPart>(getObjectsToSelect(), "Name", "GeneralBodyPart") {
+		return new AbstractSelectionTableModel<BodyPart>(getObjectsToSelect(), "Name", "General Body Part") {
 			@Override
 			protected Object getColumnValueFor(BodyPart t, int columnIndex) {
 				return switch (columnIndex) {
 					case 0 -> t.getName();
-					case 1 -> t.getGeneralBodyPart();
+					case 1 -> (t.getGeneralBodyPart() != null ? t.getGeneralBodyPart().getName() : "-");
 					default -> null;
 				};
 			}

@@ -47,12 +47,12 @@ public class ExerciseSelectJPanel extends AbstractSelectJPanel<Exercise> impleme
 
 	@Override
 	protected AbstractSelectionTableModel<Exercise> createSelectionModel() {
-		return new AbstractSelectionTableModel<Exercise>(getObjectsToSelect(), "Name", "BodyPart", "Description") {
+		return new AbstractSelectionTableModel<Exercise>(getObjectsToSelect(), "Name", "Body Part", "Description") {
 			@Override
 			protected Object getColumnValueFor(Exercise t, int columnIndex) {
 				return switch (columnIndex) {
 					case 0 -> t.getName();
-					case 1 -> t.getBodyPart();
+					case 1 -> (t.getBodyPart() != null ? t.getBodyPart().getName() : "-");
 					case 2 -> t.getDescription();
 					default -> null;
 				};

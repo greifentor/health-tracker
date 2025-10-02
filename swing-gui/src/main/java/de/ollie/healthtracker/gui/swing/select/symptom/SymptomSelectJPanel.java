@@ -55,16 +55,16 @@ public class SymptomSelectJPanel extends AbstractSelectJPanel<Symptom> implement
 	protected AbstractSelectionTableModel<Symptom> createSelectionModel() {
 		return new AbstractSelectionTableModel<Symptom>(
 			getObjectsToSelect(),
-			"DateOfRecording",
+			"Date Of Recording",
 			"Description",
-			"BodyPart"
+			"Body Part"
 		) {
 			@Override
 			protected Object getColumnValueFor(Symptom t, int columnIndex) {
 				return switch (columnIndex) {
 					case 0 -> DateTimeUtil.DE_DATE_FORMAT.format(t.getDateOfRecording());
 					case 1 -> t.getDescription();
-					case 2 -> t.getBodyPart();
+					case 2 -> (t.getBodyPart() != null ? t.getBodyPart().getName() : "-");
 					default -> null;
 				};
 			}
