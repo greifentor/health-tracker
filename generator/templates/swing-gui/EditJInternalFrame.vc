@@ -2,6 +2,9 @@ package ${PackageName};
 
 import ${Properties.get("core-service-package")}.${ClassName}Service;
 import ${Properties.get("core-model-package")}.${ClassName};
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+import ${Properties.get("core-model-package")}.$Attribute.getTypeClassType().getName();
+#end
 import ${Properties.get("swing-gui-package")}.EditDialogComponentFactory;
 import ${Properties.get("swing-gui-package")}.ItemProvider;
 import ${Properties.get("swing-gui-package")}.edit.AbstractEditJInternalFrame;
@@ -25,12 +28,19 @@ public class ${ClassName}EditJInternalFrame extends AbstractEditJInternalFrame<$
 
 	public ${ClassName}EditJInternalFrame(
 		${ClassName} toEdit,
-		String className,
+		#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+		#set($TypeClass = $Attribute.getTypeClassType())
+		ItemProvider<${TypeClass.getName()}> ${TypeClass.getNameAsAttribute()}s,
+		#end
 		EditDialogComponentFactory editDialogComponentFactory,
 		Observer<${ClassName}> observer,
 		JDesktopPane desktopPane
 	) {
-		super(desktopPane, className, toEdit, editDialogComponentFactory, observer, Map.of());
+		super(desktopPane, "${Class.getNameSeparated(" ")}", toEdit, editDialogComponentFactory, observer, Map.of(
+		#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+		${ClassName}EditJPanel.${Attribute.getTypeClassType().getNameSeparated("_").toUpperCase()}_ITEM_PROVIDER_ID, ${Attribute.getTypeClassType().getNameAsAttribute()}s#if($foreach.hasNext), #end
+		#end
+		));
 	}
 
 	@Override

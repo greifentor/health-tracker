@@ -1,5 +1,6 @@
 package de.ollie.healthtracker.core.service.port.persistence;
 
+import de.ollie.healthtracker.core.service.model.BodyPart;
 import de.ollie.healthtracker.core.service.model.Symptom;
 import jakarta.inject.Named;
 import java.time.LocalDate;
@@ -16,7 +17,7 @@ import lombok.Generated;
 @Generated
 @Named
 public interface SymptomPersistencePort {
-	Symptom create(String description, LocalDate dateOfRecording);
+	Symptom create(String description, LocalDate dateOfRecording, BodyPart bodyPart);
 
 	void deleteById(UUID id);
 

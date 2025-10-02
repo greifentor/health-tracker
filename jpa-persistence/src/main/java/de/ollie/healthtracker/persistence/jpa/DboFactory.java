@@ -6,17 +6,22 @@ import de.ollie.healthtracker.core.service.UuidFactory;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementStatusDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.BodyPartDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorConsultationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.ExerciseDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.GeneralBodyPartDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
+import de.ollie.healthtracker.persistence.jpa.repository.BodyPartDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.GeneralBodyPartDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.ManufacturerDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.MedicationDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.MedicationUnitDboRepository;
@@ -32,8 +37,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class DboFactory {
 
+	private final BodyPartDboRepository bodyPartRepository;
 	private final DoctorDboRepository doctorRepository;
 	private final DoctorTypeDboRepository doctorTypeRepository;
+	private final GeneralBodyPartDboRepository generalBodyPartRepository;
 	private final ManufacturerDboRepository manufacturerDboRepository;
 	private final MedicationDboRepository medicationDboRepository;
 	private final MedicationUnitDboRepository medicationUnitDboRepository;
@@ -63,6 +70,16 @@ class DboFactory {
 			.setStatus(state == null ? null : BloodPressureMeasurementStatusDbo.valueOf(state.name()))
 			.setSysMmHg(sysMmHg)
 			.setTimeOfRecording(timeOfRecording);
+	}
+
+	BodyPartDbo createBodyPart(UUID generalBodyPartId, String name) {
+		ensure(generalBodyPartId != null, "general body part id cannot be null!");
+		ensure(name != null, "name cannot be null!");
+		ensure(!name.isBlank(), "name cannot be blank!");
+		GeneralBodyPartDbo generalBodyPart = generalBodyPartRepository
+			.findById(generalBodyPartId)
+			.orElseThrow(() -> new NoSuchElementException("no general body part found with id: " + generalBodyPartId));
+		return new BodyPartDbo().setId(uuidFactory.create()).setGeneralBodyPart(generalBodyPart).setName(name);
 	}
 
 	CommentDbo createComment(String content, LocalDate dateOfRecording) {
@@ -112,6 +129,28 @@ class DboFactory {
 		ensure(name != null, "name cannot be null!");
 		ensure(!name.isBlank(), "name cannot be blank!");
 		return new DoctorTypeDbo().setId(uuidFactory.create()).setName(name);
+	}
+
+	ExerciseDbo createExercise(UUID bodyPartId, String name, String description) {
+		ensure(bodyPartId != null, "body part id cannot be null!");
+		ensure(description != null, "description cannot be null!");
+		ensure(!description.isBlank(), "description cannot be blank!");
+		ensure(name != null, "name cannot be null!");
+		ensure(!name.isBlank(), "name cannot be blank!");
+		BodyPartDbo bodyPart = bodyPartRepository
+			.findById(bodyPartId)
+			.orElseThrow(() -> new NoSuchElementException("no body part found with id: " + bodyPartId));
+		return new ExerciseDbo()
+			.setId(uuidFactory.create())
+			.setBodyPart(bodyPart)
+			.setDescription(description)
+			.setName(name);
+	}
+
+	GeneralBodyPartDbo createGeneralBodyPart(String name) {
+		ensure(name != null, "name cannot be null!");
+		ensure(!name.isBlank(), "name cannot be blank!");
+		return new GeneralBodyPartDbo().setId(uuidFactory.create()).setName(name);
 	}
 
 	ManufacturerDbo createManufacturer(String name) {
@@ -165,10 +204,18 @@ class DboFactory {
 		return new MedicationUnitDbo().setId(uuidFactory.create()).setName(name).setToken(token);
 	}
 
-	SymptomDbo createSymptom(String description, LocalDate dateOfRecording) {
+	SymptomDbo createSymptom(String description, LocalDate dateOfRecording, UUID bodyPartId) {
+		ensure(bodyPartId != null, "body part id cannot be null!");
 		ensure(description != null, "description cannot be null!");
 		ensure(!description.isBlank(), "description cannot be blank!");
 		ensure(dateOfRecording != null, "date of recording cannot be null!");
-		return new SymptomDbo().setDateOfRecording(dateOfRecording).setDescription(description).setId(uuidFactory.create());
+		BodyPartDbo bodyPart = bodyPartRepository
+			.findById(bodyPartId)
+			.orElseThrow(() -> new NoSuchElementException("no body part found with id: " + bodyPartId));
+		return new SymptomDbo()
+			.setBodyPart(bodyPart)
+			.setDateOfRecording(dateOfRecording)
+			.setDescription(description)
+			.setId(uuidFactory.create());
 	}
 }

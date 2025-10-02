@@ -57,6 +57,43 @@ classes:
       - name: irregularHeartbeat
         type:
           name: boolean
+  - name: BodyPart
+    properties:
+      - name: order
+        value: name
+      - name: gui
+        value: true
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: generalBodyPart
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 2
+        type:
+          name: GeneralBodyPart
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+          - name: editor-position
+            value: 1
+        type:
+          name: String
   - name: Comment
     properties:
       - name: order
@@ -198,6 +235,77 @@ classes:
             value: false
           - name: findable
             value: true
+        type:
+          name: String
+  - name: Exercise
+    properties:
+      - name: order
+        value: name
+      - name: gui
+        value: true
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: bodyPart
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 2
+        type:
+          name: BodyPart
+      - name: description
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 3
+        type:
+          name: String
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 1
+        type:
+          name: String
+  - name: GeneralBodyPart
+    properties:
+      - name: order
+        value: name
+      - name: gui
+        value: true
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+          - name: editor-position
+            value: 1
         type:
           name: String
   - name: Manufacturer
@@ -365,6 +473,8 @@ classes:
             value: false
           - name: id
             value: true
+          - name: name-attribute
+            value: true
         type:
           name: UUID
           properties:
@@ -393,3 +503,12 @@ classes:
           properties:
             - name: import
               value: java.time.LocalDate
+      - name: bodyPart
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 2
+        type:
+          name: BodyPart

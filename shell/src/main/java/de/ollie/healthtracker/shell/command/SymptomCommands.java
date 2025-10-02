@@ -1,11 +1,13 @@
 package de.ollie.healthtracker.shell.command;
 
+import de.ollie.healthtracker.core.service.BodyPartService;
 import de.ollie.healthtracker.core.service.LocalDateFactory;
 import de.ollie.healthtracker.core.service.LocalTimeFactory;
 import de.ollie.healthtracker.core.service.SymptomService;
 import de.ollie.healthtracker.shell.handler.OutputHandler;
 import de.ollie.healthtracker.shell.mapper.SymptomToStringMapper;
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,9 @@ import org.springframework.shell.standard.ShellOption;
 @RequiredArgsConstructor
 public class SymptomCommands implements CommandsWithTimeOrDate {
 
+	private static final String MSG_NO_SUCH_BODY_PART_FOUND = "No body part found with id: ";
+
+	private final BodyPartService bodyPartService;
 	private final SymptomService symptomService;
 	private final SymptomToStringMapper symptomToStringMapper;
 
@@ -35,11 +40,19 @@ public class SymptomCommands implements CommandsWithTimeOrDate {
 			help = "The date of measurement (DD.MM.JJJJ or TODAY or TD).",
 			value = "date",
 			defaultValue = "TODAY"
-		) String dateOfMeasurementStr
+		) String dateOfMeasurementStr,
+		@ShellOption(help = "The name of the body part or id.", value = "bodyPartIdOrNamePart") String bodyPartIdOrNamePart
 	) {
 		try {
 			LocalDate dateOfMeasurement = getDateFromParameter(dateOfMeasurementStr);
-			symptomService.createSymptom(content, dateOfMeasurement);
+			bodyPartService
+				.findByIdOrNameParticle(bodyPartIdOrNamePart)
+				.ifPresentOrElse(
+					bodyPart -> symptomService.createSymptom(content, dateOfMeasurement, bodyPart),
+					() -> {
+						throw new NoSuchElementException(MSG_NO_SUCH_BODY_PART_FOUND + bodyPartIdOrNamePart);
+					}
+				);
 			return Constants.OK;
 		} catch (Exception e) {
 			e.printStackTrace();

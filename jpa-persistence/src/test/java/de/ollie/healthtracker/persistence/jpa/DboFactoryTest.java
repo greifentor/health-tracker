@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.persistence.jpa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -10,17 +11,22 @@ import de.ollie.healthtracker.core.service.UuidFactory;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementStatusDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.BodyPartDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorConsultationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.ExerciseDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.GeneralBodyPartDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
+import de.ollie.healthtracker.persistence.jpa.repository.BodyPartDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.GeneralBodyPartDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.ManufacturerDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.MedicationDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.MedicationUnitDboRepository;
@@ -41,6 +47,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class DboFactoryTest {
 
 	private static final UUID ANOTHER_ID = UUID.randomUUID();
+	private static final String BLANK_STR = "\n\t\r ";
 	private static final String CONTENT = "content";
 	private static final LocalDate DATE = LocalDate.of(2025, 7, 28);
 	private static final LocalDate DATE_OF_RECORDING = LocalDate.of(2025, 6, 17);
@@ -61,6 +68,12 @@ class DboFactoryTest {
 	private static final BigDecimal UNIT_COUNT = new BigDecimal(42);
 
 	@Mock
+	private BodyPartDbo bodyPartDbo;
+
+	@Mock
+	private BodyPartDboRepository bodyPartRepository;
+
+	@Mock
 	private DoctorDbo doctorDbo;
 
 	@Mock
@@ -71,6 +84,12 @@ class DboFactoryTest {
 
 	@Mock
 	private DoctorTypeDboRepository doctorTypeRepository;
+
+	@Mock
+	private GeneralBodyPartDbo generalBodyPart;
+
+	@Mock
+	private GeneralBodyPartDboRepository generalBodyPartRepository;
 
 	@Mock
 	private ManufacturerDbo manufacturerDbo;
@@ -269,11 +288,57 @@ class DboFactoryTest {
 	}
 
 	@Nested
+	class createBodyPart_UUID_String {
+
+		@Test
+		void throwsAnException_passingANullValue_AsGeneralBodyPart() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createBodyPart(null, NAME));
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_AsName() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createBodyPart(ANOTHER_ID, null));
+		}
+
+		@Test
+		void throwsAnException_passingABlankString_AsName() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createBodyPart(ANOTHER_ID, BLANK_STR));
+		}
+
+		@Test
+		void throwsAnException_whenGeneralBodyPart() {
+			// Prepare
+			when(generalBodyPartRepository.findById(ANOTHER_ID)).thenReturn(Optional.empty());
+			// RUn & Check
+			assertThrows(NoSuchElementException.class, () -> unitUnderTest.createBodyPart(ANOTHER_ID, NAME));
+		}
+
+		@Test
+		void returnsACorrectObject() {
+			// Prepare
+			BodyPartDbo expected = new BodyPartDbo().setId(ID).setGeneralBodyPart(generalBodyPart).setName(NAME);
+			when(generalBodyPartRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(generalBodyPart));
+			when(uuidFactory.create()).thenReturn(ID);
+			// RUn & Check
+			assertEquals(expected, unitUnderTest.createBodyPart(ANOTHER_ID, NAME));
+		}
+
+		@Test
+		void returnsANewObjectOnEachCall() {
+			// Prepare
+			when(generalBodyPartRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(generalBodyPart));
+			when(uuidFactory.create()).thenReturn(ID, ANOTHER_ID);
+			// RUn & Check
+			assertNotEquals(unitUnderTest.createBodyPart(ANOTHER_ID, NAME), unitUnderTest.createBodyPart(ANOTHER_ID, NAME));
+		}
+	}
+
+	@Nested
 	class createComment_String_LocalDate_LocalTime {
 
 		@Test
 		void throwsAnException_passingABlankString_asContent() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createComment("\n\t\r ", DATE_OF_RECORDING));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createComment(BLANK_STR, DATE_OF_RECORDING));
 		}
 
 		@Test
@@ -314,7 +379,7 @@ class DboFactoryTest {
 
 		@Test
 		void throwsAnException_passingABlankString_asName() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createDoctor("\n\t\r ", ID));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createDoctor(BLANK_STR, ID));
 		}
 
 		@Test
@@ -385,7 +450,7 @@ class DboFactoryTest {
 		void throwsAnException_passingABlankString_asReason() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, "\n\t\r ", RESULT)
+				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, BLANK_STR, RESULT)
 			);
 		}
 
@@ -401,7 +466,7 @@ class DboFactoryTest {
 		void throwsAnException_passingABlankString_asResult() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, REASON, "\n\t\r ")
+				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, REASON, BLANK_STR)
 			);
 		}
 
@@ -473,7 +538,7 @@ class DboFactoryTest {
 
 		@Test
 		void throwsAnException_passingABlankString_asName() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createDoctorType("\n\t\r "));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createDoctorType(BLANK_STR));
 		}
 
 		@Test
@@ -502,11 +567,100 @@ class DboFactoryTest {
 	}
 
 	@Nested
+	class createExercise_String_String {
+
+		@Test
+		void throwsAnException_passingANullValue_AsBodyPartId() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createExercise(null, NAME, DESCRIPTION));
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_AsDescription() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createExercise(ANOTHER_ID, NAME, null));
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_AsName() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createExercise(ANOTHER_ID, null, DESCRIPTION));
+		}
+
+		@Test
+		void throwsAnException_passingABlankString_AsDescription() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createExercise(ANOTHER_ID, NAME, BLANK_STR));
+		}
+
+		@Test
+		void throwsAnException_passingABlankString_AsName() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createExercise(ANOTHER_ID, BLANK_STR, DESCRIPTION)
+			);
+		}
+
+		@Test
+		void returnsACorrectObject() {
+			// Prepare
+			ExerciseDbo expected = new ExerciseDbo()
+				.setBodyPart(bodyPartDbo)
+				.setDescription(DESCRIPTION)
+				.setId(ID)
+				.setName(NAME);
+			when(bodyPartRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(bodyPartDbo));
+			when(uuidFactory.create()).thenReturn(ID);
+			// RUn & Check
+			assertEquals(expected, unitUnderTest.createExercise(ANOTHER_ID, NAME, DESCRIPTION));
+		}
+
+		@Test
+		void returnsANewObjectOnEachCall() {
+			// Prepare
+			when(bodyPartRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(bodyPartDbo));
+			when(uuidFactory.create()).thenReturn(ID, ANOTHER_ID);
+			// RUn & Check
+			assertNotEquals(
+				unitUnderTest.createExercise(ANOTHER_ID, NAME, DESCRIPTION),
+				unitUnderTest.createExercise(ANOTHER_ID, NAME, DESCRIPTION)
+			);
+		}
+	}
+
+	@Nested
+	class createGeneralBodyPart_String {
+
+		@Test
+		void throwsAnException_passingANullValue_AsName() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createGeneralBodyPart(null));
+		}
+
+		@Test
+		void throwsAnException_passingABlankString_AsName() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createGeneralBodyPart(BLANK_STR));
+		}
+
+		@Test
+		void returnsACorrectObject() {
+			// Prepare
+			GeneralBodyPartDbo expected = new GeneralBodyPartDbo().setId(ID).setName(NAME);
+			when(uuidFactory.create()).thenReturn(ID);
+			// RUn & Check
+			assertEquals(expected, unitUnderTest.createGeneralBodyPart(NAME));
+		}
+
+		@Test
+		void returnsANewObjectOnEachCall() {
+			// Prepare
+			when(uuidFactory.create()).thenReturn(ID, ANOTHER_ID);
+			// RUn & Check
+			assertNotEquals(unitUnderTest.createGeneralBodyPart(NAME), unitUnderTest.createGeneralBodyPart(NAME));
+		}
+	}
+
+	@Nested
 	class createManufacturer_String {
 
 		@Test
 		void throwsAnException_passingABlankString_asContent() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createManufacturer("\n\t\r "));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createManufacturer(BLANK_STR));
 		}
 
 		@Test
@@ -534,7 +688,7 @@ class DboFactoryTest {
 
 		@Test
 		void throwsAnException_passingABlankString_asName() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createMedication("\n\t\r ", ID));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createMedication(BLANK_STR, ID));
 		}
 
 		@Test
@@ -694,12 +848,12 @@ class DboFactoryTest {
 
 		@Test
 		void throwsAnException_passingABlankString_asName() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createMedicationUnit("\n\t\r ", TOKEN));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createMedicationUnit(BLANK_STR, TOKEN));
 		}
 
 		@Test
 		void throwsAnException_passingABlankString_asToken() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createMedicationUnit(NAME, "\n\t\r "));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createMedicationUnit(NAME, BLANK_STR));
 		}
 
 		@Test
@@ -733,33 +887,50 @@ class DboFactoryTest {
 	}
 
 	@Nested
-	class createSymptom_String_LocalDate_LocalTime {
+	class createSymptom_String_LocalDate_UUID {
+
+		@Test
+		void throwsAnException_passingANullValue_asBodyPartId() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createSymptom(NAME, DATE_OF_RECORDING, null));
+		}
 
 		@Test
 		void throwsAnException_passingABlankString_asContent() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createSymptom("\n\t\r ", DATE_OF_RECORDING));
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createSymptom(BLANK_STR, DATE_OF_RECORDING, ANOTHER_ID)
+			);
 		}
 
 		@Test
 		void throwsAnException_passingANullValue_asContent() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createSymptom(null, DATE_OF_RECORDING));
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createSymptom(null, DATE_OF_RECORDING, ANOTHER_ID)
+			);
 		}
 
 		@Test
 		void throwsAnException_passingANullValue_asDateOfRecording() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createSymptom(CONTENT, null));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createSymptom(CONTENT, null, ANOTHER_ID));
 		}
 
 		@Test
 		void returnANewObject() {
-			assertNotNull(unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING));
+			// Prepare
+			when(bodyPartRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(bodyPartDbo));
+			// Run & Check
+			assertNotNull(unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING, ANOTHER_ID));
 		}
 
 		@Test
 		void returnANewObject_onEachCall() {
+			// Prepare
+			when(bodyPartRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(bodyPartDbo));
+			// Run & Check
 			assertNotSame(
-				unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING),
-				unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING)
+				unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING, ANOTHER_ID),
+				unitUnderTest.createSymptom(CONTENT, DATE_OF_RECORDING, ANOTHER_ID)
 			);
 		}
 
@@ -767,12 +938,14 @@ class DboFactoryTest {
 		void returnANewObject_withCorrectlySetAttributes() {
 			// Prepare
 			SymptomDbo expected = new SymptomDbo()
+				.setBodyPart(bodyPartDbo)
 				.setDateOfRecording(DATE_OF_RECORDING)
 				.setDescription(DESCRIPTION)
 				.setId(ID);
+			when(bodyPartRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(bodyPartDbo));
 			when(uuidFactory.create()).thenReturn(ID);
 			// Run & Check
-			assertEquals(expected, unitUnderTest.createSymptom(DESCRIPTION, DATE_OF_RECORDING));
+			assertEquals(expected, unitUnderTest.createSymptom(DESCRIPTION, DATE_OF_RECORDING, ANOTHER_ID));
 		}
 	}
 }

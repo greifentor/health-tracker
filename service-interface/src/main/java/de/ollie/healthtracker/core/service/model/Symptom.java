@@ -19,4 +19,5 @@ public class Symptom {
 	private UUID id;
 	private String description;
 	private LocalDate dateOfRecording;
+	private BodyPart bodyPart;
 }

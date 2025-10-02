@@ -4,6 +4,10 @@ package ${PackageName};
 import ${Properties.get("baselib")}.util.DateTimeUtil;
 #end
 import ${Properties.get("core-service-package")}.${ClassName}Service;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+#set($TypeClassName = $Attribute.getTypeClassType().getName())
+import ${Properties.get("core-service-package")}.${TypeClassName}Service;
+#end
 import ${Properties.get("core-model-package")}.${ClassName};
 import ${Properties.get("swing-gui-package")}.EditDialogComponentFactory;
 import ${Properties.get("swing-gui-package")}.edit.${ClassName.toLowerCase()}.${ClassName}EditJInternalFrame;
@@ -27,9 +31,17 @@ import ${Import};
 public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}> implements SelectionPanelObserver {
 
 	private final ${ClassName}Service ${ClassNameAsAttribute}Service;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+#set($TypeClassName = $Attribute.getTypeClassType())
+	private final ${TypeClassName.getName()}Service ${TypeClassName.getNameAsAttribute()}Service;
+#end
 
 	public ${ClassName}SelectJPanel(
 		${ClassName}Service ${ClassNameAsAttribute}Service,
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+#set($TypeClassName = $Attribute.getTypeClassType())
+		${TypeClassName.getName()}Service ${TypeClassName.getNameAsAttribute()}Service,
+#end
 		String className,
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory,
@@ -37,6 +49,10 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 	) {
 		super(desktopPane, className + "s", editDialogComponentFactory, observer);
 		this.${ClassNameAsAttribute}Service = ${ClassNameAsAttribute}Service;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+#set($TypeClassName = $Attribute.getTypeClassType())
+		this.${TypeClassName.getNameAsAttribute()}Service = ${TypeClassName.getNameAsAttribute()}Service;
+#end
 		updateTableSelection();
 	}
 
@@ -56,13 +72,15 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 
 	@Override
 	protected AbstractSelectionTableModel<${ClassName}> createSelectionModel() {
-		return new AbstractSelectionTableModel<${ClassName}>(getObjectsToSelect(), #foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))"${Attribute.getNameCamelCase()}"#if($foreach.hasNext), #end#end) {
+		return new AbstractSelectionTableModel<${ClassName}>(getObjectsToSelect(), #foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))"${Attribute.getCamelCaseNameSeparated(" ")}"#if($foreach.hasNext), #end#end) {
 			@Override
 			protected Object getColumnValueFor(${ClassName} t, int columnIndex) {
 				return switch (columnIndex) {
 					#set($count = 0)
 					#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
-					#if($Attribute.getTypeName() == "LocalDate")
+					#if($Attribute.isReference() == true)
+					case $count -> (t.get${Attribute.getNameCamelCase()}() != null ? t.get${Attribute.getNameCamelCase()}().getName() : "-");
+					#elseif($Attribute.getTypeName() == "LocalDate")
 					case $count -> DateTimeUtil.DE_DATE_FORMAT.format(t.get$Attribute.getNameCamelCase()());
 					#elseif($Attribute.getTypeName() == "LocalTime")
 					case $count -> DateTimeUtil.DE_TIME_FORMAT.format(t.get$Attribute.getNameCamelCase()());
@@ -79,21 +97,33 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 
 	@Override
 	protected void createEditInternalFrame(${ClassName} selected) {
-		new ${ClassName}EditJInternalFrame(selected, getClassName(), getEditDialogComponentFactory(), this, getDesktopPane());
+		new ${ClassName}EditJInternalFrame(
+				selected,
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+#set($TypeClassName = $Attribute.getTypeClassType())
+				() -> ${TypeClassName.getNameAsAttribute()}Service.list${TypeClassName.getName()}s(),
+#end
+				getEditDialogComponentFactory(),
+				this,
+				getDesktopPane()
+		);
 	}
 
 	@Override
 	protected ${ClassName} createNewObject() {
-		return ${ClassNameAsAttribute}Service.create${ClassName}(
+		return new ${ClassName}()
+				.setId(UUID.randomUUID())
 		#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})
 			#if($Attribute.getTypeName() == "LocalDate")
-				LocalDate.now()#if($foreach.hasNext),#end
+				.set${Attribute.getNameCamelCase()}(LocalDate.now())
 			#elseif($Attribute.getTypeName() == "LocalTime")
-				LocalTime.now()#if($foreach.hasNext),#end
+				.set${Attribute.getNameCamelCase()}(LocalTime.now())
+			#elseif($Attribute.getTypeName() == "String")
+				.set${Attribute.getNameCamelCase()}("")
 			#else
-				"?"#if($foreach.hasNext),#end
+				.set${Attribute.getNameCamelCase()}(null)
 			#end
-		#end);
+		#end;
 	}
 
 	@Override

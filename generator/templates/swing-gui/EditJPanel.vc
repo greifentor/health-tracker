@@ -4,6 +4,9 @@ import static ${Properties.get("swing-gui-package")}.Constants.HGAP;
 import static ${Properties.get("swing-gui-package")}.Constants.VGAP;
 
 import ${Properties.get("core-model-package")}.${ClassName};
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+import ${Properties.get("core-model-package")}.$Attribute.getTypeClassType().getName();
+#end
 import ${Properties.get("swing-gui-package")}.ItemProvider;
 import ${Properties.get("swing-gui-package")}.edit.AbstractEditPanel;
 import lombok.Generated;
@@ -11,6 +14,14 @@ import java.awt.GridLayout;
 import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+#if($Class.hasAReferenceAttribute() == true)
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import java.util.List;
+#end
+#if($Class.hasAnAttributeWithTypeName("LocalDate") == true)
+import ${Properties.get("baselib")}.util.DateTimeUtil;
+#end
 
 #foreach($Import in $Imports)
 import ${Import};
@@ -24,8 +35,18 @@ import ${Import};
 @Generated
 public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+	public static final String ${Attribute.getTypeClassType().getNameSeparated("_").toUpperCase()}_ITEM_PROVIDER_ID = "${Attribute.getTypeClassType().getNameSeparated("-").toLowerCase()}-item-provider";
+	#if($foreach.hasNext)#else
+
+	#end
+#end
 #foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+	#if($Attribute.isReference() == true)
+	private JComboBox<${Attribute.getTypeClassType().getName()}> comboBox${Attribute.getNameCamelCase()};
+	#else
 	private JTextField textField${Attribute.getNameCamelCase()};
+	#end
 #end
 
 	public ${ClassName}EditJPanel(${ClassName} toEdit, Map<String, ItemProvider<?>> itemProviders) {
@@ -34,21 +55,52 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel("Name:");
+		return createLabelSubPanel(
+		#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+				"${Attribute.getCamelCaseNameSeparated(" ")}:"#if($foreach.hasNext),#end
+		#end
+		);
 	}
 
 	@Override
 	protected JPanel createComponentPanel(${ClassName} toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		JPanel p = new JPanel(new GridLayout(1, 1, HGAP, VGAP));
-#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+		JPanel p = new JPanel(new GridLayout(${Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position").size()}, 1, HGAP, VGAP));
+		#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+		#if(${Attribute.isReference()} == true)
+		#set($ReferencedClassName = ${Attribute.getTypeClassType().getName()})
+		List<$ReferencedClassName> list${Attribute.getNameCamelCase()} = ((ItemProvider<$ReferencedClassName>) itemProviders.get(${Attribute.getTypeClassType().getNameSeparated("_").toUpperCase()}_ITEM_PROVIDER_ID)).getItem();
+		comboBox${Attribute.getNameCamelCase()} = new JComboBox<>(list${Attribute.getNameCamelCase()}.toArray(new ${ReferencedClassName}[list${Attribute.getNameCamelCase()}.size()]));
+		comboBox${Attribute.getNameCamelCase()}.setSelectedItem(toEdit.get${Attribute.getNameCamelCase()}());
+		comboBox${Attribute.getNameCamelCase()}.setRenderer((list, value, index, isSelected, cellHasFocus) -> {
+			if (value != null) {
+				return new JLabel(value.getName());
+			}
+			return new JLabel("-");
+		});
+		p.add(comboBox${Attribute.getNameCamelCase()});
+		#else
+		#if(${Attribute.getTypeName()} == "LocalDate")
+		textField${Attribute.getNameCamelCase()} = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.get${Attribute.getNameCamelCase()}()), 40);
+		#else
 		textField${Attribute.getNameCamelCase()} = new JTextField(toEdit.get${Attribute.getNameCamelCase()}(), 40);
+		#end
 		p.add(textField${Attribute.getNameCamelCase()});
-#end
+		#end
+		#end
 		return p;
 	}
 
 	@Override
 	public ${ClassName} getCurrentContent() {
-		return new ${ClassName}().setId(toEdit.getId())#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position")).set${Attribute.getNameCamelCase()}(textField${Attribute.getNameCamelCase()}.getText())#end;
+		return new ${ClassName}().setId(toEdit.getId())
+		#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+			#if(${Attribute.getTypeName()} == "LocalDate")
+				.set${Attribute.getNameCamelCase()}(DateTimeUtil.dateFromString(textField${Attribute.getNameCamelCase()}.getText()))
+			#elseif(${Attribute.isReference()} == true)
+				.set${Attribute.getNameCamelCase()}(((${Attribute.getTypeClassType().getName()}) comboBox${Attribute.getNameCamelCase()}.getSelectedItem()))
+			#else
+				.set${Attribute.getNameCamelCase()}(textField${Attribute.getNameCamelCase()}.getText())
+			#end
+		#end;
 	}
 }

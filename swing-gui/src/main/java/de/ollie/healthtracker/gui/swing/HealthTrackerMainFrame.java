@@ -4,19 +4,25 @@ import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
+import de.ollie.healthtracker.core.service.BodyPartService;
 import de.ollie.healthtracker.core.service.CommentService;
 import de.ollie.healthtracker.core.service.DoctorConsultationService;
 import de.ollie.healthtracker.core.service.DoctorService;
 import de.ollie.healthtracker.core.service.DoctorTypeService;
+import de.ollie.healthtracker.core.service.ExerciseService;
+import de.ollie.healthtracker.core.service.GeneralBodyPartService;
 import de.ollie.healthtracker.core.service.MedicationLogService;
 import de.ollie.healthtracker.core.service.MedicationService;
 import de.ollie.healthtracker.core.service.MedicationUnitService;
 import de.ollie.healthtracker.core.service.SymptomService;
 import de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement.BloodPressureMeasurementSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.bodypart.BodyPartSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.comment.CommentSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.doctor.DoctorSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.doctorconsultation.DoctorConsultationSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.doctortype.DoctorTypeSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.exercise.ExerciseSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.generalbodypart.GeneralBodyPartSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.medicationlog.MedicationLogSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.symptom.SymptomSelectJInternalFrame;
 import jakarta.annotation.PostConstruct;
@@ -40,10 +46,13 @@ import lombok.RequiredArgsConstructor;
 public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
+	private final BodyPartService bodyPartService;
 	private final CommentService commentService;
 	private final DoctorConsultationService doctorConsultationService;
 	private final DoctorService doctorService;
 	private final DoctorTypeService doctorTypeService;
+	private final ExerciseService exerciseService;
+	private final GeneralBodyPartService generalBodyPartService;
 	private final MedicationLogService medicationLogService;
 	private final MedicationService medicationService;
 	private final MedicationUnitService medicationUnitService;
@@ -53,10 +62,13 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JDesktopPane desktopPane;
 	private JMenuItem menuItemFileQuit;
 	private JMenuItem menuItemEditBloodPressureMeasurement;
+	private JMenuItem menuItemEditBodyPart;
 	private JMenuItem menuItemEditComment;
 	private JMenuItem menuItemEditDoctor;
 	private JMenuItem menuItemEditDoctorConsultation;
 	private JMenuItem menuItemEditDoctorType;
+	private JMenuItem menuItemEditExercise;
+	private JMenuItem menuItemEditGeneralBodyPart;
 	private JMenuItem menuItemEditMedicationLog;
 	private JMenuItem menuItemEditSymptom;
 
@@ -91,6 +103,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu = new JMenu("Edit");
 		menuItemEditBloodPressureMeasurement = createMenuItem("Blood Pressure Measurement", this);
 		menu.add(menuItemEditBloodPressureMeasurement);
+		menuItemEditBodyPart = createMenuItem("Body Part", this);
+		menu.add(menuItemEditBodyPart);
 		menuItemEditComment = createMenuItem("Comment", this);
 		menu.add(menuItemEditComment);
 		menuItemEditDoctor = createMenuItem("Doctor", this);
@@ -99,6 +113,10 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemEditDoctorType);
 		menuItemEditDoctorConsultation = createMenuItem("Doctor Consultation", this);
 		menu.add(menuItemEditDoctorConsultation);
+		menuItemEditGeneralBodyPart = createMenuItem("General Body Part", this);
+		menu.add(menuItemEditGeneralBodyPart);
+		menuItemEditExercise = createMenuItem("Exercise", this);
+		menu.add(menuItemEditExercise);
 		menuItemEditMedicationLog = createMenuItem("Medication Log", this);
 		menu.add(menuItemEditMedicationLog);
 		menuItemEditSymptom = createMenuItem("Symptom", this);
@@ -121,6 +139,13 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				desktopPane,
 				editDialogComponentFactory
 			);
+		} else if (e.getSource() == menuItemEditBodyPart) {
+			new BodyPartSelectJInternalFrame(
+				bodyPartService,
+				generalBodyPartService,
+				desktopPane,
+				editDialogComponentFactory
+			);
 		} else if (e.getSource() == menuItemEditComment) {
 			new CommentSelectJInternalFrame(commentService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditDoctor) {
@@ -134,6 +159,10 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			);
 		} else if (e.getSource() == menuItemEditDoctorType) {
 			new DoctorTypeSelectJInternalFrame(doctorTypeService, desktopPane, editDialogComponentFactory);
+		} else if (e.getSource() == menuItemEditExercise) {
+			new ExerciseSelectJInternalFrame(exerciseService, bodyPartService, desktopPane, editDialogComponentFactory);
+		} else if (e.getSource() == menuItemEditGeneralBodyPart) {
+			new GeneralBodyPartSelectJInternalFrame(generalBodyPartService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditMedicationLog) {
 			new MedicationLogSelectJInternalFrame(
 				medicationService,
@@ -143,7 +172,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				editDialogComponentFactory
 			);
 		} else if (e.getSource() == menuItemEditSymptom) {
-			new SymptomSelectJInternalFrame(symptomService, desktopPane, editDialogComponentFactory);
+			new SymptomSelectJInternalFrame(symptomService, bodyPartService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemFileQuit) {
 			System.out.println("Cancel");
 			System.exit(0);

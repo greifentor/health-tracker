@@ -3,6 +3,7 @@ package de.ollie.healthtracker.persistence.jpa;
 import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
+import de.ollie.healthtracker.core.service.model.BodyPart;
 import de.ollie.healthtracker.core.service.model.Symptom;
 import de.ollie.healthtracker.core.service.port.persistence.SymptomPersistencePort;
 import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
@@ -31,8 +32,8 @@ class SymptomPersistenceJpaAdapter implements SymptomPersistencePort {
 	private final SymptomDboRepository repository;
 
 	@Override
-	public Symptom create(String description, LocalDate dateOfRecording) {
-		return mapper.toModel(repository.save(dboFactory.createSymptom(description, dateOfRecording)));
+	public Symptom create(String description, LocalDate dateOfRecording, BodyPart bodyPart) {
+		return mapper.toModel(repository.save(dboFactory.createSymptom(description, dateOfRecording, bodyPart.getId())));
 	}
 
 	@Override
