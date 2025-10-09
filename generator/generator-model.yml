@@ -332,6 +332,45 @@ classes:
             value: true
         type:
           name: String
+  - name: MeatConsumption
+    properties:
+      - name: order
+        value: dateOfRecording
+      - name: gui
+        value: true
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: dateOfRecording
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 1
+        type:
+          name: LocalDate
+          properties:
+            - name: import
+              value: java.time.LocalDate
+      - name: description
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+          - name: editor-position
+            value: 2
+        type:
+          name: String
   - name: Medication
     properties:
       - name: order
@@ -464,6 +503,8 @@ classes:
     properties:
       - name: order
         value: dateOfRecording
+#      - name: order
+#        value: description
       - name: gui
         value: true
     attributes:

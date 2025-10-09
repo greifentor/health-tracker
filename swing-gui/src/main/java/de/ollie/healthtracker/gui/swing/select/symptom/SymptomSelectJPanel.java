@@ -42,13 +42,7 @@ public class SymptomSelectJPanel extends AbstractSelectJPanel<Symptom> implement
 
 	@Override
 	protected List<Symptom> getObjectsToSelect() {
-		return symptomService != null
-			? symptomService
-				.listSymptoms()
-				.stream()
-				.sorted((d0, d1) -> d1.getDateOfRecording().compareTo(d0.getDateOfRecording()))
-				.toList()
-			: List.of();
+		return symptomService != null ? symptomService.listSymptoms().stream().toList() : List.of();
 	}
 
 	@Override

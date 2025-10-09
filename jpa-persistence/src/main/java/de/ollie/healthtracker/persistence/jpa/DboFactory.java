@@ -14,6 +14,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ExerciseDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.GeneralBodyPartDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.MeatConsumptionDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
@@ -157,6 +158,16 @@ class DboFactory {
 		ensure(name != null, "name cannot be null!");
 		ensure(!name.isBlank(), "name cannot be blank!");
 		return new ManufacturerDbo().setId(uuidFactory.create()).setName(name);
+	}
+
+	MeatConsumptionDbo createMeatConsumption(LocalDate dateOfRecording, String description) {
+		ensure(description != null, "description cannot be null!");
+		ensure(!description.isBlank(), "description cannot be blank!");
+		ensure(dateOfRecording != null, "date of recording cannot be null!");
+		return new MeatConsumptionDbo()
+			.setDateOfRecording(dateOfRecording)
+			.setDescription(description)
+			.setId(uuidFactory.create());
 	}
 
 	MedicationDbo createMedication(String name, UUID manufacturerId) {

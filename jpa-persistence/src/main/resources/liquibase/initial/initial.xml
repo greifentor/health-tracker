@@ -241,5 +241,18 @@
         <addForeignKeyConstraint baseColumnNames="BODY_PART"         baseTableName="EXERCISE"  constraintName="FK_EXERCISE_BODY_PART_TO_BODY_PART"                  referencedColumnNames="ID" referencedTableName="BODY_PART"/>
         <addForeignKeyConstraint baseColumnNames="GENERAL_BODY_PART" baseTableName="BODY_PART" constraintName="FK_BODY_PART_GENERAL_BODY_PART_TO_GENERAL_BODY_PART" referencedColumnNames="ID" referencedTableName="GENERAL_BODY_PART"/>
     </changeSet>
+    <changeSet author="dm-comp" id="Add-Table-MEAT_CONSUMPTION" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="MEAT_CONSUMPTION">
+            <column name="ID" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="DATE_OF_RECORDING" type="DATE">
+                <constraints nullable="true"/>
+            </column>
+            <column name="DESCRIPTION" type="LONGVARCHAR">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
 
