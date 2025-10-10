@@ -2,9 +2,9 @@ classes:
   - name: BloodPressureMeasurement
     properties:
       - name: order
-        value: dateOfRecording
+        value: dateOfRecording DESC
       - name: order
-        value: timeOfRecording
+        value: timeOfRecording DESC
     attributes:
       - name: id
         properties:
@@ -97,7 +97,7 @@ classes:
   - name: Comment
     properties:
       - name: order
-        value: dateOfRecording
+        value: dateOfRecording DESC
     attributes:
       - name: id
         properties:
@@ -161,9 +161,9 @@ classes:
   - name: DoctorConsultation
     properties:
       - name: order
-        value: date
+        value: date DESC
       - name: order
-        value: time
+        value: time DESC
     attributes:
       - name: id
         properties:
@@ -335,7 +335,7 @@ classes:
   - name: MeatConsumption
     properties:
       - name: order
-        value: dateOfRecording
+        value: dateOfRecording DESC
       - name: gui
         value: true
     attributes:
@@ -407,9 +407,9 @@ classes:
       - name: gui
         value: true
       - name: order
-        value: dateOfIntake
+        value: dateOfIntake DESC
       - name: order
-        value: timeOfIntake
+        value: timeOfIntake DESC
     attributes:
       - name: id
         properties:
@@ -502,9 +502,9 @@ classes:
   - name: Symptom
     properties:
       - name: order
-        value: dateOfRecording
-#      - name: order
-#        value: description
+        value: dateOfRecording DESC
+      - name: order
+        value: description
       - name: gui
         value: true
     attributes:

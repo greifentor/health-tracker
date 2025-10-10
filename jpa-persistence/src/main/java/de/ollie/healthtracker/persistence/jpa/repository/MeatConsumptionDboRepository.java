@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface MeatConsumptionDboRepository extends JpaRepository<MeatConsumptionDbo, UUID> {
-	@Query("SELECT dbo FROM MeatConsumptionDbo dbo ORDER BY dbo.dateOfRecording")
+	@Query("SELECT dbo FROM MeatConsumptionDbo dbo ORDER BY dbo.dateOfRecording DESC")
 	List<MeatConsumptionDbo> findAllOrdered();
 
 	@Query("SELECT dbo FROM MeatConsumptionDbo dbo WHERE dbo.description LIKE CONCAT('%', :description, '%')")

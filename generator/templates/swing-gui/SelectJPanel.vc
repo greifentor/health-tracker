@@ -62,10 +62,6 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 			? ${ClassNameAsAttribute}Service
 				.list${ClassName}s()
 				.stream()
-				#foreach($Property in $Class.getPropertiesWithName("order"))
-				#set ($Attribute = $Class.getAttributeByName($Property.getValue()))
-				.sorted((d0, d1) -> d1.get${Attribute.getNameCamelCase()}().compareTo(d0.get${Attribute.getNameCamelCase()}()))
-				#end
 				.toList()
 			: List.of();
 	}

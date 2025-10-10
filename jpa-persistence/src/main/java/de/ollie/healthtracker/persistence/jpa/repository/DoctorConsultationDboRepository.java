@@ -16,6 +16,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface DoctorConsultationDboRepository extends JpaRepository<DoctorConsultationDbo, UUID> {
-	@Query("SELECT dbo FROM DoctorConsultationDbo dbo ORDER BY dbo.date, dbo.time")
+	@Query("SELECT dbo FROM DoctorConsultationDbo dbo ORDER BY dbo.date DESC, dbo.time DESC")
 	List<DoctorConsultationDbo> findAllOrdered();
 }

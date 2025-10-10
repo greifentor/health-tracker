@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface CommentDboRepository extends JpaRepository<CommentDbo, UUID> {
-	@Query("SELECT dbo FROM CommentDbo dbo ORDER BY dbo.dateOfRecording")
+	@Query("SELECT dbo FROM CommentDbo dbo ORDER BY dbo.dateOfRecording DESC")
 	List<CommentDbo> findAllOrdered();
 
 	@Query("SELECT dbo FROM CommentDbo dbo WHERE dbo.content LIKE CONCAT('%', :content, '%')")
