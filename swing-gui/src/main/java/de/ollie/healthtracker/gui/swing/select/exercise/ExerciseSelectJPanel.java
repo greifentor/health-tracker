@@ -40,9 +40,7 @@ public class ExerciseSelectJPanel extends AbstractSelectJPanel<Exercise> impleme
 
 	@Override
 	protected List<Exercise> getObjectsToSelect() {
-		return exerciseService != null
-			? exerciseService.listExercises().stream().sorted((d0, d1) -> d1.getName().compareTo(d0.getName())).toList()
-			: List.of();
+		return exerciseService != null ? exerciseService.listExercises().stream().toList() : List.of();
 	}
 
 	@Override

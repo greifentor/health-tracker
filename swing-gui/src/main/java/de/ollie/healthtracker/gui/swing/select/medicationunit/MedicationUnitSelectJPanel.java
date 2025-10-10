@@ -36,13 +36,7 @@ public class MedicationUnitSelectJPanel extends AbstractSelectJPanel<MedicationU
 
 	@Override
 	protected List<MedicationUnit> getObjectsToSelect() {
-		return medicationUnitService != null
-			? medicationUnitService
-				.listMedicationUnits()
-				.stream()
-				.sorted((d0, d1) -> d1.getName().compareTo(d0.getName()))
-				.toList()
-			: List.of();
+		return medicationUnitService != null ? medicationUnitService.listMedicationUnits().stream().toList() : List.of();
 	}
 
 	@Override

@@ -40,13 +40,7 @@ public class MeatConsumptionSelectJPanel
 
 	@Override
 	protected List<MeatConsumption> getObjectsToSelect() {
-		return meatConsumptionService != null
-			? meatConsumptionService
-				.listMeatConsumptions()
-				.stream()
-				.sorted((d0, d1) -> d1.getDateOfRecording().compareTo(d0.getDateOfRecording()))
-				.toList()
-			: List.of();
+		return meatConsumptionService != null ? meatConsumptionService.listMeatConsumptions().stream().toList() : List.of();
 	}
 
 	@Override

@@ -40,9 +40,7 @@ public class BodyPartSelectJPanel extends AbstractSelectJPanel<BodyPart> impleme
 
 	@Override
 	protected List<BodyPart> getObjectsToSelect() {
-		return bodyPartService != null
-			? bodyPartService.listBodyParts().stream().sorted((d0, d1) -> d1.getName().compareTo(d0.getName())).toList()
-			: List.of();
+		return bodyPartService != null ? bodyPartService.listBodyParts().stream().toList() : List.of();
 	}
 
 	@Override

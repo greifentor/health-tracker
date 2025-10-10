@@ -38,13 +38,7 @@ public class GeneralBodyPartSelectJPanel
 
 	@Override
 	protected List<GeneralBodyPart> getObjectsToSelect() {
-		return generalBodyPartService != null
-			? generalBodyPartService
-				.listGeneralBodyParts()
-				.stream()
-				.sorted((d0, d1) -> d1.getName().compareTo(d0.getName()))
-				.toList()
-			: List.of();
+		return generalBodyPartService != null ? generalBodyPartService.listGeneralBodyParts().stream().toList() : List.of();
 	}
 
 	@Override
