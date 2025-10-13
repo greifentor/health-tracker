@@ -63,7 +63,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final EditDialogComponentFactory editDialogComponentFactory;
 
 	private JDesktopPane desktopPane;
-	private JMenuItem menuItemFileQuit;
+	private JMenuItem menuItemDuplicateLastSymtoms;
 	private JMenuItem menuItemEditBloodPressureMeasurement;
 	private JMenuItem menuItemEditBodyPart;
 	private JMenuItem menuItemEditComment;
@@ -75,6 +75,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemEditMeatConsumption;
 	private JMenuItem menuItemEditMedicationLog;
 	private JMenuItem menuItemEditSymptom;
+	private JMenuItem menuItemFileQuit;
 
 	@PostConstruct
 	void postConstruct() {
@@ -127,6 +128,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemEditMeatConsumption);
 		menuItemEditSymptom = createMenuItem("Symptom", this);
 		menu.add(menuItemEditSymptom);
+		menuItemDuplicateLastSymtoms = createMenuItem("Duplicate Last Symptoms", this);
+		menu.add(menuItemDuplicateLastSymtoms);
 		menuBar.add(menu);
 		return menuBar;
 	}
@@ -139,7 +142,9 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == menuItemEditBloodPressureMeasurement) {
+		if (e.getSource() == menuItemDuplicateLastSymtoms) {
+			symptomService.duplicateNewestSymptomEntries();
+		} else if (e.getSource() == menuItemEditBloodPressureMeasurement) {
 			new BloodPressureMeasurementSelectJInternalFrame(
 				bloodPressureMeasurementService,
 				desktopPane,

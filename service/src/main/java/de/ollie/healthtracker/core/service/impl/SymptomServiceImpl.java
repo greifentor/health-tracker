@@ -9,15 +9,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
-/**
- * GENERATED CODE - DO NOT TOUCH
- *
- * Remove this comment to suspend class from generation process.
- */
-@Generated
 @Named
 @RequiredArgsConstructor
 class SymptomServiceImpl implements SymptomService {
@@ -32,6 +25,11 @@ class SymptomServiceImpl implements SymptomService {
 	@Override
 	public void deleteSymptom(UUID id) {
 		symptomPersistencePort.deleteById(id);
+	}
+
+	@Override
+	public void duplicateNewestSymptomEntries() {
+		System.out.println("GOTCHA!!!");
 	}
 
 	@Override
