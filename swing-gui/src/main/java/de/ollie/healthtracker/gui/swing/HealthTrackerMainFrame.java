@@ -144,6 +144,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == menuItemDuplicateLastSymtoms) {
 			symptomService.duplicateNewestSymptomEntries();
+			new SymptomSelectJInternalFrame(symptomService, bodyPartService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditBloodPressureMeasurement) {
 			new BloodPressureMeasurementSelectJInternalFrame(
 				bloodPressureMeasurementService,
@@ -187,7 +188,6 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		} else if (e.getSource() == menuItemEditSymptom) {
 			new SymptomSelectJInternalFrame(symptomService, bodyPartService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemFileQuit) {
-			System.out.println("Cancel");
 			System.exit(0);
 		}
 	}

@@ -21,9 +21,13 @@ public interface SymptomPersistencePort {
 
 	void deleteById(UUID id);
 
+	List<Symptom> findAllByDateOfRecording(LocalDate dateOfRecording);
+
 	Optional<Symptom> findById(UUID id);
 
 	Optional<Symptom> findByIdOrDescriptionParticle(String description);
+
+	LocalDate getMaxDateOfRecording();
 
 	List<Symptom> list();
 

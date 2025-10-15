@@ -17,12 +17,6 @@ import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
-/**
- * GENERATED CODE - DO NOT TOUCH
- *
- * Remove this comment to suspend class from generation process.
- */
-@Generated
 @Named
 @RequiredArgsConstructor
 class SymptomPersistenceJpaAdapter implements SymptomPersistencePort {
@@ -31,11 +25,13 @@ class SymptomPersistenceJpaAdapter implements SymptomPersistencePort {
 	private final SymptomDboMapper mapper;
 	private final SymptomDboRepository repository;
 
+	@Generated
 	@Override
 	public Symptom create(String description, LocalDate dateOfRecording, BodyPart bodyPart) {
 		return mapper.toModel(repository.save(dboFactory.createSymptom(description, dateOfRecording, bodyPart.getId())));
 	}
 
+	@Generated
 	@Override
 	public void deleteById(UUID id) {
 		ensure(id != null, "id cannot be null!");
@@ -43,11 +39,19 @@ class SymptomPersistenceJpaAdapter implements SymptomPersistencePort {
 	}
 
 	@Override
+	public List<Symptom> findAllByDateOfRecording(LocalDate dateOfRecording) {
+		ensure(dateOfRecording != null, "date of recording cannot be null!");
+		return repository.findAllByDateOfRecording(dateOfRecording).stream().map(mapper::toModel).toList();
+	}
+
+	@Generated
+	@Override
 	public Optional<Symptom> findById(UUID id) {
 		ensure(id != null, "id cannot be null!");
 		return repository.findById(id).map(mapper::toModel);
 	}
 
+	@Generated
 	@Override
 	public Optional<Symptom> findByIdOrDescriptionParticle(String nameParticleOrId) {
 		ensure(nameParticleOrId != null, "name particle or id cannot be null");
@@ -58,24 +62,30 @@ class SymptomPersistenceJpaAdapter implements SymptomPersistencePort {
 		} catch (Exception e) {
 			// NOP
 		}
-		return Optional.ofNullable(
-			mapper.toModel(
-				dbo.orElseGet(() -> {
-					List<SymptomDbo> found = repository.findAllByDescriptionMatch(nameParticleOrId);
-					if (found.size() < 2) {
-						return found.size() == 0 ? null : found.get(0);
-					}
-					throw new TooManyElementsException();
-				})
-			)
-		);
+		return Optional.ofNullable(mapper.toModel(dbo.orElseGet(() -> getSymptomDbo(nameParticleOrId))));
 	}
 
+	@Generated
+	private SymptomDbo getSymptomDbo(String nameParticleOrId) {
+		List<SymptomDbo> found = repository.findAllByDescriptionMatch(nameParticleOrId);
+		if (found.size() < 2) {
+			return found.size() == 0 ? null : found.get(0);
+		}
+		throw new TooManyElementsException();
+	}
+
+	@Override
+	public LocalDate getMaxDateOfRecording() {
+		return repository.getMaxDateOfRecording();
+	}
+
+	@Generated
 	@Override
 	public List<Symptom> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
 
+	@Generated
 	@Override
 	public Symptom update(Symptom toSave) {
 		return mapper.toModel(repository.save(mapper.toDbo(toSave)));

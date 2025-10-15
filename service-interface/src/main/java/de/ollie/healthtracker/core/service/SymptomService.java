@@ -12,7 +12,7 @@ public interface SymptomService {
 
 	void deleteSymptom(UUID id);
 
-	void duplicateNewestSymptomEntries();
+	int duplicateNewestSymptomEntries();
 
 	Optional<Symptom> findById(UUID id);
 
