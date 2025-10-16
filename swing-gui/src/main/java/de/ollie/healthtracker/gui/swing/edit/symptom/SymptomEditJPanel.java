@@ -9,10 +9,9 @@ import de.ollie.healthtracker.core.service.model.Symptom;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
 import java.awt.GridLayout;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,6 +31,7 @@ public class SymptomEditJPanel extends AbstractEditPanel<Symptom> {
 	private JTextField textFieldDateOfRecording;
 	private JTextField textFieldDescription;
 	private JComboBox<BodyPart> comboBoxBodyPart;
+	private JCheckBox checkBoxUnverified;
 
 	public SymptomEditJPanel(Symptom toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		super(toEdit, itemProviders);
@@ -39,12 +39,12 @@ public class SymptomEditJPanel extends AbstractEditPanel<Symptom> {
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel("Date Of Recording:", "Description:", "Body Part:");
+		return createLabelSubPanel("Date Of Recording:", "Description:", "Body Part:", "Unverified:");
 	}
 
 	@Override
 	protected JPanel createComponentPanel(Symptom toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
+		JPanel p = new JPanel(new GridLayout(4, 1, HGAP, VGAP));
 		textFieldDateOfRecording = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.getDateOfRecording()), 40);
 		p.add(textFieldDateOfRecording);
 		textFieldDescription = new JTextField(toEdit.getDescription(), 40);
@@ -59,6 +59,9 @@ public class SymptomEditJPanel extends AbstractEditPanel<Symptom> {
 			return new JLabel("-");
 		});
 		p.add(comboBoxBodyPart);
+		checkBoxUnverified = new JCheckBox();
+		checkBoxUnverified.setSelected(toEdit.isUnverified());
+		p.add(checkBoxUnverified);
 		return p;
 	}
 
@@ -68,6 +71,7 @@ public class SymptomEditJPanel extends AbstractEditPanel<Symptom> {
 			.setId(toEdit.getId())
 			.setDateOfRecording(DateTimeUtil.dateFromString(textFieldDateOfRecording.getText()))
 			.setDescription(textFieldDescription.getText())
-			.setBodyPart(((BodyPart) comboBoxBodyPart.getSelectedItem()));
+			.setBodyPart(((BodyPart) comboBoxBodyPart.getSelectedItem()))
+			.setUnverified(checkBoxUnverified.isSelected());
 	}
 }

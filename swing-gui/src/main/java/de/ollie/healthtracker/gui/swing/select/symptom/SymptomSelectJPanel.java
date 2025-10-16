@@ -51,7 +51,8 @@ public class SymptomSelectJPanel extends AbstractSelectJPanel<Symptom> implement
 			getObjectsToSelect(),
 			"Date Of Recording",
 			"Description",
-			"Body Part"
+			"Body Part",
+			"Unverified"
 		) {
 			@Override
 			protected Object getColumnValueFor(Symptom t, int columnIndex) {
@@ -59,6 +60,7 @@ public class SymptomSelectJPanel extends AbstractSelectJPanel<Symptom> implement
 					case 0 -> DateTimeUtil.DE_DATE_FORMAT.format(t.getDateOfRecording());
 					case 1 -> t.getDescription();
 					case 2 -> (t.getBodyPart() != null ? t.getBodyPart().getName() : "-");
+					case 3 -> t.isUnverified() ? "Y" : "N";
 					default -> null;
 				};
 			}
@@ -82,7 +84,8 @@ public class SymptomSelectJPanel extends AbstractSelectJPanel<Symptom> implement
 			.setId(UUID.randomUUID())
 			.setDescription("")
 			.setDateOfRecording(LocalDate.now())
-			.setBodyPart(null);
+			.setBodyPart(null)
+			.setUnverified(false);
 	}
 
 	@Override

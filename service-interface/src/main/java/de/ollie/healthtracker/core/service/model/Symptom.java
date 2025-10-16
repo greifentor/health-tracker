@@ -20,4 +20,5 @@ public class Symptom {
 	private String description;
 	private LocalDate dateOfRecording;
 	private BodyPart bodyPart;
+	private boolean unverified;
 }

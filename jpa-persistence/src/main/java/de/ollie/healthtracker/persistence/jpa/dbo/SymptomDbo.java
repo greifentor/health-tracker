@@ -38,4 +38,7 @@ public class SymptomDbo {
 	@JoinColumn(name = "BODY_PART", referencedColumnName = "ID", nullable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private BodyPartDbo bodyPart;
+
+	@Column(name = "UNVERIFIED", nullable = false)
+	private boolean unverified;
 }

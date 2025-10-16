@@ -550,6 +550,14 @@ classes:
           - name: nullable
             value: false
           - name: editor-position
-            value: 2
+            value: 3
         type:
           name: BodyPart
+      - name: unverified
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 4
+        type:
+          name: boolean
