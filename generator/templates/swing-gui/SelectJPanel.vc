@@ -80,6 +80,8 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 					case $count -> DateTimeUtil.DE_DATE_FORMAT.format(t.get$Attribute.getNameCamelCase()());
 					#elseif($Attribute.getTypeName() == "LocalTime")
 					case $count -> DateTimeUtil.DE_TIME_FORMAT.format(t.get$Attribute.getNameCamelCase()());
+					#elseif($Attribute.getTypeName().equalsIgnoreCase("boolean"))
+					case $count -> t.is${Attribute.getNameCamelCase()}();
 					#else
 					case $count -> t.get${Attribute.getNameCamelCase()}();
 					#end
@@ -116,6 +118,8 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 				.set${Attribute.getNameCamelCase()}(LocalTime.now())
 			#elseif($Attribute.getTypeName() == "String")
 				.set${Attribute.getNameCamelCase()}("")
+			#elseif($Attribute.getTypeName() == "boolean")
+				.set${Attribute.getNameCamelCase()}(false)
 			#else
 				.set${Attribute.getNameCamelCase()}(null)
 			#end

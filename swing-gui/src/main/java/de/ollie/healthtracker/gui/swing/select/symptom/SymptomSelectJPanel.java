@@ -60,7 +60,7 @@ public class SymptomSelectJPanel extends AbstractSelectJPanel<Symptom> implement
 					case 0 -> DateTimeUtil.DE_DATE_FORMAT.format(t.getDateOfRecording());
 					case 1 -> t.getDescription();
 					case 2 -> (t.getBodyPart() != null ? t.getBodyPart().getName() : "-");
-					case 3 -> t.isUnverified() ? "Y" : "N";
+					case 3 -> t.isUnverified();
 					default -> null;
 				};
 			}

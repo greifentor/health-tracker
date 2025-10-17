@@ -14,6 +14,12 @@ import java.awt.GridLayout;
 import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+#if($Class.hasAnAttributeWithTypeName("Boolean") == true)
+import javax.swing.JCheckBox;
+#end
+#if($Class.hasAnAttributeWithTypeName("boolean") == true)
+import javax.swing.JCheckBox;
+#end
 #if($Class.hasAReferenceAttribute() == true)
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -43,6 +49,10 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 #end
 #foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
 	#if($Attribute.isReference() == true)
+	private JComboBox<${Attribute.getTypeClassType().getName()}> comboBox${Attribute.getNameCamelCase()};
+	#elseif(${Attribute.getTypeName()} == "boolean" || ${Attribute.getTypeName()} == "Boolean")
+	private JCheckBox checkBox${Attribute.getNameCamelCase()};
+	#elseif($Attribute.isReference() == true)
 	private JComboBox<${Attribute.getTypeClassType().getName()}> comboBox${Attribute.getNameCamelCase()};
 	#else
 	private JTextField textField${Attribute.getNameCamelCase()};
@@ -81,10 +91,15 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 		#else
 		#if(${Attribute.getTypeName()} == "LocalDate")
 		textField${Attribute.getNameCamelCase()} = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.get${Attribute.getNameCamelCase()}()), 40);
+		p.add(textField${Attribute.getNameCamelCase()});
+		#elseif(${Attribute.getTypeName()} == "boolean" || ${Attribute.getTypeName()} == "Boolean")
+		checkBox${Attribute.getNameCamelCase()} = new JCheckBox();
+		checkBox${Attribute.getNameCamelCase()}.setSelected(toEdit.is${Attribute.getNameCamelCase()}());
+		p.add(checkBox${Attribute.getNameCamelCase()});
 		#else
 		textField${Attribute.getNameCamelCase()} = new JTextField(toEdit.get${Attribute.getNameCamelCase()}(), 40);
-		#end
 		p.add(textField${Attribute.getNameCamelCase()});
+		#end
 		#end
 		#end
 		return p;
@@ -96,6 +111,8 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 		#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
 			#if(${Attribute.getTypeName()} == "LocalDate")
 				.set${Attribute.getNameCamelCase()}(DateTimeUtil.dateFromString(textField${Attribute.getNameCamelCase()}.getText()))
+			#elseif(${Attribute.getTypeName()} == "boolean")
+				.set${Attribute.getNameCamelCase()}(checkBox${Attribute.getNameCamelCase()}.isSelected())
 			#elseif(${Attribute.isReference()} == true)
 				.set${Attribute.getNameCamelCase()}(((${Attribute.getTypeClassType().getName()}) comboBox${Attribute.getNameCamelCase()}.getSelectedItem()))
 			#else
