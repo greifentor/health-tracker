@@ -76,6 +76,7 @@
 	</build>
 	<modules>
 		<module>base-lib</module>
+		<module>jasper-print</module>
 		<module>jpa-persistence</module>
 		<module>shell</module>
 		<module>service</module>
