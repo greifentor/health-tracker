@@ -261,5 +261,28 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet author="dm-comp" id="Split-Meat-Consumption-Information" failOnError="true" runInTransaction="true">
+        <createTable tableName="MEAT_TYPE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="MEAT_TYPE"/>
+        <addColumn tableName="MEAT_CONSUMPTION">
+            <column name="MEAT_TYPE" type="UUID">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="MEAT_CONSUMPTION">
+            <column name="AMOUNT_IN_GR" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint constraintName="FK_MEAT_CONSUMPTION_MEAT_TYPE_TO_MEAT_TYPE" baseColumnNames="MEAT_TYPE" baseTableName="MEAT_CONSUMPTION" referencedColumnNames="ID" referencedTableName="MEAT_TYPE"/>
+    </changeSet>
+
 </databaseChangeLog>
 

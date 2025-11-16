@@ -2,7 +2,10 @@ package de.ollie.healthtracker.persistence.jpa.dbo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -26,9 +29,16 @@ public class MeatConsumptionDbo {
 	@Column(name = "ID", nullable = false)
 	private UUID id;
 
+	@Column(name = "AMOUNT_IN_GR", nullable = false)
+	private int amountInGr;
+
 	@Column(name = "DATE_OF_RECORDING", nullable = false)
 	private LocalDate dateOfRecording;
 
 	@Column(name = "DESCRIPTION", nullable = false)
 	private String description;
+
+	@JoinColumn(name = "MEAT_TYPE", referencedColumnName = "ID", nullable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	private MeatTypeDbo meatType;
 }

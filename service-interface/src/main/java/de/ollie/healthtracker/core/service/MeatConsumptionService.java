@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.core.service;
 
 import de.ollie.healthtracker.core.service.model.MeatConsumption;
+import de.ollie.healthtracker.core.service.model.MeatType;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,12 @@ import lombok.Generated;
  */
 @Generated
 public interface MeatConsumptionService {
-	MeatConsumption createMeatConsumption(LocalDate dateOfRecording, String description);
+	MeatConsumption createMeatConsumption(
+		int amountInGr,
+		LocalDate dateOfRecording,
+		String description,
+		MeatType meatType
+	);
 
 	void deleteMeatConsumption(UUID id);
 
