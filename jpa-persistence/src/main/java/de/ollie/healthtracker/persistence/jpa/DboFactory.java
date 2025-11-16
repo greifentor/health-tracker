@@ -15,6 +15,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.ExerciseDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.GeneralBodyPartDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MeatConsumptionDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.MeatTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
@@ -24,6 +25,7 @@ import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.GeneralBodyPartDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.ManufacturerDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.MeatTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.MedicationDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.MedicationUnitDboRepository;
 import jakarta.inject.Named;
@@ -43,6 +45,7 @@ class DboFactory {
 	private final DoctorTypeDboRepository doctorTypeRepository;
 	private final GeneralBodyPartDboRepository generalBodyPartRepository;
 	private final ManufacturerDboRepository manufacturerDboRepository;
+	private final MeatTypeDboRepository meatTypeDboRepository;
 	private final MedicationDboRepository medicationDboRepository;
 	private final MedicationUnitDboRepository medicationUnitDboRepository;
 	private final UuidFactory uuidFactory;
@@ -160,14 +163,28 @@ class DboFactory {
 		return new ManufacturerDbo().setId(uuidFactory.create()).setName(name);
 	}
 
-	MeatConsumptionDbo createMeatConsumption(LocalDate dateOfRecording, String description) {
+	MeatConsumptionDbo createMeatConsumption(
+		int amoutInGr,
+		LocalDate dateOfRecording,
+		String description,
+		UUID meatTypeId
+	) {
 		ensure(description != null, "description cannot be null!");
 		ensure(!description.isBlank(), "description cannot be blank!");
 		ensure(dateOfRecording != null, "date of recording cannot be null!");
+		MeatTypeDbo meatType = meatTypeDboRepository.findById(meatTypeId).orElse(null);
 		return new MeatConsumptionDbo()
+			.setAmountInGr(amoutInGr)
 			.setDateOfRecording(dateOfRecording)
 			.setDescription(description)
-			.setId(uuidFactory.create());
+			.setId(uuidFactory.create())
+			.setMeatType(meatType);
+	}
+
+	MeatTypeDbo createMeatType(String name) {
+		ensure(name != null, "name cannot be null!");
+		ensure(!name.isBlank(), "name cannot be blank!");
+		return new MeatTypeDbo().setId(uuidFactory.create()).setName(name);
 	}
 
 	MedicationDbo createMedication(String name, UUID manufacturerId) {

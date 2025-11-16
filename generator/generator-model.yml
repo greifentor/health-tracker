@@ -350,6 +350,14 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
+      - name: amountInGr
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 4
+        type:
+          name: int
       - name: dateOfRecording
         properties:
           - name: nullable
@@ -369,6 +377,43 @@ classes:
             value: true
           - name: editor-position
             value: 2
+        type:
+          name: String
+      - name: meatType
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 3
+        type:
+          name: MeatType
+  - name: MeatType
+    properties:
+      - name: order
+        value: name
+      - name: gui
+        value: true
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+          - name: editor-position
+            value: 1
         type:
           name: String
   - name: Medication

@@ -19,6 +19,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ExerciseDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.GeneralBodyPartDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.MeatTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
@@ -733,6 +734,39 @@ class DboFactoryTest {
 			when(manufacturerDboRepository.findById(ID)).thenReturn(Optional.empty());
 			// Run & Check
 			assertThrows(NoSuchElementException.class, () -> unitUnderTest.createMedication(NAME, ID));
+		}
+	}
+
+	@Nested
+	class createMeatType_String {
+
+		@Test
+		void throwsAnException_passingABlankString_asName() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createMeatType(BLANK_STR));
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asName() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createMeatType(null));
+		}
+
+		@Test
+		void returnANewObject() {
+			assertNotNull(unitUnderTest.createMeatType(CONTENT));
+		}
+
+		@Test
+		void returnANewObject_onEachCall() {
+			assertNotSame(unitUnderTest.createMeatType(CONTENT), unitUnderTest.createMeatType(CONTENT));
+		}
+
+		@Test
+		void returnANewObject_withCorrectlySetAttributes() {
+			// Prepare
+			MeatTypeDbo expected = new MeatTypeDbo().setId(ID).setName(NAME);
+			when(uuidFactory.create()).thenReturn(ID);
+			// Run & Check
+			assertEquals(expected, unitUnderTest.createMeatType(NAME));
 		}
 	}
 

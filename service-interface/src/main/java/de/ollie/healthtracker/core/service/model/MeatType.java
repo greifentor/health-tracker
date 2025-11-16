@@ -1,6 +1,5 @@
 package de.ollie.healthtracker.core.service.model;
 
-import java.time.LocalDate;
 import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
@@ -14,11 +13,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-public class MeatConsumption {
+public class MeatType {
 
 	private UUID id;
-	private int amountInGr;
-	private LocalDate dateOfRecording;
-	private String description;
-	private MeatType meatType;
+	private String name;
 }
