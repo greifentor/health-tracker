@@ -120,6 +120,8 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 				.set${Attribute.getNameCamelCase()}("")
 			#elseif($Attribute.getTypeName() == "boolean")
 				.set${Attribute.getNameCamelCase()}(false)
+			#elseif($Attribute.getTypeName() == "int")
+				.set${Attribute.getNameCamelCase()}(0)
 			#else
 				.set${Attribute.getNameCamelCase()}(null)
 			#end

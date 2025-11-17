@@ -96,6 +96,8 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 		checkBox${Attribute.getNameCamelCase()} = new JCheckBox();
 		checkBox${Attribute.getNameCamelCase()}.setSelected(toEdit.is${Attribute.getNameCamelCase()}());
 		p.add(checkBox${Attribute.getNameCamelCase()});
+		#elseif(${Attribute.getTypeName()} == "int")
+		textField${Attribute.getNameCamelCase()} = new JTextField("" + toEdit.get${Attribute.getNameCamelCase()}(), 40);
 		#else
 		textField${Attribute.getNameCamelCase()} = new JTextField(toEdit.get${Attribute.getNameCamelCase()}(), 40);
 		p.add(textField${Attribute.getNameCamelCase()});
@@ -113,6 +115,8 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 				.set${Attribute.getNameCamelCase()}(DateTimeUtil.dateFromString(textField${Attribute.getNameCamelCase()}.getText()))
 			#elseif(${Attribute.getTypeName()} == "boolean")
 				.set${Attribute.getNameCamelCase()}(checkBox${Attribute.getNameCamelCase()}.isSelected())
+			#elseif(${Attribute.getTypeName()} == "int")
+				.set${Attribute.getNameCamelCase()}(Integer.parseInt(textField${Attribute.getNameCamelCase()}.getText()))
 			#elseif(${Attribute.isReference()} == true)
 				.set${Attribute.getNameCamelCase()}(((${Attribute.getTypeClassType().getName()}) comboBox${Attribute.getNameCamelCase()}.getSelectedItem()))
 			#else

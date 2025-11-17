@@ -9,8 +9,10 @@ import de.ollie.healthtracker.core.service.model.MeatType;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
 import java.awt.GridLayout;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -59,7 +61,6 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 		});
 		p.add(comboBoxMeatType);
 		textFieldAmountInGr = new JTextField("" + toEdit.getAmountInGr(), 40);
-		p.add(textFieldAmountInGr);
 		return p;
 	}
 
