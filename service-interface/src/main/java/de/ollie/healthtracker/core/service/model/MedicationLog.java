@@ -22,6 +22,7 @@ public class MedicationLog {
 	private Medication medication;
 	private MedicationUnit medicationUnit;
 	private LocalDate dateOfIntake;
+	private boolean selfMedication;
 	private LocalTime timeOfIntake;
 	private BigDecimal unitCount;
 }

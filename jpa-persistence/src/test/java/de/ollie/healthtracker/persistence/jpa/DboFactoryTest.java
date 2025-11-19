@@ -60,6 +60,7 @@ class DboFactoryTest {
 	private static final int PULSE_PER_MINUTE = 60;
 	private static final String REASON = "reason";
 	private static final String RESULT = "result";
+	private static final boolean SELF_MEDICATION = true;
 	private static final BloodPressureMeasurementStatus STATUS = BloodPressureMeasurementStatus.GREEN;
 	private static final BloodPressureMeasurementStatusDbo STATUS_DBO = BloodPressureMeasurementStatusDbo.GREEN;
 	private static final int SYS_MM_HG = 130;
@@ -777,7 +778,7 @@ class DboFactoryTest {
 		void throwsAnException_passingANullValue_asMedicationId() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createMedicationLog(null, ID, DATE, TIME, UNIT_COUNT)
+				() -> unitUnderTest.createMedicationLog(null, ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
 			);
 		}
 
@@ -785,7 +786,7 @@ class DboFactoryTest {
 		void throwsAnException_passingANullValue_asMedicationUnitId() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createMedicationLog(ID, null, DATE, TIME, UNIT_COUNT)
+				() -> unitUnderTest.createMedicationLog(ID, null, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
 			);
 		}
 
@@ -793,7 +794,7 @@ class DboFactoryTest {
 		void throwsAnException_passingANullValue_asDateOfIntake() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, null, TIME, UNIT_COUNT)
+				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, null, SELF_MEDICATION, TIME, UNIT_COUNT)
 			);
 		}
 
@@ -801,7 +802,7 @@ class DboFactoryTest {
 		void throwsAnException_passingANullValue_asTimeOfIntake() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, null, UNIT_COUNT)
+				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, SELF_MEDICATION, null, UNIT_COUNT)
 			);
 		}
 
@@ -809,7 +810,7 @@ class DboFactoryTest {
 		void throwsAnException_passingANullValue_asUnitCount() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, TIME, null)
+				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, null)
 			);
 		}
 
@@ -820,7 +821,7 @@ class DboFactoryTest {
 			when(medicationUnitDboRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(medicationUnitDbo));
 			when(uuidFactory.create()).thenReturn(ID);
 			// Run & Check
-			assertNotNull(unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, TIME, UNIT_COUNT));
+			assertNotNull(unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT));
 		}
 
 		@Test
@@ -831,8 +832,8 @@ class DboFactoryTest {
 			when(uuidFactory.create()).thenReturn(ID);
 			// Run & Check
 			assertNotSame(
-				unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, TIME, UNIT_COUNT),
-				unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, TIME, UNIT_COUNT)
+				unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT),
+				unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
 			);
 		}
 
@@ -844,13 +845,17 @@ class DboFactoryTest {
 				.setId(ID)
 				.setMedication(medicationDbo)
 				.setMedicationUnit(medicationUnitDbo)
+				.setSelfMedication(SELF_MEDICATION)
 				.setTimeOfIntake(TIME)
 				.setUnitCount(UNIT_COUNT);
 			when(medicationDboRepository.findById(ID)).thenReturn(Optional.of(medicationDbo));
 			when(medicationUnitDboRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(medicationUnitDbo));
 			when(uuidFactory.create()).thenReturn(ID);
 			// Run & Check
-			assertEquals(expected, unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, TIME, UNIT_COUNT));
+			assertEquals(
+				expected,
+				unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
+			);
 		}
 
 		@Test
@@ -860,7 +865,7 @@ class DboFactoryTest {
 			// Run & Check
 			assertThrows(
 				NoSuchElementException.class,
-				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, TIME, UNIT_COUNT)
+				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
 			);
 		}
 
@@ -872,7 +877,7 @@ class DboFactoryTest {
 			// Run & Check
 			assertThrows(
 				NoSuchElementException.class,
-				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, TIME, UNIT_COUNT)
+				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
 			);
 		}
 	}

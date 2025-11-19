@@ -38,6 +38,7 @@ class MedicationLogPersistenceJpaAdapter implements MedicationLogPersistencePort
 		Medication medication,
 		MedicationUnit medicationUnit,
 		LocalDate dateOfIntake,
+		boolean selfMedication,
 		LocalTime timeOfIntake,
 		BigDecimal unitCount
 	) {
@@ -47,6 +48,7 @@ class MedicationLogPersistenceJpaAdapter implements MedicationLogPersistencePort
 					medication.getId(),
 					medicationUnit.getId(),
 					dateOfIntake,
+					selfMedication,
 					timeOfIntake,
 					unitCount
 				)

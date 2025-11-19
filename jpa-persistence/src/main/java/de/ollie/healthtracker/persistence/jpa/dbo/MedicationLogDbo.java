@@ -42,6 +42,9 @@ public class MedicationLogDbo {
 	@Column(name = "DATE_OF_INTAKE", nullable = false)
 	private LocalDate dateOfIntake;
 
+	@Column(name = "SELF_MEDICATION", nullable = true)
+	private boolean selfMedication;
+
 	@Column(name = "TIME_OF_INTAKE", nullable = false)
 	private LocalTime timeOfIntake;
 

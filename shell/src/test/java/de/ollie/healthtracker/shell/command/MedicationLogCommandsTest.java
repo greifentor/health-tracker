@@ -42,6 +42,7 @@ class MedicationLogCommandsTest {
 	private static final String MEDICATION_ID_STR = "medication-id-str";
 	private static final String MEDICATION_UNIT_ID_STR = "medication-unit-id-str";
 	private static final String MESSAGE = "message";
+	private static final boolean SELF_MEDICATION = true;
 	private static final String STRING = "string";
 	private static final LocalTime TIME_OF_INTAKE = LocalTime.of(12, 5);
 	private static final String TIME_OF_INTAKE_STR = "12:05";
@@ -92,7 +93,14 @@ class MedicationLogCommandsTest {
 			// Prepare
 			RuntimeException exception = new RuntimeException(MESSAGE);
 			when(
-				medicationLogService.createMedicationLog(medication, medicationUnit, DATE_OF_INTAKE, TIME_OF_INTAKE, UNIT_COUNT)
+				medicationLogService.createMedicationLog(
+					medication,
+					medicationUnit,
+					DATE_OF_INTAKE,
+					SELF_MEDICATION,
+					TIME_OF_INTAKE,
+					UNIT_COUNT
+				)
 			)
 				.thenThrow(exception);
 			when(medicationService.findByIdOrNameParticle(MEDICATION_ID_STR)).thenReturn(Optional.of(medication));
@@ -104,7 +112,8 @@ class MedicationLogCommandsTest {
 				MEDICATION_UNIT_ID_STR,
 				UNIT_COUNT_STR,
 				TIME_OF_INTAKE_STR,
-				DATE_OF_INTAKE_STR
+				DATE_OF_INTAKE_STR,
+				"" + SELF_MEDICATION
 			);
 			// Check
 			assertEquals(Constants.ERROR + MESSAGE, returned);
@@ -121,7 +130,8 @@ class MedicationLogCommandsTest {
 				MEDICATION_UNIT_ID_STR,
 				UNIT_COUNT_STR,
 				TIME_OF_INTAKE_STR,
-				DATE_OF_INTAKE_STR
+				DATE_OF_INTAKE_STR,
+				"" + SELF_MEDICATION
 			);
 			// Check
 			assertEquals(
@@ -140,7 +150,8 @@ class MedicationLogCommandsTest {
 				MEDICATION_UNIT_ID_STR,
 				UNIT_COUNT_STR,
 				TIME_OF_INTAKE_STR,
-				DATE_OF_INTAKE_STR
+				DATE_OF_INTAKE_STR,
+				"" + SELF_MEDICATION
 			);
 			// Check
 			assertEquals(Constants.ERROR + MedicationLogCommands.MSG_NO_SUCH_MEDICATION_FOUND + MEDICATION_ID_STR, returned);
@@ -150,7 +161,14 @@ class MedicationLogCommandsTest {
 		void returnsOk_whenNoErrorIsDetected() {
 			// Prepare
 			when(
-				medicationLogService.createMedicationLog(medication, medicationUnit, DATE_OF_INTAKE, TIME_OF_INTAKE, UNIT_COUNT)
+				medicationLogService.createMedicationLog(
+					medication,
+					medicationUnit,
+					DATE_OF_INTAKE,
+					SELF_MEDICATION,
+					TIME_OF_INTAKE,
+					UNIT_COUNT
+				)
 			)
 				.thenReturn(medicationLog0);
 			when(medicationService.findByIdOrNameParticle(MEDICATION_ID_STR)).thenReturn(Optional.of(medication));
@@ -162,7 +180,8 @@ class MedicationLogCommandsTest {
 				MEDICATION_UNIT_ID_STR,
 				UNIT_COUNT_STR,
 				TIME_OF_INTAKE_STR,
-				DATE_OF_INTAKE_STR
+				DATE_OF_INTAKE_STR,
+				"" + SELF_MEDICATION
 			);
 			// Check
 			assertEquals(Constants.OK, returned);
@@ -173,7 +192,14 @@ class MedicationLogCommandsTest {
 			// Prepare
 			when(localDateFactory.now()).thenReturn(DATE_OF_INTAKE);
 			when(
-				medicationLogService.createMedicationLog(medication, medicationUnit, DATE_OF_INTAKE, TIME_OF_INTAKE, UNIT_COUNT)
+				medicationLogService.createMedicationLog(
+					medication,
+					medicationUnit,
+					DATE_OF_INTAKE,
+					false,
+					TIME_OF_INTAKE,
+					UNIT_COUNT
+				)
 			)
 				.thenReturn(medicationLog0);
 			when(medicationService.findByIdOrNameParticle(MEDICATION_ID_STR)).thenReturn(Optional.of(medication));
@@ -185,6 +211,7 @@ class MedicationLogCommandsTest {
 				MEDICATION_UNIT_ID_STR,
 				UNIT_COUNT_STR,
 				TIME_OF_INTAKE_STR,
+				null,
 				null
 			);
 			// Check
@@ -197,7 +224,14 @@ class MedicationLogCommandsTest {
 			// Prepare
 			when(localDateFactory.now()).thenReturn(DATE_OF_INTAKE);
 			when(
-				medicationLogService.createMedicationLog(medication, medicationUnit, DATE_OF_INTAKE, TIME_OF_INTAKE, UNIT_COUNT)
+				medicationLogService.createMedicationLog(
+					medication,
+					medicationUnit,
+					DATE_OF_INTAKE,
+					false,
+					TIME_OF_INTAKE,
+					UNIT_COUNT
+				)
 			)
 				.thenReturn(medicationLog0);
 			when(medicationService.findByIdOrNameParticle(MEDICATION_ID_STR)).thenReturn(Optional.of(medication));
@@ -209,6 +243,7 @@ class MedicationLogCommandsTest {
 				MEDICATION_UNIT_ID_STR,
 				UNIT_COUNT_STR,
 				TIME_OF_INTAKE_STR,
+				null,
 				null
 			);
 			// Check
@@ -220,7 +255,14 @@ class MedicationLogCommandsTest {
 			// Prepare
 			when(localTimeFactory.now()).thenReturn(TIME_OF_INTAKE);
 			when(
-				medicationLogService.createMedicationLog(medication, medicationUnit, DATE_OF_INTAKE, TIME_OF_INTAKE, UNIT_COUNT)
+				medicationLogService.createMedicationLog(
+					medication,
+					medicationUnit,
+					DATE_OF_INTAKE,
+					SELF_MEDICATION,
+					TIME_OF_INTAKE,
+					UNIT_COUNT
+				)
 			)
 				.thenReturn(medicationLog0);
 			when(medicationService.findByIdOrNameParticle(MEDICATION_ID_STR)).thenReturn(Optional.of(medication));
@@ -232,7 +274,8 @@ class MedicationLogCommandsTest {
 				MEDICATION_UNIT_ID_STR,
 				UNIT_COUNT_STR,
 				null,
-				DATE_OF_INTAKE_STR
+				DATE_OF_INTAKE_STR,
+				"" + SELF_MEDICATION
 			);
 			// Check
 			assertEquals(Constants.OK, returned);
@@ -243,7 +286,14 @@ class MedicationLogCommandsTest {
 		void returnsOk_whenTimeOfIntakeIsNow(String now) {
 			// Prepare
 			when(
-				medicationLogService.createMedicationLog(medication, medicationUnit, DATE_OF_INTAKE, TIME_OF_INTAKE, UNIT_COUNT)
+				medicationLogService.createMedicationLog(
+					medication,
+					medicationUnit,
+					DATE_OF_INTAKE,
+					SELF_MEDICATION,
+					TIME_OF_INTAKE,
+					UNIT_COUNT
+				)
 			)
 				.thenReturn(medicationLog0);
 			when(medicationService.findByIdOrNameParticle(MEDICATION_ID_STR)).thenReturn(Optional.of(medication));
@@ -255,7 +305,8 @@ class MedicationLogCommandsTest {
 				MEDICATION_UNIT_ID_STR,
 				UNIT_COUNT_STR,
 				TIME_OF_INTAKE_STR,
-				DATE_OF_INTAKE_STR
+				DATE_OF_INTAKE_STR,
+				"" + SELF_MEDICATION
 			);
 			// Check
 			assertEquals(Constants.OK, returned);
@@ -269,6 +320,7 @@ class MedicationLogCommandsTest {
 					medication,
 					medicationUnit,
 					DATE_OF_INTAKE,
+					SELF_MEDICATION,
 					TIME_OF_INTAKE,
 					new BigDecimal(1)
 				)
@@ -283,7 +335,8 @@ class MedicationLogCommandsTest {
 				MEDICATION_UNIT_ID_STR,
 				null,
 				TIME_OF_INTAKE_STR,
-				DATE_OF_INTAKE_STR
+				DATE_OF_INTAKE_STR,
+				"" + SELF_MEDICATION
 			);
 			// Check
 			assertEquals(Constants.OK, returned);
@@ -298,6 +351,7 @@ class MedicationLogCommandsTest {
 					medication,
 					medicationUnit,
 					DATE_OF_INTAKE,
+					SELF_MEDICATION,
 					TIME_OF_INTAKE,
 					new BigDecimal(unitCount)
 				)
@@ -312,7 +366,8 @@ class MedicationLogCommandsTest {
 				MEDICATION_UNIT_ID_STR,
 				"" + unitCount,
 				TIME_OF_INTAKE_STR,
-				DATE_OF_INTAKE_STR
+				DATE_OF_INTAKE_STR,
+				"" + SELF_MEDICATION
 			);
 			// Check
 			assertEquals(Constants.OK, returned);
@@ -327,7 +382,8 @@ class MedicationLogCommandsTest {
 				MEDICATION_UNIT_ID_STR,
 				unitCount,
 				TIME_OF_INTAKE_STR,
-				DATE_OF_INTAKE_STR
+				DATE_OF_INTAKE_STR,
+				"" + SELF_MEDICATION
 			);
 			// Check
 			assertEquals(Constants.ERROR + MedicationLogCommands.MSG_INVALID_NUMBER_VALUE + unitCount, returned);

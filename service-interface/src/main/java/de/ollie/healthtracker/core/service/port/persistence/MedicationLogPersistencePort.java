@@ -24,6 +24,7 @@ public interface MedicationLogPersistencePort {
 		Medication medication,
 		MedicationUnit medicationUnit,
 		LocalDate dateOfIntake,
+		boolean selfMedication,
 		LocalTime timeOfIntake,
 		BigDecimal unitCount
 	);

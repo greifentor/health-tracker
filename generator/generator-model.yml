@@ -490,6 +490,9 @@ classes:
           properties:
             - name: import
               value: java.time.LocalDate
+      - name: selfMedication
+        type:
+          name: boolean
       - name: timeOfIntake
         properties:
           - name: nullable

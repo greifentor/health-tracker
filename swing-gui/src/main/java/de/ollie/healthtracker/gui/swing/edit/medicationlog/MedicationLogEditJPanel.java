@@ -13,6 +13,7 @@ import java.awt.GridLayout;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -30,6 +31,7 @@ public class MedicationLogEditJPanel extends AbstractEditPanel<MedicationLog> {
 	private JSpinner spinnerUnitCount;
 	private JTextField textFieldDateOfIntake;
 	private JTextField textFieldTimeOfIntake;
+	private JCheckBox checkboxSelfMedication;
 
 	public MedicationLogEditJPanel(MedicationLog toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		super(toEdit, itemProviders);
@@ -37,12 +39,19 @@ public class MedicationLogEditJPanel extends AbstractEditPanel<MedicationLog> {
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel("Date of Intake:", "Time of Intake:", "Medication:", "Medication Units:", "Unit Count:");
+		return createLabelSubPanel(
+			"Date of Intake:",
+			"Time of Intake:",
+			"Medication:",
+			"Medication Units:",
+			"Unit Count:",
+			"Self Medication:"
+		);
 	}
 
 	@Override
 	protected JPanel createComponentPanel(MedicationLog toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		JPanel p = new JPanel(new GridLayout(5, 1, HGAP, VGAP));
+		JPanel p = new JPanel(new GridLayout(6, 1, HGAP, VGAP));
 		textFieldDateOfIntake = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.getDateOfIntake()), 50);
 		textFieldTimeOfIntake = new JTextField(DateTimeUtil.DE_TIME_FORMAT.format(toEdit.getTimeOfIntake()), 50);
 		List<Medication> medications = ((ItemProvider<Medication>) itemProviders.get(MEDICATIONS_PROVIDER_ID)).getItem();
@@ -65,11 +74,14 @@ public class MedicationLogEditJPanel extends AbstractEditPanel<MedicationLog> {
 			return new JLabel("-");
 		});
 		spinnerUnitCount = new JSpinner(new SpinnerNumberModel(toEdit.getUnitCount().doubleValue(), -100, 100, 0.1));
+		checkboxSelfMedication = new JCheckBox();
+		checkboxSelfMedication.setSelected(toEdit.isSelfMedication());
 		p.add(textFieldDateOfIntake);
 		p.add(textFieldTimeOfIntake);
 		p.add(comboBoxMedication);
 		p.add(comboBoxMedicationUnit);
 		p.add(spinnerUnitCount);
+		p.add(checkboxSelfMedication);
 		return p;
 	}
 
@@ -80,6 +92,7 @@ public class MedicationLogEditJPanel extends AbstractEditPanel<MedicationLog> {
 			.setId(toEdit.getId())
 			.setMedication((Medication) comboBoxMedication.getSelectedItem())
 			.setMedicationUnit((MedicationUnit) comboBoxMedicationUnit.getSelectedItem())
+			.setSelfMedication(checkboxSelfMedication.isSelected())
 			.setTimeOfIntake(DateTimeUtil.timeFromString(textFieldTimeOfIntake.getText()))
 			.setUnitCount(new BigDecimal(((Number) spinnerUnitCount.getValue()).doubleValue()));
 	}

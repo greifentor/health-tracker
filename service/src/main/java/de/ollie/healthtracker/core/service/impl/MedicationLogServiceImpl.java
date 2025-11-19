@@ -32,10 +32,18 @@ class MedicationLogServiceImpl implements MedicationLogService {
 		Medication medication,
 		MedicationUnit medicationUnit,
 		LocalDate dateOfIntake,
+		boolean selfMedication,
 		LocalTime timeOfIntake,
 		BigDecimal unitCount
 	) {
-		return medicationLogPersistencePort.create(medication, medicationUnit, dateOfIntake, timeOfIntake, unitCount);
+		return medicationLogPersistencePort.create(
+			medication,
+			medicationUnit,
+			dateOfIntake,
+			selfMedication,
+			timeOfIntake,
+			unitCount
+		);
 	}
 
 	@Override

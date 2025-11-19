@@ -22,6 +22,7 @@ public interface MedicationLogService {
 		Medication medication,
 		MedicationUnit medicationUnit,
 		LocalDate dateOfIntake,
+		boolean selfMedication,
 		LocalTime timeOfIntake,
 		BigDecimal unitCount
 	);

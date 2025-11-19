@@ -201,6 +201,7 @@ class DboFactory {
 		UUID medicationId,
 		UUID medicationUnitId,
 		LocalDate dateOfIntake,
+		boolean selfMedication,
 		LocalTime timeOfIntake,
 		BigDecimal unitCount
 	) {
@@ -220,6 +221,7 @@ class DboFactory {
 			.setId(uuidFactory.create())
 			.setMedication(medication)
 			.setMedicationUnit(medicationUnit)
+			.setSelfMedication(selfMedication)
 			.setTimeOfIntake(timeOfIntake)
 			.setUnitCount(unitCount);
 	}

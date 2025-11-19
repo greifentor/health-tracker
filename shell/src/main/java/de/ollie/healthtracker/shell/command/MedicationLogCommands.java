@@ -60,7 +60,8 @@ public class MedicationLogCommands implements CommandsWithTimeOrDate {
 			help = "The date of intake (DD.MM.JJJJ or TODAY or TD).",
 			value = "date",
 			defaultValue = "TODAY"
-		) String dateOfIntakeStr
+		) String dateOfIntakeStr,
+		@ShellOption(help = "Self medication flag.", value = "selfMedication", defaultValue = "false") String selfMedication
 	) {
 		try {
 			LocalDate dateOfIntake = getDateFromParameter(dateOfIntakeStr);
@@ -73,7 +74,14 @@ public class MedicationLogCommands implements CommandsWithTimeOrDate {
 				.findByIdOrNameParticle(medicationUnitNamePartOrId)
 				.ifPresentOrElse(
 					medicationUnit ->
-						medicationLogService.createMedicationLog(medication, medicationUnit, dateOfIntake, timeOfIntake, unitCount),
+						medicationLogService.createMedicationLog(
+							medication,
+							medicationUnit,
+							dateOfIntake,
+							Boolean.valueOf(selfMedication),
+							timeOfIntake,
+							unitCount
+						),
 					() -> {
 						throw new NoSuchElementException(MSG_NO_SUCH_MEDICATION_UNIT_FOUND + medicationUnitNamePartOrId);
 					}

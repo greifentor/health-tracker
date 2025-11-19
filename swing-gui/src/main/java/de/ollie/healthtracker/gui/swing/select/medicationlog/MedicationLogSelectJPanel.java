@@ -59,7 +59,15 @@ public class MedicationLogSelectJPanel extends AbstractSelectJPanel<MedicationLo
 
 	@Override
 	protected AbstractSelectionTableModel<MedicationLog> createSelectionModel() {
-		return new AbstractSelectionTableModel<>(getObjectsToSelect(), "Date", "Time", "Medication", "Unit", "Count") {
+		return new AbstractSelectionTableModel<>(
+			getObjectsToSelect(),
+			"Date",
+			"Time",
+			"Medication",
+			"Unit",
+			"Count",
+			"Self Medication"
+		) {
 			@Override
 			protected Object getColumnValueFor(MedicationLog t, int columnIndex) {
 				return switch (columnIndex) {
@@ -68,6 +76,7 @@ public class MedicationLogSelectJPanel extends AbstractSelectJPanel<MedicationLo
 					case 2 -> t.getMedication().getName();
 					case 3 -> t.getMedicationUnit().getName();
 					case 4 -> t.getUnitCount();
+					case 5 -> t.isSelfMedication();
 					default -> null;
 				};
 			}
@@ -108,6 +117,7 @@ public class MedicationLogSelectJPanel extends AbstractSelectJPanel<MedicationLo
 			medications.get(0),
 			medicationUnits.get(0),
 			LocalDate.now(),
+			false,
 			LocalTime.now(),
 			new BigDecimal(1)
 		);
