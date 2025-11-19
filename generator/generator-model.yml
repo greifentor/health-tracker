@@ -1,4 +1,4 @@
-classes:
+ht-gui.sysMmHgclasses:
   - name: BloodPressureMeasurement
     properties:
       - name: order
