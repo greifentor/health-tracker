@@ -7,7 +7,14 @@ import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import javax.swing.JDesktopPane;
+import lombok.Generated;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
 public class CommentSelectJInternalFrame
 	extends AbstractSelectJInternalFrame<Comment>
 	implements SelectionPanelObserver {
