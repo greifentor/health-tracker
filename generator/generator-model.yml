@@ -1,4 +1,4 @@
-ht-gui.sysMmHgclasses:
+classes:
   - name: BloodPressureMeasurement
     properties:
       - name: order
@@ -609,3 +609,9 @@ ht-gui.sysMmHgclasses:
             value: 4
         type:
           name: boolean
+enums:
+  - name: TestEnum
+    identifiers:
+    - ONE
+    - TWO
+    - THREE

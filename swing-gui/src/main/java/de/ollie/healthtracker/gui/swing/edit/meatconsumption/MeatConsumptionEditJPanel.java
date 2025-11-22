@@ -16,7 +16,10 @@ import java.util.UUID;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import lombok.Generated;
 
 /**
@@ -32,7 +35,7 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 	private JTextField textFieldDateOfRecording;
 	private JTextField textFieldDescription;
 	private JComboBox<MeatType> comboBoxMeatType;
-	private JTextField textFieldAmountInGr;
+	private JSpinner spinnerAmountInGr;
 
 	public MeatConsumptionEditJPanel(MeatConsumption toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		super(toEdit, itemProviders);
@@ -60,7 +63,9 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 			return new JLabel("-");
 		});
 		p.add(comboBoxMeatType);
-		textFieldAmountInGr = new JTextField("" + toEdit.getAmountInGr(), 40);
+		SpinnerModel spinnerModelAmountInGr = new SpinnerNumberModel(toEdit.getAmountInGr(), 0, 1000, 1);
+		spinnerAmountInGr = new JSpinner(spinnerModelAmountInGr);
+		p.add(spinnerAmountInGr);
 		return p;
 	}
 
@@ -71,6 +76,6 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 			.setDateOfRecording(DateTimeUtil.dateFromString(textFieldDateOfRecording.getText()))
 			.setDescription(textFieldDescription.getText())
 			.setMeatType(((MeatType) comboBoxMeatType.getSelectedItem()))
-			.setAmountInGr(Integer.parseInt(textFieldAmountInGr.getText()));
+			.setAmountInGr((Integer) spinnerAmountInGr.getValue());
 	}
 }

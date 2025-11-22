@@ -32,6 +32,13 @@ generators:
         value: service-interface/src/main/java
       - name: suppress-project-type-imports
         value: true
+  - type: ENUM
+    package: de.ollie.healthtracker.core.service.model
+    resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+    template: templates/core/Enum.vc
+    properties:
+      - name: target-path
+        value: service-interface/src/main/java
   - type: CLASS
     package: de.ollie.healthtracker.core.service.port.persistence
     target-file-name: ${UnitName}PersistencePort
@@ -62,6 +69,14 @@ generators:
     resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
     target-file-name: ${UnitName}Dbo
     template: templates/persistence/jpa/Dbo.vc
+    properties:
+      - name: target-path
+        value: jpa-persistence/src/main/java
+  - type: ENUM
+    package: de.ollie.healthtracker.persistence.jpa.dbo
+    resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+    target-file-name: ${UnitName}Dbo
+    template: templates/persistence/jpa/EnumDbo.vc
     properties:
       - name: target-path
         value: jpa-persistence/src/main/java

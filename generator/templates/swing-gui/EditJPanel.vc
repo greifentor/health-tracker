@@ -14,11 +14,21 @@ import java.awt.GridLayout;
 import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+#if($Class.hasAnAttributeWithTypeName("boolean") == true)
+import javax.swing.JCheckBox;
+#end
 #if($Class.hasAnAttributeWithTypeName("Boolean") == true)
 import javax.swing.JCheckBox;
 #end
-#if($Class.hasAnAttributeWithTypeName("boolean") == true)
-import javax.swing.JCheckBox;
+#if($Class.hasAnAttributeWithTypeName("int") == true)
+import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+#end
+#if($Class.hasAnAttributeWithTypeName("Integer") == true)
+import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 #end
 #if($Class.hasAReferenceAttribute() == true)
 import javax.swing.JComboBox;
@@ -52,6 +62,8 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 	private JComboBox<${Attribute.getTypeClassType().getName()}> comboBox${Attribute.getNameCamelCase()};
 	#elseif(${Attribute.getTypeName()} == "boolean" || ${Attribute.getTypeName()} == "Boolean")
 	private JCheckBox checkBox${Attribute.getNameCamelCase()};
+	#elseif(${Attribute.getTypeName()} == "int" || ${Attribute.getTypeName()} == "Integer")
+	private JSpinner spinner${Attribute.getNameCamelCase()};
 	#elseif($Attribute.isReference() == true)
 	private JComboBox<${Attribute.getTypeClassType().getName()}> comboBox${Attribute.getNameCamelCase()};
 	#else
@@ -97,7 +109,9 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 		checkBox${Attribute.getNameCamelCase()}.setSelected(toEdit.is${Attribute.getNameCamelCase()}());
 		p.add(checkBox${Attribute.getNameCamelCase()});
 		#elseif(${Attribute.getTypeName()} == "int")
-		textField${Attribute.getNameCamelCase()} = new JTextField("" + toEdit.get${Attribute.getNameCamelCase()}(), 40);
+		SpinnerModel spinnerModel${Attribute.getNameCamelCase()} = new SpinnerNumberModel(toEdit.get${Attribute.getNameCamelCase()}(), 0, 1000, 1);
+		spinner${Attribute.getNameCamelCase()} = new JSpinner(spinnerModel${Attribute.getNameCamelCase()});
+		p.add(spinnerAmountInGr);
 		#else
 		textField${Attribute.getNameCamelCase()} = new JTextField(toEdit.get${Attribute.getNameCamelCase()}(), 40);
 		p.add(textField${Attribute.getNameCamelCase()});
@@ -116,7 +130,7 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 			#elseif(${Attribute.getTypeName()} == "boolean")
 				.set${Attribute.getNameCamelCase()}(checkBox${Attribute.getNameCamelCase()}.isSelected())
 			#elseif(${Attribute.getTypeName()} == "int")
-				.set${Attribute.getNameCamelCase()}(Integer.parseInt(textField${Attribute.getNameCamelCase()}.getText()))
+				.set${Attribute.getNameCamelCase()}((Integer) spinner${Attribute.getNameCamelCase()}.getValue());
 			#elseif(${Attribute.isReference()} == true)
 				.set${Attribute.getNameCamelCase()}(((${Attribute.getTypeClassType().getName()}) comboBox${Attribute.getNameCamelCase()}.getSelectedItem()))
 			#else
