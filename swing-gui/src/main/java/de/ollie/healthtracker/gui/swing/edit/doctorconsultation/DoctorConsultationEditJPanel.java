@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
@@ -74,7 +75,8 @@ public class DoctorConsultationEditJPanel extends AbstractEditPanel<DoctorConsul
 		JPanel p = new JPanel(new GridLayout(1, 1, HGAP, VGAP));
 		textAreaReason = new JTextArea(toEdit.getReason(), 5, 40);
 		textAreaReason.setBorder(new LineBorder(Color.GRAY));
-		p.add(textAreaReason);
+		textAreaReason.setLineWrap(true);
+		p.add(new JScrollPane(textAreaReason));
 		return p;
 	}
 
@@ -82,7 +84,8 @@ public class DoctorConsultationEditJPanel extends AbstractEditPanel<DoctorConsul
 		JPanel p = new JPanel(new GridLayout(1, 1, HGAP, VGAP));
 		textAreaResult = new JTextArea(toEdit.getResult(), 5, 40);
 		textAreaResult.setBorder(new LineBorder(Color.GRAY));
-		p.add(textAreaResult);
+		textAreaResult.setLineWrap(true);
+		p.add(new JScrollPane(textAreaResult));
 		return p;
 	}
 
