@@ -1,12 +1,11 @@
-package de.ollie.healthtracker.gui.swing.select.comment;
+package de.ollie.healthtracker.gui.swing.select.manufacturer;
 
-import de.ollie.healthtracker.core.service.CommentService;
-import de.ollie.healthtracker.core.service.model.Comment;
+import de.ollie.healthtracker.core.service.ManufacturerService;
+import de.ollie.healthtracker.core.service.model.Manufacturer;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
-import java.time.LocalDate;
 import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
@@ -17,26 +16,26 @@ import lombok.Generated;
  * Remove this comment to suspend class from generation process.
  */
 @Generated
-public class CommentSelectJInternalFrame
-	extends AbstractSelectJInternalFrame<Comment>
+public class ManufacturerSelectJInternalFrame
+	extends AbstractSelectJInternalFrame<Manufacturer>
 	implements SelectionPanelObserver {
 
-	private static final String CLASS_NAME = "Comment";
+	private static final String CLASS_NAME = "Manufacturer";
 
-	private final CommentService commentService;
+	private final ManufacturerService manufacturerService;
 
-	public CommentSelectJInternalFrame(
-		CommentService commentService,
+	public ManufacturerSelectJInternalFrame(
+		ManufacturerService manufacturerService,
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
 		super(desktopPane, CLASS_NAME + "s", editDialogComponentFactory);
-		this.commentService = commentService;
+		this.manufacturerService = manufacturerService;
 		finishConstruct();
 	}
 
 	@Override
-	protected AbstractSelectJPanel<Comment> createSelectPanel() {
-		return new CommentSelectJPanel(commentService, CLASS_NAME, desktopPane, editDialogComponentFactory, this);
+	protected AbstractSelectJPanel<Manufacturer> createSelectPanel() {
+		return new ManufacturerSelectJPanel(manufacturerService, CLASS_NAME, desktopPane, editDialogComponentFactory, this);
 	}
 }

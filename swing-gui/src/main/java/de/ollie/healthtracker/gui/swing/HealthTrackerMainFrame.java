@@ -11,6 +11,7 @@ import de.ollie.healthtracker.core.service.DoctorService;
 import de.ollie.healthtracker.core.service.DoctorTypeService;
 import de.ollie.healthtracker.core.service.ExerciseService;
 import de.ollie.healthtracker.core.service.GeneralBodyPartService;
+import de.ollie.healthtracker.core.service.ManufacturerService;
 import de.ollie.healthtracker.core.service.MeatConsumptionService;
 import de.ollie.healthtracker.core.service.MeatTypeService;
 import de.ollie.healthtracker.core.service.MedicationLogService;
@@ -25,8 +26,10 @@ import de.ollie.healthtracker.gui.swing.select.doctorconsultation.DoctorConsulta
 import de.ollie.healthtracker.gui.swing.select.doctortype.DoctorTypeSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.exercise.ExerciseSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.generalbodypart.GeneralBodyPartSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.manufacturer.ManufacturerSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.meatconsumption.MeatConsumptionSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.meattype.MeatTypeSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.medication.MedicationSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.medicationlog.MedicationLogSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.symptom.SymptomSelectJInternalFrame;
 import jakarta.annotation.PostConstruct;
@@ -57,6 +60,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final DoctorTypeService doctorTypeService;
 	private final ExerciseService exerciseService;
 	private final GeneralBodyPartService generalBodyPartService;
+	private final ManufacturerService manufacturerService;
 	private final MeatConsumptionService meatConsumptionService;
 	private final MeatTypeService meatTypeService;
 	private final MedicationLogService medicationLogService;
@@ -75,9 +79,11 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemEditDoctorType;
 	private JMenuItem menuItemEditExercise;
 	private JMenuItem menuItemEditGeneralBodyPart;
+	private JMenuItem menuItemEditManufacturer;
 	private JMenuItem menuItemEditMeatConsumption;
 	private JMenuItem menuItemEditMeatType;
 	private JMenuItem menuItemEditMedicationLog;
+	private JMenuItem menuItemEditMedication;
 	private JMenuItem menuItemEditSymptom;
 	private JMenuItem menuItemFileQuit;
 
@@ -126,6 +132,10 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemEditGeneralBodyPart);
 		menuItemEditExercise = createMenuItem("Exercise", this);
 		menu.add(menuItemEditExercise);
+		menuItemEditManufacturer = createMenuItem("Manufacturer", this);
+		menu.add(menuItemEditManufacturer);
+		menuItemEditMedication = createMenuItem("Medication", this);
+		menu.add(menuItemEditMedication);
 		menuItemEditMedicationLog = createMenuItem("Medication Log", this);
 		menu.add(menuItemEditMedicationLog);
 		menuItemEditMeatConsumption = createMenuItem("Meat Consumption", this);
@@ -181,6 +191,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			new ExerciseSelectJInternalFrame(exerciseService, bodyPartService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditGeneralBodyPart) {
 			new GeneralBodyPartSelectJInternalFrame(generalBodyPartService, desktopPane, editDialogComponentFactory);
+		} else if (e.getSource() == menuItemEditManufacturer) {
+			new ManufacturerSelectJInternalFrame(manufacturerService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditMeatConsumption) {
 			new MeatConsumptionSelectJInternalFrame(
 				meatConsumptionService,
@@ -190,6 +202,13 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			);
 		} else if (e.getSource() == menuItemEditMeatType) {
 			new MeatTypeSelectJInternalFrame(meatTypeService, desktopPane, editDialogComponentFactory);
+		} else if (e.getSource() == menuItemEditMedication) {
+			new MedicationSelectJInternalFrame(
+				medicationService,
+				manufacturerService,
+				desktopPane,
+				editDialogComponentFactory
+			);
 		} else if (e.getSource() == menuItemEditMedicationLog) {
 			new MedicationLogSelectJInternalFrame(
 				medicationService,
