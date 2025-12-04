@@ -1,9 +1,7 @@
 package de.ollie.healthtracker.core.service.port.persistence;
 
-import de.ollie.healthtracker.core.service.model.Comment;
 import de.ollie.healthtracker.core.service.model.CommentType;
 import jakarta.inject.Named;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,16 +14,16 @@ import lombok.Generated;
  */
 @Generated
 @Named
-public interface CommentPersistencePort {
-	Comment create(CommentType commentType, String content, LocalDate dateOfRecording);
+public interface CommentTypePersistencePort {
+	CommentType create(String name);
 
 	void deleteById(UUID id);
 
-	Optional<Comment> findById(UUID id);
+	Optional<CommentType> findById(UUID id);
 
-	Optional<Comment> findByIdOrContentParticle(String content);
+	Optional<CommentType> findByIdOrNameParticle(String name);
 
-	List<Comment> list();
+	List<CommentType> list();
 
-	Comment update(Comment toSave);
+	CommentType update(CommentType toSave);
 }

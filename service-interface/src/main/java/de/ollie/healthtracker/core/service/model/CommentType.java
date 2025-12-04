@@ -1,6 +1,5 @@
 package de.ollie.healthtracker.core.service.model;
 
-import java.time.LocalDate;
 import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
@@ -14,10 +13,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-public class Comment {
+public class CommentType {
 
 	private UUID id;
-	private CommentType commentType;
-	private String content;
-	private LocalDate dateOfRecording;
+	private String name;
 }

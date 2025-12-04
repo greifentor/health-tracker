@@ -290,6 +290,32 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet author="dm-comp" id="Add-CommentType-Fields-and-Tables" failOnError="true" runInTransaction="true">
+        <createTable tableName="COMMENT_TYPE">
+            <column name="ID" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="COMMENT_TYPE"/>
+        <addColumn tableName="COMMENT">
+            <column name="COMMENT_TYPE" type="VARCHAR(40)" />
+        </addColumn>
+        <addForeignKeyConstraint constraintName="FK_COMMENT_COMMENT_TYPE_TO_COMMENT_TYPE" baseColumnNames="COMMENT_TYPE" baseTableName="COMMENT" referencedColumnNames="ID" referencedTableName="COMMENT_TYPE"/>
+        <sql>
+            INSERT INTO COMMENT_TYPE (ID, NAME)
+            VALUES ('a66c2739-0918-4dae-ae1a-85c14aaf9117', 'Dummy');
+        </sql>
+        <sql>
+            UPDATE COMMENT
+            SET COMMENT_TYPE = 'a66c2739-0918-4dae-ae1a-85c14aaf9117';
+        </sql>
+    </changeSet>
+    <changeSet author="dm-comp" id="Add-Not-Null-Constraint-to-Field-COMMENT_TYPE-in-Table-COMMENT" failOnError="true" runInTransaction="true">
+        <addNotNullConstraint columnName="COMMENT_TYPE" tableName="COMMENT" columnDataType="VARCHAR(40)"/>
+    </changeSet>
 
 </databaseChangeLog>
 

@@ -2,6 +2,7 @@ package de.ollie.healthtracker.gui.swing.edit.comment;
 
 import de.ollie.healthtracker.core.service.CommentService;
 import de.ollie.healthtracker.core.service.model.Comment;
+import de.ollie.healthtracker.core.service.model.CommentType;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditJInternalFrame;
@@ -22,11 +23,19 @@ public class CommentEditJInternalFrame extends AbstractEditJInternalFrame<Commen
 
 	public CommentEditJInternalFrame(
 		Comment toEdit,
+		ItemProvider<CommentType> commentTypes,
 		EditDialogComponentFactory editDialogComponentFactory,
 		Observer<Comment> observer,
 		JDesktopPane desktopPane
 	) {
-		super(desktopPane, "Comment", toEdit, editDialogComponentFactory, observer, Map.of());
+		super(
+			desktopPane,
+			"Comment",
+			toEdit,
+			editDialogComponentFactory,
+			observer,
+			Map.of(CommentEditJPanel.COMMENT_TYPE_ITEM_PROVIDER_ID, commentTypes)
+		);
 	}
 
 	@Override

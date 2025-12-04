@@ -8,6 +8,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementStatusDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BodyPartDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.CommentTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorConsultationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
@@ -21,6 +22,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
 import de.ollie.healthtracker.persistence.jpa.repository.BodyPartDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.CommentTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.GeneralBodyPartDboRepository;
@@ -41,6 +43,7 @@ import lombok.RequiredArgsConstructor;
 class DboFactory {
 
 	private final BodyPartDboRepository bodyPartRepository;
+	private final CommentTypeDboRepository commentTypeDboRepository;
 	private final DoctorDboRepository doctorRepository;
 	private final DoctorTypeDboRepository doctorTypeRepository;
 	private final GeneralBodyPartDboRepository generalBodyPartRepository;
@@ -86,11 +89,25 @@ class DboFactory {
 		return new BodyPartDbo().setId(uuidFactory.create()).setGeneralBodyPart(generalBodyPart).setName(name);
 	}
 
-	CommentDbo createComment(String content, LocalDate dateOfRecording) {
+	CommentDbo createComment(UUID commentTypeId, String content, LocalDate dateOfRecording) {
+		ensure(commentTypeId != null, "comment type id cannot be null!");
 		ensure(content != null, "content cannot be null!");
 		ensure(!content.isBlank(), "content cannot be blank!");
 		ensure(dateOfRecording != null, "date of recording cannot be null!");
-		return new CommentDbo().setContent(content).setDateOfRecording(dateOfRecording).setId(uuidFactory.create());
+		CommentTypeDbo commentTypeDbo = commentTypeDboRepository
+			.findById(commentTypeId)
+			.orElseThrow(() -> new NoSuchElementException("no general body part found with id: " + commentTypeId));
+		return new CommentDbo()
+			.setCommentType(commentTypeDbo)
+			.setContent(content)
+			.setDateOfRecording(dateOfRecording)
+			.setId(uuidFactory.create());
+	}
+
+	CommentTypeDbo createCommentType(String name) {
+		ensure(name != null, "name cannot be null!");
+		ensure(!name.isBlank(), "name cannot be blank!");
+		return new CommentTypeDbo().setName(name).setId(uuidFactory.create());
 	}
 
 	DoctorDbo createDoctor(String name, UUID doctorTypeId) {

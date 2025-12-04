@@ -2,6 +2,7 @@ package de.ollie.healthtracker.core.service.impl;
 
 import de.ollie.healthtracker.core.service.CommentService;
 import de.ollie.healthtracker.core.service.model.Comment;
+import de.ollie.healthtracker.core.service.model.CommentType;
 import de.ollie.healthtracker.core.service.port.persistence.CommentPersistencePort;
 import jakarta.inject.Named;
 import java.time.LocalDate;
@@ -24,8 +25,8 @@ class CommentServiceImpl implements CommentService {
 	private final CommentPersistencePort commentPersistencePort;
 
 	@Override
-	public Comment createComment(String content, LocalDate dateOfRecording) {
-		return commentPersistencePort.create(content, dateOfRecording);
+	public Comment createComment(CommentType commentType, String content, LocalDate dateOfRecording) {
+		return commentPersistencePort.create(commentType, content, dateOfRecording);
 	}
 
 	@Override

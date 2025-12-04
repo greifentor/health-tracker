@@ -6,6 +6,7 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.BodyPartService;
 import de.ollie.healthtracker.core.service.CommentService;
+import de.ollie.healthtracker.core.service.CommentTypeService;
 import de.ollie.healthtracker.core.service.DoctorConsultationService;
 import de.ollie.healthtracker.core.service.DoctorService;
 import de.ollie.healthtracker.core.service.DoctorTypeService;
@@ -21,6 +22,7 @@ import de.ollie.healthtracker.core.service.SymptomService;
 import de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement.BloodPressureMeasurementSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.bodypart.BodyPartSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.comment.CommentSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.commenttype.CommentTypeSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.doctor.DoctorSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.doctorconsultation.DoctorConsultationSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.doctortype.DoctorTypeSelectJInternalFrame;
@@ -55,6 +57,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final BodyPartService bodyPartService;
 	private final CommentService commentService;
+	private final CommentTypeService commentTypeService;
 	private final DoctorConsultationService doctorConsultationService;
 	private final DoctorService doctorService;
 	private final DoctorTypeService doctorTypeService;
@@ -74,6 +77,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemEditBloodPressureMeasurement;
 	private JMenuItem menuItemEditBodyPart;
 	private JMenuItem menuItemEditComment;
+	private JMenuItem menuItemEditCommentType;
 	private JMenuItem menuItemEditDoctor;
 	private JMenuItem menuItemEditDoctorConsultation;
 	private JMenuItem menuItemEditDoctorType;
@@ -122,6 +126,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemEditBodyPart);
 		menuItemEditComment = createMenuItem("Comment", this);
 		menu.add(menuItemEditComment);
+		menuItemEditCommentType = createMenuItem("Comment Type", this);
+		menu.add(menuItemEditCommentType);
 		menuItemEditDoctor = createMenuItem("Doctor", this);
 		menu.add(menuItemEditDoctor);
 		menuItemEditDoctorType = createMenuItem("Doctor Type", this);
@@ -175,7 +181,9 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				editDialogComponentFactory
 			);
 		} else if (e.getSource() == menuItemEditComment) {
-			new CommentSelectJInternalFrame(commentService, desktopPane, editDialogComponentFactory);
+			new CommentSelectJInternalFrame(commentService, commentTypeService, desktopPane, editDialogComponentFactory);
+		} else if (e.getSource() == menuItemEditCommentType) {
+			new CommentTypeSelectJInternalFrame(commentTypeService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditDoctor) {
 			new DoctorSelectJInternalFrame(doctorService, doctorTypeService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditDoctorConsultation) {

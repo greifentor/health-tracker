@@ -13,6 +13,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementStatusDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BodyPartDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.CommentTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorConsultationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
@@ -25,6 +26,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
 import de.ollie.healthtracker.persistence.jpa.repository.BodyPartDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.CommentTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.GeneralBodyPartDboRepository;
@@ -74,6 +76,9 @@ class DboFactoryTest {
 
 	@Mock
 	private BodyPartDboRepository bodyPartRepository;
+
+	@Mock
+	private CommentTypeDboRepository commentTypeDboRepository;
 
 	@Mock
 	private DoctorDbo doctorDbo;
@@ -338,41 +343,62 @@ class DboFactoryTest {
 	@Nested
 	class createComment_String_LocalDate_LocalTime {
 
+		private static final UUID COMMENT_TYPE_ID = UUID.randomUUID();
+
+		@Mock
+		private CommentTypeDbo commentType;
+
 		@Test
 		void throwsAnException_passingABlankString_asContent() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createComment(BLANK_STR, DATE_OF_RECORDING));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createComment(ID, BLANK_STR, DATE_OF_RECORDING));
 		}
 
 		@Test
 		void throwsAnException_passingANullValue_asContent() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createComment(null, DATE_OF_RECORDING));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createComment(ID, null, DATE_OF_RECORDING));
 		}
 
 		@Test
 		void throwsAnException_passingANullValue_asDateOfRecording() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createComment(CONTENT, null));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createComment(ID, CONTENT, null));
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asCommentTypeId() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createComment(null, CONTENT, DATE_OF_RECORDING));
 		}
 
 		@Test
 		void returnANewObject() {
-			assertNotNull(unitUnderTest.createComment(CONTENT, DATE_OF_RECORDING));
+			// Prepare
+			when(commentTypeDboRepository.findById(COMMENT_TYPE_ID)).thenReturn(Optional.of(commentType));
+			// Run & Check
+			assertNotNull(unitUnderTest.createComment(COMMENT_TYPE_ID, CONTENT, DATE_OF_RECORDING));
 		}
 
 		@Test
 		void returnANewObject_onEachCall() {
+			// Prepare
+			when(commentTypeDboRepository.findById(COMMENT_TYPE_ID)).thenReturn(Optional.of(commentType));
+			// Run & Check
 			assertNotSame(
-				unitUnderTest.createComment(CONTENT, DATE_OF_RECORDING),
-				unitUnderTest.createComment(CONTENT, DATE_OF_RECORDING)
+				unitUnderTest.createComment(COMMENT_TYPE_ID, CONTENT, DATE_OF_RECORDING),
+				unitUnderTest.createComment(COMMENT_TYPE_ID, CONTENT, DATE_OF_RECORDING)
 			);
 		}
 
 		@Test
 		void returnANewObject_withCorrectlySetAttributes() {
 			// Prepare
-			CommentDbo expected = new CommentDbo().setContent(CONTENT).setDateOfRecording(DATE_OF_RECORDING).setId(ID);
+			CommentDbo expected = new CommentDbo()
+				.setCommentType(commentType)
+				.setContent(CONTENT)
+				.setDateOfRecording(DATE_OF_RECORDING)
+				.setId(ID);
 			when(uuidFactory.create()).thenReturn(ID);
+			when(commentTypeDboRepository.findById(COMMENT_TYPE_ID)).thenReturn(Optional.of(commentType));
 			// Run & Check
-			assertEquals(expected, unitUnderTest.createComment(CONTENT, DATE_OF_RECORDING));
+			assertEquals(expected, unitUnderTest.createComment(COMMENT_TYPE_ID, CONTENT, DATE_OF_RECORDING));
 		}
 	}
 

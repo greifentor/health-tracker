@@ -2,7 +2,10 @@ package de.ollie.healthtracker.persistence.jpa.dbo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -25,6 +28,10 @@ public class CommentDbo {
 	@Id
 	@Column(name = "ID", nullable = false)
 	private UUID id;
+
+	@JoinColumn(name = "COMMENT_TYPE", referencedColumnName = "ID", nullable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	private CommentTypeDbo commentType;
 
 	@Column(name = "CONTENT", nullable = false)
 	private String content;

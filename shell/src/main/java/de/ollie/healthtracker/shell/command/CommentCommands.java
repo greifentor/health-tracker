@@ -39,7 +39,7 @@ public class CommentCommands implements CommandsWithTimeOrDate {
 	) {
 		try {
 			LocalDate dateOfMeasurement = getDateFromParameter(dateOfMeasurementStr);
-			commentService.createComment(content, dateOfMeasurement);
+			commentService.createComment(null, content, dateOfMeasurement);
 			return Constants.OK;
 		} catch (Exception e) {
 			e.printStackTrace();

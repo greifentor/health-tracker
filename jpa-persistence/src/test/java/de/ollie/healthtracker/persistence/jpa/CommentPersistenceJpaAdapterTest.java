@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.ollie.healthtracker.core.service.model.Comment;
+import de.ollie.healthtracker.core.service.model.CommentType;
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
 import de.ollie.healthtracker.persistence.jpa.mapper.CommentDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.CommentDboRepository;
@@ -30,6 +31,9 @@ class CommentPersistenceJpaAdapterTest {
 
 	@Mock
 	private Comment model;
+
+	@Mock
+	private CommentType commentType;
 
 	@Mock
 	private CommentDbo dbo;
@@ -55,11 +59,12 @@ class CommentPersistenceJpaAdapterTest {
 		@Test
 		void returnsANewSavedObject() {
 			// Prepare
-			when(dboFactory.createComment(CONTENT, DATE_OF_RECORDING)).thenReturn(dbo);
+			when(commentType.getId()).thenReturn(ID);
+			when(dboFactory.createComment(ID, CONTENT, DATE_OF_RECORDING)).thenReturn(dbo);
 			when(mapper.toModel(dboSaved)).thenReturn(model);
 			when(repository.save(dbo)).thenReturn(dboSaved);
 			// Run & Check
-			assertSame(model, unitUnderTest.create(CONTENT, DATE_OF_RECORDING));
+			assertSame(model, unitUnderTest.create(commentType, CONTENT, DATE_OF_RECORDING));
 		}
 	}
 

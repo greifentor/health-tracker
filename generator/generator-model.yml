@@ -112,6 +112,18 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
+      - name: commentType
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 3
+        reference: true
+        type:
+          name: CommentType
+          properties:
+            - name: project-type
+              value: true
       - name: content
         properties:
           - name: nullable
@@ -133,6 +145,34 @@ classes:
           properties:
             - name: import
               value: java.time.LocalDate
+  - name: CommentType
+    properties:
+      - name: order
+        value: name DESC
+      - name: gui
+        value: true
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+          - name: editor-position
+            value: 1
+        type:
+          name: String
   - name: Doctor
     properties:
       - name: order
@@ -625,9 +665,3 @@ classes:
             value: 4
         type:
           name: boolean
-enums:
-  - name: TestEnum
-    identifiers:
-    - ONE
-    - TWO
-    - THREE

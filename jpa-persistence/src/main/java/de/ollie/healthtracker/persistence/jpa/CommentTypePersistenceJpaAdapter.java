@@ -3,14 +3,12 @@ package de.ollie.healthtracker.persistence.jpa;
 import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
-import de.ollie.healthtracker.core.service.model.Comment;
 import de.ollie.healthtracker.core.service.model.CommentType;
-import de.ollie.healthtracker.core.service.port.persistence.CommentPersistencePort;
-import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
-import de.ollie.healthtracker.persistence.jpa.mapper.CommentDboMapper;
-import de.ollie.healthtracker.persistence.jpa.repository.CommentDboRepository;
+import de.ollie.healthtracker.core.service.port.persistence.CommentTypePersistencePort;
+import de.ollie.healthtracker.persistence.jpa.dbo.CommentTypeDbo;
+import de.ollie.healthtracker.persistence.jpa.mapper.CommentTypeDboMapper;
+import de.ollie.healthtracker.persistence.jpa.repository.CommentTypeDboRepository;
 import jakarta.inject.Named;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,15 +23,15 @@ import lombok.RequiredArgsConstructor;
 @Generated
 @Named
 @RequiredArgsConstructor
-class CommentPersistenceJpaAdapter implements CommentPersistencePort {
+class CommentTypePersistenceJpaAdapter implements CommentTypePersistencePort {
 
 	private final DboFactory dboFactory;
-	private final CommentDboMapper mapper;
-	private final CommentDboRepository repository;
+	private final CommentTypeDboMapper mapper;
+	private final CommentTypeDboRepository repository;
 
 	@Override
-	public Comment create(CommentType commentType, String content, LocalDate dateOfRecording) {
-		return mapper.toModel(repository.save(dboFactory.createComment(commentType.getId(), content, dateOfRecording)));
+	public CommentType create(String name) {
+		return mapper.toModel(repository.save(dboFactory.createCommentType(name)));
 	}
 
 	@Override
@@ -43,15 +41,15 @@ class CommentPersistenceJpaAdapter implements CommentPersistencePort {
 	}
 
 	@Override
-	public Optional<Comment> findById(UUID id) {
+	public Optional<CommentType> findById(UUID id) {
 		ensure(id != null, "id cannot be null!");
 		return repository.findById(id).map(mapper::toModel);
 	}
 
 	@Override
-	public Optional<Comment> findByIdOrContentParticle(String nameParticleOrId) {
+	public Optional<CommentType> findByIdOrNameParticle(String nameParticleOrId) {
 		ensure(nameParticleOrId != null, "name particle or id cannot be null");
-		Optional<CommentDbo> dbo = Optional.empty();
+		Optional<CommentTypeDbo> dbo = Optional.empty();
 		try {
 			UUID uuid = UUID.fromString(nameParticleOrId);
 			dbo = repository.findById(uuid);
@@ -61,7 +59,7 @@ class CommentPersistenceJpaAdapter implements CommentPersistencePort {
 		return Optional.ofNullable(
 			mapper.toModel(
 				dbo.orElseGet(() -> {
-					List<CommentDbo> found = repository.findAllByContentMatch(nameParticleOrId);
+					List<CommentTypeDbo> found = repository.findAllByNameMatch(nameParticleOrId);
 					if (found.size() < 2) {
 						return found.size() == 0 ? null : found.get(0);
 					}
@@ -72,12 +70,12 @@ class CommentPersistenceJpaAdapter implements CommentPersistencePort {
 	}
 
 	@Override
-	public List<Comment> list() {
+	public List<CommentType> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
 
 	@Override
-	public Comment update(Comment toSave) {
+	public CommentType update(CommentType toSave) {
 		return mapper.toModel(repository.save(mapper.toDbo(toSave)));
 	}
 }

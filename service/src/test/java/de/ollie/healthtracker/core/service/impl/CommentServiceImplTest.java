@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.ollie.healthtracker.core.service.model.Comment;
+import de.ollie.healthtracker.core.service.model.CommentType;
 import de.ollie.healthtracker.core.service.port.persistence.CommentPersistencePort;
 import java.time.LocalDate;
 import java.util.List;
@@ -28,6 +29,9 @@ class CommentServiceImplTest {
 	private Comment comment;
 
 	@Mock
+	private CommentType commentType;
+
+	@Mock
 	private CommentPersistencePort commentPersistencePort;
 
 	@InjectMocks
@@ -39,9 +43,9 @@ class CommentServiceImplTest {
 		@Test
 		void returnsTheResultOfThePersistencePortMethodCall() {
 			// Prepare
-			when(commentPersistencePort.create(CONTENT, DATE_OF_RECORDING)).thenReturn(comment);
+			when(commentPersistencePort.create(commentType, CONTENT, DATE_OF_RECORDING)).thenReturn(comment);
 			// Run
-			Comment returned = unitUnderTest.createComment(CONTENT, DATE_OF_RECORDING);
+			Comment returned = unitUnderTest.createComment(commentType, CONTENT, DATE_OF_RECORDING);
 			// Check
 			assertSame(comment, returned);
 		}

@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.core.service;
 
 import de.ollie.healthtracker.core.service.model.Comment;
+import de.ollie.healthtracker.core.service.model.CommentType;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,7 @@ import lombok.Generated;
  */
 @Generated
 public interface CommentService {
-	Comment createComment(String content, LocalDate dateOfRecording);
+	Comment createComment(CommentType commentType, String content, LocalDate dateOfRecording);
 
 	void deleteComment(UUID id);
 
