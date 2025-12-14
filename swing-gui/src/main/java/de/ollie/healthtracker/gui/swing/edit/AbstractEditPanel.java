@@ -23,7 +23,15 @@ public abstract class AbstractEditPanel<T> extends JPanel implements Editor<T> {
 		JPanel psub = new JPanel(new BorderLayout(HGAP, VGAP));
 		psub.add(createLabelPanel(), BorderLayout.WEST);
 		psub.add(createComponentPanel(toEdit, itemProviders), BorderLayout.CENTER);
+		JPanel additionalPanel = createAdditionalPanel(toEdit, itemProviders);
+		if (additionalPanel != null) {
+			add(additionalPanel, BorderLayout.CENTER);
+		}
 		add(psub, BorderLayout.NORTH);
+	}
+
+	protected JPanel createAdditionalPanel(T toEdit, Map<String, ItemProvider<?>> itemProviders) {
+		return null;
 	}
 
 	protected abstract JPanel createLabelPanel();
