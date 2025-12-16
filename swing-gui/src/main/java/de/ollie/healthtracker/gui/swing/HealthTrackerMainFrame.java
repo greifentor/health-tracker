@@ -18,6 +18,7 @@ import de.ollie.healthtracker.core.service.MeatTypeService;
 import de.ollie.healthtracker.core.service.MedicationLogService;
 import de.ollie.healthtracker.core.service.MedicationService;
 import de.ollie.healthtracker.core.service.MedicationUnitService;
+import de.ollie.healthtracker.core.service.ReportPrintService;
 import de.ollie.healthtracker.core.service.SymptomService;
 import de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement.BloodPressureMeasurementSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.bodypart.BodyPartSelectJInternalFrame;
@@ -40,12 +41,19 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import lombok.RequiredArgsConstructor;
@@ -69,6 +77,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final MedicationLogService medicationLogService;
 	private final MedicationService medicationService;
 	private final MedicationUnitService medicationUnitService;
+	private final ReportPrintService reportPrintService;
+	private final SwingConfiguration configuration;
 	private final SymptomService symptomService;
 	private final EditDialogComponentFactory editDialogComponentFactory;
 
@@ -89,6 +99,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemEditMedicationLog;
 	private JMenuItem menuItemEditMedication;
 	private JMenuItem menuItemEditSymptom;
+	private JMenuItem menuItemFilePrint;
 	private JMenuItem menuItemFileQuit;
 
 	@PostConstruct
@@ -116,6 +127,9 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuBar createJMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("File");
+		menuItemFilePrint = createMenuItem("Print", this);
+		menu.add(menuItemFilePrint);
+		menu.add(new JSeparator());
 		menuItemFileQuit = createMenuItem("Quit", this);
 		menu.add(menuItemFileQuit);
 		menuBar.add(menu);
@@ -227,6 +241,30 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			);
 		} else if (e.getSource() == menuItemEditSymptom) {
 			new SymptomSelectJInternalFrame(symptomService, bodyPartService, desktopPane, editDialogComponentFactory);
+		} else if (e.getSource() == menuItemFilePrint) {
+			Map<String, Object> parameters = new HashMap<>();
+			byte[] pdf = reportPrintService.printForTimeInterval(
+				LocalDate.of(2025, 01, 01),
+				LocalDate.of(2099, 12, 31),
+				"jasper",
+				parameters
+			);
+			try {
+				Files.write(
+					Path.of(configuration.getPdfTmpFilename()),
+					pdf,
+					StandardOpenOption.WRITE,
+					StandardOpenOption.TRUNCATE_EXISTING,
+					StandardOpenOption.CREATE
+				);
+				ProcessBuilder pb = new ProcessBuilder(
+					configuration.getPdfViewerCallApplication(),
+					configuration.getPdfViewerCallParameters().replace("%TEMP_PDF%", configuration.getPdfTmpFilename())
+				);
+				pb.start();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		} else if (e.getSource() == menuItemFileQuit) {
 			System.exit(0);
 		}

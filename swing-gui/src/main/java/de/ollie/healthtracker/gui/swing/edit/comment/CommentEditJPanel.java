@@ -68,7 +68,7 @@ public class CommentEditJPanel extends AbstractEditPanel<Comment> {
 	protected JPanel createAdditionalPanel(Comment toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		JPanel p = new JPanel(new BorderLayout(HGAP, VGAP));
 		JPanel pLabel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
-		pLabel.add(new JLabel("Content:                   "));
+		pLabel.add(new JLabel("Content:                 "));
 		textAreaContent = new JTextArea(toEdit.getContent(), 5, 40);
 		p.add(pLabel, BorderLayout.WEST);
 		p.add(textAreaContent, BorderLayout.CENTER);

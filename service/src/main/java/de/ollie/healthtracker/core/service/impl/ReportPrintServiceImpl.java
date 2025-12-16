@@ -45,13 +45,13 @@ class ReportPrintServiceImpl implements ReportPrintService {
 	}
 
 	@Override
-	public void printForTimeInterval(LocalDate from, LocalDate to, String printPortId, Map<String, String> parameters) {
+	public byte[] printForTimeInterval(LocalDate from, LocalDate to, String printPortId, Map<String, Object> parameters) {
 		ensure(from != null, "from cannot be null!");
 		ensure(parameters != null, "parameters cannot be null!");
 		ensure(printPortId != null, "print port id cannot be null!");
 		ensure(to != null, "to cannot be null!");
 		PrintPort printPort = printPorts.get(printPortId);
 		ensure(printPort != null, "print port id is not found in configured print ports!");
-		printPort.print(reportService.collectData(from, to), parameters);
+		return printPort.print(reportService.collectData(from, to), parameters);
 	}
 }

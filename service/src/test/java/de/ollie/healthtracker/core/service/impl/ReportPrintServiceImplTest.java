@@ -37,7 +37,7 @@ class ReportPrintServiceImplTest {
 	private HealthTrackingReport healthTrackerReport;
 
 	@Mock
-	private Map<String, String> parameters;
+	private Map<String, Object> parameters;
 
 	@Mock
 	private PrintPort printPort0;
