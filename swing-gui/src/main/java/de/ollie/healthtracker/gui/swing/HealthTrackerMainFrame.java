@@ -20,6 +20,7 @@ import de.ollie.healthtracker.core.service.MedicationService;
 import de.ollie.healthtracker.core.service.MedicationUnitService;
 import de.ollie.healthtracker.core.service.ReportPrintService;
 import de.ollie.healthtracker.core.service.SymptomService;
+import de.ollie.healthtracker.gui.swing.external.viewer.pdf.ExternalPdfViewerStarter;
 import de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement.BloodPressureMeasurementSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.bodypart.BodyPartSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.comment.CommentSelectJInternalFrame;
@@ -41,12 +42,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -70,6 +67,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final DoctorService doctorService;
 	private final DoctorTypeService doctorTypeService;
 	private final ExerciseService exerciseService;
+	private final ExternalPdfViewerStarter externalPdfViewerStarter;
 	private final GeneralBodyPartService generalBodyPartService;
 	private final ManufacturerService manufacturerService;
 	private final MeatConsumptionService meatConsumptionService;
@@ -78,7 +76,6 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final MedicationService medicationService;
 	private final MedicationUnitService medicationUnitService;
 	private final ReportPrintService reportPrintService;
-	private final SwingConfiguration configuration;
 	private final SymptomService symptomService;
 	private final EditDialogComponentFactory editDialogComponentFactory;
 
@@ -242,26 +239,14 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		} else if (e.getSource() == menuItemEditSymptom) {
 			new SymptomSelectJInternalFrame(symptomService, bodyPartService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemFilePrint) {
-			Map<String, Object> parameters = new HashMap<>();
 			byte[] pdf = reportPrintService.printForTimeInterval(
 				LocalDate.of(2025, 01, 01),
 				LocalDate.of(2099, 12, 31),
 				"jasper",
-				parameters
+				new HashMap<>()
 			);
 			try {
-				Files.write(
-					Path.of(configuration.getPdfTmpFilename()),
-					pdf,
-					StandardOpenOption.WRITE,
-					StandardOpenOption.TRUNCATE_EXISTING,
-					StandardOpenOption.CREATE
-				);
-				ProcessBuilder pb = new ProcessBuilder(
-					configuration.getPdfViewerCallApplication(),
-					configuration.getPdfViewerCallParameters().replace("%TEMP_PDF%", configuration.getPdfTmpFilename())
-				);
-				pb.start();
+				externalPdfViewerStarter.show(pdf);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
