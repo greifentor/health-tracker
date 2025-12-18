@@ -32,9 +32,16 @@ class DoctorConsultationPersistenceJpaAdapter implements DoctorConsultationPersi
 	private final DoctorConsultationDboRepository repository;
 
 	@Override
-	public DoctorConsultation create(LocalDate date, LocalTime time, Doctor doctor, String reason, String result) {
+	public DoctorConsultation create(
+		LocalDate date,
+		LocalTime time,
+		Doctor doctor,
+		boolean open,
+		String reason,
+		String result
+	) {
 		return mapper.toModel(
-			repository.save(dboFactory.createDoctorConsultation(date, time, doctor.getId(), reason, result))
+			repository.save(dboFactory.createDoctorConsultation(date, time, doctor.getId(), open, reason, result))
 		);
 	}
 

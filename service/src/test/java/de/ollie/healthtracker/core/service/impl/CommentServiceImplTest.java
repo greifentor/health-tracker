@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.core.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -73,6 +74,48 @@ class CommentServiceImplTest {
 			when(commentPersistencePort.list()).thenReturn(list);
 			// Run
 			List<Comment> returned = unitUnderTest.listComments();
+			// Check
+			assertSame(list, returned);
+		}
+	}
+
+	@Nested
+	class listCommentsBetweenDatesOrderedByDateAndContent {
+
+		private static final LocalDate FROM = LocalDate.of(2025, 12, 1);
+		private static final LocalDate TO = LocalDate.of(2025, 12, 31);
+
+		@Test
+		void throwsException_passingANullValue_asFromDate() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.listCommentsBetweenDatesOrderedByDateAndContent(null, TO)
+			);
+		}
+
+		@Test
+		void throwsException_passingANullValue_asToDate() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.listCommentsBetweenDatesOrderedByDateAndContent(FROM, null)
+			);
+		}
+
+		@Test
+		void throwsException_passingFromDateAfterToDate() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.listCommentsBetweenDatesOrderedByDateAndContent(TO, FROM)
+			);
+		}
+
+		@Test
+		void returnsTheResultOfThePersistencePortMethodCall() {
+			// Prepare
+			List<Comment> list = List.of(comment);
+			when(commentPersistencePort.listBetweenDatesOrderedByDateAndContent(FROM, TO)).thenReturn(list);
+			// Run
+			List<Comment> returned = unitUnderTest.listCommentsBetweenDatesOrderedByDateAndContent(FROM, TO);
 			// Check
 			assertSame(list, returned);
 		}

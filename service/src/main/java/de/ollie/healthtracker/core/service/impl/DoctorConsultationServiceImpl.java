@@ -30,10 +30,11 @@ class DoctorConsultationServiceImpl implements DoctorConsultationService {
 		LocalDate date,
 		LocalTime time,
 		Doctor doctor,
+		boolean open,
 		String reason,
 		String result
 	) {
-		return doctorConsultationPersistencePort.create(date, time, doctor, reason, result);
+		return doctorConsultationPersistencePort.create(date, time, doctor, open, reason, result);
 	}
 
 	@Override

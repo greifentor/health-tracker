@@ -9,5 +9,6 @@ import lombok.experimental.Accessors;
 @Generated
 public class DataPerDayPO {
 
+	private String comment;
 	private String date;
 }

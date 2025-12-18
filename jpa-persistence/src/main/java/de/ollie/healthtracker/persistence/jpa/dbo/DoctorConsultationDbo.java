@@ -40,6 +40,9 @@ public class DoctorConsultationDbo {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DoctorDbo doctor;
 
+	@Column(name = "OPEN", nullable = false)
+	private boolean open;
+
 	@Column(name = "REASON", nullable = false)
 	private String reason;
 

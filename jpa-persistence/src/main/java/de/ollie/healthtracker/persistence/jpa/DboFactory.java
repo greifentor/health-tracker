@@ -124,6 +124,7 @@ class DboFactory {
 		LocalDate date,
 		LocalTime time,
 		UUID doctorId,
+		boolean open,
 		String reason,
 		String result
 	) {
@@ -141,6 +142,7 @@ class DboFactory {
 			.setDate(date)
 			.setDoctor(doctor)
 			.setId(uuidFactory.create())
+			.setOpen(open)
 			.setReason(reason)
 			.setResult(result)
 			.setTime(time);

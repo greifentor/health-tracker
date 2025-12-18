@@ -54,7 +54,7 @@ public class DoctorConsultationSelectJPanel
 
 	@Override
 	protected AbstractSelectionTableModel<DoctorConsultation> createSelectionModel() {
-		return new AbstractSelectionTableModel<>(getObjectsToSelect(), "Date", "Time", "Doctor", "Doctor Type") {
+		return new AbstractSelectionTableModel<>(getObjectsToSelect(), "Date", "Time", "Doctor", "Doctor Type", "Open") {
 			@Override
 			protected Object getColumnValueFor(DoctorConsultation t, int columnIndex) {
 				return switch (columnIndex) {
@@ -62,6 +62,7 @@ public class DoctorConsultationSelectJPanel
 					case 1 -> t.getTime();
 					case 2 -> t.getDoctor().getName();
 					case 3 -> t.getDoctor().getDoctorType().getName();
+					case 4 -> t.isOpen();
 					default -> null;
 				};
 			}
@@ -90,6 +91,7 @@ public class DoctorConsultationSelectJPanel
 			LocalDate.now(),
 			LocalTime.now(),
 			doctors.get(0),
+			true,
 			"-",
 			"-"
 		);

@@ -18,7 +18,7 @@ import lombok.Generated;
 @Generated
 @Named
 public interface DoctorConsultationPersistencePort {
-	DoctorConsultation create(LocalDate date, LocalTime time, Doctor doctor, String reason, String result);
+	DoctorConsultation create(LocalDate date, LocalTime time, Doctor doctor, boolean open, String reason, String result);
 
 	void deleteById(UUID id);
 

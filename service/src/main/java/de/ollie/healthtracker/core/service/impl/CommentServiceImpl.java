@@ -1,5 +1,7 @@
 package de.ollie.healthtracker.core.service.impl;
 
+import static de.ollie.baselib.util.Check.ensure;
+
 import de.ollie.healthtracker.core.service.CommentService;
 import de.ollie.healthtracker.core.service.model.Comment;
 import de.ollie.healthtracker.core.service.model.CommentType;
@@ -9,15 +11,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
-/**
- * GENERATED CODE - DO NOT TOUCH
- *
- * Remove this comment to suspend class from generation process.
- */
-@Generated
 @Named
 @RequiredArgsConstructor
 class CommentServiceImpl implements CommentService {
@@ -47,6 +42,14 @@ class CommentServiceImpl implements CommentService {
 	@Override
 	public List<Comment> listComments() {
 		return commentPersistencePort.list();
+	}
+
+	@Override
+	public List<Comment> listCommentsBetweenDatesOrderedByDateAndContent(LocalDate from, LocalDate to) {
+		ensure(from != null, "from cannot be null!");
+		ensure(to != null, "to cannot be null!");
+		ensure(from.isBefore(to) || from.equals(to), "to cannot be before from!");
+		return commentPersistencePort.listBetweenDatesOrderedByDateAndContent(from, to);
 	}
 
 	@Override

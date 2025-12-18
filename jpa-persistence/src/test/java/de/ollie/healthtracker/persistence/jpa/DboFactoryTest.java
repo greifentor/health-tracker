@@ -462,7 +462,7 @@ class DboFactoryTest {
 		void throwsAnException_passingANullValue_asDate() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createDoctorConsultation(null, TIME, ID, REASON, RESULT)
+				() -> unitUnderTest.createDoctorConsultation(null, TIME, ID, true, REASON, RESULT)
 			);
 		}
 
@@ -470,7 +470,7 @@ class DboFactoryTest {
 		void throwsAnException_passingANullValue_asDoctorId() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, null, REASON, RESULT)
+				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, null, true, REASON, RESULT)
 			);
 		}
 
@@ -478,7 +478,7 @@ class DboFactoryTest {
 		void throwsAnException_passingABlankString_asReason() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, BLANK_STR, RESULT)
+				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, true, BLANK_STR, RESULT)
 			);
 		}
 
@@ -486,7 +486,7 @@ class DboFactoryTest {
 		void throwsAnException_passingANullValue_asResult() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, null, RESULT)
+				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, true, null, RESULT)
 			);
 		}
 
@@ -494,7 +494,7 @@ class DboFactoryTest {
 		void throwsAnException_passingABlankString_asResult() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, REASON, BLANK_STR)
+				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, true, REASON, BLANK_STR)
 			);
 		}
 
@@ -502,7 +502,7 @@ class DboFactoryTest {
 		void throwsAnException_passingANullValue_asReason() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, REASON, null)
+				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, true, REASON, null)
 			);
 		}
 
@@ -510,7 +510,7 @@ class DboFactoryTest {
 		void throwsAnException_passingANullValue_asTime() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createDoctorConsultation(DATE, null, ID, REASON, RESULT)
+				() -> unitUnderTest.createDoctorConsultation(DATE, null, ID, true, REASON, RESULT)
 			);
 		}
 
@@ -519,7 +519,7 @@ class DboFactoryTest {
 			// Prepare
 			when(doctorRepository.findById(ID)).thenReturn(Optional.of(doctorDbo));
 			// Run & Check
-			assertNotNull(unitUnderTest.createDoctorConsultation(DATE, TIME, ID, REASON, RESULT));
+			assertNotNull(unitUnderTest.createDoctorConsultation(DATE, TIME, ID, true, REASON, RESULT));
 		}
 
 		@Test
@@ -528,8 +528,8 @@ class DboFactoryTest {
 			when(doctorRepository.findById(ID)).thenReturn(Optional.of(doctorDbo));
 			// Run & Check
 			assertNotSame(
-				unitUnderTest.createDoctorConsultation(DATE, TIME, ID, REASON, RESULT),
-				unitUnderTest.createDoctorConsultation(DATE, TIME, ID, REASON, RESULT)
+				unitUnderTest.createDoctorConsultation(DATE, TIME, ID, true, REASON, RESULT),
+				unitUnderTest.createDoctorConsultation(DATE, TIME, ID, true, REASON, RESULT)
 			);
 		}
 
@@ -540,13 +540,14 @@ class DboFactoryTest {
 				.setDate(DATE)
 				.setDoctor(doctorDbo)
 				.setId(ID)
+				.setOpen(true)
 				.setReason(REASON)
 				.setResult(RESULT)
 				.setTime(TIME);
 			when(doctorRepository.findById(ID)).thenReturn(Optional.of(doctorDbo));
 			when(uuidFactory.create()).thenReturn(ID);
 			// Run & Check
-			assertEquals(expected, unitUnderTest.createDoctorConsultation(DATE, TIME, ID, REASON, RESULT));
+			assertEquals(expected, unitUnderTest.createDoctorConsultation(DATE, TIME, ID, true, REASON, RESULT));
 		}
 
 		@Test
@@ -556,7 +557,7 @@ class DboFactoryTest {
 			// Run & Check
 			assertThrows(
 				NoSuchElementException.class,
-				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, REASON, RESULT)
+				() -> unitUnderTest.createDoctorConsultation(DATE, TIME, ID, true, REASON, RESULT)
 			);
 		}
 	}

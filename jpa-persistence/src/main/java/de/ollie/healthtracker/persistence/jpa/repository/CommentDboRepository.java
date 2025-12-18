@@ -20,4 +20,9 @@ public interface CommentDboRepository extends JpaRepository<CommentDbo, UUID> {
 
 	@Query("SELECT dbo FROM CommentDbo dbo WHERE dbo.content LIKE CONCAT('%', :content, '%')")
 	List<CommentDbo> findAllByContentMatch(String content);
+
+	@Query(
+		"SELECT dbo FROM CommentDbo dbo WHERE dbo.dateOfRecording >= :from AND dbo.dateOfRecording <= :to ORDER BY dbo.dateOfRecording, dbo.content"
+	)
+	List<CommentDbo> findAllBetweenFromAndToOrderByDateOfRecordingAndContent(LocalDate from, LocalDate to);
 }

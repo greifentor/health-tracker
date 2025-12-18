@@ -21,6 +21,7 @@ public class DoctorConsultation {
 	private LocalDate date;
 	private LocalTime time;
 	private Doctor doctor;
+	private boolean open;
 	private String reason;
 	private String result;
 }

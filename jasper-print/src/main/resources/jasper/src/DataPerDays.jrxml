@@ -14,14 +14,22 @@
 		<![CDATA[]]>
 	</queryString>
 	<field name="date" class="java.lang.String"/>
+	<field name="comment" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="32" splitType="Stretch">
+		<band height="64" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="100" height="30" uuid="0b71168d-b1e6-4d86-9a48-91aff23bc811"/>
-				<textFieldExpression><![CDATA["- " + $F{date}]]></textFieldExpression>
+				<reportElement x="0" y="0" width="595" height="20" uuid="0b71168d-b1e6-4d86-9a48-91aff23bc811"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="27" width="595" height="16" uuid="28de1eca-5e4c-4e02-9380-ebdf868de00d"/>
+				<textFieldExpression><![CDATA["Comment: " + $F{comment}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -77,6 +77,15 @@ class CommentPersistenceJpaAdapter implements CommentPersistencePort {
 	}
 
 	@Override
+	public List<Comment> listBetweenDatesOrderedByDateAndContent(LocalDate from, LocalDate to) {
+		return repository
+			.findAllBetweenFromAndToOrderByDateOfRecordingAndContent(from, to)
+			.stream()
+			.map(mapper::toModel)
+			.toList();
+	}
+
+	@Override
 	public Comment update(Comment toSave) {
 		return mapper.toModel(repository.save(mapper.toDbo(toSave)));
 	}

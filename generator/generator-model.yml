@@ -247,6 +247,12 @@ classes:
             value: false
         type:
           name: Doctor
+      - name: open
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: boolean
       - name: reason
         properties:
           - name: nullable

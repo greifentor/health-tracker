@@ -12,6 +12,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,6 +25,7 @@ public class DoctorConsultationEditJPanel extends AbstractEditPanel<DoctorConsul
 
 	public static final String DOCTORS_ITEM_PROVIDER_ID = "doctors-item-provider";
 
+	private JCheckBox checkBoxOpen;
 	private JComboBox<Doctor> comboBoxDoctor;
 	private JTextArea textAreaReason;
 	private JTextArea textAreaResult;
@@ -37,7 +39,7 @@ public class DoctorConsultationEditJPanel extends AbstractEditPanel<DoctorConsul
 	@Override
 	protected JPanel createLabelPanel() {
 		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
-		p.add(createLabelSubPanel("Date of Measurement:", "Time of Measurement:", "Doctor:"));
+		p.add(createLabelSubPanel("Date of Measurement:", "Time of Measurement:", "Doctor:", "Open:"));
 		p.add(createLabelSubPanel("Reason:", "", ""));
 		p.add(createLabelSubPanel("Result:", "", ""));
 		return p;
@@ -53,7 +55,7 @@ public class DoctorConsultationEditJPanel extends AbstractEditPanel<DoctorConsul
 	}
 
 	private JPanel createDateTimeAndDoctorPanel(DoctorConsultation toEdit, ItemProvider<Doctor> doctors) {
-		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
+		JPanel p = new JPanel(new GridLayout(4, 1, HGAP, VGAP));
 		textFieldDate = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.getDate()), 50);
 		textFieldTime = new JTextField(DateTimeUtil.DE_TIME_FORMAT.format(toEdit.getTime()), 50);
 		List<Doctor> doctorList = doctors.getItem();
@@ -65,9 +67,12 @@ public class DoctorConsultationEditJPanel extends AbstractEditPanel<DoctorConsul
 			}
 			return new JLabel("-");
 		});
+		checkBoxOpen = new JCheckBox();
+		checkBoxOpen.setSelected(toEdit.isOpen());
 		p.add(textFieldDate);
 		p.add(textFieldTime);
 		p.add(comboBoxDoctor);
+		p.add(checkBoxOpen);
 		return p;
 	}
 
@@ -95,6 +100,7 @@ public class DoctorConsultationEditJPanel extends AbstractEditPanel<DoctorConsul
 			.setDate(DateTimeUtil.dateFromString(textFieldDate.getText()))
 			.setDoctor((Doctor) comboBoxDoctor.getSelectedItem())
 			.setId(toEdit.getId())
+			.setOpen(checkBoxOpen.isSelected())
 			.setReason(textAreaReason.getText())
 			.setResult(textAreaResult.getText())
 			.setTime(DateTimeUtil.timeFromString(textFieldTime.getText()));

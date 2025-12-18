@@ -7,14 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import lombok.Generated;
 
-/**
- * GENERATED CODE - DO NOT TOUCH
- *
- * Remove this comment to suspend class from generation process.
- */
-@Generated
 @Named
 public interface CommentPersistencePort {
 	Comment create(CommentType commentType, String content, LocalDate dateOfRecording);
@@ -26,6 +19,8 @@ public interface CommentPersistencePort {
 	Optional<Comment> findByIdOrContentParticle(String content);
 
 	List<Comment> list();
+
+	List<Comment> listBetweenDatesOrderedByDateAndContent(LocalDate from, LocalDate to);
 
 	Comment update(Comment toSave);
 }

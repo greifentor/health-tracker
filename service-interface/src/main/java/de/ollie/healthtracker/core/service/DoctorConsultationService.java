@@ -20,6 +20,7 @@ public interface DoctorConsultationService {
 		LocalDate date,
 		LocalTime time,
 		Doctor doctor,
+		boolean open,
 		String reason,
 		String result
 	);
