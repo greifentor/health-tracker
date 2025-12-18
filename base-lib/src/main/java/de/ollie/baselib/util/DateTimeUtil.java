@@ -23,4 +23,8 @@ public class DateTimeUtil {
 	public static LocalTime timeFromString(String timeStr) {
 		return LocalTime.parse(timeStr, DE_TIME_FORMAT);
 	}
+
+	public static String dateToString(LocalDate date) {
+		return DE_DATE_FORMAT.format(date);
+	}
 }

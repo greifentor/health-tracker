@@ -10,14 +10,16 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
+	<field name="dataPerDayOrderedByDate" class="java.util.List"/>
+	<field name="from" class="java.lang.String"/>
+	<field name="to" class="java.lang.String"/>
 	<title>
-		<band height="52" splitType="Stretch">
+		<band height="83" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField>
 				<reportElement x="0" y="0" width="555" height="50" uuid="a0b8c8e7-6c03-4346-b692-d2664b71aea8">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -28,18 +30,28 @@
 				<textFieldExpression><![CDATA["Gesundheitsreport"]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="50" width="555" height="1" uuid="624723c4-3674-4a95-8d29-db5749c5ef32">
+				<reportElement x="0" y="66" width="555" height="1" uuid="624723c4-3674-4a95-8d29-db5749c5ef32">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 			</line>
+			<textField>
+				<reportElement x="0" y="50" width="555" height="16" uuid="083a9ea1-2d90-4100-a573-ad23590955e1"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{from} + " - " + $F{to}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<detail>
-		<band height="44" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="0" width="555" height="30" uuid="5d30ad60-11ff-41d3-a805-980d27fd8cac"/>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
-			</textField>
+		<band height="42" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="40" uuid="aed8591a-b10f-457a-9afb-64e2d4bef759">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{dataPerDayOrderedByDate})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DataPerDays.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 </jasperReport>

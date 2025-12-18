@@ -4,23 +4,21 @@ import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.Comment;
 import de.ollie.healthtracker.core.service.model.MedicationLog;
 import de.ollie.healthtracker.core.service.model.Symptom;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.EqualsAndHashCode;
+import lombok.Data;
 import lombok.Generated;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.experimental.Accessors;
 
-@EqualsAndHashCode
+@Accessors(chain = true)
+@Data
 @Generated
-@Getter
-@RequiredArgsConstructor
-@ToString
 public class DataPerDay {
 
-	private final List<BloodPressureMeasurement> bloodPressureMeasurementsOrderedByTime = new ArrayList<>();
-	private final Comment comment;
-	private final List<MedicationLog> medicationLogsOrderedByTime = new ArrayList<>();
-	private final Symptom symptom;
+	private LocalDate date;
+	private List<BloodPressureMeasurement> bloodPressureMeasurementsOrderedByTime = new ArrayList<>();
+	private Comment comment;
+	private List<MedicationLog> medicationLogsOrderedByTime = new ArrayList<>();
+	private Symptom symptom;
 }
