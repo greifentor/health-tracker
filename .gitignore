@@ -32,3 +32,4 @@ tmp0/
 /start.sh
 /pom.xml.versionsBackup
 /generate-code.sh
+/test.pdf
