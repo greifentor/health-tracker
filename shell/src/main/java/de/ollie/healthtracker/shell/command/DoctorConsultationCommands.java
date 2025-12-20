@@ -59,6 +59,7 @@ public class DoctorConsultationCommands implements CommandsWithTimeOrDate {
 							getDateFromParameter(dateOfMeasurementStr),
 							getTimeFromParameter(timeOfMeasurementStr),
 							doctor,
+							true,
 							reason,
 							result
 						),

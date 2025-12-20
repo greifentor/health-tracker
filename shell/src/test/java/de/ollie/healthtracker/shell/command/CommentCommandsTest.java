@@ -67,7 +67,7 @@ class CommentCommandsTest {
 		void returnAnErrorMessage_whenServiceCallThrowsAnException() {
 			// Prepare
 			RuntimeException exception = new RuntimeException(MESSAGE);
-			when(service.createComment(CONTENT, DATE_OF_RECORDING)).thenThrow(exception);
+			when(service.createComment(null, CONTENT, DATE_OF_RECORDING)).thenThrow(exception);
 			// Run
 			String returned = unitUnderTest.addComment(CONTENT, DATE_OF_RECORDING_STR);
 			// Check
@@ -77,7 +77,7 @@ class CommentCommandsTest {
 		@Test
 		void returnsOk_whenNoErrorIsDetected() {
 			// Prepare
-			when(service.createComment(CONTENT, DATE_OF_RECORDING)).thenReturn(comment0);
+			when(service.createComment(null, CONTENT, DATE_OF_RECORDING)).thenReturn(comment0);
 			// Run
 			String returned = unitUnderTest.addComment(CONTENT, DATE_OF_RECORDING_STR);
 			// Check
@@ -88,7 +88,7 @@ class CommentCommandsTest {
 		void returnsOk_whenDateOfMeasurementNotSet() {
 			// Prepare
 			when(localDateFactory.now()).thenReturn(DATE_OF_RECORDING);
-			when(service.createComment(CONTENT, DATE_OF_RECORDING)).thenReturn(comment0);
+			when(service.createComment(null, CONTENT, DATE_OF_RECORDING)).thenReturn(comment0);
 			// Run
 			String returned = unitUnderTest.addComment(CONTENT, null);
 			// Check
@@ -100,7 +100,7 @@ class CommentCommandsTest {
 		void returnsOk_whenDateOfMeasurementIsToday(String today) {
 			// Prepare
 			when(localDateFactory.now()).thenReturn(DATE_OF_RECORDING);
-			when(service.createComment(CONTENT, DATE_OF_RECORDING)).thenReturn(comment0);
+			when(service.createComment(null, CONTENT, DATE_OF_RECORDING)).thenReturn(comment0);
 			// Run
 			String returned = unitUnderTest.addComment(CONTENT, today);
 			// Check

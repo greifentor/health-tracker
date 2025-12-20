@@ -24,7 +24,8 @@ class ConsolePrintAdapter implements PrintPort {
 	}
 
 	@Override
-	public void print(HealthTrackingReport report, Map<String, String> parameters) {
+	public byte[] print(HealthTrackingReport report, Map<String, Object> parameters) {
 		outputHandler.println(healthTrackingReportToStringMapper.toString(report));
+		return new byte[0];
 	}
 }

@@ -45,11 +45,11 @@ class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public List<Comment> listCommentsBetweenDatesOrderedByDateAndContent(LocalDate from, LocalDate to) {
+	public List<Comment> listCommentsBetweenDatesOrderedByDateAndContentTypeName(LocalDate from, LocalDate to) {
 		ensure(from != null, "from cannot be null!");
 		ensure(to != null, "to cannot be null!");
 		ensure(from.isBefore(to) || from.equals(to), "to cannot be before from!");
-		return commentPersistencePort.listBetweenDatesOrderedByDateAndContent(from, to);
+		return commentPersistencePort.listBetweenDatesOrderedByDateAndContentTypeName(from, to);
 	}
 
 	@Override

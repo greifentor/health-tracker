@@ -79,7 +79,8 @@ class DoctorConsultationCommandsTest {
 			// Prepare
 			RuntimeException exception = new RuntimeException(MESSAGE);
 			when(doctorService.findByIdOrNameParticle(ID.toString())).thenReturn(Optional.of(doctor));
-			when(doctorConsultationService.createDoctorConsultation(DATE, TIME, doctor, REASON, RESULT)).thenThrow(exception);
+			when(doctorConsultationService.createDoctorConsultation(DATE, TIME, doctor, true, REASON, RESULT))
+				.thenThrow(exception);
 			// Run
 			String returned = unitUnderTest.addDoctorConsultation(DATE_STR, TIME_STR, ID.toString(), REASON, RESULT);
 			// Check
@@ -100,7 +101,8 @@ class DoctorConsultationCommandsTest {
 		void returnsOkWhenFinishedCorrectly() {
 			// Prepare
 			when(doctorService.findByIdOrNameParticle(ID.toString())).thenReturn(Optional.of(doctor));
-			when(doctorConsultationService.createDoctorConsultation(DATE, TIME, doctor, REASON, RESULT)).thenReturn(model0);
+			when(doctorConsultationService.createDoctorConsultation(DATE, TIME, doctor, true, REASON, RESULT))
+				.thenReturn(model0);
 			// Run
 			String returned = unitUnderTest.addDoctorConsultation(DATE_STR, TIME_STR, ID.toString(), REASON, RESULT);
 			// Check

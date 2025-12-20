@@ -80,7 +80,7 @@ class CommentServiceImplTest {
 	}
 
 	@Nested
-	class listCommentsBetweenDatesOrderedByDateAndContent {
+	class listCommentsBetweenDatesOrderedByDateAndContentTypeName_LocalDate_LocalDate {
 
 		private static final LocalDate FROM = LocalDate.of(2025, 12, 1);
 		private static final LocalDate TO = LocalDate.of(2025, 12, 31);
@@ -89,7 +89,7 @@ class CommentServiceImplTest {
 		void throwsException_passingANullValue_asFromDate() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.listCommentsBetweenDatesOrderedByDateAndContent(null, TO)
+				() -> unitUnderTest.listCommentsBetweenDatesOrderedByDateAndContentTypeName(null, TO)
 			);
 		}
 
@@ -97,7 +97,7 @@ class CommentServiceImplTest {
 		void throwsException_passingANullValue_asToDate() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.listCommentsBetweenDatesOrderedByDateAndContent(FROM, null)
+				() -> unitUnderTest.listCommentsBetweenDatesOrderedByDateAndContentTypeName(FROM, null)
 			);
 		}
 
@@ -105,7 +105,7 @@ class CommentServiceImplTest {
 		void throwsException_passingFromDateAfterToDate() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.listCommentsBetweenDatesOrderedByDateAndContent(TO, FROM)
+				() -> unitUnderTest.listCommentsBetweenDatesOrderedByDateAndContentTypeName(TO, FROM)
 			);
 		}
 
@@ -113,9 +113,9 @@ class CommentServiceImplTest {
 		void returnsTheResultOfThePersistencePortMethodCall() {
 			// Prepare
 			List<Comment> list = List.of(comment);
-			when(commentPersistencePort.listBetweenDatesOrderedByDateAndContent(FROM, TO)).thenReturn(list);
+			when(commentPersistencePort.listBetweenDatesOrderedByDateAndContentTypeName(FROM, TO)).thenReturn(list);
 			// Run
-			List<Comment> returned = unitUnderTest.listCommentsBetweenDatesOrderedByDateAndContent(FROM, TO);
+			List<Comment> returned = unitUnderTest.listCommentsBetweenDatesOrderedByDateAndContentTypeName(FROM, TO);
 			// Check
 			assertSame(list, returned);
 		}

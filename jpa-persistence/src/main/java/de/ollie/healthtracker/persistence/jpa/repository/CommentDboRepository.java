@@ -22,7 +22,7 @@ public interface CommentDboRepository extends JpaRepository<CommentDbo, UUID> {
 	List<CommentDbo> findAllByContentMatch(String content);
 
 	@Query(
-		"SELECT dbo FROM CommentDbo dbo WHERE dbo.dateOfRecording >= :from AND dbo.dateOfRecording <= :to ORDER BY dbo.dateOfRecording, dbo.content"
+		"SELECT dbo FROM CommentDbo dbo WHERE dbo.dateOfRecording >= :from AND dbo.dateOfRecording <= :to ORDER BY dbo.dateOfRecording, dbo.contentType.name"
 	)
-	List<CommentDbo> findAllBetweenFromAndToOrderByDateOfRecordingAndContent(LocalDate from, LocalDate to);
+	List<CommentDbo> findAllBetweenFromAndToOrderByDateOfRecordingAndContentTypeName(LocalDate from, LocalDate to);
 }

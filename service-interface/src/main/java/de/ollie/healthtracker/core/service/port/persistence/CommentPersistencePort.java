@@ -20,7 +20,7 @@ public interface CommentPersistencePort {
 
 	List<Comment> list();
 
-	List<Comment> listBetweenDatesOrderedByDateAndContent(LocalDate from, LocalDate to);
+	List<Comment> listBetweenDatesOrderedByDateAndContentTypeName(LocalDate from, LocalDate to);
 
 	Comment update(Comment toSave);
 }

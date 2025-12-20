@@ -53,10 +53,7 @@ class JasperPrintAdapter implements PrintPort {
 				report
 					.getDataPerDayOrderedByDate()
 					.stream()
-					.map(dpd ->
-						new DataPerDayPO()
-							.setDate(DateTimeUtil.dateToString(dpd.getDate()))
-							.setComment(dpd.getComment().getContent())
+					.map(dpd -> new DataPerDayPO().setDate(DateTimeUtil.dateToString(dpd.getDate())).setComment(dpd.getComments())
 					)
 					.toList()
 			);

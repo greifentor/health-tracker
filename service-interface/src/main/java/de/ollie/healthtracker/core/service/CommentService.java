@@ -18,7 +18,7 @@ public interface CommentService {
 
 	List<Comment> listComments();
 
-	List<Comment> listCommentsBetweenDatesOrderedByDateAndContent(LocalDate from, LocalDate to);
+	List<Comment> listCommentsBetweenDatesOrderedByDateAndContentTypeName(LocalDate from, LocalDate to);
 
 	Comment updateComment(Comment toSave);
 }
