@@ -239,9 +239,10 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		} else if (e.getSource() == menuItemEditSymptom) {
 			new SymptomSelectJInternalFrame(symptomService, bodyPartService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemFilePrint) {
+			LocalDate now = LocalDate.now();
 			byte[] pdf = reportPrintService.printForTimeInterval(
-				LocalDate.of(2025, 01, 01),
-				LocalDate.of(2099, 12, 31),
+				now.withDayOfMonth(1),
+				now.withDayOfMonth(now.lengthOfMonth()),
 				"jasper",
 				new HashMap<>()
 			);

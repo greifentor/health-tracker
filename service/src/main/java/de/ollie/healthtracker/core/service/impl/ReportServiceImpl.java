@@ -22,10 +22,11 @@ class ReportServiceImpl implements ReportService {
 
 	@Override
 	public HealthTrackingReport collectData(LocalDate from, LocalDate to) {
-		List<Comment> comments = commentService.listCommentsBetweenDatesOrderedByDateAndContentTypeName(from, to);
+		List<Comment> comments = commentService.listCommentsBetweenDatesOrderedByDateAndCommentTypeName(from, to);
 		Map<LocalDate, Map<CommentType, List<Comment>>> commentMap = mapComments(comments);
 		List<DataPerDay> dataPerDays = new ArrayList<>();
-		for (LocalDate currentDay = from; !currentDay.isAfter(to); currentDay.plusDays(1)) {
+		for (LocalDate currentDay = from; !currentDay.isAfter(to); currentDay = currentDay.plusDays(1)) {
+			System.out.println(currentDay);
 			DataPerDay dataPerDay = new DataPerDay().setDate(currentDay).setComments(commentMap.get(currentDay));
 			dataPerDays.add(dataPerDay);
 		}
