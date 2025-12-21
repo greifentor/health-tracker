@@ -1,15 +1,16 @@
 package de.ollie.healthtracker.print.jasper.po;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
 
 @Accessors(chain = true)
+@AllArgsConstructor
 @Data
 @Generated
-public class DataPerDayPO {
+public class CommentPO {
 
-	private List<CommentPO> comments;
-	private String date;
+	private String typeName;
+	private String comment;
 }

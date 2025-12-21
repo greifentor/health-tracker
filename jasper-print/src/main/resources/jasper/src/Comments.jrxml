@@ -10,37 +10,47 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="date" class="java.lang.String"/>
-	<field name="comments" class="java.util.List"/>
+	<field name="comment" class="java.lang.String"/>
+	<field name="typeName" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<detail>
-		<band height="38" splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+	<title>
+		<band height="23">
 			<textField>
-				<reportElement x="0" y="0" width="595" height="20" uuid="0b71168d-b1e6-4d86-9a48-91aff23bc811"/>
-				<textElement>
-					<font size="14" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
-			</textField>
-			<subreport>
-				<reportElement x="0" y="21" width="595" height="13" uuid="b58ce5dd-f32c-4f90-a4b5-a2d54131ff49">
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<reportElement x="0" y="0" width="594" height="17" uuid="5948bb63-7988-4ee9-a702-36e2ecb93ecc">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
-				<subreportParameter name="SUBREPORT_DIR">
-					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
-				</subreportParameter>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{comments})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Comments.jasper"]]></subreportExpression>
-			</subreport>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Kommentare"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="130" y="0" width="465" height="16" uuid="28de1eca-5e4c-4e02-9380-ebdf868de00d"/>
+				<textFieldExpression><![CDATA[$F{comment}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="10" height="16" uuid="383012ab-44af-4d0e-ac61-0669e086fd6b">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["-"]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="10" y="0" width="110" height="16" uuid="1851527f-e274-456d-b1b9-e5c52a9334d4"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{typeName}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

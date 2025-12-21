@@ -2,13 +2,16 @@ package de.ollie.healthtracker.print.jasper;
 
 import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.exception.PrintReportException;
+import de.ollie.healthtracker.core.service.model.Comment;
 import de.ollie.healthtracker.core.service.model.report.HealthTrackingReport;
 import de.ollie.healthtracker.core.service.port.print.PrintPort;
+import de.ollie.healthtracker.print.jasper.po.CommentPO;
 import de.ollie.healthtracker.print.jasper.po.DataPerDayPO;
 import de.ollie.healthtracker.print.jasper.po.HealthTrackingReportPO;
 import jakarta.inject.Named;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.JRException;
@@ -53,10 +56,17 @@ class JasperPrintAdapter implements PrintPort {
 				report
 					.getDataPerDayOrderedByDate()
 					.stream()
-					.map(dpd -> new DataPerDayPO().setDate(DateTimeUtil.dateToString(dpd.getDate())).setComment(dpd.getComments())
+					.map(dpd ->
+						new DataPerDayPO()
+							.setDate(DateTimeUtil.dateToString(dpd.getDate()))
+							.setComments(mapToCommentsPO(dpd.getComments()))
 					)
 					.toList()
 			);
+	}
+
+	private List<CommentPO> mapToCommentsPO(List<Comment> comments) {
+		return comments.stream().map(c -> new CommentPO(c.getCommentType().getName(), c.getContent())).toList();
 	}
 
 	private JasperPrint createDocument(
