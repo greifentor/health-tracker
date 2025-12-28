@@ -24,9 +24,11 @@ import javax.swing.border.LineBorder;
 public class DoctorConsultationEditJPanel extends AbstractEditPanel<DoctorConsultation> {
 
 	public static final String DOCTORS_ITEM_PROVIDER_ID = "doctors-item-provider";
+	public static final String DOCTOR_CONSULTATIONS_ITEM_PROVIDER_ID = "doctor-consultations-item-provider";
 
 	private JCheckBox checkBoxOpen;
 	private JComboBox<Doctor> comboBoxDoctor;
+	private JComboBox<DoctorConsultation> comboBoxSubsequentAppointmentOf;
 	private JTextArea textAreaReason;
 	private JTextArea textAreaResult;
 	private JTextField textFieldDate;
@@ -39,7 +41,15 @@ public class DoctorConsultationEditJPanel extends AbstractEditPanel<DoctorConsul
 	@Override
 	protected JPanel createLabelPanel() {
 		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
-		p.add(createLabelSubPanel("Date of Measurement:", "Time of Measurement:", "Doctor:", "Open:"));
+		p.add(
+			createLabelSubPanel(
+				"Date of Measurement:",
+				"Time of Measurement:",
+				"Doctor:",
+				"Open:",
+				"Subsequent Consultation of:"
+			)
+		);
 		p.add(createLabelSubPanel("Reason:", "", ""));
 		p.add(createLabelSubPanel("Result:", "", ""));
 		return p;
@@ -48,14 +58,24 @@ public class DoctorConsultationEditJPanel extends AbstractEditPanel<DoctorConsul
 	@Override
 	protected JPanel createComponentPanel(DoctorConsultation toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
-		p.add(createDateTimeAndDoctorPanel(toEdit, (ItemProvider<Doctor>) itemProviders.get(DOCTORS_ITEM_PROVIDER_ID)));
+		p.add(
+			createDateTimeAndDoctorPanel(
+				toEdit,
+				(ItemProvider<Doctor>) itemProviders.get(DOCTORS_ITEM_PROVIDER_ID),
+				(ItemProvider<DoctorConsultation>) itemProviders.get(DOCTOR_CONSULTATIONS_ITEM_PROVIDER_ID)
+			)
+		);
 		p.add(createReasonPanel(toEdit));
 		p.add(createResultPanel(toEdit));
 		return p;
 	}
 
-	private JPanel createDateTimeAndDoctorPanel(DoctorConsultation toEdit, ItemProvider<Doctor> doctors) {
-		JPanel p = new JPanel(new GridLayout(4, 1, HGAP, VGAP));
+	private JPanel createDateTimeAndDoctorPanel(
+		DoctorConsultation toEdit,
+		ItemProvider<Doctor> doctors,
+		ItemProvider<DoctorConsultation> doctorConsultations
+	) {
+		JPanel p = new JPanel(new GridLayout(5, 1, HGAP, VGAP));
 		textFieldDate = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.getDate()), 50);
 		textFieldTime = new JTextField(DateTimeUtil.DE_TIME_FORMAT.format(toEdit.getTime()), 50);
 		List<Doctor> doctorList = doctors.getItem();
@@ -67,11 +87,30 @@ public class DoctorConsultationEditJPanel extends AbstractEditPanel<DoctorConsul
 			}
 			return new JLabel("-");
 		});
+		List<DoctorConsultation> doctorConsultationList = doctorConsultations.getItem();
+		comboBoxSubsequentAppointmentOf =
+			new JComboBox<>(doctorConsultationList.toArray(new DoctorConsultation[doctorConsultationList.size()]));
+		comboBoxSubsequentAppointmentOf.setSelectedItem(toEdit.getSubsequentAppointmentOf());
+		comboBoxSubsequentAppointmentOf.setRenderer((list, value, index, isSelected, cellHasFocus) -> {
+			if (value != null) {
+				return new JLabel(
+					"(" +
+					value.getDate() +
+					") " +
+					value.getDoctor().getName() +
+					"(" +
+					value.getDoctor().getDoctorType().getName() +
+					")"
+				);
+			}
+			return new JLabel("-");
+		});
 		checkBoxOpen = new JCheckBox();
 		checkBoxOpen.setSelected(toEdit.isOpen());
 		p.add(textFieldDate);
 		p.add(textFieldTime);
 		p.add(comboBoxDoctor);
+		p.add(comboBoxSubsequentAppointmentOf);
 		p.add(checkBoxOpen);
 		return p;
 	}
@@ -103,6 +142,7 @@ public class DoctorConsultationEditJPanel extends AbstractEditPanel<DoctorConsul
 			.setOpen(checkBoxOpen.isSelected())
 			.setReason(textAreaReason.getText())
 			.setResult(textAreaResult.getText())
+			.setSubsequentAppointmentOf((DoctorConsultation) comboBoxSubsequentAppointmentOf.getSelectedItem())
 			.setTime(DateTimeUtil.timeFromString(textFieldTime.getText()));
 	}
 }

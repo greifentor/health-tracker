@@ -2,6 +2,7 @@ package de.ollie.healthtracker.core.service;
 
 import de.ollie.healthtracker.core.service.model.Doctor;
 import de.ollie.healthtracker.core.service.model.DoctorConsultation;
+import de.ollie.healthtracker.core.service.model.DoctorConsultation;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -22,7 +23,8 @@ public interface DoctorConsultationService {
 		Doctor doctor,
 		boolean open,
 		String reason,
-		String result
+		String result,
+		DoctorConsultation subsequentAppointmentOf
 	);
 
 	void deleteDoctorConsultation(UUID id);

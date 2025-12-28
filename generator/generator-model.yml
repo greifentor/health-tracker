@@ -265,6 +265,13 @@ classes:
             value: false
         type:
           name: String
+      - name: subsequentAppointmentOf
+        reference: true
+        properties:
+          - name: nullable
+            value: true
+        type:
+          name: DoctorConsultation
   - name: DoctorType
     properties:
       - name: order

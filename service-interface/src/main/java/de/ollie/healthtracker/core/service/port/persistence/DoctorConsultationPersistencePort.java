@@ -2,6 +2,7 @@ package de.ollie.healthtracker.core.service.port.persistence;
 
 import de.ollie.healthtracker.core.service.model.Doctor;
 import de.ollie.healthtracker.core.service.model.DoctorConsultation;
+import de.ollie.healthtracker.core.service.model.DoctorConsultation;
 import jakarta.inject.Named;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,7 +19,15 @@ import lombok.Generated;
 @Generated
 @Named
 public interface DoctorConsultationPersistencePort {
-	DoctorConsultation create(LocalDate date, LocalTime time, Doctor doctor, boolean open, String reason, String result);
+	DoctorConsultation create(
+		LocalDate date,
+		LocalTime time,
+		Doctor doctor,
+		boolean open,
+		String reason,
+		String result,
+		DoctorConsultation subsequentAppointmentOf
+	);
 
 	void deleteById(UUID id);
 

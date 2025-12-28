@@ -24,4 +24,5 @@ public class DoctorConsultation {
 	private boolean open;
 	private String reason;
 	private String result;
+	private DoctorConsultation subsequentAppointmentOf;
 }

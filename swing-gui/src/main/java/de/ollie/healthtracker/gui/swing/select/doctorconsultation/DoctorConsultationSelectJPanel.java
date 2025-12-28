@@ -74,6 +74,12 @@ public class DoctorConsultationSelectJPanel
 		new DoctorConsultationEditJInternalFrame(
 			selected,
 			() -> doctorService.listDoctors().stream().sorted((d0, d1) -> d0.getName().compareTo(d1.getName())).toList(),
+			() ->
+				doctorConsultationService
+					.listDoctorConsultations()
+					.stream()
+					.sorted((d0, d1) -> d0.getDate().compareTo(d1.getDate()))
+					.toList(),
 			getEditDialogComponentFactory(),
 			this,
 			getDesktopPane()
@@ -93,7 +99,8 @@ public class DoctorConsultationSelectJPanel
 			doctors.get(0),
 			true,
 			"-",
-			"-"
+			"-",
+			null
 		);
 	}
 

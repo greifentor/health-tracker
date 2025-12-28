@@ -323,6 +323,12 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet author="dm-comp" id="Add-Field-SUBSEQUENT_APPOINTMENT_OF-to-Table-DOCTOR_CONSULTATION" failOnError="true" runInTransaction="true">
+        <addColumn tableName="DOCTOR_CONSULTATION">
+            <column name="SUBSEQUENT_APPOINTMENT_OF" type="UUID"/>
+        </addColumn>
+        <addForeignKeyConstraint constraintName="FK_DOCTOR_CONSULTATION_SUBSEQUENT_APPOINTMENT_OF_TO_DOCTOR_CON" baseColumnNames="SUBSEQUENT_APPOINTMENT_OF" baseTableName="DOCTOR_CONSULTATION" referencedColumnNames="ID" referencedTableName="DOCTOR_CONSULTATION"/>
+    </changeSet>
 
 </databaseChangeLog>
 

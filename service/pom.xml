@@ -21,7 +21,7 @@
 	</properties>
 
 	<dependencies>
-		<!-- bptracker-->
+		<!-- health-tracker-->
 		<dependency>
 			<groupId>de.ollie</groupId>
 			<artifactId>base-lib</artifactId>

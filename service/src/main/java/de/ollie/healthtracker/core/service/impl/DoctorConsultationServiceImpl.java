@@ -3,6 +3,7 @@ package de.ollie.healthtracker.core.service.impl;
 import de.ollie.healthtracker.core.service.DoctorConsultationService;
 import de.ollie.healthtracker.core.service.model.Doctor;
 import de.ollie.healthtracker.core.service.model.DoctorConsultation;
+import de.ollie.healthtracker.core.service.model.DoctorConsultation;
 import de.ollie.healthtracker.core.service.port.persistence.DoctorConsultationPersistencePort;
 import jakarta.inject.Named;
 import java.time.LocalDate;
@@ -32,9 +33,10 @@ class DoctorConsultationServiceImpl implements DoctorConsultationService {
 		Doctor doctor,
 		boolean open,
 		String reason,
-		String result
+		String result,
+		DoctorConsultation subsequentAppointmentOf
 	) {
-		return doctorConsultationPersistencePort.create(date, time, doctor, open, reason, result);
+		return doctorConsultationPersistencePort.create(date, time, doctor, open, reason, result, subsequentAppointmentOf);
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package de.ollie.healthtracker.persistence.jpa;
 
 import static de.ollie.baselib.util.Check.ensure;
 
-import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.Doctor;
 import de.ollie.healthtracker.core.service.model.DoctorConsultation;
 import de.ollie.healthtracker.core.service.port.persistence.DoctorConsultationPersistencePort;
@@ -14,15 +13,8 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
-/**
- * GENERATED CODE - DO NOT TOUCH
- *
- * Remove this comment to suspend class from generation process.
- */
-@Generated
 @Named
 @RequiredArgsConstructor
 class DoctorConsultationPersistenceJpaAdapter implements DoctorConsultationPersistencePort {
@@ -38,10 +30,21 @@ class DoctorConsultationPersistenceJpaAdapter implements DoctorConsultationPersi
 		Doctor doctor,
 		boolean open,
 		String reason,
-		String result
+		String result,
+		DoctorConsultation subsequentAppointmentOf
 	) {
 		return mapper.toModel(
-			repository.save(dboFactory.createDoctorConsultation(date, time, doctor.getId(), open, reason, result))
+			repository.save(
+				dboFactory.createDoctorConsultation(
+					date,
+					time,
+					doctor.getId(),
+					open,
+					reason,
+					result,
+					subsequentAppointmentOf != null ? subsequentAppointmentOf.getId() : null
+				)
+			)
 		);
 	}
 

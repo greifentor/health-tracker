@@ -14,6 +14,7 @@ public class DoctorConsultationEditJInternalFrame extends AbstractEditJInternalF
 	public DoctorConsultationEditJInternalFrame(
 		DoctorConsultation toEdit,
 		ItemProvider<Doctor> doctors,
+		ItemProvider<DoctorConsultation> doctorConsultations,
 		EditDialogComponentFactory editDialogComponentFactory,
 		Observer<DoctorConsultation> observer,
 		JDesktopPane desktopPane
@@ -24,7 +25,12 @@ public class DoctorConsultationEditJInternalFrame extends AbstractEditJInternalF
 			toEdit,
 			editDialogComponentFactory,
 			observer,
-			Map.of(DoctorConsultationEditJPanel.DOCTORS_ITEM_PROVIDER_ID, doctors)
+			Map.of(
+				DoctorConsultationEditJPanel.DOCTORS_ITEM_PROVIDER_ID,
+				doctors,
+				DoctorConsultationEditJPanel.DOCTOR_CONSULTATIONS_ITEM_PROVIDER_ID,
+				doctorConsultations
+			)
 		);
 	}
 

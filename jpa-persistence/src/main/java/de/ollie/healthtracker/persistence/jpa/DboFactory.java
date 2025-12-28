@@ -23,6 +23,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
 import de.ollie.healthtracker.persistence.jpa.repository.BodyPartDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.CommentTypeDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.DoctorConsultationDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.GeneralBodyPartDboRepository;
@@ -44,6 +45,7 @@ class DboFactory {
 
 	private final BodyPartDboRepository bodyPartRepository;
 	private final CommentTypeDboRepository commentTypeDboRepository;
+	private final DoctorConsultationDboRepository doctorConsultationRepository;
 	private final DoctorDboRepository doctorRepository;
 	private final DoctorTypeDboRepository doctorTypeRepository;
 	private final GeneralBodyPartDboRepository generalBodyPartRepository;
@@ -126,7 +128,8 @@ class DboFactory {
 		UUID doctorId,
 		boolean open,
 		String reason,
-		String result
+		String result,
+		UUID doctorConsultationId
 	) {
 		ensure(date != null, "date cannot be null!");
 		ensure(doctorId != null, "doctor id cannot be null!");
@@ -138,6 +141,9 @@ class DboFactory {
 		DoctorDbo doctor = doctorRepository
 			.findById(doctorId)
 			.orElseThrow(() -> new NoSuchElementException("no doctor found with id: " + doctorId));
+		DoctorConsultationDbo doctorConsultation = doctorConsultationId == null
+			? null
+			: doctorConsultationRepository.findById(doctorConsultationId).orElse(null);
 		return new DoctorConsultationDbo()
 			.setDate(date)
 			.setDoctor(doctor)
@@ -145,6 +151,7 @@ class DboFactory {
 			.setOpen(open)
 			.setReason(reason)
 			.setResult(result)
+			.setSubsequentAppointmentOf(doctorConsultation)
 			.setTime(time);
 	}
 
