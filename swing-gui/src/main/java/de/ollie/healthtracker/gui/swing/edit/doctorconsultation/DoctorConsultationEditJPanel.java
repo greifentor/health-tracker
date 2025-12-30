@@ -46,8 +46,8 @@ public class DoctorConsultationEditJPanel extends AbstractEditPanel<DoctorConsul
 				"Date of Measurement:",
 				"Time of Measurement:",
 				"Doctor:",
-				"Open:",
-				"Subsequent Consultation of:"
+				"Subsequent Consultation of:",
+				"Open:"
 			)
 		);
 		p.add(createLabelSubPanel("Reason:", "", ""));

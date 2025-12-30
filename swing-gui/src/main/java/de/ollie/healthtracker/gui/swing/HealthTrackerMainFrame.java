@@ -107,7 +107,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		mainPanel.add(desktopPane, BorderLayout.CENTER);
 		setJMenuBar(createJMenuBar());
 		setContentPane(mainPanel);
-		setBounds(100, 100, 800, 600);
+		setBounds(100, 100, 800, 800);
 	}
 
 	public void showFrame() {
