@@ -23,16 +23,16 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-@Entity(name = "MedicationLogDbo")
-@Table(name = "MEDICATION_LOG")
-public class MedicationLogDbo {
+@Entity(name = "MedicationPlanDbo")
+@Table(name = "MEDICATION_PLAN")
+public class MedicationPlanDbo {
 
 	@Id
 	@Column(name = "ID", nullable = false)
 	private UUID id;
 
-	@Column(name = "CONFIRMED", nullable = true)
-	private boolean confirmed;
+	@Column(name = "END_DATE", nullable = false)
+	private LocalDate endDate;
 
 	@JoinColumn(name = "MEDICATION", referencedColumnName = "ID", nullable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -42,11 +42,14 @@ public class MedicationLogDbo {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private MedicationUnitDbo medicationUnit;
 
-	@Column(name = "DATE_OF_INTAKE", nullable = false)
-	private LocalDate dateOfIntake;
+	@Column(name = "NEXT_DATE_OF_INTAKE", nullable = false)
+	private LocalDate nextDateOfIntake;
 
 	@Column(name = "SELF_MEDICATION", nullable = true)
 	private boolean selfMedication;
+
+	@Column(name = "START_DATE", nullable = false)
+	private LocalDate startDate;
 
 	@Column(name = "TIME_OF_INTAKE", nullable = false)
 	private LocalTime timeOfIntake;

@@ -329,6 +329,44 @@
         </addColumn>
         <addForeignKeyConstraint constraintName="FK_DOCTOR_CONSULTATION_SUBSEQUENT_APPOINTMENT_OF_TO_DOCTOR_CON" baseColumnNames="SUBSEQUENT_APPOINTMENT_OF" baseTableName="DOCTOR_CONSULTATION" referencedColumnNames="ID" referencedTableName="DOCTOR_CONSULTATION"/>
     </changeSet>
+    <changeSet author="dm-comp" id="Added-Table-and-Fields-for-Medication-Plan" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="MEDICATION_PLAN">
+            <column name="MEDICATION" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NEXT_DATE_OF_INTAKE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SELF_MEDICATION" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="END_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TIME_OF_INTAKE" type="TIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="START_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MEDICATION_UNIT" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UNIT_COUNT" type="NUMERIC(5, 2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="MEDICATION_PLAN"/>
+        <addColumn tableName="MEDICATION_LOG">
+            <column name="CONFIRMED" type="BOOLEAN" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseColumnNames="MEDICATION_UNIT" baseTableName="MEDICATION_PLAN" constraintName="FK_MEDICATION_PLAN_MEDICATION_UNIT_TO_MEDICATION_UNIT" referencedColumnNames="ID" referencedTableName="MEDICATION_UNIT"/>
+        <addForeignKeyConstraint baseColumnNames="MEDICATION" baseTableName="MEDICATION_PLAN" constraintName="FK_MEDICATION_PLAN_MEDICATION_TO_MEDICATION" referencedColumnNames="ID" referencedTableName="MEDICATION"/>
+    </changeSet>
 
 </databaseChangeLog>
-

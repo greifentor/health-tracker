@@ -19,6 +19,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.MeatConsumptionDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MeatTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.MedicationPlanDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
 import de.ollie.healthtracker.persistence.jpa.repository.BodyPartDboRepository;
@@ -224,6 +225,7 @@ class DboFactory {
 	}
 
 	MedicationLogDbo createMedicationLog(
+		boolean confirmed,
 		UUID medicationId,
 		UUID medicationUnitId,
 		LocalDate dateOfIntake,
@@ -243,10 +245,44 @@ class DboFactory {
 			.findById(medicationUnitId)
 			.orElseThrow(() -> new NoSuchElementException("no medication unit found with id: " + medicationUnitId));
 		return new MedicationLogDbo()
+			.setConfirmed(confirmed)
 			.setDateOfIntake(dateOfIntake)
 			.setId(uuidFactory.create())
 			.setMedication(medication)
 			.setMedicationUnit(medicationUnit)
+			.setSelfMedication(selfMedication)
+			.setTimeOfIntake(timeOfIntake)
+			.setUnitCount(unitCount);
+	}
+
+	MedicationPlanDbo createMedicationPlan(
+		LocalDate endDate,
+		UUID medicationId,
+		UUID medicationUnitId,
+		LocalDate nextDateOfIntake,
+		boolean selfMedication,
+		LocalDate startDate,
+		LocalTime timeOfIntake,
+		BigDecimal unitCount
+	) {
+		ensure(nextDateOfIntake != null, "next date of intake cannot be null!");
+		ensure(endDate != null, "end date cannot be null!");
+		ensure(medicationId != null, "medication id cannot be null!");
+		ensure(medicationUnitId != null, "medication unit id cannot be null!");
+		ensure(startDate != null, "start date cannot be null!");
+		ensure(timeOfIntake != null, "time of intake cannot be null!");
+		ensure(unitCount != null, "unit count cannot be null!");
+		MedicationDbo medication = medicationDboRepository
+			.findById(medicationId)
+			.orElseThrow(() -> new NoSuchElementException("no medication found with id: " + medicationId));
+		MedicationUnitDbo medicationUnit = medicationUnitDboRepository
+			.findById(medicationUnitId)
+			.orElseThrow(() -> new NoSuchElementException("no medication unit found with id: " + medicationUnitId));
+		return new MedicationPlanDbo()
+			.setId(uuidFactory.create())
+			.setMedication(medication)
+			.setMedicationUnit(medicationUnit)
+			.setNextDateOfIntake(nextDateOfIntake)
 			.setSelfMedication(selfMedication)
 			.setTimeOfIntake(timeOfIntake)
 			.setUnitCount(unitCount);

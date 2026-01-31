@@ -114,6 +114,7 @@ public class MedicationLogSelectJPanel extends AbstractSelectJPanel<MedicationLo
 			.sorted((d0, d1) -> d0.getName().compareTo(d1.getName()))
 			.toList();
 		return medicationLogService.createMedicationLog(
+			true,
 			medications.get(0),
 			medicationUnits.get(0),
 			LocalDate.now(),

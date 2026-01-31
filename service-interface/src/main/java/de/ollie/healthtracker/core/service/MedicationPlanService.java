@@ -1,9 +1,8 @@
-package de.ollie.healthtracker.core.service.port.persistence;
+package de.ollie.healthtracker.core.service;
 
 import de.ollie.healthtracker.core.service.model.Medication;
-import de.ollie.healthtracker.core.service.model.MedicationLog;
+import de.ollie.healthtracker.core.service.model.MedicationPlan;
 import de.ollie.healthtracker.core.service.model.MedicationUnit;
-import jakarta.inject.Named;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,23 +17,23 @@ import lombok.Generated;
  * Remove this comment to suspend class from generation process.
  */
 @Generated
-@Named
-public interface MedicationLogPersistencePort {
-	MedicationLog create(
-		boolean confirmed,
+public interface MedicationPlanService {
+	MedicationPlan createMedicationPlan(
+		LocalDate endDate,
 		Medication medication,
 		MedicationUnit medicationUnit,
-		LocalDate dateOfIntake,
+		LocalDate nextDateOfIntake,
 		boolean selfMedication,
+		LocalDate startDate,
 		LocalTime timeOfIntake,
 		BigDecimal unitCount
 	);
 
-	void deleteById(UUID id);
+	void deleteMedicationPlan(UUID id);
 
-	Optional<MedicationLog> findById(UUID id);
+	Optional<MedicationPlan> findById(UUID id);
 
-	List<MedicationLog> list();
+	List<MedicationPlan> listMedicationPlans();
 
-	MedicationLog update(MedicationLog toSave);
+	MedicationPlan updateMedicationPlan(MedicationPlan toSave);
 }

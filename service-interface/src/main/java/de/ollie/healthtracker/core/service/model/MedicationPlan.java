@@ -16,14 +16,15 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-public class MedicationLog {
+public class MedicationPlan {
 
 	private UUID id;
-	private boolean confirmed = true;
+	private LocalDate endDate;
 	private Medication medication;
 	private MedicationUnit medicationUnit;
-	private LocalDate dateOfIntake;
+	private LocalDate nextDateOfIntake;
 	private boolean selfMedication;
+	private LocalDate startDate;
 	private LocalTime timeOfIntake;
 	private BigDecimal unitCount;
 }

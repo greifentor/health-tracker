@@ -805,7 +805,7 @@ class DboFactoryTest {
 		void throwsAnException_passingANullValue_asMedicationId() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createMedicationLog(null, ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
+				() -> unitUnderTest.createMedicationLog(true, null, ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
 			);
 		}
 
@@ -813,7 +813,7 @@ class DboFactoryTest {
 		void throwsAnException_passingANullValue_asMedicationUnitId() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createMedicationLog(ID, null, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
+				() -> unitUnderTest.createMedicationLog(true, ID, null, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
 			);
 		}
 
@@ -821,7 +821,7 @@ class DboFactoryTest {
 		void throwsAnException_passingANullValue_asDateOfIntake() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, null, SELF_MEDICATION, TIME, UNIT_COUNT)
+				() -> unitUnderTest.createMedicationLog(true, ID, ANOTHER_ID, null, SELF_MEDICATION, TIME, UNIT_COUNT)
 			);
 		}
 
@@ -829,7 +829,7 @@ class DboFactoryTest {
 		void throwsAnException_passingANullValue_asTimeOfIntake() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, SELF_MEDICATION, null, UNIT_COUNT)
+				() -> unitUnderTest.createMedicationLog(true, ID, ANOTHER_ID, DATE, SELF_MEDICATION, null, UNIT_COUNT)
 			);
 		}
 
@@ -837,7 +837,7 @@ class DboFactoryTest {
 		void throwsAnException_passingANullValue_asUnitCount() {
 			assertThrows(
 				IllegalArgumentException.class,
-				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, null)
+				() -> unitUnderTest.createMedicationLog(true, ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, null)
 			);
 		}
 
@@ -848,7 +848,7 @@ class DboFactoryTest {
 			when(medicationUnitDboRepository.findById(ANOTHER_ID)).thenReturn(Optional.of(medicationUnitDbo));
 			when(uuidFactory.create()).thenReturn(ID);
 			// Run & Check
-			assertNotNull(unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT));
+			assertNotNull(unitUnderTest.createMedicationLog(true, ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT));
 		}
 
 		@Test
@@ -859,8 +859,8 @@ class DboFactoryTest {
 			when(uuidFactory.create()).thenReturn(ID);
 			// Run & Check
 			assertNotSame(
-				unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT),
-				unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
+				unitUnderTest.createMedicationLog(true, ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT),
+				unitUnderTest.createMedicationLog(true, ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
 			);
 		}
 
@@ -868,6 +868,7 @@ class DboFactoryTest {
 		void returnANewObject_withCorrectlySetAttributes() {
 			// Prepare
 			MedicationLogDbo expected = new MedicationLogDbo()
+				.setConfirmed(true)
 				.setDateOfIntake(DATE)
 				.setId(ID)
 				.setMedication(medicationDbo)
@@ -881,7 +882,7 @@ class DboFactoryTest {
 			// Run & Check
 			assertEquals(
 				expected,
-				unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
+				unitUnderTest.createMedicationLog(true, ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
 			);
 		}
 
@@ -892,7 +893,7 @@ class DboFactoryTest {
 			// Run & Check
 			assertThrows(
 				NoSuchElementException.class,
-				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
+				() -> unitUnderTest.createMedicationLog(true, ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
 			);
 		}
 
@@ -904,7 +905,7 @@ class DboFactoryTest {
 			// Run & Check
 			assertThrows(
 				NoSuchElementException.class,
-				() -> unitUnderTest.createMedicationLog(ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
+				() -> unitUnderTest.createMedicationLog(true, ID, ANOTHER_ID, DATE, SELF_MEDICATION, TIME, UNIT_COUNT)
 			);
 		}
 	}
