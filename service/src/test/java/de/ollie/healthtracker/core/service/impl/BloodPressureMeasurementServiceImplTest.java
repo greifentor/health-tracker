@@ -10,7 +10,6 @@ import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.core.service.port.persistence.BloodPressureMeasurementPersistencePort;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
@@ -94,8 +93,8 @@ class BloodPressureMeasurementServiceImplTest {
 	@Nested
 	class findAllBloodPressureMeasurementsPrettifiedByTimeInterval_LocalDateTime_LocalDateTime {
 
-		private static final LocalDateTime FROM = LocalDateTime.of(2026, 1, 1, 0, 0, 0);
-		private static final LocalDateTime TO = LocalDateTime.of(2026, 12, 31, 23, 59, 59);
+		private static final LocalDate FROM = LocalDate.of(2026, 1, 1);
+		private static final LocalDate TO = LocalDate.of(2026, 12, 31);
 
 		private BloodPressureMeasurement bpm0;
 		private BloodPressureMeasurement bpm1;

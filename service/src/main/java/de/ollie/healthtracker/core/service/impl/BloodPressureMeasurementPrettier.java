@@ -52,7 +52,6 @@ class BloodPressureMeasurementPrettier {
 		Map<LocalDateTime, BloodPressureMeasurementPerDay> bpmspd = createMapBloodPressureMeasurementsPerDay(
 			bpmsToPrettify
 		);
-		System.out.println(bpmspd);
 		return getAveragedBloodPressureMeasurements(bpmspd);
 	}
 

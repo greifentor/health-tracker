@@ -46,7 +46,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.util.HashMap;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -259,18 +258,40 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		} else if (e.getSource() == menuItemEditSymptom) {
 			new SymptomSelectJInternalFrame(symptomService, bodyPartService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemFilePrint) {
-			LocalDate now = LocalDate.now();
-			byte[] pdf = reportPrintService.printForTimeInterval(
-				now.withDayOfMonth(1),
-				now.withDayOfMonth(now.lengthOfMonth()),
-				"jasper",
-				new HashMap<>()
-			);
-			try {
-				externalPdfViewerStarter.show(pdf);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
+			//			LocalDate now = LocalDate.now();
+			//			byte[] pdf = reportPrintService.printForTimeInterval(
+			//				now.withDayOfMonth(1),
+			//				now.withDayOfMonth(now.lengthOfMonth()),
+			//				"jasper",
+			//				new HashMap<>()
+			//			);
+			//			try {
+			//				externalPdfViewerStarter.show(pdf);
+			//			} catch (Exception ex) {
+			//				ex.printStackTrace();
+			//			}
+			System.out.println("Datum      Uhrzeit Dia Sys PPM IHB Status");
+			System.out.println("-----------------------------------------");
+			//JJJJ-MM-DD HH:MM   XXX XXX XXX X
+			bloodPressureMeasurementService
+				.findAllBloodPressureMeasurementsPrettifiedByTimeInterval(
+					LocalDate.now().minusMonths(2),
+					LocalDate.now().plusDays(1)
+				)
+				.forEach(bpm ->
+					System.out.println(
+						String.format(
+							"%s %s   %3d %3d %3d %s %s",
+							bpm.getDateOfRecording().toString(),
+							bpm.getTimeOfRecording().toString(),
+							bpm.getDiaMmHg(),
+							bpm.getSysMmHg(),
+							bpm.getPulsePerMinute(),
+							(bpm.isIrregularHeartbeat() ? " X " : "   "),
+							bpm.getStatus().name()
+						)
+					)
+				);
 		} else if (e.getSource() == menuItemFileQuit) {
 			System.exit(0);
 		}

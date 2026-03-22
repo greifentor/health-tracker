@@ -9,7 +9,6 @@ import de.ollie.healthtracker.persistence.jpa.mapper.BloodPressureMeasurementDbo
 import de.ollie.healthtracker.persistence.jpa.repository.BloodPressureMeasurementDboRepository;
 import jakarta.inject.Named;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -63,9 +62,8 @@ class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeas
 	}
 
 	@Override
-	public List<BloodPressureMeasurement> findAllByTimeInterval(LocalDateTime from, LocalDateTime to) {
-		// TODO OLI Auto-generated method stub
-		throw new UnsupportedOperationException("NOT IMPLEMENTED YET!");
+	public List<BloodPressureMeasurement> findAllByTimeInterval(LocalDate from, LocalDate to) {
+		return repository.findAllBetweenDates(from, to).stream().map(mapper::toModel).toList();
 	}
 
 	@Override

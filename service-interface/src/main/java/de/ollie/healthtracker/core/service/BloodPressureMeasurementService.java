@@ -3,7 +3,6 @@ package de.ollie.healthtracker.core.service;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -22,10 +21,7 @@ public interface BloodPressureMeasurementService {
 
 	void deleteBloodPressureMeasurement(UUID id);
 
-	List<BloodPressureMeasurement> findAllBloodPressureMeasurementsPrettifiedByTimeInterval(
-		LocalDateTime from,
-		LocalDateTime to
-	);
+	List<BloodPressureMeasurement> findAllBloodPressureMeasurementsPrettifiedByTimeInterval(LocalDate from, LocalDate to);
 
 	Optional<BloodPressureMeasurement> findById(UUID id);
 
