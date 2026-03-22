@@ -6,6 +6,7 @@ import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.core.service.port.persistence.BloodPressureMeasurementPersistencePort;
 import jakarta.inject.Named;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 class BloodPressureMeasurementServiceImpl implements BloodPressureMeasurementService {
 
 	private final BloodPressureMeasurementPersistencePort bloodPressureMeasurementPersistencePort;
+	private final BloodPressureMeasurementPrettier bloodPressureMeasurementPrettier;
 
 	@Override
 	public BloodPressureMeasurement createBloodPressureMeasurement(
@@ -49,6 +51,15 @@ class BloodPressureMeasurementServiceImpl implements BloodPressureMeasurementSer
 	@Override
 	public void deleteBloodPressureMeasurement(UUID id) {
 		bloodPressureMeasurementPersistencePort.deleteById(id);
+	}
+
+	@Override
+	public List<BloodPressureMeasurement> findAllBloodPressureMeasurementsPrettifiedByTimeInterval(
+		LocalDateTime from,
+		LocalDateTime to
+	) {
+		List<BloodPressureMeasurement> bpms = bloodPressureMeasurementPersistencePort.findAllByTimeInterval(from, to);
+		return bloodPressureMeasurementPrettier.prettify(bpms);
 	}
 
 	@Override

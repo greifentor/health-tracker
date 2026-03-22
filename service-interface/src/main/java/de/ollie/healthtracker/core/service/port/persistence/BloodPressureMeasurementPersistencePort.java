@@ -4,6 +4,7 @@ import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import jakarta.inject.Named;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,8 @@ public interface BloodPressureMeasurementPersistencePort {
 	);
 
 	void deleteById(UUID id);
+
+	List<BloodPressureMeasurement> findAllByTimeInterval(LocalDateTime from, LocalDateTime to);
 
 	Optional<BloodPressureMeasurement> findById(UUID id);
 

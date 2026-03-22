@@ -2,7 +2,6 @@ package de.ollie.healthtracker.persistence.jpa;
 
 import static de.ollie.baselib.util.Check.ensure;
 
-import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.core.service.port.persistence.BloodPressureMeasurementPersistencePort;
@@ -10,6 +9,7 @@ import de.ollie.healthtracker.persistence.jpa.mapper.BloodPressureMeasurementDbo
 import de.ollie.healthtracker.persistence.jpa.repository.BloodPressureMeasurementDboRepository;
 import jakarta.inject.Named;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -60,6 +60,12 @@ class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeas
 	public void deleteById(UUID id) {
 		ensure(id != null, "id cannot be null!");
 		repository.deleteById(id);
+	}
+
+	@Override
+	public List<BloodPressureMeasurement> findAllByTimeInterval(LocalDateTime from, LocalDateTime to) {
+		// TODO OLI Auto-generated method stub
+		throw new UnsupportedOperationException("NOT IMPLEMENTED YET!");
 	}
 
 	@Override

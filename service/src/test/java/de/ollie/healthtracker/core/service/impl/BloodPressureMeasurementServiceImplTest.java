@@ -1,5 +1,6 @@
 package de.ollie.healthtracker.core.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -9,9 +10,11 @@ import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.core.service.port.persistence.BloodPressureMeasurementPersistencePort;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,10 +35,13 @@ class BloodPressureMeasurementServiceImplTest {
 	private static final LocalTime TIME_OF_RECORDING = LocalTime.of(23, 31, 42);
 
 	@Mock
-	private BloodPressureMeasurement recording;
+	private BloodPressureMeasurement bloodPressureMeasurement;
 
 	@Mock
-	private BloodPressureMeasurementPersistencePort recordingPersistencePort;
+	private BloodPressureMeasurementPersistencePort persistencePort;
+
+	@Mock
+	private BloodPressureMeasurementPrettier bloodPressureMeasurementPrettier;
 
 	@InjectMocks
 	private BloodPressureMeasurementServiceImpl unitUnderTest;
@@ -47,7 +53,7 @@ class BloodPressureMeasurementServiceImplTest {
 		void returnsTheResultOfThePersistencePortMethodCall() {
 			// Prepare
 			when(
-				recordingPersistencePort.create(
+				persistencePort.create(
 					DATE_OF_RECORDING,
 					DIA_MM_HG,
 					PULSE_PER_MINUTE,
@@ -57,7 +63,7 @@ class BloodPressureMeasurementServiceImplTest {
 					IRREGULAR_HEARTBEAT
 				)
 			)
-				.thenReturn(recording);
+				.thenReturn(bloodPressureMeasurement);
 			// Run
 			BloodPressureMeasurement returned = unitUnderTest.createBloodPressureMeasurement(
 				DATE_OF_RECORDING,
@@ -69,7 +75,7 @@ class BloodPressureMeasurementServiceImplTest {
 				IRREGULAR_HEARTBEAT
 			);
 			// Check
-			assertSame(recording, returned);
+			assertSame(bloodPressureMeasurement, returned);
 		}
 	}
 
@@ -81,7 +87,55 @@ class BloodPressureMeasurementServiceImplTest {
 			// Run
 			unitUnderTest.deleteBloodPressureMeasurement(ID);
 			// Check
-			verify(recordingPersistencePort, times(1)).deleteById(ID);
+			verify(persistencePort, times(1)).deleteById(ID);
+		}
+	}
+
+	@Nested
+	class findAllBloodPressureMeasurementsPrettifiedByTimeInterval_LocalDateTime_LocalDateTime {
+
+		private static final LocalDateTime FROM = LocalDateTime.of(2026, 1, 1, 0, 0, 0);
+		private static final LocalDateTime TO = LocalDateTime.of(2026, 12, 31, 23, 59, 59);
+
+		private BloodPressureMeasurement bpm0;
+		private BloodPressureMeasurement bpm1;
+		private BloodPressureMeasurement bpm2;
+		private BloodPressureMeasurement bpm3;
+
+		@BeforeEach
+		void beforeEach() {
+			bpm0 = new BloodPressureMeasurement();
+			bpm1 = new BloodPressureMeasurement();
+			bpm2 = new BloodPressureMeasurement();
+			bpm3 = new BloodPressureMeasurement();
+		}
+
+		@Test
+		void returnsAListWithPrettifiedBloodPressureMeasurementsInTimeIntervalOrderedByLocalDateTime() {
+			// Prepare
+			when(persistencePort.findAllByTimeInterval(FROM, TO)).thenReturn(List.of(bpm0, bpm2, bpm1));
+			when(bloodPressureMeasurementPrettier.prettify(List.of(bpm0, bpm2, bpm1))).thenReturn(List.of(bpm3, bpm2));
+			// Run
+			List<BloodPressureMeasurement> returned = unitUnderTest.findAllBloodPressureMeasurementsPrettifiedByTimeInterval(
+				FROM,
+				TO
+			);
+			// Check
+			assertEquals(List.of(bpm3, bpm2), returned);
+		}
+
+		@Test
+		void returnsAListWithPrettifiedBloodPressureMeasurementsInTimeIntervalOrderedByLocalDateTime_acceptsNullValuesAsParameters() {
+			// Prepare
+			when(persistencePort.findAllByTimeInterval(null, null)).thenReturn(List.of(bpm0, bpm2, bpm1));
+			when(bloodPressureMeasurementPrettier.prettify(List.of(bpm0, bpm2, bpm1))).thenReturn(List.of(bpm3, bpm2));
+			// Run
+			List<BloodPressureMeasurement> returned = unitUnderTest.findAllBloodPressureMeasurementsPrettifiedByTimeInterval(
+				null,
+				null
+			);
+			// Check
+			assertEquals(List.of(bpm3, bpm2), returned);
 		}
 	}
 
@@ -91,8 +145,8 @@ class BloodPressureMeasurementServiceImplTest {
 		@Test
 		void returnsTheResultOfThePersistencePortMethodCall() {
 			// Prepare
-			List<BloodPressureMeasurement> list = List.of(recording);
-			when(recordingPersistencePort.list()).thenReturn(list);
+			List<BloodPressureMeasurement> list = List.of(bloodPressureMeasurement);
+			when(persistencePort.list()).thenReturn(list);
 			// Run
 			List<BloodPressureMeasurement> returned = unitUnderTest.listBloodPressureMeasurements();
 			// Check
