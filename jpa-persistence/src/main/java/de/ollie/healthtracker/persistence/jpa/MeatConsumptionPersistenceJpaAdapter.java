@@ -5,17 +5,18 @@ import static de.ollie.baselib.util.Check.ensure;
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.MeatConsumption;
 import de.ollie.healthtracker.core.service.model.MeatType;
-import de.ollie.healthtracker.core.service.port.persistence.MeatConsumptionPersistencePort;
 import de.ollie.healthtracker.persistence.jpa.dbo.MeatConsumptionDbo;
+import de.ollie.healthtracker.core.service.port.persistence.MeatConsumptionPersistencePort;
 import de.ollie.healthtracker.persistence.jpa.mapper.MeatConsumptionDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.MeatConsumptionDboRepository;
 import jakarta.inject.Named;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -33,9 +34,7 @@ class MeatConsumptionPersistenceJpaAdapter implements MeatConsumptionPersistence
 
 	@Override
 	public MeatConsumption create(int amountInGr, LocalDate dateOfRecording, String description, MeatType meatType) {
-		return mapper.toModel(
-			repository.save(dboFactory.createMeatConsumption(amountInGr, dateOfRecording, description, meatType.getId()))
-		);
+		return mapper.toModel(repository.save(dboFactory.createMeatConsumption(amountInGr, dateOfRecording, description, meatType.getId())));
 	}
 
 	@Override
@@ -77,7 +76,7 @@ class MeatConsumptionPersistenceJpaAdapter implements MeatConsumptionPersistence
 	public List<MeatConsumption> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
-
+	
 	@Override
 	public MeatConsumption update(MeatConsumption toSave) {
 		return mapper.toModel(repository.save(mapper.toDbo(toSave)));

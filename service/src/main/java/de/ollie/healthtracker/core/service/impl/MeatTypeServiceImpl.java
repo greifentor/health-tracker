@@ -6,9 +6,10 @@ import de.ollie.healthtracker.core.service.port.persistence.MeatTypePersistenceP
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -46,7 +47,7 @@ class MeatTypeServiceImpl implements MeatTypeService {
 	public List<MeatType> listMeatTypes() {
 		return meatTypePersistencePort.list();
 	}
-
+	
 	@Override
 	public MeatType updateMeatType(MeatType toSave) {
 		return meatTypePersistencePort.update(toSave);

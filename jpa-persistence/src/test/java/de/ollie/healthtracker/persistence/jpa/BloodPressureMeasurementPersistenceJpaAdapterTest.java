@@ -27,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class BloodPressureMeasurementPersistenceJpaAdapterTest {
 
+	private static final String COMMENT = "comment";
 	private static final LocalDate DATE_OF_RECORDING = LocalDate.of(2025, 6, 17);
 	private static final int DIA_MM_HG = 70;
 	private static final UUID ID = UUID.randomUUID();
@@ -66,6 +67,7 @@ class BloodPressureMeasurementPersistenceJpaAdapterTest {
 			// Prepare
 			when(
 				dboFactory.createBloodPressureMeasurement(
+					COMMENT,
 					DATE_OF_RECORDING,
 					DIA_MM_HG,
 					PULSE_PER_MINUTE,
@@ -82,6 +84,7 @@ class BloodPressureMeasurementPersistenceJpaAdapterTest {
 			assertSame(
 				model,
 				unitUnderTest.create(
+					COMMENT,
 					DATE_OF_RECORDING,
 					DIA_MM_HG,
 					PULSE_PER_MINUTE,

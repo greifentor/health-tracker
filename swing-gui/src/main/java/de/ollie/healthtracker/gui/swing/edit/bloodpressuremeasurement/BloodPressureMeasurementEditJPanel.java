@@ -16,7 +16,14 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import lombok.Generated;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
 public class BloodPressureMeasurementEditJPanel extends AbstractEditPanel<BloodPressureMeasurement> {
 
 	private JCheckBox checkBoxIrregularHeartbeat;
@@ -51,7 +58,7 @@ public class BloodPressureMeasurementEditJPanel extends AbstractEditPanel<BloodP
 		return p;
 	}
 
-	@Override
+	@Override // DOOF
 	protected JPanel createComponentPanel(BloodPressureMeasurement toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		JPanel p = new JPanel(new GridLayout(7, 1, HGAP, VGAP));
 		checkBoxIrregularHeartbeat = new JCheckBox();

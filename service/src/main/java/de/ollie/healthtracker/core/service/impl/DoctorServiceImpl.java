@@ -7,9 +7,10 @@ import de.ollie.healthtracker.core.service.port.persistence.DoctorPersistencePor
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -47,7 +48,7 @@ class DoctorServiceImpl implements DoctorService {
 	public List<Doctor> listDoctors() {
 		return doctorPersistencePort.list();
 	}
-
+	
 	@Override
 	public Doctor updateDoctor(Doctor toSave) {
 		return doctorPersistencePort.update(toSave);

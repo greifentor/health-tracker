@@ -1,16 +1,18 @@
 package de.ollie.healthtracker.gui.swing.edit.medication;
 
 import de.ollie.healthtracker.core.service.MedicationService;
-import de.ollie.healthtracker.core.service.model.Manufacturer;
 import de.ollie.healthtracker.core.service.model.Medication;
+import de.ollie.healthtracker.core.service.model.Manufacturer;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditJInternalFrame;
+
 import java.util.Map;
-import java.util.UUID;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -27,14 +29,9 @@ public class MedicationEditJInternalFrame extends AbstractEditJInternalFrame<Med
 		Observer<Medication> observer,
 		JDesktopPane desktopPane
 	) {
-		super(
-			desktopPane,
-			"Medication",
-			toEdit,
-			editDialogComponentFactory,
-			observer,
-			Map.of(MedicationEditJPanel.MANUFACTURER_ITEM_PROVIDER_ID, manufacturers)
-		);
+		super(desktopPane, "Medication", toEdit, editDialogComponentFactory, observer, Map.of(
+		MedicationEditJPanel.MANUFACTURER_ITEM_PROVIDER_ID, manufacturers
+		));
 	}
 
 	@Override

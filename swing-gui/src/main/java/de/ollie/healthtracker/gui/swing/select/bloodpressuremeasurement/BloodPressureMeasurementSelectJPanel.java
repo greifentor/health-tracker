@@ -12,7 +12,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import javax.swing.JDesktopPane;
+import lombok.Generated;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
 public class BloodPressureMeasurementSelectJPanel
 	extends AbstractSelectJPanel<BloodPressureMeasurement>
 	implements SelectionPanelObserver {
@@ -92,6 +99,7 @@ public class BloodPressureMeasurementSelectJPanel
 	@Override
 	protected BloodPressureMeasurement createNewObject() {
 		return bloodPressureMeasurementService.createBloodPressureMeasurement(
+			null,
 			LocalDate.now(),
 			80,
 			60,

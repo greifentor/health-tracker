@@ -5,6 +5,8 @@ classes:
         value: dateOfRecording DESC
       - name: order
         value: timeOfRecording DESC
+      - name: gui
+        value: true
     attributes:
       - name: id
         properties:
@@ -17,8 +19,18 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
+      - name: comment
+        properties:
+          - name: editor-position
+            value: 99
+          - name: nullable
+            value: false
+        type:
+          name: String
       - name: dateOfRecording
         properties:
+          - name: editor-position
+            value: 1
           - name: nullable
             value: false
         type:
@@ -27,16 +39,27 @@ classes:
             - name: import
               value: java.time.LocalDate
       - name: diaMmHg
+        properties:
+          - name: editor-position
+            value: 4
         type:
           name: int
       - name: pulsePerMinute
+        properties:
+          - name: editor-position
+            value: 5
         type:
           name: int
       - name: sysMmHg
+        properties:
+          - name: editor-position
+            value: 3
         type:
           name: int
       - name: timeOfRecording
         properties:
+          - name: editor-position
+            value: 2
           - name: nullable
             value: false
         type:
@@ -46,6 +69,8 @@ classes:
               value: java.time.LocalTime
       - name: status
         properties:
+          - name: editor-position
+            value: 6
           - name: nullable
             value: false
         enum: true
@@ -55,6 +80,9 @@ classes:
             - name: project-type
               value: true
       - name: irregularHeartbeat
+        properties:
+          - name: editor-position
+            value: 7
         type:
           name: boolean
   - name: BodyPart

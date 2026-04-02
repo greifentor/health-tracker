@@ -4,16 +4,17 @@ import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.MedicationUnit;
-import de.ollie.healthtracker.core.service.port.persistence.MedicationUnitPersistencePort;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
+import de.ollie.healthtracker.core.service.port.persistence.MedicationUnitPersistencePort;
 import de.ollie.healthtracker.persistence.jpa.mapper.MedicationUnitDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.MedicationUnitDboRepository;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -73,7 +74,7 @@ class MedicationUnitPersistenceJpaAdapter implements MedicationUnitPersistencePo
 	public List<MedicationUnit> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
-
+	
 	@Override
 	public MedicationUnit update(MedicationUnit toSave) {
 		return mapper.toModel(repository.save(mapper.toDbo(toSave)));

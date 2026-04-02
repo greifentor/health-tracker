@@ -7,13 +7,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.Generated;
+import lombok.experimental.Accessors;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
-import lombok.Data;
-import lombok.Generated;
-import lombok.experimental.Accessors;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -26,6 +27,7 @@ import lombok.experimental.Accessors;
 @Entity(name = "MedicationLogDbo")
 @Table(name = "MEDICATION_LOG")
 public class MedicationLogDbo {
+
 
 	@Id
 	@Column(name = "ID", nullable = false)
@@ -53,4 +55,5 @@ public class MedicationLogDbo {
 
 	@Column(name = "UNIT_COUNT", nullable = false)
 	private BigDecimal unitCount;
+
 }

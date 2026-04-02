@@ -7,10 +7,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -24,6 +25,7 @@ import lombok.experimental.Accessors;
 @Table(name = "MEDICATION")
 public class MedicationDbo {
 
+
 	@Id
 	@Column(name = "ID", nullable = false)
 	private UUID id;
@@ -34,4 +36,5 @@ public class MedicationDbo {
 	@JoinColumn(name = "MANUFACTURER", referencedColumnName = "ID", nullable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private ManufacturerDbo manufacturer;
+
 }

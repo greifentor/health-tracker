@@ -4,10 +4,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -21,6 +22,7 @@ import lombok.experimental.Accessors;
 @Table(name = "MEDICATION_UNIT")
 public class MedicationUnitDbo {
 
+
 	@Id
 	@Column(name = "ID", nullable = false)
 	private UUID id;
@@ -30,4 +32,5 @@ public class MedicationUnitDbo {
 
 	@Column(name = "TOKEN", nullable = false)
 	private String token;
+
 }

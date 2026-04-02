@@ -7,9 +7,10 @@ import de.ollie.healthtracker.core.service.port.persistence.BodyPartPersistenceP
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -47,7 +48,7 @@ class BodyPartServiceImpl implements BodyPartService {
 	public List<BodyPart> listBodyParts() {
 		return bodyPartPersistencePort.list();
 	}
-
+	
 	@Override
 	public BodyPart updateBodyPart(BodyPart toSave) {
 		return bodyPartPersistencePort.update(toSave);

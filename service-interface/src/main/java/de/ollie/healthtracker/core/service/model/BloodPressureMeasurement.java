@@ -1,11 +1,12 @@
 package de.ollie.healthtracker.core.service.model;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -18,6 +19,7 @@ import lombok.experimental.Accessors;
 public class BloodPressureMeasurement {
 
 	private UUID id;
+	private String comment;
 	private LocalDate dateOfRecording;
 	private int diaMmHg;
 	private int pulsePerMinute;
@@ -25,4 +27,5 @@ public class BloodPressureMeasurement {
 	private LocalTime timeOfRecording;
 	private BloodPressureMeasurementStatus status;
 	private boolean irregularHeartbeat;
+
 }

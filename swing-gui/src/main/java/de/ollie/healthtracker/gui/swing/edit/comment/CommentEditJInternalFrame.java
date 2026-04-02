@@ -6,12 +6,14 @@ import de.ollie.healthtracker.core.service.model.CommentType;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditJInternalFrame;
-import java.time.LocalDate;
+
 import java.util.Map;
-import java.util.UUID;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 import lombok.Generated;
+
+import java.time.LocalDate;
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -28,14 +30,9 @@ public class CommentEditJInternalFrame extends AbstractEditJInternalFrame<Commen
 		Observer<Comment> observer,
 		JDesktopPane desktopPane
 	) {
-		super(
-			desktopPane,
-			"Comment",
-			toEdit,
-			editDialogComponentFactory,
-			observer,
-			Map.of(CommentEditJPanel.COMMENT_TYPE_ITEM_PROVIDER_ID, commentTypes)
-		);
+		super(desktopPane, "Comment", toEdit, editDialogComponentFactory, observer, Map.of(
+		CommentEditJPanel.COMMENT_TYPE_ITEM_PROVIDER_ID, commentTypes
+		));
 	}
 
 	@Override

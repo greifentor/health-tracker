@@ -7,7 +7,14 @@ import de.ollie.healthtracker.gui.swing.edit.AbstractEditJInternalFrame;
 import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
+import lombok.Generated;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
 public class BloodPressureMeasurementEditJInternalFrame extends AbstractEditJInternalFrame<BloodPressureMeasurement> {
 
 	public BloodPressureMeasurementEditJInternalFrame(

@@ -6,9 +6,10 @@ import de.ollie.healthtracker.core.service.port.persistence.CommentTypePersisten
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -46,7 +47,7 @@ class CommentTypeServiceImpl implements CommentTypeService {
 	public List<CommentType> listCommentTypes() {
 		return commentTypePersistencePort.list();
 	}
-
+	
 	@Override
 	public CommentType updateCommentType(CommentType toSave) {
 		return commentTypePersistencePort.update(toSave);

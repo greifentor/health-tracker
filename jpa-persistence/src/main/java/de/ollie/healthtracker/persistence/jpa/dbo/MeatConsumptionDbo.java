@@ -7,11 +7,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
-import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
+
+import java.time.LocalDate;
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -24,6 +25,7 @@ import lombok.experimental.Accessors;
 @Entity(name = "MeatConsumptionDbo")
 @Table(name = "MEAT_CONSUMPTION")
 public class MeatConsumptionDbo {
+
 
 	@Id
 	@Column(name = "ID", nullable = false)
@@ -41,4 +43,5 @@ public class MeatConsumptionDbo {
 	@JoinColumn(name = "MEAT_TYPE", referencedColumnName = "ID", nullable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private MeatTypeDbo meatType;
+
 }

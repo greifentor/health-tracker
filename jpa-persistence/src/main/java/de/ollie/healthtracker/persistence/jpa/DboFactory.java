@@ -57,6 +57,7 @@ class DboFactory {
 	private final UuidFactory uuidFactory;
 
 	BloodPressureMeasurementDbo createBloodPressureMeasurement(
+		String comment,
 		LocalDate dateOfRecording,
 		int diaMmHg,
 		int pulsePerMinute,
@@ -72,6 +73,7 @@ class DboFactory {
 		ensure(dateOfRecording != null, "date of recording cannot be null!");
 		ensure(timeOfRecording != null, "time of recording cannot be null!");
 		return new BloodPressureMeasurementDbo()
+			.setComment(comment)
 			.setDateOfRecording(dateOfRecording)
 			.setDiaMmHg(diaMmHg)
 			.setId(uuidFactory.create())

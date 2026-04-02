@@ -4,8 +4,9 @@ import de.ollie.healthtracker.core.service.model.MeatType;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -15,6 +16,7 @@ import lombok.Generated;
 @Generated
 @Named
 public interface MeatTypePersistencePort {
+
 	MeatType create(String name);
 
 	void deleteById(UUID id);
@@ -24,6 +26,6 @@ public interface MeatTypePersistencePort {
 	Optional<MeatType> findByIdOrNameParticle(String name);
 
 	List<MeatType> list();
-
+	
 	MeatType update(MeatType toSave);
 }

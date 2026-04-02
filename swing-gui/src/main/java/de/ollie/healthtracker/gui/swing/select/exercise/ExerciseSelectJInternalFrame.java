@@ -1,15 +1,16 @@
 package de.ollie.healthtracker.gui.swing.select.exercise;
 
-import de.ollie.healthtracker.core.service.BodyPartService;
 import de.ollie.healthtracker.core.service.ExerciseService;
+import de.ollie.healthtracker.core.service.BodyPartService;
 import de.ollie.healthtracker.core.service.model.Exercise;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
-import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -41,12 +42,11 @@ public class ExerciseSelectJInternalFrame
 	@Override
 	protected AbstractSelectJPanel<Exercise> createSelectPanel() {
 		return new ExerciseSelectJPanel(
-			exerciseService,
-			bodyPartService,
-			CLASS_NAME,
-			desktopPane,
-			editDialogComponentFactory,
-			this
-		);
+				exerciseService,
+				bodyPartService,
+				CLASS_NAME,
+				desktopPane,
+				editDialogComponentFactory,
+				this);
 	}
 }

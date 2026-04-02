@@ -8,12 +8,13 @@ import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
+import javax.swing.JDesktopPane;
+import lombok.Generated;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
-import javax.swing.JDesktopPane;
-import lombok.Generated;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -48,13 +49,12 @@ public class MedicationPlanSelectJInternalFrame
 	@Override
 	protected AbstractSelectJPanel<MedicationPlan> createSelectPanel() {
 		return new MedicationPlanSelectJPanel(
-			medicationPlanService,
-			medicationService,
-			medicationUnitService,
-			CLASS_NAME,
-			desktopPane,
-			editDialogComponentFactory,
-			this
-		);
+				medicationPlanService,
+				medicationService,
+				medicationUnitService,
+				CLASS_NAME,
+				desktopPane,
+				editDialogComponentFactory,
+				this);
 	}
 }

@@ -7,10 +7,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -23,6 +24,7 @@ import lombok.experimental.Accessors;
 @Entity(name = "ExerciseDbo")
 @Table(name = "EXERCISE")
 public class ExerciseDbo {
+
 
 	@Id
 	@Column(name = "ID", nullable = false)
@@ -37,4 +39,5 @@ public class ExerciseDbo {
 
 	@Column(name = "NAME", nullable = false)
 	private String name;
+
 }

@@ -4,16 +4,17 @@ import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.MeatType;
-import de.ollie.healthtracker.core.service.port.persistence.MeatTypePersistencePort;
 import de.ollie.healthtracker.persistence.jpa.dbo.MeatTypeDbo;
+import de.ollie.healthtracker.core.service.port.persistence.MeatTypePersistencePort;
 import de.ollie.healthtracker.persistence.jpa.mapper.MeatTypeDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.MeatTypeDboRepository;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -73,7 +74,7 @@ class MeatTypePersistenceJpaAdapter implements MeatTypePersistencePort {
 	public List<MeatType> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
-
+	
 	@Override
 	public MeatType update(MeatType toSave) {
 		return mapper.toModel(repository.save(mapper.toDbo(toSave)));

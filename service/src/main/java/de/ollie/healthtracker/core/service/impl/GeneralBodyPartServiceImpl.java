@@ -6,9 +6,10 @@ import de.ollie.healthtracker.core.service.port.persistence.GeneralBodyPartPersi
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -46,7 +47,7 @@ class GeneralBodyPartServiceImpl implements GeneralBodyPartService {
 	public List<GeneralBodyPart> listGeneralBodyParts() {
 		return generalBodyPartPersistencePort.list();
 	}
-
+	
 	@Override
 	public GeneralBodyPart updateGeneralBodyPart(GeneralBodyPart toSave) {
 		return generalBodyPartPersistencePort.update(toSave);

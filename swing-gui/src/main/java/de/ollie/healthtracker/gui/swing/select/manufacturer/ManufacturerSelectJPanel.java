@@ -8,9 +8,10 @@ import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.util.List;
-import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -36,7 +37,12 @@ public class ManufacturerSelectJPanel extends AbstractSelectJPanel<Manufacturer>
 
 	@Override
 	protected List<Manufacturer> getObjectsToSelect() {
-		return manufacturerService != null ? manufacturerService.listManufacturers().stream().toList() : List.of();
+		return manufacturerService != null
+			? manufacturerService
+				.listManufacturers()
+				.stream()
+				.toList()
+			: List.of();
 	}
 
 	@Override
@@ -54,12 +60,20 @@ public class ManufacturerSelectJPanel extends AbstractSelectJPanel<Manufacturer>
 
 	@Override
 	protected void createEditInternalFrame(Manufacturer selected) {
-		new ManufacturerEditJInternalFrame(selected, getEditDialogComponentFactory(), this, getDesktopPane());
+		new ManufacturerEditJInternalFrame(
+				selected,
+				getEditDialogComponentFactory(),
+				this,
+				getDesktopPane()
+		);
 	}
 
 	@Override
 	protected Manufacturer createNewObject() {
-		return new Manufacturer().setId(UUID.randomUUID()).setName("");
+		return new Manufacturer()
+				.setId(UUID.randomUUID())
+				.setName("")
+;
 	}
 
 	@Override

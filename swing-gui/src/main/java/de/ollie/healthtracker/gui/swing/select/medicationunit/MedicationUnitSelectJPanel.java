@@ -8,9 +8,10 @@ import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.util.List;
-import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -36,7 +37,12 @@ public class MedicationUnitSelectJPanel extends AbstractSelectJPanel<MedicationU
 
 	@Override
 	protected List<MedicationUnit> getObjectsToSelect() {
-		return medicationUnitService != null ? medicationUnitService.listMedicationUnits().stream().toList() : List.of();
+		return medicationUnitService != null
+			? medicationUnitService
+				.listMedicationUnits()
+				.stream()
+				.toList()
+			: List.of();
 	}
 
 	@Override
@@ -55,12 +61,21 @@ public class MedicationUnitSelectJPanel extends AbstractSelectJPanel<MedicationU
 
 	@Override
 	protected void createEditInternalFrame(MedicationUnit selected) {
-		new MedicationUnitEditJInternalFrame(selected, getEditDialogComponentFactory(), this, getDesktopPane());
+		new MedicationUnitEditJInternalFrame(
+				selected,
+				getEditDialogComponentFactory(),
+				this,
+				getDesktopPane()
+		);
 	}
 
 	@Override
 	protected MedicationUnit createNewObject() {
-		return new MedicationUnit().setId(UUID.randomUUID()).setName("").setToken("");
+		return new MedicationUnit()
+				.setId(UUID.randomUUID())
+				.setName("")
+				.setToken("")
+;
 	}
 
 	@Override

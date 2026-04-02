@@ -5,11 +5,13 @@ import de.ollie.healthtracker.core.service.model.GeneralBodyPart;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditJInternalFrame;
+
 import java.util.Map;
-import java.util.UUID;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -25,7 +27,8 @@ public class GeneralBodyPartEditJInternalFrame extends AbstractEditJInternalFram
 		Observer<GeneralBodyPart> observer,
 		JDesktopPane desktopPane
 	) {
-		super(desktopPane, "General Body Part", toEdit, editDialogComponentFactory, observer, Map.of());
+		super(desktopPane, "General Body Part", toEdit, editDialogComponentFactory, observer, Map.of(
+		));
 	}
 
 	@Override

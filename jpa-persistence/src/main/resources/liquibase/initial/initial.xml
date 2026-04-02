@@ -368,5 +368,10 @@
         <addForeignKeyConstraint baseColumnNames="MEDICATION_UNIT" baseTableName="MEDICATION_PLAN" constraintName="FK_MEDICATION_PLAN_MEDICATION_UNIT_TO_MEDICATION_UNIT" referencedColumnNames="ID" referencedTableName="MEDICATION_UNIT"/>
         <addForeignKeyConstraint baseColumnNames="MEDICATION" baseTableName="MEDICATION_PLAN" constraintName="FK_MEDICATION_PLAN_MEDICATION_TO_MEDICATION" referencedColumnNames="ID" referencedTableName="MEDICATION"/>
     </changeSet>
+    <changeSet author="dm-comp" id="Add-Field-Comment-to-Table-BloodPressureMeasurement" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <addColumn tableName="BLOOD_PRESSURE_MEASUREMENT">
+            <column name="COMMENT" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

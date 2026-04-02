@@ -4,8 +4,9 @@ import de.ollie.healthtracker.core.service.model.Manufacturer;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -15,6 +16,7 @@ import lombok.Generated;
 @Generated
 @Named
 public interface ManufacturerPersistencePort {
+
 	Manufacturer create(String name);
 
 	void deleteById(UUID id);
@@ -24,6 +26,6 @@ public interface ManufacturerPersistencePort {
 	Optional<Manufacturer> findByIdOrNameParticle(String name);
 
 	List<Manufacturer> list();
-
+	
 	Manufacturer update(Manufacturer toSave);
 }

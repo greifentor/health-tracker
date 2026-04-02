@@ -6,9 +6,10 @@ import de.ollie.healthtracker.core.service.port.persistence.ManufacturerPersiste
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -46,7 +47,7 @@ class ManufacturerServiceImpl implements ManufacturerService {
 	public List<Manufacturer> listManufacturers() {
 		return manufacturerPersistencePort.list();
 	}
-
+	
 	@Override
 	public Manufacturer updateManufacturer(Manufacturer toSave) {
 		return manufacturerPersistencePort.update(toSave);

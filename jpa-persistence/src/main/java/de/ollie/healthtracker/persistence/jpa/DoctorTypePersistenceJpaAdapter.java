@@ -4,16 +4,17 @@ import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.DoctorType;
-import de.ollie.healthtracker.core.service.port.persistence.DoctorTypePersistencePort;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
+import de.ollie.healthtracker.core.service.port.persistence.DoctorTypePersistencePort;
 import de.ollie.healthtracker.persistence.jpa.mapper.DoctorTypeDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -73,7 +74,7 @@ class DoctorTypePersistenceJpaAdapter implements DoctorTypePersistencePort {
 	public List<DoctorType> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
-
+	
 	@Override
 	public DoctorType update(DoctorType toSave) {
 		return mapper.toModel(repository.save(mapper.toDbo(toSave)));

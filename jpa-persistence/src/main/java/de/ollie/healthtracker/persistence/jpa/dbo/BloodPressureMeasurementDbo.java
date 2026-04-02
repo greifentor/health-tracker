@@ -6,12 +6,13 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -25,9 +26,13 @@ import lombok.experimental.Accessors;
 @Table(name = "BLOOD_PRESSURE_MEASUREMENT")
 public class BloodPressureMeasurementDbo {
 
+
 	@Id
 	@Column(name = "ID", nullable = false)
 	private UUID id;
+
+	@Column(name = "COMMENT", nullable = false)
+	private String comment;
 
 	@Column(name = "DATE_OF_RECORDING", nullable = false)
 	private LocalDate dateOfRecording;
@@ -50,4 +55,5 @@ public class BloodPressureMeasurementDbo {
 
 	@Column(name = "IRREGULAR_HEARTBEAT", nullable = true)
 	private boolean irregularHeartbeat;
+
 }

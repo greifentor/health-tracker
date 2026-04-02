@@ -4,8 +4,9 @@ import de.ollie.healthtracker.core.service.model.MedicationUnit;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -15,6 +16,7 @@ import lombok.Generated;
 @Generated
 @Named
 public interface MedicationUnitPersistencePort {
+
 	MedicationUnit create(String name, String token);
 
 	void deleteById(UUID id);
@@ -24,6 +26,6 @@ public interface MedicationUnitPersistencePort {
 	Optional<MedicationUnit> findByIdOrNameParticle(String name);
 
 	List<MedicationUnit> list();
-
+	
 	MedicationUnit update(MedicationUnit toSave);
 }

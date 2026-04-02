@@ -3,8 +3,9 @@ package de.ollie.healthtracker.core.service;
 import de.ollie.healthtracker.core.service.model.CommentType;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -13,10 +14,11 @@ import lombok.Generated;
  */
 @Generated
 public interface CommentTypeService {
+
 	CommentType createCommentType(String name);
 
 	void deleteCommentType(UUID id);
-
+	
 	Optional<CommentType> findById(UUID id);
 
 	Optional<CommentType> findByIdOrNameParticle(String namePartOrId);

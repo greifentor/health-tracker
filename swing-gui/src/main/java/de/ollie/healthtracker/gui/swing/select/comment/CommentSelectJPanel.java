@@ -9,11 +9,12 @@ import de.ollie.healthtracker.gui.swing.edit.comment.CommentEditJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
+
+import java.time.LocalDate;
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -42,17 +43,17 @@ public class CommentSelectJPanel extends AbstractSelectJPanel<Comment> implement
 
 	@Override
 	protected List<Comment> getObjectsToSelect() {
-		return commentService != null ? commentService.listComments().stream().toList() : List.of();
+		return commentService != null
+			? commentService
+				.listComments()
+				.stream()
+				.toList()
+			: List.of();
 	}
 
 	@Override
 	protected AbstractSelectionTableModel<Comment> createSelectionModel() {
-		return new AbstractSelectionTableModel<Comment>(
-			getObjectsToSelect(),
-			"Date Of Recording",
-			"Content",
-			"Comment Type"
-		) {
+		return new AbstractSelectionTableModel<Comment>(getObjectsToSelect(), "Date Of Recording", "Content", "Comment Type") {
 			@Override
 			protected Object getColumnValueFor(Comment t, int columnIndex) {
 				return switch (columnIndex) {
@@ -68,21 +69,22 @@ public class CommentSelectJPanel extends AbstractSelectJPanel<Comment> implement
 	@Override
 	protected void createEditInternalFrame(Comment selected) {
 		new CommentEditJInternalFrame(
-			selected,
-			() -> commentTypeService.listCommentTypes(),
-			getEditDialogComponentFactory(),
-			this,
-			getDesktopPane()
+				selected,
+				() -> commentTypeService.listCommentTypes(),
+				getEditDialogComponentFactory(),
+				this,
+				getDesktopPane()
 		);
 	}
 
 	@Override
 	protected Comment createNewObject() {
 		return new Comment()
-			.setId(UUID.randomUUID())
-			.setCommentType(null)
-			.setContent("")
-			.setDateOfRecording(LocalDate.now());
+				.setId(UUID.randomUUID())
+				.setCommentType(null)
+				.setContent("")
+				.setDateOfRecording(LocalDate.now())
+;
 	}
 
 	@Override

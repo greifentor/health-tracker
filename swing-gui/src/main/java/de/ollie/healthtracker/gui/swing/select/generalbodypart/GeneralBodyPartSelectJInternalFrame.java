@@ -6,9 +6,10 @@ import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
-import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -37,11 +38,10 @@ public class GeneralBodyPartSelectJInternalFrame
 	@Override
 	protected AbstractSelectJPanel<GeneralBodyPart> createSelectPanel() {
 		return new GeneralBodyPartSelectJPanel(
-			generalBodyPartService,
-			CLASS_NAME,
-			desktopPane,
-			editDialogComponentFactory,
-			this
-		);
+				generalBodyPartService,
+				CLASS_NAME,
+				desktopPane,
+				editDialogComponentFactory,
+				this);
 	}
 }

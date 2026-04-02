@@ -6,12 +6,13 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 import de.ollie.healthtracker.core.service.model.GeneralBodyPart;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
+import lombok.Generated;
 import java.awt.GridLayout;
 import java.util.Map;
-import java.util.UUID;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -29,7 +30,9 @@ public class GeneralBodyPartEditJPanel extends AbstractEditPanel<GeneralBodyPart
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel("Name:");
+		return createLabelSubPanel(
+				"Name:"
+		);
 	}
 
 	@Override
@@ -42,6 +45,8 @@ public class GeneralBodyPartEditJPanel extends AbstractEditPanel<GeneralBodyPart
 
 	@Override
 	public GeneralBodyPart getCurrentContent() {
-		return new GeneralBodyPart().setId(toEdit.getId()).setName(textFieldName.getText());
+		return new GeneralBodyPart().setId(toEdit.getId())
+				.setName(textFieldName.getText())
+;
 	}
 }

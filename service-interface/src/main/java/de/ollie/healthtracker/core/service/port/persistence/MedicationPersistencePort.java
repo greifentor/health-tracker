@@ -1,12 +1,13 @@
 package de.ollie.healthtracker.core.service.port.persistence;
 
-import de.ollie.healthtracker.core.service.model.Manufacturer;
 import de.ollie.healthtracker.core.service.model.Medication;
+import de.ollie.healthtracker.core.service.model.Manufacturer;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -16,6 +17,7 @@ import lombok.Generated;
 @Generated
 @Named
 public interface MedicationPersistencePort {
+
 	Medication create(String name, Manufacturer manufacturer);
 
 	void deleteById(UUID id);
@@ -25,6 +27,6 @@ public interface MedicationPersistencePort {
 	Optional<Medication> findByIdOrNameParticle(String name);
 
 	List<Medication> list();
-
+	
 	Medication update(Medication toSave);
 }

@@ -7,10 +7,11 @@ import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
-import java.time.LocalDate;
-import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
+
+import java.time.LocalDate;
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -42,12 +43,11 @@ public class CommentSelectJInternalFrame
 	@Override
 	protected AbstractSelectJPanel<Comment> createSelectPanel() {
 		return new CommentSelectJPanel(
-			commentService,
-			commentTypeService,
-			CLASS_NAME,
-			desktopPane,
-			editDialogComponentFactory,
-			this
-		);
+				commentService,
+				commentTypeService,
+				CLASS_NAME,
+				desktopPane,
+				editDialogComponentFactory,
+				this);
 	}
 }

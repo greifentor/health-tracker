@@ -8,9 +8,10 @@ import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.util.List;
-import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -18,9 +19,7 @@ import lombok.Generated;
  * Remove this comment to suspend class from generation process.
  */
 @Generated
-public class GeneralBodyPartSelectJPanel
-	extends AbstractSelectJPanel<GeneralBodyPart>
-	implements SelectionPanelObserver {
+public class GeneralBodyPartSelectJPanel extends AbstractSelectJPanel<GeneralBodyPart> implements SelectionPanelObserver {
 
 	private final GeneralBodyPartService generalBodyPartService;
 
@@ -38,7 +37,12 @@ public class GeneralBodyPartSelectJPanel
 
 	@Override
 	protected List<GeneralBodyPart> getObjectsToSelect() {
-		return generalBodyPartService != null ? generalBodyPartService.listGeneralBodyParts().stream().toList() : List.of();
+		return generalBodyPartService != null
+			? generalBodyPartService
+				.listGeneralBodyParts()
+				.stream()
+				.toList()
+			: List.of();
 	}
 
 	@Override
@@ -56,12 +60,20 @@ public class GeneralBodyPartSelectJPanel
 
 	@Override
 	protected void createEditInternalFrame(GeneralBodyPart selected) {
-		new GeneralBodyPartEditJInternalFrame(selected, getEditDialogComponentFactory(), this, getDesktopPane());
+		new GeneralBodyPartEditJInternalFrame(
+				selected,
+				getEditDialogComponentFactory(),
+				this,
+				getDesktopPane()
+		);
 	}
 
 	@Override
 	protected GeneralBodyPart createNewObject() {
-		return new GeneralBodyPart().setId(UUID.randomUUID()).setName("");
+		return new GeneralBodyPart()
+				.setId(UUID.randomUUID())
+				.setName("")
+;
 	}
 
 	@Override

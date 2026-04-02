@@ -5,11 +5,13 @@ import de.ollie.healthtracker.core.service.model.MedicationUnit;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditJInternalFrame;
+
 import java.util.Map;
-import java.util.UUID;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -25,7 +27,8 @@ public class MedicationUnitEditJInternalFrame extends AbstractEditJInternalFrame
 		Observer<MedicationUnit> observer,
 		JDesktopPane desktopPane
 	) {
-		super(desktopPane, "Medication Unit", toEdit, editDialogComponentFactory, observer, Map.of());
+		super(desktopPane, "Medication Unit", toEdit, editDialogComponentFactory, observer, Map.of(
+		));
 	}
 
 	@Override

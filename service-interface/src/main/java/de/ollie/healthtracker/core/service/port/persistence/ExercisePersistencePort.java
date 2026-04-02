@@ -1,12 +1,13 @@
 package de.ollie.healthtracker.core.service.port.persistence;
 
-import de.ollie.healthtracker.core.service.model.BodyPart;
 import de.ollie.healthtracker.core.service.model.Exercise;
+import de.ollie.healthtracker.core.service.model.BodyPart;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -16,6 +17,7 @@ import lombok.Generated;
 @Generated
 @Named
 public interface ExercisePersistencePort {
+
 	Exercise create(BodyPart bodyPart, String description, String name);
 
 	void deleteById(UUID id);
@@ -23,6 +25,6 @@ public interface ExercisePersistencePort {
 	Optional<Exercise> findById(UUID id);
 
 	List<Exercise> list();
-
+	
 	Exercise update(Exercise toSave);
 }

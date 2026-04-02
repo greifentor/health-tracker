@@ -4,16 +4,17 @@ import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.GeneralBodyPart;
-import de.ollie.healthtracker.core.service.port.persistence.GeneralBodyPartPersistencePort;
 import de.ollie.healthtracker.persistence.jpa.dbo.GeneralBodyPartDbo;
+import de.ollie.healthtracker.core.service.port.persistence.GeneralBodyPartPersistencePort;
 import de.ollie.healthtracker.persistence.jpa.mapper.GeneralBodyPartDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.GeneralBodyPartDboRepository;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -73,7 +74,7 @@ class GeneralBodyPartPersistenceJpaAdapter implements GeneralBodyPartPersistence
 	public List<GeneralBodyPart> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
-
+	
 	@Override
 	public GeneralBodyPart update(GeneralBodyPart toSave) {
 		return mapper.toModel(repository.save(mapper.toDbo(toSave)));

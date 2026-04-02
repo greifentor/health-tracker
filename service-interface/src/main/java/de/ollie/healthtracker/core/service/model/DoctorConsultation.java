@@ -1,11 +1,12 @@
 package de.ollie.healthtracker.core.service.model;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -25,4 +26,5 @@ public class DoctorConsultation {
 	private String reason;
 	private String result;
 	private DoctorConsultation subsequentAppointmentOf;
+
 }

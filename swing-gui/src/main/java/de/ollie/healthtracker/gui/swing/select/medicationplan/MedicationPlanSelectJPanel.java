@@ -10,13 +10,14 @@ import de.ollie.healthtracker.gui.swing.edit.medicationplan.MedicationPlanEditJI
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
+import java.util.List;
+import javax.swing.JDesktopPane;
+import lombok.Generated;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.UUID;
-import javax.swing.JDesktopPane;
-import lombok.Generated;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -48,22 +49,17 @@ public class MedicationPlanSelectJPanel extends AbstractSelectJPanel<MedicationP
 
 	@Override
 	protected List<MedicationPlan> getObjectsToSelect() {
-		return medicationPlanService != null ? medicationPlanService.listMedicationPlans().stream().toList() : List.of();
+		return medicationPlanService != null
+			? medicationPlanService
+				.listMedicationPlans()
+				.stream()
+				.toList()
+			: List.of();
 	}
 
 	@Override
 	protected AbstractSelectionTableModel<MedicationPlan> createSelectionModel() {
-		return new AbstractSelectionTableModel<MedicationPlan>(
-			getObjectsToSelect(),
-			"Start Date",
-			"End Date",
-			"Next Date Of Intake",
-			"Time Of Intake",
-			"Medication",
-			"Medication Unit",
-			"Unit Count",
-			"Self Medication"
-		) {
+		return new AbstractSelectionTableModel<MedicationPlan>(getObjectsToSelect(), "Start Date", "End Date", "Next Date Of Intake", "Time Of Intake", "Medication", "Medication Unit", "Unit Count", "Self Medication") {
 			@Override
 			protected Object getColumnValueFor(MedicationPlan t, int columnIndex) {
 				return switch (columnIndex) {
@@ -84,27 +80,28 @@ public class MedicationPlanSelectJPanel extends AbstractSelectJPanel<MedicationP
 	@Override
 	protected void createEditInternalFrame(MedicationPlan selected) {
 		new MedicationPlanEditJInternalFrame(
-			selected,
-			() -> medicationService.listMedications(),
-			() -> medicationUnitService.listMedicationUnits(),
-			getEditDialogComponentFactory(),
-			this,
-			getDesktopPane()
+				selected,
+				() -> medicationService.listMedications(),
+				() -> medicationUnitService.listMedicationUnits(),
+				getEditDialogComponentFactory(),
+				this,
+				getDesktopPane()
 		);
 	}
 
 	@Override
 	protected MedicationPlan createNewObject() {
 		return new MedicationPlan()
-			.setId(UUID.randomUUID())
-			.setEndDate(LocalDate.now())
-			.setMedication(null)
-			.setMedicationUnit(null)
-			.setNextDateOfIntake(LocalDate.now())
-			.setSelfMedication(false)
-			.setStartDate(LocalDate.now())
-			.setTimeOfIntake(LocalTime.now())
-			.setUnitCount(new BigDecimal(0));
+				.setId(UUID.randomUUID())
+				.setEndDate(LocalDate.now())
+				.setMedication(null)
+				.setMedicationUnit(null)
+				.setNextDateOfIntake(LocalDate.now())
+				.setSelfMedication(false)
+				.setStartDate(LocalDate.now())
+				.setTimeOfIntake(LocalTime.now())
+				.setUnitCount(null)
+;
 	}
 
 	@Override

@@ -3,8 +3,9 @@ package de.ollie.healthtracker.core.service;
 import de.ollie.healthtracker.core.service.model.MedicationUnit;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -13,10 +14,11 @@ import lombok.Generated;
  */
 @Generated
 public interface MedicationUnitService {
+
 	MedicationUnit createMedicationUnit(String name, String token);
 
 	void deleteMedicationUnit(UUID id);
-
+	
 	Optional<MedicationUnit> findById(UUID id);
 
 	Optional<MedicationUnit> findByIdOrNameParticle(String namePartOrId);

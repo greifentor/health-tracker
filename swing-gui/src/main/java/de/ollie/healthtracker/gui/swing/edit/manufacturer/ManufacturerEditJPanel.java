@@ -6,12 +6,13 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 import de.ollie.healthtracker.core.service.model.Manufacturer;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
+import lombok.Generated;
 import java.awt.GridLayout;
 import java.util.Map;
-import java.util.UUID;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import lombok.Generated;
+
+import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -29,7 +30,9 @@ public class ManufacturerEditJPanel extends AbstractEditPanel<Manufacturer> {
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel("Name:");
+		return createLabelSubPanel(
+				"Name:"
+		);
 	}
 
 	@Override
@@ -42,6 +45,8 @@ public class ManufacturerEditJPanel extends AbstractEditPanel<Manufacturer> {
 
 	@Override
 	public Manufacturer getCurrentContent() {
-		return new Manufacturer().setId(toEdit.getId()).setName(textFieldName.getText());
+		return new Manufacturer().setId(toEdit.getId())
+				.setName(textFieldName.getText())
+;
 	}
 }
