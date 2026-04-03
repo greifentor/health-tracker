@@ -5,9 +5,8 @@ import de.ollie.healthtracker.core.service.model.GeneralBodyPart;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import lombok.Generated;
-
 import java.util.UUID;
+import lombok.Generated;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -17,7 +16,6 @@ import java.util.UUID;
 @Generated
 @Named
 public interface BodyPartPersistencePort {
-
 	BodyPart create(GeneralBodyPart generalBodyPart, String name);
 
 	void deleteById(UUID id);
@@ -27,6 +25,6 @@ public interface BodyPartPersistencePort {
 	Optional<BodyPart> findByIdOrNameParticle(String name);
 
 	List<BodyPart> list();
-	
+
 	BodyPart update(BodyPart toSave);
 }

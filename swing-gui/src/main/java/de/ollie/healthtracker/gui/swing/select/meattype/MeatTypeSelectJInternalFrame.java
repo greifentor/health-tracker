@@ -6,10 +6,9 @@ import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
+import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
-
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -37,11 +36,6 @@ public class MeatTypeSelectJInternalFrame
 
 	@Override
 	protected AbstractSelectJPanel<MeatType> createSelectPanel() {
-		return new MeatTypeSelectJPanel(
-				meatTypeService,
-				CLASS_NAME,
-				desktopPane,
-				editDialogComponentFactory,
-				this);
+		return new MeatTypeSelectJPanel(meatTypeService, CLASS_NAME, desktopPane, editDialogComponentFactory, this);
 	}
 }

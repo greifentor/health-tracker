@@ -1,7 +1,7 @@
 package de.ollie.healthtracker.gui.swing.select.medication;
 
-import de.ollie.healthtracker.core.service.MedicationService;
 import de.ollie.healthtracker.core.service.ManufacturerService;
+import de.ollie.healthtracker.core.service.MedicationService;
 import de.ollie.healthtracker.core.service.model.Medication;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.edit.medication.MedicationEditJInternalFrame;
@@ -9,10 +9,9 @@ import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.util.List;
+import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
-
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -41,12 +40,7 @@ public class MedicationSelectJPanel extends AbstractSelectJPanel<Medication> imp
 
 	@Override
 	protected List<Medication> getObjectsToSelect() {
-		return medicationService != null
-			? medicationService
-				.listMedications()
-				.stream()
-				.toList()
-			: List.of();
+		return medicationService != null ? medicationService.listMedications().stream().toList() : List.of();
 	}
 
 	@Override
@@ -66,21 +60,17 @@ public class MedicationSelectJPanel extends AbstractSelectJPanel<Medication> imp
 	@Override
 	protected void createEditInternalFrame(Medication selected) {
 		new MedicationEditJInternalFrame(
-				selected,
-				() -> manufacturerService.listManufacturers(),
-				getEditDialogComponentFactory(),
-				this,
-				getDesktopPane()
+			selected,
+			() -> manufacturerService.listManufacturers(),
+			getEditDialogComponentFactory(),
+			this,
+			getDesktopPane()
 		);
 	}
 
 	@Override
 	protected Medication createNewObject() {
-		return new Medication()
-				.setId(UUID.randomUUID())
-				.setName("")
-				.setManufacturer(null)
-;
+		return new Medication().setId(UUID.randomUUID()).setName("").setManufacturer(null);
 	}
 
 	@Override

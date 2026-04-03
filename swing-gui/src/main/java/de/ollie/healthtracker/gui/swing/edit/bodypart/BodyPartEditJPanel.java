@@ -7,16 +7,15 @@ import de.ollie.healthtracker.core.service.model.BodyPart;
 import de.ollie.healthtracker.core.service.model.GeneralBodyPart;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
-import lombok.Generated;
 import java.awt.GridLayout;
+import java.util.List;
 import java.util.Map;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.util.UUID;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import java.util.List;
-
-import java.util.UUID;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import lombok.Generated;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -37,10 +36,7 @@ public class BodyPartEditJPanel extends AbstractEditPanel<BodyPart> {
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel(
-				"Name:",
-				"General Body Part:"
-		);
+		return createLabelSubPanel("Name:", "General Body Part:");
 	}
 
 	@Override
@@ -48,8 +44,10 @@ public class BodyPartEditJPanel extends AbstractEditPanel<BodyPart> {
 		JPanel p = new JPanel(new GridLayout(2, 1, HGAP, VGAP));
 		textFieldName = new JTextField(toEdit.getName(), 40);
 		p.add(textFieldName);
-		List<GeneralBodyPart> listGeneralBodyPart = ((ItemProvider<GeneralBodyPart>) itemProviders.get(GENERAL_BODY_PART_ITEM_PROVIDER_ID)).getItem();
-		comboBoxGeneralBodyPart = new JComboBox<>(listGeneralBodyPart.toArray(new GeneralBodyPart[listGeneralBodyPart.size()]));
+		List<GeneralBodyPart> listGeneralBodyPart =
+			((ItemProvider<GeneralBodyPart>) itemProviders.get(GENERAL_BODY_PART_ITEM_PROVIDER_ID)).getItem();
+		comboBoxGeneralBodyPart =
+			new JComboBox<>(listGeneralBodyPart.toArray(new GeneralBodyPart[listGeneralBodyPart.size()]));
 		comboBoxGeneralBodyPart.setSelectedItem(toEdit.getGeneralBodyPart());
 		comboBoxGeneralBodyPart.setRenderer((list, value, index, isSelected, cellHasFocus) -> {
 			if (value != null) {
@@ -63,9 +61,9 @@ public class BodyPartEditJPanel extends AbstractEditPanel<BodyPart> {
 
 	@Override
 	public BodyPart getCurrentContent() {
-		return new BodyPart().setId(toEdit.getId())
-				.setName(textFieldName.getText())
-				.setGeneralBodyPart(((GeneralBodyPart) comboBoxGeneralBodyPart.getSelectedItem()))
-;
+		return new BodyPart()
+			.setId(toEdit.getId())
+			.setName(textFieldName.getText())
+			.setGeneralBodyPart(((GeneralBodyPart) comboBoxGeneralBodyPart.getSelectedItem()));
 	}
 }

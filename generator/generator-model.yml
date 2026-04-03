@@ -24,10 +24,11 @@ classes:
           - name: editor-position
             value: 99
           - name: nullable
-            value: false
+            value: true
         type:
           name: String
       - name: dateOfRecording
+        default-value: LocalDate.now()
         properties:
           - name: editor-position
             value: 1
@@ -39,24 +40,28 @@ classes:
             - name: import
               value: java.time.LocalDate
       - name: diaMmHg
+        default-value: 80
         properties:
           - name: editor-position
             value: 4
         type:
           name: int
       - name: pulsePerMinute
+        default-value: 60
         properties:
           - name: editor-position
             value: 5
         type:
           name: int
       - name: sysMmHg
+        default-value: 130
         properties:
           - name: editor-position
             value: 3
         type:
           name: int
       - name: timeOfRecording
+        default-value: LocalTime.now()
         properties:
           - name: editor-position
             value: 2
@@ -68,6 +73,7 @@ classes:
             - name: import
               value: java.time.LocalTime
       - name: status
+        default-value: BloodPressureMeasurementStatus.YELLOW
         properties:
           - name: editor-position
             value: 6

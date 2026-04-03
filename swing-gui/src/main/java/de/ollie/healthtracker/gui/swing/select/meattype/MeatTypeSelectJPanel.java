@@ -8,10 +8,9 @@ import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.util.List;
+import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
-
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -37,12 +36,7 @@ public class MeatTypeSelectJPanel extends AbstractSelectJPanel<MeatType> impleme
 
 	@Override
 	protected List<MeatType> getObjectsToSelect() {
-		return meatTypeService != null
-			? meatTypeService
-				.listMeatTypes()
-				.stream()
-				.toList()
-			: List.of();
+		return meatTypeService != null ? meatTypeService.listMeatTypes().stream().toList() : List.of();
 	}
 
 	@Override
@@ -60,20 +54,12 @@ public class MeatTypeSelectJPanel extends AbstractSelectJPanel<MeatType> impleme
 
 	@Override
 	protected void createEditInternalFrame(MeatType selected) {
-		new MeatTypeEditJInternalFrame(
-				selected,
-				getEditDialogComponentFactory(),
-				this,
-				getDesktopPane()
-		);
+		new MeatTypeEditJInternalFrame(selected, getEditDialogComponentFactory(), this, getDesktopPane());
 	}
 
 	@Override
 	protected MeatType createNewObject() {
-		return new MeatType()
-				.setId(UUID.randomUUID())
-				.setName("")
-;
+		return new MeatType().setId(UUID.randomUUID()).setName("");
 	}
 
 	@Override

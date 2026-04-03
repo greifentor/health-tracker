@@ -3,9 +3,8 @@ package de.ollie.healthtracker.core.service;
 import de.ollie.healthtracker.core.service.model.MeatType;
 import java.util.List;
 import java.util.Optional;
-import lombok.Generated;
-
 import java.util.UUID;
+import lombok.Generated;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -14,11 +13,10 @@ import java.util.UUID;
  */
 @Generated
 public interface MeatTypeService {
-
 	MeatType createMeatType(String name);
 
 	void deleteMeatType(UUID id);
-	
+
 	Optional<MeatType> findById(UUID id);
 
 	Optional<MeatType> findByIdOrNameParticle(String namePartOrId);

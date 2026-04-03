@@ -1,12 +1,11 @@
 package de.ollie.healthtracker.core.service;
 
-import de.ollie.healthtracker.core.service.model.Exercise;
 import de.ollie.healthtracker.core.service.model.BodyPart;
+import de.ollie.healthtracker.core.service.model.Exercise;
 import java.util.List;
 import java.util.Optional;
-import lombok.Generated;
-
 import java.util.UUID;
+import lombok.Generated;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -15,11 +14,10 @@ import java.util.UUID;
  */
 @Generated
 public interface ExerciseService {
-
 	Exercise createExercise(BodyPart bodyPart, String description, String name);
 
 	void deleteExercise(UUID id);
-	
+
 	Optional<Exercise> findById(UUID id);
 
 	List<Exercise> listExercises();

@@ -3,22 +3,21 @@ package de.ollie.healthtracker.persistence.jpa;
 import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
-import de.ollie.healthtracker.core.service.model.MedicationLog;
 import de.ollie.healthtracker.core.service.model.Medication;
+import de.ollie.healthtracker.core.service.model.MedicationLog;
 import de.ollie.healthtracker.core.service.model.MedicationUnit;
 import de.ollie.healthtracker.core.service.port.persistence.MedicationLogPersistencePort;
 import de.ollie.healthtracker.persistence.jpa.mapper.MedicationLogDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.MedicationLogDboRepository;
 import jakarta.inject.Named;
-import java.util.List;
-import java.util.Optional;
-import lombok.Generated;
-import lombok.RequiredArgsConstructor;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import lombok.Generated;
+import lombok.RequiredArgsConstructor;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -35,8 +34,28 @@ class MedicationLogPersistenceJpaAdapter implements MedicationLogPersistencePort
 	private final MedicationLogDboRepository repository;
 
 	@Override
-	public MedicationLog create(boolean confirmed, Medication medication, MedicationUnit medicationUnit, LocalDate dateOfIntake, boolean selfMedication, LocalTime timeOfIntake, BigDecimal unitCount) {
-		return mapper.toModel(repository.save(dboFactory.createMedicationLog(confirmed, medication.getId(), medicationUnit.getId(), dateOfIntake, selfMedication, timeOfIntake, unitCount)));
+	public MedicationLog create(
+		boolean confirmed,
+		Medication medication,
+		MedicationUnit medicationUnit,
+		LocalDate dateOfIntake,
+		boolean selfMedication,
+		LocalTime timeOfIntake,
+		BigDecimal unitCount
+	) {
+		return mapper.toModel(
+			repository.save(
+				dboFactory.createMedicationLog(
+					confirmed,
+					medication.getId(),
+					medicationUnit.getId(),
+					dateOfIntake,
+					selfMedication,
+					timeOfIntake,
+					unitCount
+				)
+			)
+		);
 	}
 
 	@Override
@@ -55,7 +74,7 @@ class MedicationLogPersistenceJpaAdapter implements MedicationLogPersistencePort
 	public List<MedicationLog> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
-	
+
 	@Override
 	public MedicationLog update(MedicationLog toSave) {
 		return mapper.toModel(repository.save(mapper.toDbo(toSave)));

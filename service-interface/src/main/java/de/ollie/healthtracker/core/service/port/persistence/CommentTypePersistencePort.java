@@ -4,9 +4,8 @@ import de.ollie.healthtracker.core.service.model.CommentType;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
-import lombok.Generated;
-
 import java.util.UUID;
+import lombok.Generated;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -16,7 +15,6 @@ import java.util.UUID;
 @Generated
 @Named
 public interface CommentTypePersistencePort {
-
 	CommentType create(String name);
 
 	void deleteById(UUID id);
@@ -26,6 +24,6 @@ public interface CommentTypePersistencePort {
 	Optional<CommentType> findByIdOrNameParticle(String name);
 
 	List<CommentType> list();
-	
+
 	CommentType update(CommentType toSave);
 }

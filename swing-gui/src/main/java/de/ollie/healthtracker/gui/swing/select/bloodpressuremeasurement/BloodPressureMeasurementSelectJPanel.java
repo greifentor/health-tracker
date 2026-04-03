@@ -1,5 +1,6 @@
 package de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement;
 
+import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
@@ -11,6 +12,7 @@ import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
 
@@ -41,44 +43,34 @@ public class BloodPressureMeasurementSelectJPanel
 	@Override
 	protected List<BloodPressureMeasurement> getObjectsToSelect() {
 		return bloodPressureMeasurementService != null
-			? bloodPressureMeasurementService
-				.listBloodPressureMeasurements()
-				.stream()
-				.sorted((bpm0, bpm1) -> compare(bpm0, bpm1))
-				.toList()
+			? bloodPressureMeasurementService.listBloodPressureMeasurements().stream().toList()
 			: List.of();
-	}
-
-	private int compare(BloodPressureMeasurement bpm0, BloodPressureMeasurement bpm1) {
-		int r = bpm1.getDateOfRecording().compareTo(bpm0.getDateOfRecording());
-		if (r == 0) {
-			r = bpm1.getTimeOfRecording().compareTo(bpm0.getTimeOfRecording());
-		}
-		return r;
 	}
 
 	@Override
 	protected AbstractSelectionTableModel<BloodPressureMeasurement> createSelectionModel() {
 		return new AbstractSelectionTableModel<BloodPressureMeasurement>(
 			getObjectsToSelect(),
-			"Date",
-			"Time",
-			"SYS mmHg",
-			"DIA mmHg",
-			"PP",
-			"IHB",
-			"Status"
+			"Date Of Recording",
+			"Time Of Recording",
+			"Sys Mm Hg",
+			"Dia Mm Hg",
+			"Pulse Per Minute",
+			"Status",
+			"Irregular Heartbeat",
+			"Comment"
 		) {
 			@Override
-			protected Object getColumnValueFor(BloodPressureMeasurement bpm, int columnIndex) {
+			protected Object getColumnValueFor(BloodPressureMeasurement t, int columnIndex) {
 				return switch (columnIndex) {
-					case 0 -> bpm.getDateOfRecording();
-					case 1 -> bpm.getTimeOfRecording();
-					case 2 -> bpm.getSysMmHg();
-					case 3 -> bpm.getDiaMmHg();
-					case 4 -> bpm.getPulsePerMinute();
-					case 5 -> bpm.isIrregularHeartbeat() ? "Y" : "N";
-					case 6 -> bpm.getStatus() == null ? "-" : bpm.getStatus().name();
+					case 0 -> DateTimeUtil.DE_DATE_FORMAT.format(t.getDateOfRecording());
+					case 1 -> DateTimeUtil.DE_TIME_FORMAT.format(t.getTimeOfRecording());
+					case 2 -> t.getSysMmHg();
+					case 3 -> t.getDiaMmHg();
+					case 4 -> t.getPulsePerMinute();
+					case 5 -> t.getStatus();
+					case 6 -> t.isIrregularHeartbeat();
+					case 7 -> t.getComment();
 					default -> null;
 				};
 			}
@@ -87,27 +79,21 @@ public class BloodPressureMeasurementSelectJPanel
 
 	@Override
 	protected void createEditInternalFrame(BloodPressureMeasurement selected) {
-		new BloodPressureMeasurementEditJInternalFrame(
-			selected,
-			getClassName(),
-			getEditDialogComponentFactory(),
-			this,
-			getDesktopPane()
-		);
+		new BloodPressureMeasurementEditJInternalFrame(selected, getEditDialogComponentFactory(), this, getDesktopPane());
 	}
 
 	@Override
 	protected BloodPressureMeasurement createNewObject() {
-		return bloodPressureMeasurementService.createBloodPressureMeasurement(
-			null,
-			LocalDate.now(),
-			80,
-			60,
-			130,
-			LocalTime.now(),
-			BloodPressureMeasurementStatus.YELLOW,
-			false
-		);
+		return new BloodPressureMeasurement()
+			.setId(UUID.randomUUID())
+			.setComment("")
+			.setDateOfRecording(LocalDate.now())
+			.setDiaMmHg(80)
+			.setPulsePerMinute(60)
+			.setSysMmHg(130)
+			.setTimeOfRecording(LocalTime.now())
+			.setStatus(BloodPressureMeasurementStatus.YELLOW)
+			.setIrregularHeartbeat(false);
 	}
 
 	@Override

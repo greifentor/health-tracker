@@ -1,7 +1,7 @@
 package de.ollie.healthtracker.gui.swing.select.exercise;
 
-import de.ollie.healthtracker.core.service.ExerciseService;
 import de.ollie.healthtracker.core.service.BodyPartService;
+import de.ollie.healthtracker.core.service.ExerciseService;
 import de.ollie.healthtracker.core.service.model.Exercise;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.edit.exercise.ExerciseEditJInternalFrame;
@@ -9,10 +9,9 @@ import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.util.List;
+import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
-
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -41,12 +40,7 @@ public class ExerciseSelectJPanel extends AbstractSelectJPanel<Exercise> impleme
 
 	@Override
 	protected List<Exercise> getObjectsToSelect() {
-		return exerciseService != null
-			? exerciseService
-				.listExercises()
-				.stream()
-				.toList()
-			: List.of();
+		return exerciseService != null ? exerciseService.listExercises().stream().toList() : List.of();
 	}
 
 	@Override
@@ -67,22 +61,17 @@ public class ExerciseSelectJPanel extends AbstractSelectJPanel<Exercise> impleme
 	@Override
 	protected void createEditInternalFrame(Exercise selected) {
 		new ExerciseEditJInternalFrame(
-				selected,
-				() -> bodyPartService.listBodyParts(),
-				getEditDialogComponentFactory(),
-				this,
-				getDesktopPane()
+			selected,
+			() -> bodyPartService.listBodyParts(),
+			getEditDialogComponentFactory(),
+			this,
+			getDesktopPane()
 		);
 	}
 
 	@Override
 	protected Exercise createNewObject() {
-		return new Exercise()
-				.setId(UUID.randomUUID())
-				.setBodyPart(null)
-				.setDescription("")
-				.setName("")
-;
+		return new Exercise().setId(UUID.randomUUID()).setBodyPart(null).setDescription("").setName("");
 	}
 
 	@Override

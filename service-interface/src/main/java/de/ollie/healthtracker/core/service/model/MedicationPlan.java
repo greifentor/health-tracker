@@ -1,13 +1,12 @@
 package de.ollie.healthtracker.core.service.model;
 
-import lombok.Data;
-import lombok.Generated;
-import lombok.experimental.Accessors;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
+import lombok.Data;
+import lombok.Generated;
+import lombok.experimental.Accessors;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -28,5 +27,4 @@ public class MedicationPlan {
 	private LocalDate startDate;
 	private LocalTime timeOfIntake;
 	private BigDecimal unitCount;
-
 }

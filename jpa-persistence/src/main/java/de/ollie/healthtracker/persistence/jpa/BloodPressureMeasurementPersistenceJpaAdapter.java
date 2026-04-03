@@ -2,28 +2,19 @@ package de.ollie.healthtracker.persistence.jpa;
 
 import static de.ollie.baselib.util.Check.ensure;
 
-import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
 import de.ollie.healthtracker.core.service.port.persistence.BloodPressureMeasurementPersistencePort;
 import de.ollie.healthtracker.persistence.jpa.mapper.BloodPressureMeasurementDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.BloodPressureMeasurementDboRepository;
 import jakarta.inject.Named;
-import java.util.List;
-import java.util.Optional;
-import lombok.Generated;
-import lombok.RequiredArgsConstructor;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 
-/**
- * GENERATED CODE - DO NOT TOUCH
- *
- * Remove this comment to suspend class from generation process.
- */
-@Generated
 @Named
 @RequiredArgsConstructor
 class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeasurementPersistencePort {
@@ -33,14 +24,41 @@ class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeas
 	private final BloodPressureMeasurementDboRepository repository;
 
 	@Override
-	public BloodPressureMeasurement create(String comment, LocalDate dateOfRecording, int diaMmHg, int pulsePerMinute, int sysMmHg, LocalTime timeOfRecording, BloodPressureMeasurementStatus status, boolean irregularHeartbeat) {
-		return mapper.toModel(repository.save(dboFactory.createBloodPressureMeasurement(comment, dateOfRecording, diaMmHg, pulsePerMinute, sysMmHg, timeOfRecording, status, irregularHeartbeat)));
+	public BloodPressureMeasurement create(
+		String comment,
+		LocalDate dateOfRecording,
+		int diaMmHg,
+		int pulsePerMinute,
+		int sysMmHg,
+		LocalTime timeOfRecording,
+		BloodPressureMeasurementStatus status,
+		boolean irregularHeartbeat
+	) {
+		return mapper.toModel(
+			repository.save(
+				dboFactory.createBloodPressureMeasurement(
+					comment,
+					dateOfRecording,
+					diaMmHg,
+					pulsePerMinute,
+					sysMmHg,
+					timeOfRecording,
+					status,
+					irregularHeartbeat
+				)
+			)
+		);
 	}
 
 	@Override
 	public void deleteById(UUID id) {
 		ensure(id != null, "id cannot be null!");
 		repository.deleteById(id);
+	}
+
+	@Override
+	public List<BloodPressureMeasurement> findAllByTimeInterval(LocalDate from, LocalDate to) {
+		return repository.findAllBetweenDates(from, to).stream().map(mapper::toModel).toList();
 	}
 
 	@Override
@@ -53,7 +71,7 @@ class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeas
 	public List<BloodPressureMeasurement> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
-	
+
 	@Override
 	public BloodPressureMeasurement update(BloodPressureMeasurement toSave) {
 		return mapper.toModel(repository.save(mapper.toDbo(toSave)));

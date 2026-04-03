@@ -1,16 +1,15 @@
 package de.ollie.healthtracker.core.service.impl;
 
 import de.ollie.healthtracker.core.service.MedicationService;
-import de.ollie.healthtracker.core.service.model.Medication;
 import de.ollie.healthtracker.core.service.model.Manufacturer;
+import de.ollie.healthtracker.core.service.model.Medication;
 import de.ollie.healthtracker.core.service.port.persistence.MedicationPersistencePort;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
-
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -48,7 +47,7 @@ class MedicationServiceImpl implements MedicationService {
 	public List<Medication> listMedications() {
 		return medicationPersistencePort.list();
 	}
-	
+
 	@Override
 	public Medication updateMedication(Medication toSave) {
 		return medicationPersistencePort.update(toSave);

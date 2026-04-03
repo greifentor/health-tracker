@@ -1,10 +1,14 @@
 package de.ollie.healthtracker.gui.swing.edit.bloodpressuremeasurement;
 
+import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditJInternalFrame;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Map;
+import java.util.UUID;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 import lombok.Generated;
@@ -19,12 +23,11 @@ public class BloodPressureMeasurementEditJInternalFrame extends AbstractEditJInt
 
 	public BloodPressureMeasurementEditJInternalFrame(
 		BloodPressureMeasurement toEdit,
-		String className,
 		EditDialogComponentFactory editDialogComponentFactory,
 		Observer<BloodPressureMeasurement> observer,
 		JDesktopPane desktopPane
 	) {
-		super(desktopPane, className, toEdit, editDialogComponentFactory, observer, Map.of());
+		super(desktopPane, "Blood Pressure Measurement", toEdit, editDialogComponentFactory, observer, Map.of());
 	}
 
 	@Override

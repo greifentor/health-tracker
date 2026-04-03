@@ -4,17 +4,16 @@ import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.Manufacturer;
-import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
 import de.ollie.healthtracker.core.service.port.persistence.ManufacturerPersistencePort;
+import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
 import de.ollie.healthtracker.persistence.jpa.mapper.ManufacturerDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.ManufacturerDboRepository;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
-
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -74,7 +73,7 @@ class ManufacturerPersistenceJpaAdapter implements ManufacturerPersistencePort {
 	public List<Manufacturer> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
-	
+
 	@Override
 	public Manufacturer update(Manufacturer toSave) {
 		return mapper.toModel(repository.save(mapper.toDbo(toSave)));

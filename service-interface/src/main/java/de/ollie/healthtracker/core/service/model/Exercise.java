@@ -1,10 +1,9 @@
 package de.ollie.healthtracker.core.service.model;
 
+import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
-
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -20,5 +19,4 @@ public class Exercise {
 	private BodyPart bodyPart;
 	private String description;
 	private String name;
-
 }

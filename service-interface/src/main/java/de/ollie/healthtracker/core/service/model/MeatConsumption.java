@@ -1,11 +1,10 @@
 package de.ollie.healthtracker.core.service.model;
 
+import java.time.LocalDate;
+import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -22,5 +21,4 @@ public class MeatConsumption {
 	private LocalDate dateOfRecording;
 	private String description;
 	private MeatType meatType;
-
 }

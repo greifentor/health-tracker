@@ -5,13 +5,12 @@ import de.ollie.healthtracker.core.service.model.MeatConsumption;
 import de.ollie.healthtracker.core.service.model.MeatType;
 import de.ollie.healthtracker.core.service.port.persistence.MeatConsumptionPersistencePort;
 import jakarta.inject.Named;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -26,7 +25,12 @@ class MeatConsumptionServiceImpl implements MeatConsumptionService {
 	private final MeatConsumptionPersistencePort meatConsumptionPersistencePort;
 
 	@Override
-	public MeatConsumption createMeatConsumption(int amountInGr, LocalDate dateOfRecording, String description, MeatType meatType) {
+	public MeatConsumption createMeatConsumption(
+		int amountInGr,
+		LocalDate dateOfRecording,
+		String description,
+		MeatType meatType
+	) {
 		return meatConsumptionPersistencePort.create(amountInGr, dateOfRecording, description, meatType);
 	}
 
@@ -49,7 +53,7 @@ class MeatConsumptionServiceImpl implements MeatConsumptionService {
 	public List<MeatConsumption> listMeatConsumptions() {
 		return meatConsumptionPersistencePort.list();
 	}
-	
+
 	@Override
 	public MeatConsumption updateMeatConsumption(MeatConsumption toSave) {
 		return meatConsumptionPersistencePort.update(toSave);

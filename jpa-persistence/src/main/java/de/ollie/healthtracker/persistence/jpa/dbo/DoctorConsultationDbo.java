@@ -7,13 +7,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
-import lombok.Generated;
-import lombok.experimental.Accessors;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
+import lombok.Data;
+import lombok.Generated;
+import lombok.experimental.Accessors;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -26,7 +25,6 @@ import java.util.UUID;
 @Entity(name = "DoctorConsultationDbo")
 @Table(name = "DOCTOR_CONSULTATION")
 public class DoctorConsultationDbo {
-
 
 	@Id
 	@Column(name = "ID", nullable = false)
@@ -54,5 +52,4 @@ public class DoctorConsultationDbo {
 	@JoinColumn(name = "SUBSEQUENT_APPOINTMENT_OF", referencedColumnName = "ID", nullable = true)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DoctorConsultationDbo subsequentAppointmentOf;
-
 }

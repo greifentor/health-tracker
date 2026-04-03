@@ -4,17 +4,16 @@ import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.CommentType;
-import de.ollie.healthtracker.persistence.jpa.dbo.CommentTypeDbo;
 import de.ollie.healthtracker.core.service.port.persistence.CommentTypePersistencePort;
+import de.ollie.healthtracker.persistence.jpa.dbo.CommentTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.mapper.CommentTypeDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.CommentTypeDboRepository;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
-
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -74,7 +73,7 @@ class CommentTypePersistenceJpaAdapter implements CommentTypePersistencePort {
 	public List<CommentType> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
-	
+
 	@Override
 	public CommentType update(CommentType toSave) {
 		return mapper.toModel(repository.save(mapper.toDbo(toSave)));

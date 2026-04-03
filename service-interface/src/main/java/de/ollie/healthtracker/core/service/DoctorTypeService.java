@@ -3,9 +3,8 @@ package de.ollie.healthtracker.core.service;
 import de.ollie.healthtracker.core.service.model.DoctorType;
 import java.util.List;
 import java.util.Optional;
-import lombok.Generated;
-
 import java.util.UUID;
+import lombok.Generated;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -14,11 +13,10 @@ import java.util.UUID;
  */
 @Generated
 public interface DoctorTypeService {
-
 	DoctorType createDoctorType(String name);
 
 	void deleteDoctorType(UUID id);
-	
+
 	Optional<DoctorType> findById(UUID id);
 
 	Optional<DoctorType> findByIdOrNameParticle(String namePartOrId);

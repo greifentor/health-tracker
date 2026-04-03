@@ -8,10 +8,9 @@ import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.util.List;
+import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
-
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -37,12 +36,7 @@ public class CommentTypeSelectJPanel extends AbstractSelectJPanel<CommentType> i
 
 	@Override
 	protected List<CommentType> getObjectsToSelect() {
-		return commentTypeService != null
-			? commentTypeService
-				.listCommentTypes()
-				.stream()
-				.toList()
-			: List.of();
+		return commentTypeService != null ? commentTypeService.listCommentTypes().stream().toList() : List.of();
 	}
 
 	@Override
@@ -60,20 +54,12 @@ public class CommentTypeSelectJPanel extends AbstractSelectJPanel<CommentType> i
 
 	@Override
 	protected void createEditInternalFrame(CommentType selected) {
-		new CommentTypeEditJInternalFrame(
-				selected,
-				getEditDialogComponentFactory(),
-				this,
-				getDesktopPane()
-		);
+		new CommentTypeEditJInternalFrame(selected, getEditDialogComponentFactory(), this, getDesktopPane());
 	}
 
 	@Override
 	protected CommentType createNewObject() {
-		return new CommentType()
-				.setId(UUID.randomUUID())
-				.setName("")
-;
+		return new CommentType().setId(UUID.randomUUID()).setName("");
 	}
 
 	@Override

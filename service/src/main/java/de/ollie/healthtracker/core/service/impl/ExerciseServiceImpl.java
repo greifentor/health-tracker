@@ -1,16 +1,15 @@
 package de.ollie.healthtracker.core.service.impl;
 
 import de.ollie.healthtracker.core.service.ExerciseService;
-import de.ollie.healthtracker.core.service.model.Exercise;
 import de.ollie.healthtracker.core.service.model.BodyPart;
+import de.ollie.healthtracker.core.service.model.Exercise;
 import de.ollie.healthtracker.core.service.port.persistence.ExercisePersistencePort;
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
-
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -43,7 +42,7 @@ class ExerciseServiceImpl implements ExerciseService {
 	public List<Exercise> listExercises() {
 		return exercisePersistencePort.list();
 	}
-	
+
 	@Override
 	public Exercise updateExercise(Exercise toSave) {
 		return exercisePersistencePort.update(toSave);

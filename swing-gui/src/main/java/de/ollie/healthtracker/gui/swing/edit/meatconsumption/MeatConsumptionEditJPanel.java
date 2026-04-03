@@ -3,25 +3,24 @@ package de.ollie.healthtracker.gui.swing.edit.meatconsumption;
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
+import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.model.MeatConsumption;
 import de.ollie.healthtracker.core.service.model.MeatType;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
-import lombok.Generated;
 import java.awt.GridLayout;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
+import java.util.UUID;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import java.util.List;
-import de.ollie.baselib.util.DateTimeUtil;
-
-import java.time.LocalDate;
-import java.util.UUID;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+import lombok.Generated;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -44,12 +43,7 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel(
-				"Date Of Recording:",
-				"Description:",
-				"Meat Type:",
-				"Amount In Gr:"
-		);
+		return createLabelSubPanel("Date Of Recording:", "Description:", "Meat Type:", "Amount In Gr:");
 	}
 
 	@Override
@@ -77,11 +71,11 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 
 	@Override
 	public MeatConsumption getCurrentContent() {
-		return new MeatConsumption().setId(toEdit.getId())
-				.setDateOfRecording(DateTimeUtil.dateFromString(textFieldDateOfRecording.getText()))
-				.setDescription(textFieldDescription.getText())
-				.setMeatType(((MeatType) comboBoxMeatType.getSelectedItem()))
-				.setAmountInGr((Integer) spinnerAmountInGr.getValue());
-;
+		return new MeatConsumption()
+			.setId(toEdit.getId())
+			.setDateOfRecording(DateTimeUtil.dateFromString(textFieldDateOfRecording.getText()))
+			.setDescription(textFieldDescription.getText())
+			.setMeatType(((MeatType) comboBoxMeatType.getSelectedItem()))
+			.setAmountInGr((Integer) spinnerAmountInGr.getValue());
 	}
 }

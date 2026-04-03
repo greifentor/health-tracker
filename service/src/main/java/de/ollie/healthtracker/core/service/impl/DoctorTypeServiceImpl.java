@@ -6,10 +6,9 @@ import de.ollie.healthtracker.core.service.port.persistence.DoctorTypePersistenc
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
-
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -47,7 +46,7 @@ class DoctorTypeServiceImpl implements DoctorTypeService {
 	public List<DoctorType> listDoctorTypes() {
 		return doctorTypePersistencePort.list();
 	}
-	
+
 	@Override
 	public DoctorType updateDoctorType(DoctorType toSave) {
 		return doctorTypePersistencePort.update(toSave);

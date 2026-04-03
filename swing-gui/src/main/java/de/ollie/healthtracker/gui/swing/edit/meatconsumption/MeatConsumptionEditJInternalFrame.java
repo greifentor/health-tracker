@@ -6,14 +6,12 @@ import de.ollie.healthtracker.core.service.model.MeatType;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditJInternalFrame;
-
+import java.time.LocalDate;
 import java.util.Map;
+import java.util.UUID;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
 import lombok.Generated;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -30,9 +28,14 @@ public class MeatConsumptionEditJInternalFrame extends AbstractEditJInternalFram
 		Observer<MeatConsumption> observer,
 		JDesktopPane desktopPane
 	) {
-		super(desktopPane, "Meat Consumption", toEdit, editDialogComponentFactory, observer, Map.of(
-		MeatConsumptionEditJPanel.MEAT_TYPE_ITEM_PROVIDER_ID, meatTypes
-		));
+		super(
+			desktopPane,
+			"Meat Consumption",
+			toEdit,
+			editDialogComponentFactory,
+			observer,
+			Map.of(MeatConsumptionEditJPanel.MEAT_TYPE_ITEM_PROVIDER_ID, meatTypes)
+		);
 	}
 
 	@Override

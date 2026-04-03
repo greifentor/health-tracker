@@ -7,6 +7,11 @@ import ${Properties.get("core-model-package")}.${ClassName};
 #foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
 import ${Properties.get("core-model-package")}.$Attribute.getTypeClassType().getName();
 #end
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+#if($Attribute.isTypeEnum() == true)
+import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
+#end
+#end
 import ${Properties.get("swing-gui-package")}.ItemProvider;
 import ${Properties.get("swing-gui-package")}.edit.AbstractEditPanel;
 import lombok.Generated;
@@ -30,7 +35,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 #end
-#if($Class.hasAReferenceAttribute() == true)
+#if($Class.hasAReferenceAttribute() == true  || $Class.hasAnEnumTypeAttribute() == true)
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import java.util.List;
@@ -64,8 +69,8 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 	private JCheckBox checkBox${Attribute.getNameCamelCase()};
 	#elseif(${Attribute.getTypeName()} == "int" || ${Attribute.getTypeName()} == "Integer")
 	private JSpinner spinner${Attribute.getNameCamelCase()};
-	#elseif($Attribute.isReference() == true)
-	private JComboBox<${Attribute.getTypeClassType().getName()}> comboBox${Attribute.getNameCamelCase()};
+	#elseif($Attribute.isTypeEnum() == true)
+	private JComboBox<${Attribute.getTypeName()}> comboBox${Attribute.getNameCamelCase()};
 	#else
 	private JTextField textField${Attribute.getNameCamelCase()};
 	#end
@@ -104,6 +109,9 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 		#if(${Attribute.getTypeName()} == "LocalDate")
 		textField${Attribute.getNameCamelCase()} = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.get${Attribute.getNameCamelCase()}()), 40);
 		p.add(textField${Attribute.getNameCamelCase()});
+		#elseif(${Attribute.getTypeName()} == "LocalTime")
+		textField${Attribute.getNameCamelCase()} = new JTextField(DateTimeUtil.DE_TIME_FORMAT.format(toEdit.get${Attribute.getNameCamelCase()}()), 40);
+		p.add(textField${Attribute.getNameCamelCase()});
 		#elseif(${Attribute.getTypeName()} == "boolean" || ${Attribute.getTypeName()} == "Boolean")
 		checkBox${Attribute.getNameCamelCase()} = new JCheckBox();
 		checkBox${Attribute.getNameCamelCase()}.setSelected(toEdit.is${Attribute.getNameCamelCase()}());
@@ -111,7 +119,11 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 		#elseif(${Attribute.getTypeName()} == "int")
 		SpinnerModel spinnerModel${Attribute.getNameCamelCase()} = new SpinnerNumberModel(toEdit.get${Attribute.getNameCamelCase()}(), 0, 1000, 1);
 		spinner${Attribute.getNameCamelCase()} = new JSpinner(spinnerModel${Attribute.getNameCamelCase()});
-		p.add(spinnerAmountInGr);
+		p.add(spinner${Attribute.getNameCamelCase()});
+		#elseif(${Attribute.isTypeEnum()} == true)
+		comboBox${Attribute.getNameCamelCase()} = new JComboBox<>(${Attribute.getTypeName()}.values());
+		comboBox${Attribute.getNameCamelCase()}.setSelectedItem(toEdit.get${Attribute.getNameCamelCase()}());
+		p.add(comboBox${Attribute.getNameCamelCase()});
 		#else
 		textField${Attribute.getNameCamelCase()} = new JTextField(toEdit.get${Attribute.getNameCamelCase()}(), 40);
 		p.add(textField${Attribute.getNameCamelCase()});
@@ -127,14 +139,18 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 		#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
 			#if(${Attribute.getTypeName()} == "LocalDate")
 				.set${Attribute.getNameCamelCase()}(DateTimeUtil.dateFromString(textField${Attribute.getNameCamelCase()}.getText()))
+			#elseif(${Attribute.getTypeName()} == "LocalTime")
+				.set${Attribute.getNameCamelCase()}(DateTimeUtil.timeFromString(textField${Attribute.getNameCamelCase()}.getText()))
 			#elseif(${Attribute.getTypeName()} == "boolean")
 				.set${Attribute.getNameCamelCase()}(checkBox${Attribute.getNameCamelCase()}.isSelected())
 			#elseif(${Attribute.getTypeName()} == "int")
-				.set${Attribute.getNameCamelCase()}((Integer) spinner${Attribute.getNameCamelCase()}.getValue());
+				.set${Attribute.getNameCamelCase()}((Integer) spinner${Attribute.getNameCamelCase()}.getValue())
 			#elseif(${Attribute.isReference()} == true)
 				.set${Attribute.getNameCamelCase()}(((${Attribute.getTypeClassType().getName()}) comboBox${Attribute.getNameCamelCase()}.getSelectedItem()))
+			#elseif(${Attribute.isTypeEnum()} == true)
+				.set${Attribute.getNameCamelCase()}(((${Attribute.getTypeName()}) comboBox${Attribute.getNameCamelCase()}.getSelectedItem()))
 			#else
-				.set${Attribute.getNameCamelCase()}(textField${Attribute.getNameCamelCase()}.getText())
+				.set${Attribute.getNameCamelCase()}(textField${Attribute.getNameCamelCase()}#if(${Attribute.hasPropertyWithValue("nullable", "true")}).getText().isEmpty() ? null : textField${Attribute.getNameCamelCase()}#end .getText())
 			#end
 		#end;
 	}

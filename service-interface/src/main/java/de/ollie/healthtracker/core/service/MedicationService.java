@@ -1,12 +1,11 @@
 package de.ollie.healthtracker.core.service;
 
-import de.ollie.healthtracker.core.service.model.Medication;
 import de.ollie.healthtracker.core.service.model.Manufacturer;
+import de.ollie.healthtracker.core.service.model.Medication;
 import java.util.List;
 import java.util.Optional;
-import lombok.Generated;
-
 import java.util.UUID;
+import lombok.Generated;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -15,11 +14,10 @@ import java.util.UUID;
  */
 @Generated
 public interface MedicationService {
-
 	Medication createMedication(String name, Manufacturer manufacturer);
 
 	void deleteMedication(UUID id);
-	
+
 	Optional<Medication> findById(UUID id);
 
 	Optional<Medication> findByIdOrNameParticle(String namePartOrId);

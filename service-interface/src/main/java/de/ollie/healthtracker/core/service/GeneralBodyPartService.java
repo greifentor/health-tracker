@@ -3,9 +3,8 @@ package de.ollie.healthtracker.core.service;
 import de.ollie.healthtracker.core.service.model.GeneralBodyPart;
 import java.util.List;
 import java.util.Optional;
-import lombok.Generated;
-
 import java.util.UUID;
+import lombok.Generated;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -14,11 +13,10 @@ import java.util.UUID;
  */
 @Generated
 public interface GeneralBodyPartService {
-
 	GeneralBodyPart createGeneralBodyPart(String name);
 
 	void deleteGeneralBodyPart(UUID id);
-	
+
 	Optional<GeneralBodyPart> findById(UUID id);
 
 	Optional<GeneralBodyPart> findByIdOrNameParticle(String namePartOrId);

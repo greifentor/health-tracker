@@ -7,12 +7,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
+import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -25,7 +24,6 @@ import java.util.UUID;
 @Entity(name = "CommentDbo")
 @Table(name = "COMMENT")
 public class CommentDbo {
-
 
 	@Id
 	@Column(name = "ID", nullable = false)
@@ -40,5 +38,4 @@ public class CommentDbo {
 
 	@Column(name = "DATE_OF_RECORDING", nullable = false)
 	private LocalDate dateOfRecording;
-
 }

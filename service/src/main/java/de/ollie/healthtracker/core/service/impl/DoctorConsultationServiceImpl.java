@@ -1,19 +1,18 @@
 package de.ollie.healthtracker.core.service.impl;
 
 import de.ollie.healthtracker.core.service.DoctorConsultationService;
-import de.ollie.healthtracker.core.service.model.DoctorConsultation;
 import de.ollie.healthtracker.core.service.model.Doctor;
+import de.ollie.healthtracker.core.service.model.DoctorConsultation;
 import de.ollie.healthtracker.core.service.model.DoctorConsultation;
 import de.ollie.healthtracker.core.service.port.persistence.DoctorConsultationPersistencePort;
 import jakarta.inject.Named;
-import java.util.List;
-import java.util.Optional;
-import lombok.Generated;
-import lombok.RequiredArgsConstructor;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import lombok.Generated;
+import lombok.RequiredArgsConstructor;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -28,7 +27,15 @@ class DoctorConsultationServiceImpl implements DoctorConsultationService {
 	private final DoctorConsultationPersistencePort doctorConsultationPersistencePort;
 
 	@Override
-	public DoctorConsultation createDoctorConsultation(LocalDate date, LocalTime time, Doctor doctor, boolean open, String reason, String result, DoctorConsultation subsequentAppointmentOf) {
+	public DoctorConsultation createDoctorConsultation(
+		LocalDate date,
+		LocalTime time,
+		Doctor doctor,
+		boolean open,
+		String reason,
+		String result,
+		DoctorConsultation subsequentAppointmentOf
+	) {
 		return doctorConsultationPersistencePort.create(date, time, doctor, open, reason, result, subsequentAppointmentOf);
 	}
 
@@ -46,7 +53,7 @@ class DoctorConsultationServiceImpl implements DoctorConsultationService {
 	public List<DoctorConsultation> listDoctorConsultations() {
 		return doctorConsultationPersistencePort.list();
 	}
-	
+
 	@Override
 	public DoctorConsultation updateDoctorConsultation(DoctorConsultation toSave) {
 		return doctorConsultationPersistencePort.update(toSave);

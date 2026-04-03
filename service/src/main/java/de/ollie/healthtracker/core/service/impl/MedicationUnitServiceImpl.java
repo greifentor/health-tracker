@@ -6,10 +6,9 @@ import de.ollie.healthtracker.core.service.port.persistence.MedicationUnitPersis
 import jakarta.inject.Named;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
-
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -47,7 +46,7 @@ class MedicationUnitServiceImpl implements MedicationUnitService {
 	public List<MedicationUnit> listMedicationUnits() {
 		return medicationUnitPersistencePort.list();
 	}
-	
+
 	@Override
 	public MedicationUnit updateMedicationUnit(MedicationUnit toSave) {
 		return medicationUnitPersistencePort.update(toSave);

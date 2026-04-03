@@ -3,12 +3,11 @@ package de.ollie.healthtracker.core.service.port.persistence;
 import de.ollie.healthtracker.core.service.model.MeatConsumption;
 import de.ollie.healthtracker.core.service.model.MeatType;
 import jakarta.inject.Named;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import lombok.Generated;
-
-import java.time.LocalDate;
 import java.util.UUID;
+import lombok.Generated;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -18,7 +17,6 @@ import java.util.UUID;
 @Generated
 @Named
 public interface MeatConsumptionPersistencePort {
-
 	MeatConsumption create(int amountInGr, LocalDate dateOfRecording, String description, MeatType meatType);
 
 	void deleteById(UUID id);
@@ -28,6 +26,6 @@ public interface MeatConsumptionPersistencePort {
 	Optional<MeatConsumption> findByIdOrDescriptionParticle(String description);
 
 	List<MeatConsumption> list();
-	
+
 	MeatConsumption update(MeatConsumption toSave);
 }

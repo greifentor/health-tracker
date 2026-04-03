@@ -3,23 +3,22 @@ package de.ollie.healthtracker.gui.swing.edit.symptom;
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
-import de.ollie.healthtracker.core.service.model.Symptom;
+import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.model.BodyPart;
+import de.ollie.healthtracker.core.service.model.Symptom;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
-import lombok.Generated;
 import java.awt.GridLayout;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.util.UUID;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import java.util.List;
-import de.ollie.baselib.util.DateTimeUtil;
-
-import java.time.LocalDate;
-import java.util.UUID;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import lombok.Generated;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -42,12 +41,7 @@ public class SymptomEditJPanel extends AbstractEditPanel<Symptom> {
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel(
-				"Date Of Recording:",
-				"Description:",
-				"Body Part:",
-				"Unverified:"
-		);
+		return createLabelSubPanel("Date Of Recording:", "Description:", "Body Part:", "Unverified:");
 	}
 
 	@Override
@@ -75,11 +69,11 @@ public class SymptomEditJPanel extends AbstractEditPanel<Symptom> {
 
 	@Override
 	public Symptom getCurrentContent() {
-		return new Symptom().setId(toEdit.getId())
-				.setDateOfRecording(DateTimeUtil.dateFromString(textFieldDateOfRecording.getText()))
-				.setDescription(textFieldDescription.getText())
-				.setBodyPart(((BodyPart) comboBoxBodyPart.getSelectedItem()))
-				.setUnverified(checkBoxUnverified.isSelected())
-;
+		return new Symptom()
+			.setId(toEdit.getId())
+			.setDateOfRecording(DateTimeUtil.dateFromString(textFieldDateOfRecording.getText()))
+			.setDescription(textFieldDescription.getText())
+			.setBodyPart(((BodyPart) comboBoxBodyPart.getSelectedItem()))
+			.setUnverified(checkBoxUnverified.isSelected());
 	}
 }

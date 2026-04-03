@@ -1,20 +1,19 @@
 package de.ollie.healthtracker.gui.swing.select.symptom;
 
 import de.ollie.baselib.util.DateTimeUtil;
-import de.ollie.healthtracker.core.service.SymptomService;
 import de.ollie.healthtracker.core.service.BodyPartService;
+import de.ollie.healthtracker.core.service.SymptomService;
 import de.ollie.healthtracker.core.service.model.Symptom;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.edit.symptom.SymptomEditJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -43,17 +42,18 @@ public class SymptomSelectJPanel extends AbstractSelectJPanel<Symptom> implement
 
 	@Override
 	protected List<Symptom> getObjectsToSelect() {
-		return symptomService != null
-			? symptomService
-				.listSymptoms()
-				.stream()
-				.toList()
-			: List.of();
+		return symptomService != null ? symptomService.listSymptoms().stream().toList() : List.of();
 	}
 
 	@Override
 	protected AbstractSelectionTableModel<Symptom> createSelectionModel() {
-		return new AbstractSelectionTableModel<Symptom>(getObjectsToSelect(), "Date Of Recording", "Description", "Body Part", "Unverified") {
+		return new AbstractSelectionTableModel<Symptom>(
+			getObjectsToSelect(),
+			"Date Of Recording",
+			"Description",
+			"Body Part",
+			"Unverified"
+		) {
 			@Override
 			protected Object getColumnValueFor(Symptom t, int columnIndex) {
 				return switch (columnIndex) {
@@ -70,23 +70,22 @@ public class SymptomSelectJPanel extends AbstractSelectJPanel<Symptom> implement
 	@Override
 	protected void createEditInternalFrame(Symptom selected) {
 		new SymptomEditJInternalFrame(
-				selected,
-				() -> bodyPartService.listBodyParts(),
-				getEditDialogComponentFactory(),
-				this,
-				getDesktopPane()
+			selected,
+			() -> bodyPartService.listBodyParts(),
+			getEditDialogComponentFactory(),
+			this,
+			getDesktopPane()
 		);
 	}
 
 	@Override
 	protected Symptom createNewObject() {
 		return new Symptom()
-				.setId(UUID.randomUUID())
-				.setDescription("")
-				.setDateOfRecording(LocalDate.now())
-				.setBodyPart(null)
-				.setUnverified(false)
-;
+			.setId(UUID.randomUUID())
+			.setDescription("")
+			.setDateOfRecording(LocalDate.now())
+			.setBodyPart(null)
+			.setUnverified(false);
 	}
 
 	@Override

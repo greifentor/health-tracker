@@ -9,12 +9,11 @@ import de.ollie.healthtracker.gui.swing.edit.meatconsumption.MeatConsumptionEdit
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 /**
  * GENERATED CODE - DO NOT TOUCH
@@ -22,7 +21,9 @@ import java.util.UUID;
  * Remove this comment to suspend class from generation process.
  */
 @Generated
-public class MeatConsumptionSelectJPanel extends AbstractSelectJPanel<MeatConsumption> implements SelectionPanelObserver {
+public class MeatConsumptionSelectJPanel
+	extends AbstractSelectJPanel<MeatConsumption>
+	implements SelectionPanelObserver {
 
 	private final MeatConsumptionService meatConsumptionService;
 	private final MeatTypeService meatTypeService;
@@ -43,17 +44,18 @@ public class MeatConsumptionSelectJPanel extends AbstractSelectJPanel<MeatConsum
 
 	@Override
 	protected List<MeatConsumption> getObjectsToSelect() {
-		return meatConsumptionService != null
-			? meatConsumptionService
-				.listMeatConsumptions()
-				.stream()
-				.toList()
-			: List.of();
+		return meatConsumptionService != null ? meatConsumptionService.listMeatConsumptions().stream().toList() : List.of();
 	}
 
 	@Override
 	protected AbstractSelectionTableModel<MeatConsumption> createSelectionModel() {
-		return new AbstractSelectionTableModel<MeatConsumption>(getObjectsToSelect(), "Date Of Recording", "Description", "Meat Type", "Amount In Gr") {
+		return new AbstractSelectionTableModel<MeatConsumption>(
+			getObjectsToSelect(),
+			"Date Of Recording",
+			"Description",
+			"Meat Type",
+			"Amount In Gr"
+		) {
 			@Override
 			protected Object getColumnValueFor(MeatConsumption t, int columnIndex) {
 				return switch (columnIndex) {
@@ -70,23 +72,22 @@ public class MeatConsumptionSelectJPanel extends AbstractSelectJPanel<MeatConsum
 	@Override
 	protected void createEditInternalFrame(MeatConsumption selected) {
 		new MeatConsumptionEditJInternalFrame(
-				selected,
-				() -> meatTypeService.listMeatTypes(),
-				getEditDialogComponentFactory(),
-				this,
-				getDesktopPane()
+			selected,
+			() -> meatTypeService.listMeatTypes(),
+			getEditDialogComponentFactory(),
+			this,
+			getDesktopPane()
 		);
 	}
 
 	@Override
 	protected MeatConsumption createNewObject() {
 		return new MeatConsumption()
-				.setId(UUID.randomUUID())
-				.setAmountInGr(0)
-				.setDateOfRecording(LocalDate.now())
-				.setDescription("")
-				.setMeatType(null)
-;
+			.setId(UUID.randomUUID())
+			.setAmountInGr(0)
+			.setDateOfRecording(LocalDate.now())
+			.setDescription("")
+			.setMeatType(null);
 	}
 
 	@Override
