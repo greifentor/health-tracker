@@ -16,6 +16,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.ExerciseDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.GeneralBodyPartDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MeatConsumptionDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.MeatProductDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MeatTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
@@ -29,6 +30,7 @@ import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.GeneralBodyPartDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.ManufacturerDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.MeatProductDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.MeatTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.MedicationDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.MedicationUnitDboRepository;
@@ -51,12 +53,14 @@ class DboFactory {
 	private final DoctorTypeDboRepository doctorTypeRepository;
 	private final GeneralBodyPartDboRepository generalBodyPartRepository;
 	private final ManufacturerDboRepository manufacturerDboRepository;
+	private final MeatProductDboRepository meatProductDboRepository;
 	private final MeatTypeDboRepository meatTypeDboRepository;
 	private final MedicationDboRepository medicationDboRepository;
 	private final MedicationUnitDboRepository medicationUnitDboRepository;
 	private final UuidFactory uuidFactory;
 
 	BloodPressureMeasurementDbo createBloodPressureMeasurement(
+		String comment,
 		LocalDate dateOfRecording,
 		int diaMmHg,
 		int pulsePerMinute,
@@ -72,6 +76,7 @@ class DboFactory {
 		ensure(dateOfRecording != null, "date of recording cannot be null!");
 		ensure(timeOfRecording != null, "time of recording cannot be null!");
 		return new BloodPressureMeasurementDbo()
+			.setComment(comment)
 			.setDateOfRecording(dateOfRecording)
 			.setDiaMmHg(diaMmHg)
 			.setId(uuidFactory.create())
@@ -194,15 +199,29 @@ class DboFactory {
 		int amoutInGr,
 		LocalDate dateOfRecording,
 		String description,
+		UUID meatProductId,
 		UUID meatTypeId
 	) {
 		ensure(description != null, "description cannot be null!");
 		ensure(!description.isBlank(), "description cannot be blank!");
 		ensure(dateOfRecording != null, "date of recording cannot be null!");
+		MeatProductDbo meatProduct = meatProductDboRepository.findById(meatProductId).orElse(null);
 		MeatTypeDbo meatType = meatTypeDboRepository.findById(meatTypeId).orElse(null);
 		return new MeatConsumptionDbo()
 			.setAmountInGr(amoutInGr)
 			.setDateOfRecording(dateOfRecording)
+			.setDescription(description)
+			.setId(uuidFactory.create())
+			.setMeatProduct(meatProduct)
+			.setMeatType(meatType);
+	}
+
+	MeatProductDbo createMeatProduct(int amoutInGr, String description, UUID meatTypeId) {
+		ensure(description != null, "description cannot be null!");
+		ensure(!description.isBlank(), "description cannot be blank!");
+		MeatTypeDbo meatType = meatTypeDboRepository.findById(meatTypeId).orElse(null);
+		return new MeatProductDbo()
+			.setAmountInGr(amoutInGr)
 			.setDescription(description)
 			.setId(uuidFactory.create())
 			.setMeatType(meatType);

@@ -2,6 +2,7 @@ package de.ollie.healthtracker.gui.swing.edit.meatconsumption;
 
 import de.ollie.healthtracker.core.service.MeatConsumptionService;
 import de.ollie.healthtracker.core.service.model.MeatConsumption;
+import de.ollie.healthtracker.core.service.model.MeatProduct;
 import de.ollie.healthtracker.core.service.model.MeatType;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
@@ -23,6 +24,7 @@ public class MeatConsumptionEditJInternalFrame extends AbstractEditJInternalFram
 
 	public MeatConsumptionEditJInternalFrame(
 		MeatConsumption toEdit,
+		ItemProvider<MeatProduct> meatProducts,
 		ItemProvider<MeatType> meatTypes,
 		EditDialogComponentFactory editDialogComponentFactory,
 		Observer<MeatConsumption> observer,
@@ -34,7 +36,12 @@ public class MeatConsumptionEditJInternalFrame extends AbstractEditJInternalFram
 			toEdit,
 			editDialogComponentFactory,
 			observer,
-			Map.of(MeatConsumptionEditJPanel.MEAT_TYPE_ITEM_PROVIDER_ID, meatTypes)
+			Map.of(
+				MeatConsumptionEditJPanel.MEAT_PRODUCT_ITEM_PROVIDER_ID,
+				meatProducts,
+				MeatConsumptionEditJPanel.MEAT_TYPE_ITEM_PROVIDER_ID,
+				meatTypes
+			)
 		);
 	}
 

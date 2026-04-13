@@ -1,10 +1,8 @@
-package de.ollie.healthtracker.gui.swing.edit.meatconsumption;
+package de.ollie.healthtracker.gui.swing.edit.meatproduct;
 
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
-import de.ollie.baselib.util.DateTimeUtil;
-import de.ollie.healthtracker.core.service.model.MeatConsumption;
 import de.ollie.healthtracker.core.service.model.MeatProduct;
 import de.ollie.healthtracker.core.service.model.MeatType;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
@@ -12,6 +10,7 @@ import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
 import java.awt.GridLayout;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,44 +26,28 @@ import lombok.Generated;
  * Remove this comment to suspend class from generation process.
  */
 @Generated
-public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption> {
+public class MeatProductEditJPanel extends AbstractEditPanel<MeatProduct> {
 
-	public static final String MEAT_PRODUCT_ITEM_PROVIDER_ID = "meat-product-item-provider";
 	public static final String MEAT_TYPE_ITEM_PROVIDER_ID = "meat-type-item-provider";
 
-	private JTextField textFieldDateOfRecording;
 	private JTextField textFieldDescription;
-	private JComboBox<MeatProduct> comboBoxMeatProduct;
 	private JComboBox<MeatType> comboBoxMeatType;
 	private JSpinner spinnerAmountInGr;
 
-	public MeatConsumptionEditJPanel(MeatConsumption toEdit, Map<String, ItemProvider<?>> itemProviders) {
+	public MeatProductEditJPanel(MeatProduct toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		super(toEdit, itemProviders);
 	}
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel("Date Of Recording:", "Description:", "Meat Product:", "Meat Type:", "Amount In Gr:");
+		return createLabelSubPanel("Description:", "Meat Type:", "Amount In Gr:");
 	}
 
 	@Override
-	protected JPanel createComponentPanel(MeatConsumption toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		JPanel p = new JPanel(new GridLayout(5, 1, HGAP, VGAP));
-		textFieldDateOfRecording = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.getDateOfRecording()), 40);
-		p.add(textFieldDateOfRecording);
+	protected JPanel createComponentPanel(MeatProduct toEdit, Map<String, ItemProvider<?>> itemProviders) {
+		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
 		textFieldDescription = new JTextField(toEdit.getDescription(), 40);
 		p.add(textFieldDescription);
-		List<MeatProduct> listMeatProduct =
-			((ItemProvider<MeatProduct>) itemProviders.get(MEAT_PRODUCT_ITEM_PROVIDER_ID)).getItem();
-		comboBoxMeatProduct = new JComboBox<>(listMeatProduct.toArray(new MeatProduct[listMeatProduct.size()]));
-		comboBoxMeatProduct.setSelectedItem(toEdit.getMeatProduct());
-		comboBoxMeatProduct.setRenderer((list, value, index, isSelected, cellHasFocus) -> {
-			if (value != null) {
-				return new JLabel(value.getDescription());
-			}
-			return new JLabel("-");
-		});
-		p.add(comboBoxMeatProduct);
 		List<MeatType> listMeatType = ((ItemProvider<MeatType>) itemProviders.get(MEAT_TYPE_ITEM_PROVIDER_ID)).getItem();
 		comboBoxMeatType = new JComboBox<>(listMeatType.toArray(new MeatType[listMeatType.size()]));
 		comboBoxMeatType.setSelectedItem(toEdit.getMeatType());
@@ -82,12 +65,10 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 	}
 
 	@Override
-	public MeatConsumption getCurrentContent() {
-		return new MeatConsumption()
+	public MeatProduct getCurrentContent() {
+		return new MeatProduct()
 			.setId(toEdit.getId())
-			.setDateOfRecording(DateTimeUtil.dateFromString(textFieldDateOfRecording.getText()))
 			.setDescription(textFieldDescription.getText())
-			.setMeatProduct(((MeatProduct) comboBoxMeatProduct.getSelectedItem()))
 			.setMeatType(((MeatType) comboBoxMeatType.getSelectedItem()))
 			.setAmountInGr((Integer) spinnerAmountInGr.getValue());
 	}

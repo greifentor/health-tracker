@@ -1,14 +1,12 @@
-package de.ollie.healthtracker.gui.swing.select.meatconsumption;
+package de.ollie.healthtracker.gui.swing.select.meatproduct;
 
-import de.ollie.healthtracker.core.service.MeatConsumptionService;
 import de.ollie.healthtracker.core.service.MeatProductService;
 import de.ollie.healthtracker.core.service.MeatTypeService;
-import de.ollie.healthtracker.core.service.model.MeatConsumption;
+import de.ollie.healthtracker.core.service.model.MeatProduct;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
-import java.time.LocalDate;
 import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
@@ -19,34 +17,30 @@ import lombok.Generated;
  * Remove this comment to suspend class from generation process.
  */
 @Generated
-public class MeatConsumptionSelectJInternalFrame
-	extends AbstractSelectJInternalFrame<MeatConsumption>
+public class MeatProductSelectJInternalFrame
+	extends AbstractSelectJInternalFrame<MeatProduct>
 	implements SelectionPanelObserver {
 
-	private static final String CLASS_NAME = "MeatConsumption";
+	private static final String CLASS_NAME = "MeatProduct";
 
-	private final MeatConsumptionService meatConsumptionService;
 	private final MeatProductService meatProductService;
 	private final MeatTypeService meatTypeService;
 
-	public MeatConsumptionSelectJInternalFrame(
-		MeatConsumptionService meatConsumptionService,
+	public MeatProductSelectJInternalFrame(
 		MeatProductService meatProductService,
 		MeatTypeService meatTypeService,
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
 		super(desktopPane, CLASS_NAME + "s", editDialogComponentFactory);
-		this.meatConsumptionService = meatConsumptionService;
 		this.meatProductService = meatProductService;
 		this.meatTypeService = meatTypeService;
 		finishConstruct();
 	}
 
 	@Override
-	protected AbstractSelectJPanel<MeatConsumption> createSelectPanel() {
-		return new MeatConsumptionSelectJPanel(
-			meatConsumptionService,
+	protected AbstractSelectJPanel<MeatProduct> createSelectPanel() {
+		return new MeatProductSelectJPanel(
 			meatProductService,
 			meatTypeService,
 			CLASS_NAME,

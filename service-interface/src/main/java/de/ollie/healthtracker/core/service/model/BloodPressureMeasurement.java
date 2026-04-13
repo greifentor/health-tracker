@@ -18,11 +18,12 @@ import lombok.experimental.Accessors;
 public class BloodPressureMeasurement {
 
 	private UUID id;
-	private LocalDate dateOfRecording;
-	private int diaMmHg;
-	private int pulsePerMinute;
-	private int sysMmHg;
-	private LocalTime timeOfRecording;
-	private BloodPressureMeasurementStatus status;
+	private String comment;
+	private LocalDate dateOfRecording = LocalDate.now();
+	private int diaMmHg = 80;
+	private int pulsePerMinute = 60;
+	private int sysMmHg = 130;
+	private LocalTime timeOfRecording = LocalTime.now();
+	private BloodPressureMeasurementStatus status = BloodPressureMeasurementStatus.YELLOW;
 	private boolean irregularHeartbeat;
 }

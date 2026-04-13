@@ -26,7 +26,7 @@ class BloodPressureMeasurementPrettier {
 		}
 
 		BloodPressureMeasurement getAveragedBloodPressureMeasurement() {
-			BloodPressureMeasurement abpm = new BloodPressureMeasurement();
+			BloodPressureMeasurement abpm = new BloodPressureMeasurement().setDiaMmHg(0).setPulsePerMinute(0).setSysMmHg(0);
 			abpm.setStatus(BloodPressureMeasurementStatus.GREEN);
 			abpm.setIrregularHeartbeat(false);
 			for (BloodPressureMeasurement bpm : bpms) {

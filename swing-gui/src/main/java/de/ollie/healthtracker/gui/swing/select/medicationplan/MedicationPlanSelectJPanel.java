@@ -104,7 +104,7 @@ public class MedicationPlanSelectJPanel extends AbstractSelectJPanel<MedicationP
 			.setSelfMedication(false)
 			.setStartDate(LocalDate.now())
 			.setTimeOfIntake(LocalTime.now())
-			.setUnitCount(new BigDecimal(0));
+			.setUnitCount(null);
 	}
 
 	@Override

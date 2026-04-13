@@ -13,15 +13,8 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
-/**
- * GENERATED CODE - DO NOT TOUCH
- *
- * Remove this comment to suspend class from generation process.
- */
-@Generated
 @Named
 @RequiredArgsConstructor
 class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeasurementPersistencePort {
@@ -32,6 +25,7 @@ class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeas
 
 	@Override
 	public BloodPressureMeasurement create(
+		String comment,
 		LocalDate dateOfRecording,
 		int diaMmHg,
 		int pulsePerMinute,
@@ -43,6 +37,7 @@ class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeas
 		return mapper.toModel(
 			repository.save(
 				dboFactory.createBloodPressureMeasurement(
+					comment,
 					dateOfRecording,
 					diaMmHg,
 					pulsePerMinute,

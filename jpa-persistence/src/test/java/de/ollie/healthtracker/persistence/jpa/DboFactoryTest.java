@@ -51,6 +51,7 @@ class DboFactoryTest {
 
 	private static final UUID ANOTHER_ID = UUID.randomUUID();
 	private static final String BLANK_STR = "\n\t\r ";
+	private static final String COMMENT = "comment";
 	private static final String CONTENT = "content";
 	private static final LocalDate DATE = LocalDate.of(2025, 7, 28);
 	private static final LocalDate DATE_OF_RECORDING = LocalDate.of(2025, 6, 17);
@@ -132,6 +133,7 @@ class DboFactoryTest {
 				() ->
 					unitUnderTest.createBloodPressureMeasurement(
 						null,
+						null,
 						DIA_MM_HG,
 						PULSE_PER_MINUTE,
 						SYS_MM_HG,
@@ -148,6 +150,7 @@ class DboFactoryTest {
 				IllegalArgumentException.class,
 				() ->
 					unitUnderTest.createBloodPressureMeasurement(
+						null,
 						DATE_OF_RECORDING,
 						0,
 						PULSE_PER_MINUTE,
@@ -165,6 +168,7 @@ class DboFactoryTest {
 				IllegalArgumentException.class,
 				() ->
 					unitUnderTest.createBloodPressureMeasurement(
+						null,
 						DATE_OF_RECORDING,
 						DIA_MM_HG,
 						0,
@@ -182,6 +186,7 @@ class DboFactoryTest {
 				IllegalArgumentException.class,
 				() ->
 					unitUnderTest.createBloodPressureMeasurement(
+						null,
 						DATE_OF_RECORDING,
 						DIA_MM_HG,
 						PULSE_PER_MINUTE,
@@ -199,6 +204,7 @@ class DboFactoryTest {
 				IllegalArgumentException.class,
 				() ->
 					unitUnderTest.createBloodPressureMeasurement(
+						null,
 						DATE_OF_RECORDING,
 						DIA_MM_HG,
 						PULSE_PER_MINUTE,
@@ -216,6 +222,7 @@ class DboFactoryTest {
 				IllegalArgumentException.class,
 				() ->
 					unitUnderTest.createBloodPressureMeasurement(
+						null,
 						DATE_OF_RECORDING,
 						DIA_MM_HG,
 						PULSE_PER_MINUTE,
@@ -231,6 +238,7 @@ class DboFactoryTest {
 		void returnANewObject() {
 			assertNotNull(
 				unitUnderTest.createBloodPressureMeasurement(
+					null,
 					DATE_OF_RECORDING,
 					DIA_MM_HG,
 					PULSE_PER_MINUTE,
@@ -246,6 +254,7 @@ class DboFactoryTest {
 		void returnANewObject_onEachCall() {
 			assertNotSame(
 				unitUnderTest.createBloodPressureMeasurement(
+					null,
 					DATE_OF_RECORDING,
 					DIA_MM_HG,
 					PULSE_PER_MINUTE,
@@ -255,6 +264,7 @@ class DboFactoryTest {
 					IRREGULAR_HEARTBEAT
 				),
 				unitUnderTest.createBloodPressureMeasurement(
+					null,
 					DATE_OF_RECORDING,
 					DIA_MM_HG,
 					PULSE_PER_MINUTE,
@@ -270,6 +280,7 @@ class DboFactoryTest {
 		void returnANewObject_withCorrectlySetAttributes() {
 			// Prepare
 			BloodPressureMeasurementDbo expected = new BloodPressureMeasurementDbo()
+				.setComment(COMMENT)
 				.setDateOfRecording(DATE_OF_RECORDING)
 				.setDiaMmHg(DIA_MM_HG)
 				.setId(ID)
@@ -282,6 +293,7 @@ class DboFactoryTest {
 			assertEquals(
 				expected,
 				unitUnderTest.createBloodPressureMeasurement(
+					COMMENT,
 					DATE_OF_RECORDING,
 					DIA_MM_HG,
 					PULSE_PER_MINUTE,

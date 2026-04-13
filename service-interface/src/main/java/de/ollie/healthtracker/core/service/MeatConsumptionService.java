@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.core.service;
 
 import de.ollie.healthtracker.core.service.model.MeatConsumption;
+import de.ollie.healthtracker.core.service.model.MeatProduct;
 import de.ollie.healthtracker.core.service.model.MeatType;
 import java.time.LocalDate;
 import java.util.List;
@@ -19,6 +20,7 @@ public interface MeatConsumptionService {
 		int amountInGr,
 		LocalDate dateOfRecording,
 		String description,
+		MeatProduct meatProduct,
 		MeatType meatType
 	);
 

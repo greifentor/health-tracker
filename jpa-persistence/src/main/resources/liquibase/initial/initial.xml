@@ -368,5 +368,31 @@
         <addForeignKeyConstraint baseColumnNames="MEDICATION_UNIT" baseTableName="MEDICATION_PLAN" constraintName="FK_MEDICATION_PLAN_MEDICATION_UNIT_TO_MEDICATION_UNIT" referencedColumnNames="ID" referencedTableName="MEDICATION_UNIT"/>
         <addForeignKeyConstraint baseColumnNames="MEDICATION" baseTableName="MEDICATION_PLAN" constraintName="FK_MEDICATION_PLAN_MEDICATION_TO_MEDICATION" referencedColumnNames="ID" referencedTableName="MEDICATION"/>
     </changeSet>
-
+    <changeSet author="dm-comp" id="Add-Field-Comment-to-Table-BloodPressureMeasurement" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <addColumn tableName="BLOOD_PRESSURE_MEASUREMENT">
+            <column name="COMMENT" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="dm-comp" id="Add-Table-MEAT_PRODUCT" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="MEAT_PRODUCT">
+            <column name="DESCRIPTION" type="LONGVARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MEAT_TYPE" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AMOUNT_IN_GR" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="MEAT_PRODUCT"/>
+        <addColumn tableName="MEAT_CONSUMPTION">
+            <column name="MEAT_PRODUCT" type="UUID"/>
+        </addColumn>
+        <addForeignKeyConstraint constraintName="FK_MEAT_PRODUCT_ID_TO_MEAT_TYPE" baseColumnNames="MEAT_PRODUCT" baseTableName="MEAT_CONSUMPTION" referencedColumnNames="ID" referencedTableName="MEAT_PRODUCT"/>
+        <addForeignKeyConstraint constraintName="FK_MEAT_PRODUCT_MEAT_TYPE_TO_MEAT_TYPE" baseColumnNames="MEAT_TYPE" baseTableName="MEAT_PRODUCT" referencedColumnNames="ID" referencedTableName="MEAT_TYPE"/>
+    </changeSet>
 </databaseChangeLog>

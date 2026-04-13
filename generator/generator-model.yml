@@ -5,6 +5,8 @@ classes:
         value: dateOfRecording DESC
       - name: order
         value: timeOfRecording DESC
+      - name: gui
+        value: true
     attributes:
       - name: id
         properties:
@@ -17,8 +19,19 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
-      - name: dateOfRecording
+      - name: comment
         properties:
+          - name: editor-position
+            value: 99
+          - name: nullable
+            value: true
+        type:
+          name: String
+      - name: dateOfRecording
+        default-value: LocalDate.now()
+        properties:
+          - name: editor-position
+            value: 1
           - name: nullable
             value: false
         type:
@@ -27,16 +40,31 @@ classes:
             - name: import
               value: java.time.LocalDate
       - name: diaMmHg
+        default-value: 80
+        properties:
+          - name: editor-position
+            value: 4
         type:
           name: int
       - name: pulsePerMinute
+        default-value: 60
+        properties:
+          - name: editor-position
+            value: 5
         type:
           name: int
       - name: sysMmHg
+        default-value: 130
+        properties:
+          - name: editor-position
+            value: 3
         type:
           name: int
       - name: timeOfRecording
+        default-value: LocalTime.now()
         properties:
+          - name: editor-position
+            value: 2
           - name: nullable
             value: false
         type:
@@ -45,7 +73,10 @@ classes:
             - name: import
               value: java.time.LocalTime
       - name: status
+        default-value: BloodPressureMeasurementStatus.YELLOW
         properties:
+          - name: editor-position
+            value: 6
           - name: nullable
             value: false
         enum: true
@@ -55,6 +86,9 @@ classes:
             - name: project-type
               value: true
       - name: irregularHeartbeat
+        properties:
+          - name: editor-position
+            value: 7
         type:
           name: boolean
   - name: BodyPart
@@ -418,7 +452,7 @@ classes:
           - name: nullable
             value: false
           - name: editor-position
-            value: 4
+            value: 5
         type:
           name: int
       - name: dateOfRecording
@@ -432,6 +466,58 @@ classes:
           properties:
             - name: import
               value: java.time.LocalDate
+      - name: description
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+          - name: editor-position
+            value: 2
+        type:
+          name: String
+      - name: meatProduct
+        reference: true
+        properties:
+          - name: editor-position
+            value: 3
+        type:
+          name: MeatProduct
+      - name: meatType
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 4
+        type:
+          name: MeatType
+  - name: MeatProduct
+    properties:
+      - name: order
+        value: description DESC
+      - name: gui
+        value: true
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: amountInGr
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 4
+        type:
+          name: int
       - name: description
         properties:
           - name: nullable

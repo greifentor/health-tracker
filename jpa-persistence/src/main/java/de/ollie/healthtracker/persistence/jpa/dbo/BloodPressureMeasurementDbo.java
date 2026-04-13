@@ -29,6 +29,9 @@ public class BloodPressureMeasurementDbo {
 	@Column(name = "ID", nullable = false)
 	private UUID id;
 
+	@Column(name = "COMMENT", nullable = true)
+	private String comment;
+
 	@Column(name = "DATE_OF_RECORDING", nullable = false)
 	private LocalDate dateOfRecording;
 

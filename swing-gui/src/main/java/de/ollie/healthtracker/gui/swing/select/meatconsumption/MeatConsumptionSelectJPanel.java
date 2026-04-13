@@ -2,6 +2,7 @@ package de.ollie.healthtracker.gui.swing.select.meatconsumption;
 
 import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.MeatConsumptionService;
+import de.ollie.healthtracker.core.service.MeatProductService;
 import de.ollie.healthtracker.core.service.MeatTypeService;
 import de.ollie.healthtracker.core.service.model.MeatConsumption;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
@@ -26,10 +27,12 @@ public class MeatConsumptionSelectJPanel
 	implements SelectionPanelObserver {
 
 	private final MeatConsumptionService meatConsumptionService;
+	private final MeatProductService meatProductService;
 	private final MeatTypeService meatTypeService;
 
 	public MeatConsumptionSelectJPanel(
 		MeatConsumptionService meatConsumptionService,
+		MeatProductService meatProductService,
 		MeatTypeService meatTypeService,
 		String className,
 		JDesktopPane desktopPane,
@@ -38,6 +41,7 @@ public class MeatConsumptionSelectJPanel
 	) {
 		super(desktopPane, className + "s", editDialogComponentFactory, observer);
 		this.meatConsumptionService = meatConsumptionService;
+		this.meatProductService = meatProductService;
 		this.meatTypeService = meatTypeService;
 		updateTableSelection();
 	}
@@ -53,6 +57,7 @@ public class MeatConsumptionSelectJPanel
 			getObjectsToSelect(),
 			"Date Of Recording",
 			"Description",
+			"Meat Product",
 			"Meat Type",
 			"Amount In Gr"
 		) {
@@ -61,8 +66,9 @@ public class MeatConsumptionSelectJPanel
 				return switch (columnIndex) {
 					case 0 -> DateTimeUtil.DE_DATE_FORMAT.format(t.getDateOfRecording());
 					case 1 -> t.getDescription();
-					case 2 -> (t.getMeatType() != null ? t.getMeatType().getName() : "-");
-					case 3 -> t.getAmountInGr();
+					case 2 -> (t.getMeatProduct() != null ? t.getMeatProduct().getDescription() : "-");
+					case 3 -> (t.getMeatType() != null ? t.getMeatType().getName() : "-");
+					case 4 -> t.getAmountInGr();
 					default -> null;
 				};
 			}
@@ -73,6 +79,7 @@ public class MeatConsumptionSelectJPanel
 	protected void createEditInternalFrame(MeatConsumption selected) {
 		new MeatConsumptionEditJInternalFrame(
 			selected,
+			() -> meatProductService.listMeatProducts(),
 			() -> meatTypeService.listMeatTypes(),
 			getEditDialogComponentFactory(),
 			this,
@@ -87,6 +94,7 @@ public class MeatConsumptionSelectJPanel
 			.setAmountInGr(0)
 			.setDateOfRecording(LocalDate.now())
 			.setDescription("")
+			.setMeatProduct(null)
 			.setMeatType(null);
 	}
 

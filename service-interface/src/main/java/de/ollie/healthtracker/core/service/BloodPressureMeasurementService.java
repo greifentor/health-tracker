@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public interface BloodPressureMeasurementService {
 	BloodPressureMeasurement createBloodPressureMeasurement(
+		String comment,
 		LocalDate dateOfRecording,
 		int diaMmHg,
 		int pulsePerMinute,

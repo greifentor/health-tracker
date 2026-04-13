@@ -14,6 +14,11 @@ import ${Properties.get("swing-gui-package")}.edit.${ClassName.toLowerCase()}.${
 import ${Properties.get("swing-gui-package")}.select.AbstractSelectJPanel;
 import ${Properties.get("swing-gui-package")}.select.AbstractSelectionTableModel;
 import ${Properties.get("swing-gui-package")}.select.SelectionPanelObserver;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+#if($Attribute.isTypeEnum() == true)
+import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
+#end
+#end
 import java.util.List;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
@@ -119,11 +124,11 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 			#elseif($Attribute.getTypeName() == "String")
 				.set${Attribute.getNameCamelCase()}("")
 			#elseif($Attribute.getTypeName() == "boolean")
-				.set${Attribute.getNameCamelCase()}(false)
+				.set${Attribute.getNameCamelCase()}(#if(${Attribute.getDefaultValue()})${Attribute.getDefaultValue()} #else false#end)
 			#elseif($Attribute.getTypeName() == "int")
-				.set${Attribute.getNameCamelCase()}(0)
+				.set${Attribute.getNameCamelCase()}(#if(${Attribute.getDefaultValue()})${Attribute.getDefaultValue()} #else 0#end)
 			#else
-				.set${Attribute.getNameCamelCase()}(null)
+				.set${Attribute.getNameCamelCase()}(#if(${Attribute.getDefaultValue()})${Attribute.getDefaultValue()} #else null#end)
 			#end
 		#end;
 	}

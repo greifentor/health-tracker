@@ -14,6 +14,7 @@ import de.ollie.healthtracker.core.service.ExerciseService;
 import de.ollie.healthtracker.core.service.GeneralBodyPartService;
 import de.ollie.healthtracker.core.service.ManufacturerService;
 import de.ollie.healthtracker.core.service.MeatConsumptionService;
+import de.ollie.healthtracker.core.service.MeatProductService;
 import de.ollie.healthtracker.core.service.MeatTypeService;
 import de.ollie.healthtracker.core.service.MedicationLogService;
 import de.ollie.healthtracker.core.service.MedicationPlanService;
@@ -33,6 +34,7 @@ import de.ollie.healthtracker.gui.swing.select.exercise.ExerciseSelectJInternalF
 import de.ollie.healthtracker.gui.swing.select.generalbodypart.GeneralBodyPartSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.manufacturer.ManufacturerSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.meatconsumption.MeatConsumptionSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.meatproduct.MeatProductSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.meattype.MeatTypeSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.medication.MedicationSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.medicationlog.MedicationLogSelectJInternalFrame;
@@ -73,6 +75,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final GeneralBodyPartService generalBodyPartService;
 	private final ManufacturerService manufacturerService;
 	private final MeatConsumptionService meatConsumptionService;
+	private final MeatProductService meatProductService;
 	private final MeatTypeService meatTypeService;
 	private final MedicationLogService medicationLogService;
 	private final MedicationPlanService medicationPlanService;
@@ -95,6 +98,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemEditGeneralBodyPart;
 	private JMenuItem menuItemEditManufacturer;
 	private JMenuItem menuItemEditMeatConsumption;
+	private JMenuItem menuItemEditMeatProduct;
 	private JMenuItem menuItemEditMeatType;
 	private JMenuItem menuItemEditMedication;
 	private JMenuItem menuItemEditMedicationLog;
@@ -166,6 +170,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemEditMedicationUnit);
 		menuItemEditMeatConsumption = createMenuItem("Meat Consumption", this);
 		menu.add(menuItemEditMeatConsumption);
+		menuItemEditMeatProduct = createMenuItem("Meat Product", this);
+		menu.add(menuItemEditMeatProduct);
 		menuItemEditMeatType = createMenuItem("Meat Type", this);
 		menu.add(menuItemEditMeatType);
 		menuItemEditSymptom = createMenuItem("Symptom", this);
@@ -224,10 +230,13 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		} else if (e.getSource() == menuItemEditMeatConsumption) {
 			new MeatConsumptionSelectJInternalFrame(
 				meatConsumptionService,
+				meatProductService,
 				meatTypeService,
 				desktopPane,
 				editDialogComponentFactory
 			);
+		} else if (e.getSource() == menuItemEditMeatProduct) {
+			new MeatProductSelectJInternalFrame(meatProductService, meatTypeService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditMeatType) {
 			new MeatTypeSelectJInternalFrame(meatTypeService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditMedication) {

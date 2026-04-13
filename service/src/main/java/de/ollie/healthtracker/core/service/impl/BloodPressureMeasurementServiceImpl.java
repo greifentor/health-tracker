@@ -10,15 +10,8 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
-/**
- * GENERATED CODE - DO NOT TOUCH
- *
- * Remove this comment to suspend class from generation process.
- */
-@Generated
 @Named
 @RequiredArgsConstructor
 class BloodPressureMeasurementServiceImpl implements BloodPressureMeasurementService {
@@ -28,6 +21,7 @@ class BloodPressureMeasurementServiceImpl implements BloodPressureMeasurementSer
 
 	@Override
 	public BloodPressureMeasurement createBloodPressureMeasurement(
+		String comment,
 		LocalDate dateOfRecording,
 		int diaMmHg,
 		int pulsePerMinute,
@@ -37,6 +31,7 @@ class BloodPressureMeasurementServiceImpl implements BloodPressureMeasurementSer
 		boolean irregularHeartbeat
 	) {
 		return bloodPressureMeasurementPersistencePort.create(
+			comment,
 			dateOfRecording,
 			diaMmHg,
 			pulsePerMinute,
