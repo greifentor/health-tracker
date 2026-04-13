@@ -3,15 +3,13 @@ package de.ollie.healthtracker.persistence.jpa;
 import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
-import de.ollie.healthtracker.core.service.model.MeatConsumption;
 import de.ollie.healthtracker.core.service.model.MeatProduct;
 import de.ollie.healthtracker.core.service.model.MeatType;
-import de.ollie.healthtracker.core.service.port.persistence.MeatConsumptionPersistencePort;
-import de.ollie.healthtracker.persistence.jpa.dbo.MeatConsumptionDbo;
-import de.ollie.healthtracker.persistence.jpa.mapper.MeatConsumptionDboMapper;
-import de.ollie.healthtracker.persistence.jpa.repository.MeatConsumptionDboRepository;
+import de.ollie.healthtracker.core.service.port.persistence.MeatProductPersistencePort;
+import de.ollie.healthtracker.persistence.jpa.dbo.MeatProductDbo;
+import de.ollie.healthtracker.persistence.jpa.mapper.MeatProductDboMapper;
+import de.ollie.healthtracker.persistence.jpa.repository.MeatProductDboRepository;
 import jakarta.inject.Named;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,31 +24,15 @@ import lombok.RequiredArgsConstructor;
 @Generated
 @Named
 @RequiredArgsConstructor
-class MeatConsumptionPersistenceJpaAdapter implements MeatConsumptionPersistencePort {
+class MeatProductPersistenceJpaAdapter implements MeatProductPersistencePort {
 
 	private final DboFactory dboFactory;
-	private final MeatConsumptionDboMapper mapper;
-	private final MeatConsumptionDboRepository repository;
+	private final MeatProductDboMapper mapper;
+	private final MeatProductDboRepository repository;
 
 	@Override
-	public MeatConsumption create(
-		int amountInGr,
-		LocalDate dateOfRecording,
-		String description,
-		MeatProduct meatProduct,
-		MeatType meatType
-	) {
-		return mapper.toModel(
-			repository.save(
-				dboFactory.createMeatConsumption(
-					amountInGr,
-					dateOfRecording,
-					description,
-					meatProduct.getId(),
-					meatType.getId()
-				)
-			)
-		);
+	public MeatProduct create(int amountInGr, String description, MeatType meatType) {
+		return mapper.toModel(repository.save(dboFactory.createMeatProduct(amountInGr, description, meatType.getId())));
 	}
 
 	@Override
@@ -60,15 +42,15 @@ class MeatConsumptionPersistenceJpaAdapter implements MeatConsumptionPersistence
 	}
 
 	@Override
-	public Optional<MeatConsumption> findById(UUID id) {
+	public Optional<MeatProduct> findById(UUID id) {
 		ensure(id != null, "id cannot be null!");
 		return repository.findById(id).map(mapper::toModel);
 	}
 
 	@Override
-	public Optional<MeatConsumption> findByIdOrDescriptionParticle(String nameParticleOrId) {
+	public Optional<MeatProduct> findByIdOrDescriptionParticle(String nameParticleOrId) {
 		ensure(nameParticleOrId != null, "name particle or id cannot be null");
-		Optional<MeatConsumptionDbo> dbo = Optional.empty();
+		Optional<MeatProductDbo> dbo = Optional.empty();
 		try {
 			UUID uuid = UUID.fromString(nameParticleOrId);
 			dbo = repository.findById(uuid);
@@ -78,7 +60,7 @@ class MeatConsumptionPersistenceJpaAdapter implements MeatConsumptionPersistence
 		return Optional.ofNullable(
 			mapper.toModel(
 				dbo.orElseGet(() -> {
-					List<MeatConsumptionDbo> found = repository.findAllByDescriptionMatch(nameParticleOrId);
+					List<MeatProductDbo> found = repository.findAllByDescriptionMatch(nameParticleOrId);
 					if (found.size() < 2) {
 						return found.size() == 0 ? null : found.get(0);
 					}
@@ -89,12 +71,12 @@ class MeatConsumptionPersistenceJpaAdapter implements MeatConsumptionPersistence
 	}
 
 	@Override
-	public List<MeatConsumption> list() {
+	public List<MeatProduct> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
 
 	@Override
-	public MeatConsumption update(MeatConsumption toSave) {
+	public MeatProduct update(MeatProduct toSave) {
 		return mapper.toModel(repository.save(mapper.toDbo(toSave)));
 	}
 }

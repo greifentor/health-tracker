@@ -452,7 +452,7 @@ classes:
           - name: nullable
             value: false
           - name: editor-position
-            value: 4
+            value: 5
         type:
           name: int
       - name: dateOfRecording
@@ -466,6 +466,58 @@ classes:
           properties:
             - name: import
               value: java.time.LocalDate
+      - name: description
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+          - name: editor-position
+            value: 2
+        type:
+          name: String
+      - name: meatProduct
+        reference: true
+        properties:
+          - name: editor-position
+            value: 3
+        type:
+          name: MeatProduct
+      - name: meatType
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 4
+        type:
+          name: MeatType
+  - name: MeatProduct
+    properties:
+      - name: order
+        value: description DESC
+      - name: gui
+        value: true
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: amountInGr
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 4
+        type:
+          name: int
       - name: description
         properties:
           - name: nullable
