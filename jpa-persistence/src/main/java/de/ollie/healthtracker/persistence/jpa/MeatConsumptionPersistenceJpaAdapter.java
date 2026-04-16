@@ -5,9 +5,7 @@ import static de.ollie.baselib.util.Check.ensure;
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.MeatConsumption;
 import de.ollie.healthtracker.core.service.model.MeatProduct;
-import de.ollie.healthtracker.core.service.model.MeatType;
 import de.ollie.healthtracker.core.service.port.persistence.MeatConsumptionPersistencePort;
-import de.ollie.healthtracker.persistence.jpa.dbo.MeatConsumptionDbo;
 import de.ollie.healthtracker.persistence.jpa.mapper.MeatConsumptionDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.MeatConsumptionDboRepository;
 import jakarta.inject.Named;
@@ -33,24 +31,8 @@ class MeatConsumptionPersistenceJpaAdapter implements MeatConsumptionPersistence
 	private final MeatConsumptionDboRepository repository;
 
 	@Override
-	public MeatConsumption create(
-		int amountInGr,
-		LocalDate dateOfRecording,
-		String description,
-		MeatProduct meatProduct,
-		MeatType meatType
-	) {
-		return mapper.toModel(
-			repository.save(
-				dboFactory.createMeatConsumption(
-					amountInGr,
-					dateOfRecording,
-					description,
-					meatProduct.getId(),
-					meatType.getId()
-				)
-			)
-		);
+	public MeatConsumption create(LocalDate dateOfRecording, MeatProduct meatProduct) {
+		return mapper.toModel(repository.save(dboFactory.createMeatConsumption(dateOfRecording, meatProduct.getId())));
 	}
 
 	@Override
@@ -63,29 +45,6 @@ class MeatConsumptionPersistenceJpaAdapter implements MeatConsumptionPersistence
 	public Optional<MeatConsumption> findById(UUID id) {
 		ensure(id != null, "id cannot be null!");
 		return repository.findById(id).map(mapper::toModel);
-	}
-
-	@Override
-	public Optional<MeatConsumption> findByIdOrDescriptionParticle(String nameParticleOrId) {
-		ensure(nameParticleOrId != null, "name particle or id cannot be null");
-		Optional<MeatConsumptionDbo> dbo = Optional.empty();
-		try {
-			UUID uuid = UUID.fromString(nameParticleOrId);
-			dbo = repository.findById(uuid);
-		} catch (Exception e) {
-			// NOP
-		}
-		return Optional.ofNullable(
-			mapper.toModel(
-				dbo.orElseGet(() -> {
-					List<MeatConsumptionDbo> found = repository.findAllByDescriptionMatch(nameParticleOrId);
-					if (found.size() < 2) {
-						return found.size() == 0 ? null : found.get(0);
-					}
-					throw new TooManyElementsException();
-				})
-			)
-		);
 	}
 
 	@Override

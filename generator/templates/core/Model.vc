@@ -1,0 +1,40 @@
+package ${PackageName};
+
+import lombok.Data;
+import lombok.Generated;
+import lombok.experimental.Accessors;
+
+#foreach($Import in $Imports)
+import ${Import};
+#end
+
+/**
+ * ${GeneratedCodeMarker}
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Accessors(chain = true)
+@Data
+@Generated
+public class ${ClassName}#if(${Class.getPropertiesWithName("implements")}) implements #foreach($Property in ${Class.getPropertiesWithName("implements")})${Property.getValue()}#if($foreach.hasNext), #end#end#end {
+
+#foreach ($Attribute in $Attributes)
+	private ${Attribute.getTypeName()} ${Attribute.getName()}#if(${Attribute.getDefaultValue()}) = ${Attribute.getDefaultValue()}#end;
+#end
+#if (${Class.isPropertyWithNameInAttributesPresent("name-provider")})
+	#foreach ($Attribute in $Attributes)
+	#if ($Attribute.hasProperty("name-provider"))
+
+	public String getName() {
+		return get${Attribute.getNameCamelCase()}();
+	}
+
+	public ${ClassName} setName(String newName) {
+		set${Attribute.getNameCamelCase()}(newName);
+		return this;
+	}
+	#end
+	#end
+#end
+
+}

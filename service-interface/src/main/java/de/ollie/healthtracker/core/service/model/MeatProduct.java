@@ -13,10 +13,19 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-public class MeatProduct {
+public class MeatProduct implements NameProvider<MeatProduct> {
 
 	private UUID id;
 	private int amountInGr;
 	private String description;
 	private MeatType meatType;
+
+	public String getName() {
+		return getDescription();
+	}
+
+	public MeatProduct setName(String newName) {
+		setDescription(newName);
+		return this;
+	}
 }

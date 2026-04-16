@@ -3,7 +3,6 @@ package de.ollie.healthtracker.gui.swing.select.meatconsumption;
 import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.MeatConsumptionService;
 import de.ollie.healthtracker.core.service.MeatProductService;
-import de.ollie.healthtracker.core.service.MeatTypeService;
 import de.ollie.healthtracker.core.service.model.MeatConsumption;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.edit.meatconsumption.MeatConsumptionEditJInternalFrame;
@@ -28,12 +27,10 @@ public class MeatConsumptionSelectJPanel
 
 	private final MeatConsumptionService meatConsumptionService;
 	private final MeatProductService meatProductService;
-	private final MeatTypeService meatTypeService;
 
 	public MeatConsumptionSelectJPanel(
 		MeatConsumptionService meatConsumptionService,
 		MeatProductService meatProductService,
-		MeatTypeService meatTypeService,
 		String className,
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory,
@@ -42,7 +39,6 @@ public class MeatConsumptionSelectJPanel
 		super(desktopPane, className + "s", editDialogComponentFactory, observer);
 		this.meatConsumptionService = meatConsumptionService;
 		this.meatProductService = meatProductService;
-		this.meatTypeService = meatTypeService;
 		updateTableSelection();
 	}
 
@@ -53,22 +49,12 @@ public class MeatConsumptionSelectJPanel
 
 	@Override
 	protected AbstractSelectionTableModel<MeatConsumption> createSelectionModel() {
-		return new AbstractSelectionTableModel<MeatConsumption>(
-			getObjectsToSelect(),
-			"Date Of Recording",
-			"Description",
-			"Meat Product",
-			"Meat Type",
-			"Amount In Gr"
-		) {
+		return new AbstractSelectionTableModel<MeatConsumption>(getObjectsToSelect(), "Date Of Recording", "Meat Product") {
 			@Override
 			protected Object getColumnValueFor(MeatConsumption t, int columnIndex) {
 				return switch (columnIndex) {
 					case 0 -> DateTimeUtil.DE_DATE_FORMAT.format(t.getDateOfRecording());
-					case 1 -> t.getDescription();
-					case 2 -> (t.getMeatProduct() != null ? t.getMeatProduct().getDescription() : "-");
-					case 3 -> (t.getMeatType() != null ? t.getMeatType().getName() : "-");
-					case 4 -> t.getAmountInGr();
+					case 1 -> (t.getMeatProduct() != null ? t.getMeatProduct().getName() : "-");
 					default -> null;
 				};
 			}
@@ -80,7 +66,6 @@ public class MeatConsumptionSelectJPanel
 		new MeatConsumptionEditJInternalFrame(
 			selected,
 			() -> meatProductService.listMeatProducts(),
-			() -> meatTypeService.listMeatTypes(),
 			getEditDialogComponentFactory(),
 			this,
 			getDesktopPane()
@@ -89,13 +74,7 @@ public class MeatConsumptionSelectJPanel
 
 	@Override
 	protected MeatConsumption createNewObject() {
-		return new MeatConsumption()
-			.setId(UUID.randomUUID())
-			.setAmountInGr(0)
-			.setDateOfRecording(LocalDate.now())
-			.setDescription("")
-			.setMeatProduct(null)
-			.setMeatType(null);
+		return new MeatConsumption().setId(UUID.randomUUID()).setDateOfRecording(LocalDate.now()).setMeatProduct(null);
 	}
 
 	@Override

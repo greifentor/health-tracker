@@ -395,4 +395,16 @@
         <addForeignKeyConstraint constraintName="FK_MEAT_PRODUCT_ID_TO_MEAT_TYPE" baseColumnNames="MEAT_PRODUCT" baseTableName="MEAT_CONSUMPTION" referencedColumnNames="ID" referencedTableName="MEAT_PRODUCT"/>
         <addForeignKeyConstraint constraintName="FK_MEAT_PRODUCT_MEAT_TYPE_TO_MEAT_TYPE" baseColumnNames="MEAT_TYPE" baseTableName="MEAT_PRODUCT" referencedColumnNames="ID" referencedTableName="MEAT_TYPE"/>
     </changeSet>
+    <changeSet author="dm-comp" id="Clean-up-Table-MEAT_CONSUMPTION" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <dropForeignKeyConstraint baseTableName="MEAT_CONSUMPTION" constraintName="FK_MEAT_CONSUMPTION_MEAT_TYPE_TO_MEAT_TYPE"/>
+        <dropColumn tableName="MEAT_CONSUMPTION">
+            <column name="DESCRIPTION"/>
+        </dropColumn>
+        <dropColumn tableName="MEAT_CONSUMPTION">
+            <column name="MEAT_TYPE"/>
+        </dropColumn>
+        <dropColumn tableName="MEAT_CONSUMPTION">
+            <column name="AMOUNT_IN_GR"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>

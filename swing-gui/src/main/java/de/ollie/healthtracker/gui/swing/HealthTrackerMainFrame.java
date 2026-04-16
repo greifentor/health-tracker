@@ -231,7 +231,6 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			new MeatConsumptionSelectJInternalFrame(
 				meatConsumptionService,
 				meatProductService,
-				meatTypeService,
 				desktopPane,
 				editDialogComponentFactory
 			);

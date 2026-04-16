@@ -195,25 +195,13 @@ class DboFactory {
 		return new ManufacturerDbo().setId(uuidFactory.create()).setName(name);
 	}
 
-	MeatConsumptionDbo createMeatConsumption(
-		int amoutInGr,
-		LocalDate dateOfRecording,
-		String description,
-		UUID meatProductId,
-		UUID meatTypeId
-	) {
-		ensure(description != null, "description cannot be null!");
-		ensure(!description.isBlank(), "description cannot be blank!");
+	MeatConsumptionDbo createMeatConsumption(LocalDate dateOfRecording, UUID meatProductId) {
 		ensure(dateOfRecording != null, "date of recording cannot be null!");
 		MeatProductDbo meatProduct = meatProductDboRepository.findById(meatProductId).orElse(null);
-		MeatTypeDbo meatType = meatTypeDboRepository.findById(meatTypeId).orElse(null);
 		return new MeatConsumptionDbo()
-			.setAmountInGr(amoutInGr)
 			.setDateOfRecording(dateOfRecording)
-			.setDescription(description)
 			.setId(uuidFactory.create())
-			.setMeatProduct(meatProduct)
-			.setMeatType(meatType);
+			.setMeatProduct(meatProduct);
 	}
 
 	MeatProductDbo createMeatProduct(int amoutInGr, String description, UUID meatTypeId) {

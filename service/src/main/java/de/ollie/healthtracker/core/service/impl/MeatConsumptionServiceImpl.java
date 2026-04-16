@@ -3,7 +3,6 @@ package de.ollie.healthtracker.core.service.impl;
 import de.ollie.healthtracker.core.service.MeatConsumptionService;
 import de.ollie.healthtracker.core.service.model.MeatConsumption;
 import de.ollie.healthtracker.core.service.model.MeatProduct;
-import de.ollie.healthtracker.core.service.model.MeatType;
 import de.ollie.healthtracker.core.service.port.persistence.MeatConsumptionPersistencePort;
 import jakarta.inject.Named;
 import java.time.LocalDate;
@@ -26,14 +25,8 @@ class MeatConsumptionServiceImpl implements MeatConsumptionService {
 	private final MeatConsumptionPersistencePort meatConsumptionPersistencePort;
 
 	@Override
-	public MeatConsumption createMeatConsumption(
-		int amountInGr,
-		LocalDate dateOfRecording,
-		String description,
-		MeatProduct meatProduct,
-		MeatType meatType
-	) {
-		return meatConsumptionPersistencePort.create(amountInGr, dateOfRecording, description, meatProduct, meatType);
+	public MeatConsumption createMeatConsumption(LocalDate dateOfRecording, MeatProduct meatProduct) {
+		return meatConsumptionPersistencePort.create(dateOfRecording, meatProduct);
 	}
 
 	@Override
@@ -44,11 +37,6 @@ class MeatConsumptionServiceImpl implements MeatConsumptionService {
 	@Override
 	public Optional<MeatConsumption> findById(UUID id) {
 		return meatConsumptionPersistencePort.findById(id);
-	}
-
-	@Override
-	public Optional<MeatConsumption> findByIdOrDescriptionParticle(String namePartOrId) {
-		return meatConsumptionPersistencePort.findByIdOrDescriptionParticle(namePartOrId);
 	}
 
 	@Override

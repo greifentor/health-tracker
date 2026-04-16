@@ -17,9 +17,6 @@ import lombok.experimental.Accessors;
 public class MeatConsumption {
 
 	private UUID id;
-	private int amountInGr;
 	private LocalDate dateOfRecording;
-	private String description;
 	private MeatProduct meatProduct;
-	private MeatType meatType;
 }

@@ -6,19 +6,17 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.model.MeatConsumption;
 import de.ollie.healthtracker.core.service.model.MeatProduct;
-import de.ollie.healthtracker.core.service.model.MeatType;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
 import java.awt.GridLayout;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 import lombok.Generated;
 
 /**
@@ -30,13 +28,9 @@ import lombok.Generated;
 public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption> {
 
 	public static final String MEAT_PRODUCT_ITEM_PROVIDER_ID = "meat-product-item-provider";
-	public static final String MEAT_TYPE_ITEM_PROVIDER_ID = "meat-type-item-provider";
 
 	private JTextField textFieldDateOfRecording;
-	private JTextField textFieldDescription;
 	private JComboBox<MeatProduct> comboBoxMeatProduct;
-	private JComboBox<MeatType> comboBoxMeatType;
-	private JSpinner spinnerAmountInGr;
 
 	public MeatConsumptionEditJPanel(MeatConsumption toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		super(toEdit, itemProviders);
@@ -44,40 +38,25 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel("Date Of Recording:", "Description:", "Meat Product:", "Meat Type:", "Amount In Gr:");
+		return createLabelSubPanel("Date Of Recording:", "Meat Product:");
 	}
 
 	@Override
 	protected JPanel createComponentPanel(MeatConsumption toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		JPanel p = new JPanel(new GridLayout(5, 1, HGAP, VGAP));
+		JPanel p = new JPanel(new GridLayout(2, 1, HGAP, VGAP));
 		textFieldDateOfRecording = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.getDateOfRecording()), 40);
 		p.add(textFieldDateOfRecording);
-		textFieldDescription = new JTextField(toEdit.getDescription(), 40);
-		p.add(textFieldDescription);
 		List<MeatProduct> listMeatProduct =
 			((ItemProvider<MeatProduct>) itemProviders.get(MEAT_PRODUCT_ITEM_PROVIDER_ID)).getItem();
 		comboBoxMeatProduct = new JComboBox<>(listMeatProduct.toArray(new MeatProduct[listMeatProduct.size()]));
 		comboBoxMeatProduct.setSelectedItem(toEdit.getMeatProduct());
 		comboBoxMeatProduct.setRenderer((list, value, index, isSelected, cellHasFocus) -> {
 			if (value != null) {
-				return new JLabel(value.getDescription());
-			}
-			return new JLabel("-");
-		});
-		p.add(comboBoxMeatProduct);
-		List<MeatType> listMeatType = ((ItemProvider<MeatType>) itemProviders.get(MEAT_TYPE_ITEM_PROVIDER_ID)).getItem();
-		comboBoxMeatType = new JComboBox<>(listMeatType.toArray(new MeatType[listMeatType.size()]));
-		comboBoxMeatType.setSelectedItem(toEdit.getMeatType());
-		comboBoxMeatType.setRenderer((list, value, index, isSelected, cellHasFocus) -> {
-			if (value != null) {
 				return new JLabel(value.getName());
 			}
 			return new JLabel("-");
 		});
-		p.add(comboBoxMeatType);
-		SpinnerModel spinnerModelAmountInGr = new SpinnerNumberModel(toEdit.getAmountInGr(), 0, 1000, 1);
-		spinnerAmountInGr = new JSpinner(spinnerModelAmountInGr);
-		p.add(spinnerAmountInGr);
+		p.add(comboBoxMeatProduct);
 		return p;
 	}
 
@@ -86,9 +65,6 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 		return new MeatConsumption()
 			.setId(toEdit.getId())
 			.setDateOfRecording(DateTimeUtil.dateFromString(textFieldDateOfRecording.getText()))
-			.setDescription(textFieldDescription.getText())
-			.setMeatProduct(((MeatProduct) comboBoxMeatProduct.getSelectedItem()))
-			.setMeatType(((MeatType) comboBoxMeatType.getSelectedItem()))
-			.setAmountInGr((Integer) spinnerAmountInGr.getValue());
+			.setMeatProduct(((MeatProduct) comboBoxMeatProduct.getSelectedItem()));
 	}
 }

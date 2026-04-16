@@ -2,7 +2,6 @@ package de.ollie.healthtracker.core.service.port.persistence;
 
 import de.ollie.healthtracker.core.service.model.MeatConsumption;
 import de.ollie.healthtracker.core.service.model.MeatProduct;
-import de.ollie.healthtracker.core.service.model.MeatType;
 import jakarta.inject.Named;
 import java.time.LocalDate;
 import java.util.List;
@@ -18,19 +17,11 @@ import lombok.Generated;
 @Generated
 @Named
 public interface MeatConsumptionPersistencePort {
-	MeatConsumption create(
-		int amountInGr,
-		LocalDate dateOfRecording,
-		String description,
-		MeatProduct meatProduct,
-		MeatType meatType
-	);
+	MeatConsumption create(LocalDate dateOfRecording, MeatProduct meatProduct);
 
 	void deleteById(UUID id);
 
 	Optional<MeatConsumption> findById(UUID id);
-
-	Optional<MeatConsumption> findByIdOrDescriptionParticle(String description);
 
 	List<MeatConsumption> list();
 

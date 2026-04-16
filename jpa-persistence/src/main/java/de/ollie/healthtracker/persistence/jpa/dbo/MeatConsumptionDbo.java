@@ -29,20 +29,10 @@ public class MeatConsumptionDbo {
 	@Column(name = "ID", nullable = false)
 	private UUID id;
 
-	@Column(name = "AMOUNT_IN_GR", nullable = false)
-	private int amountInGr;
-
 	@Column(name = "DATE_OF_RECORDING", nullable = false)
 	private LocalDate dateOfRecording;
-
-	@Column(name = "DESCRIPTION", nullable = false)
-	private String description;
 
 	@JoinColumn(name = "MEAT_PRODUCT", referencedColumnName = "ID", nullable = true)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private MeatProductDbo meatProduct;
-
-	@JoinColumn(name = "MEAT_TYPE", referencedColumnName = "ID", nullable = false)
-	@ManyToOne(fetch = FetchType.EAGER)
-	private MeatTypeDbo meatType;
 }
