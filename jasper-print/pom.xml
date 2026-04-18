@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>de.ollie</groupId>
 		<artifactId>health-tracker</artifactId>
-		<version>1.0.0</version>
+		<version>1.2.0</version>
 	</parent>
 
 	<artifactId>health-tracker-jasper-print</artifactId>
@@ -25,12 +25,12 @@
 		<dependency>
 			<groupId>de.ollie</groupId>
 			<artifactId>base-lib</artifactId>
-			<version>1.0.0</version>
+			<version>1.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>de.ollie</groupId>
 			<artifactId>health-tracker-service-interface</artifactId>
-			<version>1.0.0</version>
+			<version>1.2.0</version>
 		</dependency>
 		<!-- Spring -->
 		<dependency>

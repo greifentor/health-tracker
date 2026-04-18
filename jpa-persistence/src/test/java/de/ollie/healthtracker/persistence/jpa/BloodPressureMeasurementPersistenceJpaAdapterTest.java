@@ -8,9 +8,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
-import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
+import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
-import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementStatusDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.WhoBloodPressureClassificationDbo;
 import de.ollie.healthtracker.persistence.jpa.mapper.BloodPressureMeasurementDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.BloodPressureMeasurementDboRepository;
 import java.time.LocalDate;
@@ -33,8 +33,8 @@ class BloodPressureMeasurementPersistenceJpaAdapterTest {
 	private static final UUID ID = UUID.randomUUID();
 	private static final boolean IRREGULAR_HEARTBEAT = true;
 	private static final int PULSE_PER_MINUTE = 60;
-	private static final BloodPressureMeasurementStatus STATE = BloodPressureMeasurementStatus.GREEN;
-	private static final BloodPressureMeasurementStatusDbo STATE_DBO = BloodPressureMeasurementStatusDbo.GREEN;
+	private static final WhoBloodPressureClassification STATE = WhoBloodPressureClassification.HIGH_NORMAL;
+	private static final WhoBloodPressureClassificationDbo STATE_DBO = WhoBloodPressureClassificationDbo.HIGH_NORMAL;
 	private static final int SYS_MM_HG = 130;
 	private static final LocalTime TIME_OF_RECORDING = LocalTime.of(23, 31, 42);
 

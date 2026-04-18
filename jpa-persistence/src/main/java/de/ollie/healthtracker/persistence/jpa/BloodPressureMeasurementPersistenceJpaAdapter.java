@@ -3,7 +3,7 @@ package de.ollie.healthtracker.persistence.jpa;
 import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
-import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
+import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
 import de.ollie.healthtracker.core.service.port.persistence.BloodPressureMeasurementPersistencePort;
 import de.ollie.healthtracker.persistence.jpa.mapper.BloodPressureMeasurementDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.BloodPressureMeasurementDboRepository;
@@ -31,7 +31,7 @@ class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeas
 		int pulsePerMinute,
 		int sysMmHg,
 		LocalTime timeOfRecording,
-		BloodPressureMeasurementStatus status,
+		WhoBloodPressureClassification status,
 		boolean irregularHeartbeat
 	) {
 		return mapper.toModel(

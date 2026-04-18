@@ -2,7 +2,7 @@ package de.ollie.healthtracker.core.service.impl;
 
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
-import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
+import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
 import de.ollie.healthtracker.core.service.port.persistence.BloodPressureMeasurementPersistencePort;
 import jakarta.inject.Named;
 import java.time.LocalDate;
@@ -27,7 +27,7 @@ class BloodPressureMeasurementServiceImpl implements BloodPressureMeasurementSer
 		int pulsePerMinute,
 		int sysMmHg,
 		LocalTime timeOfRecording,
-		BloodPressureMeasurementStatus status,
+		WhoBloodPressureClassification status,
 		boolean irregularHeartbeat
 	) {
 		return bloodPressureMeasurementPersistencePort.create(

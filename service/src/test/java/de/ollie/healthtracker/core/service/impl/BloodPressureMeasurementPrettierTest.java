@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
-import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
+import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -54,7 +54,7 @@ class BloodPressureMeasurementPrettierTest {
 					.setTimeOfRecording(fromTime)
 					.setDiaMmHg(DIA_MM_HG_0)
 					.setPulsePerMinute(PPM_0)
-					.setStatus(BloodPressureMeasurementStatus.ORANGE)
+					.setStatus(WhoBloodPressureClassification.HYPERTENSION_GRADE_1)
 					.setSysMmHg(SYS_MM_HG_0);
 			bpm1 =
 				new BloodPressureMeasurement()
@@ -62,7 +62,7 @@ class BloodPressureMeasurementPrettierTest {
 					.setTimeOfRecording(fromTime)
 					.setDiaMmHg(DIA_MM_HG_1)
 					.setPulsePerMinute(PPM_1)
-					.setStatus(BloodPressureMeasurementStatus.YELLOW)
+					.setStatus(WhoBloodPressureClassification.HIGH_NORMAL)
 					.setSysMmHg(SYS_MM_HG_1);
 			bpm2 =
 				new BloodPressureMeasurement()
@@ -70,7 +70,7 @@ class BloodPressureMeasurementPrettierTest {
 					.setTimeOfRecording(toTime)
 					.setDiaMmHg(DIA_MM_HG_0 + 1)
 					.setPulsePerMinute(PPM_0 + 1)
-					.setStatus(BloodPressureMeasurementStatus.GREEN)
+					.setStatus(WhoBloodPressureClassification.NORMAL)
 					.setSysMmHg(SYS_MM_HG_0 + 1);
 			bpmA =
 				new BloodPressureMeasurement()
@@ -78,7 +78,7 @@ class BloodPressureMeasurementPrettierTest {
 					.setTimeOfRecording(fromTime)
 					.setDiaMmHg(DIA_MM_HG_AVG)
 					.setPulsePerMinute(PPM_AVG)
-					.setStatus(BloodPressureMeasurementStatus.ORANGE)
+					.setStatus(WhoBloodPressureClassification.HYPERTENSION_GRADE_1)
 					.setSysMmHg(SYS_MM_HG_AVG);
 		}
 

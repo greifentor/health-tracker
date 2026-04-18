@@ -407,4 +407,42 @@
             <column name="AMOUNT_IN_GR"/>
         </dropColumn>
     </changeSet>
+    <changeSet author="dm-comp" id="Change-BPM-Status-to-WHO-Logic" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <sql>
+            update BLOOD_PRESSURE_MEASUREMENT bpm
+            set bpm.STATUS = 'NORMAL'
+            where bpm.STATUS = 'GREEN'
+        </sql>
+        <sql>
+            update BLOOD_PRESSURE_MEASUREMENT bpm
+            set bpm.STATUS = 'HIGH_NORMAL'
+            where bpm.STATUS = 'YELLOW'
+        </sql>
+        <sql>
+            update BLOOD_PRESSURE_MEASUREMENT bpm
+            set bpm.STATUS = 'HYPERTENSION_GRADE_1'
+            where bpm.STATUS = 'ORANGE'
+        </sql>
+        <sql>
+            update BLOOD_PRESSURE_MEASUREMENT bpm
+            set bpm.STATUS = 'HYPERTENSION_GRADE_2'
+            where bpm.STATUS = 'RED'
+        </sql>
+    </changeSet>
+    <changeSet author="dm-comp" id="Add-Table-WEIGHT_MEASUREMENT" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="WEIGHT_MEASUREMENT">
+            <column name="DATE_OF_RECORDING" type="DATE"/>
+            <column name="ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="KG" type="NUMERIC(5, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TIME_OF_RECORDING" type="TIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="COMMENT" type="VARCHAR(255)"/>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="WEIGHT_MEASUREMENT"/>
+    </changeSet>
 </databaseChangeLog>

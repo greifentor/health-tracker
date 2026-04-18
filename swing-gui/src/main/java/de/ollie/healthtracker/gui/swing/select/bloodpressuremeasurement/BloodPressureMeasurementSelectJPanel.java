@@ -3,7 +3,7 @@ package de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement;
 import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
-import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
+import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.edit.bloodpressuremeasurement.BloodPressureMeasurementEditJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
@@ -92,7 +92,7 @@ public class BloodPressureMeasurementSelectJPanel
 			.setPulsePerMinute(60)
 			.setSysMmHg(130)
 			.setTimeOfRecording(LocalTime.now())
-			.setStatus(BloodPressureMeasurementStatus.YELLOW)
+			.setStatus(WhoBloodPressureClassification.HIGH_NORMAL)
 			.setIrregularHeartbeat(false);
 	}
 

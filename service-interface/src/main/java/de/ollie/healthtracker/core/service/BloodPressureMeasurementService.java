@@ -1,7 +1,7 @@
 package de.ollie.healthtracker.core.service;
 
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
-import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
+import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -16,7 +16,7 @@ public interface BloodPressureMeasurementService {
 		int pulsePerMinute,
 		int sysMmHg,
 		LocalTime timeOfRecording,
-		BloodPressureMeasurementStatus status,
+		WhoBloodPressureClassification status,
 		boolean irregularHeartbeat
 	);
 

@@ -1,5 +1,6 @@
 package de.ollie.healthtracker.core.service.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
@@ -15,15 +16,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Data
 @Generated
-public class BloodPressureMeasurement {
+public class WeightMeasurement {
 
 	private UUID id;
 	private String comment;
 	private LocalDate dateOfRecording = LocalDate.now();
-	private int diaMmHg = 80;
-	private int pulsePerMinute = 60;
-	private int sysMmHg = 130;
+	private BigDecimal kg = new BigDecimal(70.0);
 	private LocalTime timeOfRecording = LocalTime.now();
-	private WhoBloodPressureClassification status = WhoBloodPressureClassification.HIGH_NORMAL;
-	private boolean irregularHeartbeat;
 }

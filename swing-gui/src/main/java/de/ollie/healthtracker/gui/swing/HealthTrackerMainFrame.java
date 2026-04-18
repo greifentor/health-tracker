@@ -22,6 +22,7 @@ import de.ollie.healthtracker.core.service.MedicationService;
 import de.ollie.healthtracker.core.service.MedicationUnitService;
 import de.ollie.healthtracker.core.service.ReportPrintService;
 import de.ollie.healthtracker.core.service.SymptomService;
+import de.ollie.healthtracker.core.service.WeightMeasurementService;
 import de.ollie.healthtracker.gui.swing.external.viewer.pdf.ExternalPdfViewerStarter;
 import de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement.BloodPressureMeasurementSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.bodypart.BodyPartSelectJInternalFrame;
@@ -41,6 +42,7 @@ import de.ollie.healthtracker.gui.swing.select.medicationlog.MedicationLogSelect
 import de.ollie.healthtracker.gui.swing.select.medicationplan.MedicationPlanSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.medicationunit.MedicationUnitSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.symptom.SymptomSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.weightmeasurement.WeightMeasurementSelectJInternalFrame;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Named;
 import java.awt.BorderLayout;
@@ -83,6 +85,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final MedicationUnitService medicationUnitService;
 	private final ReportPrintService reportPrintService;
 	private final SymptomService symptomService;
+	private final WeightMeasurementService weightMeasurementService;
 	private final EditDialogComponentFactory editDialogComponentFactory;
 
 	private JDesktopPane desktopPane;
@@ -104,6 +107,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemEditMedicationLog;
 	private JMenuItem menuItemEditMedicationPlan;
 	private JMenuItem menuItemEditMedicationUnit;
+	private JMenuItem menuItemEditWeightMeasurement;
 	private JMenuItem menuItemEditSymptom;
 	private JMenuItem menuItemFilePrint;
 	private JMenuItem menuItemFileQuit;
@@ -176,6 +180,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemEditMeatType);
 		menuItemEditSymptom = createMenuItem("Symptom", this);
 		menu.add(menuItemEditSymptom);
+		menuItemEditWeightMeasurement = createMenuItem("Weight Measurement", this);
+		menu.add(menuItemEditWeightMeasurement);
 		menuItemDuplicateLastSymtoms = createMenuItem("Duplicate Last Symptoms", this);
 		menu.add(menuItemDuplicateLastSymtoms);
 		menuBar.add(menu);
@@ -265,6 +271,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			new MedicationUnitSelectJInternalFrame(medicationUnitService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditSymptom) {
 			new SymptomSelectJInternalFrame(symptomService, bodyPartService, desktopPane, editDialogComponentFactory);
+		} else if (e.getSource() == menuItemEditWeightMeasurement) {
+			new WeightMeasurementSelectJInternalFrame(weightMeasurementService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemFilePrint) {
 			//			LocalDate now = LocalDate.now();
 			//			byte[] pdf = reportPrintService.printForTimeInterval(

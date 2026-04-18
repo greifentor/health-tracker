@@ -3,7 +3,7 @@ package de.ollie.healthtracker.core.service.impl;
 import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
-import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
+import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
 import jakarta.inject.Named;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ class BloodPressureMeasurementPrettier {
 
 		BloodPressureMeasurement getAveragedBloodPressureMeasurement() {
 			BloodPressureMeasurement abpm = new BloodPressureMeasurement().setDiaMmHg(0).setPulsePerMinute(0).setSysMmHg(0);
-			abpm.setStatus(BloodPressureMeasurementStatus.GREEN);
+			abpm.setStatus(WhoBloodPressureClassification.NORMAL);
 			abpm.setIrregularHeartbeat(false);
 			for (BloodPressureMeasurement bpm : bpms) {
 				abpm.setDateOfRecording(bpm.getDateOfRecording());

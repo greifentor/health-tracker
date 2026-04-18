@@ -3,9 +3,8 @@ package de.ollie.healthtracker.persistence.jpa;
 import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.UuidFactory;
-import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
+import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
-import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementStatusDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BodyPartDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentTypeDbo;
@@ -23,6 +22,8 @@ import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationPlanDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.WeightMeasurementDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.WhoBloodPressureClassificationDbo;
 import de.ollie.healthtracker.persistence.jpa.repository.BodyPartDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.CommentTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorConsultationDboRepository;
@@ -66,7 +67,7 @@ class DboFactory {
 		int pulsePerMinute,
 		int sysMmHg,
 		LocalTime timeOfRecording,
-		BloodPressureMeasurementStatus state,
+		WhoBloodPressureClassification state,
 		boolean irregularHeartbeat
 	) {
 		ensure(diaMmHg > 0, "DiaMmHg cannot be lesser then 1!");
@@ -82,7 +83,7 @@ class DboFactory {
 			.setId(uuidFactory.create())
 			.setIrregularHeartbeat(irregularHeartbeat)
 			.setPulsePerMinute(pulsePerMinute)
-			.setStatus(state == null ? null : BloodPressureMeasurementStatusDbo.valueOf(state.name()))
+			.setStatus(state == null ? null : WhoBloodPressureClassificationDbo.valueOf(state.name()))
 			.setSysMmHg(sysMmHg)
 			.setTimeOfRecording(timeOfRecording);
 	}
@@ -316,5 +317,22 @@ class DboFactory {
 			.setDateOfRecording(dateOfRecording)
 			.setDescription(description)
 			.setId(uuidFactory.create());
+	}
+
+	WeightMeasurementDbo createWeightMeasurement(
+		String comment,
+		LocalDate dateOfRecording,
+		BigDecimal kg,
+		LocalTime timeOfRecording
+	) {
+		ensure(kg != null, "kg cannot be null!");
+		ensure(dateOfRecording != null, "date of recording cannot be null!");
+		ensure(timeOfRecording != null, "time of recording cannot be null!");
+		return new WeightMeasurementDbo()
+			.setComment(comment)
+			.setDateOfRecording(dateOfRecording)
+			.setId(uuidFactory.create())
+			.setKg(kg)
+			.setTimeOfRecording(timeOfRecording);
 	}
 }

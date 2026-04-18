@@ -5,7 +5,7 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
 import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
-import de.ollie.healthtracker.core.service.model.BloodPressureMeasurementStatus;
+import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
 import java.awt.GridLayout;
@@ -37,7 +37,7 @@ public class BloodPressureMeasurementEditJPanel extends AbstractEditPanel<BloodP
 	private JSpinner spinnerSysMmHg;
 	private JSpinner spinnerDiaMmHg;
 	private JSpinner spinnerPulsePerMinute;
-	private JComboBox<BloodPressureMeasurementStatus> comboBoxStatus;
+	private JComboBox<WhoBloodPressureClassification> comboBoxStatus;
 	private JCheckBox checkBoxIrregularHeartbeat;
 	private JTextField textFieldComment;
 
@@ -78,7 +78,7 @@ public class BloodPressureMeasurementEditJPanel extends AbstractEditPanel<BloodP
 		SpinnerModel spinnerModelPulsePerMinute = new SpinnerNumberModel(toEdit.getPulsePerMinute(), 0, 1000, 1);
 		spinnerPulsePerMinute = new JSpinner(spinnerModelPulsePerMinute);
 		p.add(spinnerPulsePerMinute);
-		comboBoxStatus = new JComboBox<>(BloodPressureMeasurementStatus.values());
+		comboBoxStatus = new JComboBox<>(WhoBloodPressureClassification.values());
 		comboBoxStatus.setSelectedItem(toEdit.getStatus());
 		p.add(comboBoxStatus);
 		checkBoxIrregularHeartbeat = new JCheckBox();
@@ -98,7 +98,7 @@ public class BloodPressureMeasurementEditJPanel extends AbstractEditPanel<BloodP
 			.setSysMmHg((Integer) spinnerSysMmHg.getValue())
 			.setDiaMmHg((Integer) spinnerDiaMmHg.getValue())
 			.setPulsePerMinute((Integer) spinnerPulsePerMinute.getValue())
-			.setStatus(((BloodPressureMeasurementStatus) comboBoxStatus.getSelectedItem()))
+			.setStatus(((WhoBloodPressureClassification) comboBoxStatus.getSelectedItem()))
 			.setIrregularHeartbeat(checkBoxIrregularHeartbeat.isSelected())
 			.setComment(textFieldComment.getText().isEmpty() ? null : textFieldComment.getText());
 	}
