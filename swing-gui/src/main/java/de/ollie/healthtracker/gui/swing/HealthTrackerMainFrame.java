@@ -23,6 +23,7 @@ import de.ollie.healthtracker.core.service.MedicationUnitService;
 import de.ollie.healthtracker.core.service.ReportPrintService;
 import de.ollie.healthtracker.core.service.SymptomService;
 import de.ollie.healthtracker.core.service.WeightMeasurementService;
+import de.ollie.healthtracker.core.service.WhoBloodPressureClassificationService;
 import de.ollie.healthtracker.gui.swing.external.viewer.pdf.ExternalPdfViewerStarter;
 import de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement.BloodPressureMeasurementSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.bodypart.BodyPartSelectJInternalFrame;
@@ -86,6 +87,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final ReportPrintService reportPrintService;
 	private final SymptomService symptomService;
 	private final WeightMeasurementService weightMeasurementService;
+	private final WhoBloodPressureClassificationService whoBloodPressureClassificationService;
 	private final EditDialogComponentFactory editDialogComponentFactory;
 
 	private JDesktopPane desktopPane;
@@ -304,7 +306,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 							bpm.getSysMmHg(),
 							bpm.getPulsePerMinute(),
 							(bpm.isIrregularHeartbeat() ? " X " : "   "),
-							bpm.getStatus().name()
+							whoBloodPressureClassificationService.calculateClassification(bpm.getSysMmHg(), bpm.getDiaMmHg()).name()
 						)
 					)
 				);
