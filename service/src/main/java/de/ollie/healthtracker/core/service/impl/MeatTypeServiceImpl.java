@@ -1,6 +1,8 @@
 package de.ollie.healthtracker.core.service.impl;
 
 import de.ollie.healthtracker.core.service.MeatTypeService;
+import de.ollie.healthtracker.core.service.model.MeatCategory;
+import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.MeatType;
 import de.ollie.healthtracker.core.service.port.persistence.MeatTypePersistencePort;
 import jakarta.inject.Named;
@@ -23,8 +25,8 @@ class MeatTypeServiceImpl implements MeatTypeService {
 	private final MeatTypePersistencePort meatTypePersistencePort;
 
 	@Override
-	public MeatType createMeatType(String name) {
-		return meatTypePersistencePort.create(name);
+	public MeatType createMeatType(MeatCategory category, String name) {
+		return meatTypePersistencePort.create(category, name);
 	}
 
 	@Override
