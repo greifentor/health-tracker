@@ -445,4 +445,11 @@
         </createTable>
         <addPrimaryKey columnNames="ID" tableName="WEIGHT_MEASUREMENT"/>
     </changeSet>
+    <changeSet author="dm-comp" id="Add-Field-CATEGORY-to-Table-MEAT_TYPE" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <addColumn tableName="MEAT_TYPE">
+            <column name="CATEGORY" type="VARCHAR(10)" defaultValue="MEAT">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

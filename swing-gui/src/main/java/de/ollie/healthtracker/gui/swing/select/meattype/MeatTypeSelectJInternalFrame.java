@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.gui.swing.select.meattype;
 
 import de.ollie.healthtracker.core.service.MeatTypeService;
+import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.MeatType;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;

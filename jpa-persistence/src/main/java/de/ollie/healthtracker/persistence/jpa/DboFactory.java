@@ -3,6 +3,7 @@ package de.ollie.healthtracker.persistence.jpa;
 import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.UuidFactory;
+import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BodyPartDbo;
@@ -14,6 +15,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ExerciseDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.GeneralBodyPartDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.MeatCategoryDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MeatConsumptionDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MeatProductDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MeatTypeDbo;
@@ -216,10 +218,14 @@ class DboFactory {
 			.setMeatType(meatType);
 	}
 
-	MeatTypeDbo createMeatType(String name) {
+	MeatTypeDbo createMeatType(MeatCategory category, String name) {
+		ensure(category != null, "category cannot be null!");
 		ensure(name != null, "name cannot be null!");
 		ensure(!name.isBlank(), "name cannot be blank!");
-		return new MeatTypeDbo().setId(uuidFactory.create()).setName(name);
+		return new MeatTypeDbo()
+			.setId(uuidFactory.create())
+			.setCategory((category == null ? null : MeatCategoryDbo.valueOf(category.name())))
+			.setName(name);
 	}
 
 	MedicationDbo createMedication(String name, UUID manufacturerId) {

@@ -1,5 +1,7 @@
 package de.ollie.healthtracker.core.service.port.persistence;
 
+import de.ollie.healthtracker.core.service.model.MeatCategory;
+import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.MeatType;
 import jakarta.inject.Named;
 import java.util.List;
@@ -15,7 +17,7 @@ import lombok.Generated;
 @Generated
 @Named
 public interface MeatTypePersistencePort {
-	MeatType create(String name);
+	MeatType create(MeatCategory category, String name);
 
 	void deleteById(UUID id);
 

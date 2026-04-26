@@ -532,6 +532,18 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
+      - name: category
+        properties:
+          - name: editor-position
+            value: 2
+        enum: true
+        type:
+          name: MeatCategory
+          properties:
+            - name: project-type
+              value: true
+            - name: import
+              value: de.ollie.healthtracker.core.service.model.MeatCategory
       - name: name
         properties:
           - name: nullable
@@ -909,6 +921,10 @@ classes:
             - name: import
               value: java.time.LocalTime
 enums:
+  - name: MeatCategory
+    identifiers:
+    - FISH
+    - MEAT
   - name: WhoBloodPressureClassification
     identifiers:
     - OPTIMAL

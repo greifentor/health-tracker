@@ -3,6 +3,8 @@ package de.ollie.healthtracker.persistence.jpa;
 import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
+import de.ollie.healthtracker.core.service.model.MeatCategory;
+import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.MeatType;
 import de.ollie.healthtracker.core.service.port.persistence.MeatTypePersistencePort;
 import de.ollie.healthtracker.persistence.jpa.dbo.MeatTypeDbo;
@@ -30,8 +32,8 @@ class MeatTypePersistenceJpaAdapter implements MeatTypePersistencePort {
 	private final MeatTypeDboRepository repository;
 
 	@Override
-	public MeatType create(String name) {
-		return mapper.toModel(repository.save(dboFactory.createMeatType(name)));
+	public MeatType create(MeatCategory category, String name) {
+		return mapper.toModel(repository.save(dboFactory.createMeatType(category, name)));
 	}
 
 	@Override

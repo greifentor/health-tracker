@@ -1,6 +1,8 @@
 package de.ollie.healthtracker.gui.swing.select.meattype;
 
 import de.ollie.healthtracker.core.service.MeatTypeService;
+import de.ollie.healthtracker.core.service.model.MeatCategory;
+import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.MeatType;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.edit.meattype.MeatTypeEditJInternalFrame;
@@ -41,11 +43,12 @@ public class MeatTypeSelectJPanel extends AbstractSelectJPanel<MeatType> impleme
 
 	@Override
 	protected AbstractSelectionTableModel<MeatType> createSelectionModel() {
-		return new AbstractSelectionTableModel<MeatType>(getObjectsToSelect(), "Name") {
+		return new AbstractSelectionTableModel<MeatType>(getObjectsToSelect(), "Name", "Category") {
 			@Override
 			protected Object getColumnValueFor(MeatType t, int columnIndex) {
 				return switch (columnIndex) {
 					case 0 -> t.getName();
+					case 1 -> t.getCategory();
 					default -> null;
 				};
 			}
@@ -59,7 +62,7 @@ public class MeatTypeSelectJPanel extends AbstractSelectJPanel<MeatType> impleme
 
 	@Override
 	protected MeatType createNewObject() {
-		return new MeatType().setId(UUID.randomUUID()).setName("");
+		return new MeatType().setId(UUID.randomUUID()).setCategory(null).setName("");
 	}
 
 	@Override

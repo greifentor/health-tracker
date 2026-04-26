@@ -1,5 +1,6 @@
 package de.ollie.healthtracker.core.service.model;
 
+import de.ollie.healthtracker.core.service.model.MeatCategory;
 import java.util.UUID;
 import lombok.Data;
 import lombok.Generated;
@@ -16,5 +17,6 @@ import lombok.experimental.Accessors;
 public class MeatType {
 
 	private UUID id;
+	private MeatCategory category;
 	private String name;
 }

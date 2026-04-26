@@ -1,5 +1,6 @@
 package de.ollie.healthtracker.persistence.jpa.repository;
 
+import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.persistence.jpa.dbo.MeatTypeDbo;
 import java.util.List;
 import java.util.UUID;

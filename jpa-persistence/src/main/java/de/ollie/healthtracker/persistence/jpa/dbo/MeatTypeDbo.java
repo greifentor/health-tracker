@@ -1,7 +1,10 @@
 package de.ollie.healthtracker.persistence.jpa.dbo;
 
+import de.ollie.healthtracker.core.service.model.MeatCategory;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.UUID;
@@ -24,6 +27,10 @@ public class MeatTypeDbo {
 	@Id
 	@Column(name = "ID", nullable = false)
 	private UUID id;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "CATEGORY", nullable = true)
+	private MeatCategoryDbo category;
 
 	@Column(name = "NAME", nullable = false)
 	private String name;

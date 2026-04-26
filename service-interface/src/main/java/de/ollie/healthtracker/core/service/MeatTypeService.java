@@ -1,5 +1,7 @@
 package de.ollie.healthtracker.core.service;
 
+import de.ollie.healthtracker.core.service.model.MeatCategory;
+import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.MeatType;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +15,7 @@ import lombok.Generated;
  */
 @Generated
 public interface MeatTypeService {
-	MeatType createMeatType(String name);
+	MeatType createMeatType(MeatCategory category, String name);
 
 	void deleteMeatType(UUID id);
 

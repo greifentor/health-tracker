@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import de.ollie.healthtracker.core.service.UuidFactory;
+import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BodyPartDbo;
@@ -19,6 +20,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ExerciseDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.GeneralBodyPartDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.MeatCategoryDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MeatTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
@@ -780,33 +782,43 @@ class DboFactoryTest {
 	@Nested
 	class createMeatType_String {
 
+		private static final MeatCategory CATEGORY = MeatCategory.FISH;
+
 		@Test
 		void throwsAnException_passingABlankString_asName() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createMeatType(BLANK_STR));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createMeatType(CATEGORY, BLANK_STR));
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asCategory() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createMeatType(null, CONTENT));
 		}
 
 		@Test
 		void throwsAnException_passingANullValue_asName() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createMeatType(null));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createMeatType(CATEGORY, null));
 		}
 
 		@Test
 		void returnANewObject() {
-			assertNotNull(unitUnderTest.createMeatType(CONTENT));
+			assertNotNull(unitUnderTest.createMeatType(CATEGORY, CONTENT));
 		}
 
 		@Test
 		void returnANewObject_onEachCall() {
-			assertNotSame(unitUnderTest.createMeatType(CONTENT), unitUnderTest.createMeatType(CONTENT));
+			assertNotSame(unitUnderTest.createMeatType(CATEGORY, CONTENT), unitUnderTest.createMeatType(CATEGORY, CONTENT));
 		}
 
 		@Test
 		void returnANewObject_withCorrectlySetAttributes() {
 			// Prepare
-			MeatTypeDbo expected = new MeatTypeDbo().setId(ID).setName(NAME);
+			MeatTypeDbo expected = new MeatTypeDbo()
+				.setId(ID)
+				.setCategory(MeatCategoryDbo.valueOf(CATEGORY.name()))
+				.setName(NAME);
 			when(uuidFactory.create()).thenReturn(ID);
 			// Run & Check
-			assertEquals(expected, unitUnderTest.createMeatType(NAME));
+			assertEquals(expected, unitUnderTest.createMeatType(CATEGORY, NAME));
 		}
 	}
 
