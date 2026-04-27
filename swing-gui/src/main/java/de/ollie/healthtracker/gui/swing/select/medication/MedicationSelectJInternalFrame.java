@@ -32,7 +32,7 @@ public class MedicationSelectJInternalFrame
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
-		super(desktopPane, CLASS_NAME + "s", editDialogComponentFactory);
+		super(desktopPane, CLASS_NAME, editDialogComponentFactory);
 		this.medicationService = medicationService;
 		this.manufacturerService = manufacturerService;
 		finishConstruct();

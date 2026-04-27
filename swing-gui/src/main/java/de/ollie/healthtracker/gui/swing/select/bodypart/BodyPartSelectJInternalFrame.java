@@ -32,7 +32,7 @@ public class BodyPartSelectJInternalFrame
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
-		super(desktopPane, CLASS_NAME + "s", editDialogComponentFactory);
+		super(desktopPane, CLASS_NAME, editDialogComponentFactory);
 		this.bodyPartService = bodyPartService;
 		this.generalBodyPartService = generalBodyPartService;
 		finishConstruct();

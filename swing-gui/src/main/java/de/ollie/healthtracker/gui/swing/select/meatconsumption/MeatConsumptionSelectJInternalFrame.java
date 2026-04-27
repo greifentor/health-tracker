@@ -33,7 +33,7 @@ public class MeatConsumptionSelectJInternalFrame
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
-		super(desktopPane, CLASS_NAME + "s", editDialogComponentFactory);
+		super(desktopPane, CLASS_NAME, editDialogComponentFactory);
 		this.meatConsumptionService = meatConsumptionService;
 		this.meatProductService = meatProductService;
 		finishConstruct();

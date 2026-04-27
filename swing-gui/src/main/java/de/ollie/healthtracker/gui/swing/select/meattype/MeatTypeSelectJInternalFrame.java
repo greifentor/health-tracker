@@ -30,7 +30,7 @@ public class MeatTypeSelectJInternalFrame
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
-		super(desktopPane, CLASS_NAME + "s", editDialogComponentFactory);
+		super(desktopPane, CLASS_NAME, editDialogComponentFactory);
 		this.meatTypeService = meatTypeService;
 		finishConstruct();
 	}

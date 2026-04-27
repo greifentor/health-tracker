@@ -33,7 +33,7 @@ public class SymptomSelectJInternalFrame
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
-		super(desktopPane, CLASS_NAME + "s", editDialogComponentFactory);
+		super(desktopPane, CLASS_NAME, editDialogComponentFactory);
 		this.symptomService = symptomService;
 		this.bodyPartService = bodyPartService;
 		finishConstruct();

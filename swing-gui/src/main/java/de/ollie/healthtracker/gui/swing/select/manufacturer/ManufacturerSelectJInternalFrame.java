@@ -29,7 +29,7 @@ public class ManufacturerSelectJInternalFrame
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
-		super(desktopPane, CLASS_NAME + "s", editDialogComponentFactory);
+		super(desktopPane, CLASS_NAME, editDialogComponentFactory);
 		this.manufacturerService = manufacturerService;
 		finishConstruct();
 	}

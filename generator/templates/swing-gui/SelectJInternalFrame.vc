@@ -44,7 +44,7 @@ public class ${ClassName}SelectJInternalFrame
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
-		super(desktopPane, CLASS_NAME + "s", editDialogComponentFactory);
+		super(desktopPane, CLASS_NAME, editDialogComponentFactory);
 		this.${ClassNameAsAttribute}Service = ${ClassNameAsAttribute}Service;
 #foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
 #set($TypeClassName = $Attribute.getTypeClassType())

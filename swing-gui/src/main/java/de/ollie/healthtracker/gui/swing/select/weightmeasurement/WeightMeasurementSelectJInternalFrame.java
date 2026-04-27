@@ -32,7 +32,7 @@ public class WeightMeasurementSelectJInternalFrame
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
-		super(desktopPane, CLASS_NAME + "s", editDialogComponentFactory);
+		super(desktopPane, CLASS_NAME, editDialogComponentFactory);
 		this.weightMeasurementService = weightMeasurementService;
 		finishConstruct();
 	}
