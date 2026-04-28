@@ -9,7 +9,6 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Data
 @Generated
-// Test
 public class CommentPO {
 
 	private String typeName;
