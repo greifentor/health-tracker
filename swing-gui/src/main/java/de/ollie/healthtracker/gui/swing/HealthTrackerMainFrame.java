@@ -359,9 +359,12 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				.sorted((dpm0, dpm1) -> compareYearMonth(dpm0.getKey(), dpm1.getKey()))
 				.forEach(dpm -> {
 					System.out.println("\n" + dpm.getKey());
-					System.out.println("- Total: " + dpm.getKey().getMonth().maxLength());
-					System.out.println("- Meat:  " + dpm.getValue().getMeat());
-					System.out.println("- Fish:  " + dpm.getValue().getFish());
+					System.out.println("- Total:  " + dpm.getKey().getMonth().maxLength());
+					System.out.println("- Meat:   " + dpm.getValue().getMeat());
+					System.out.println("- Fish:   " + dpm.getValue().getFish());
+					System.out.println(
+						"- VEGGIE: " + (dpm.getKey().getMonth().maxLength() - dpm.getValue().getMeat() - dpm.getValue().getFish())
+					);
 				});
 		} else if (e.getSource() == menuItemFileQuit) {
 			System.exit(0);
