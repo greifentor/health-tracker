@@ -794,6 +794,27 @@ classes:
             value: 2
         type:
           name: String
+  - name: NutritionCalculationData
+    properties:
+      - name: suppress-persistence
+        value: true
+      - name: suppress-service
+        value: true
+      - name: suppress-shell
+        value: true
+    attributes:
+      - name: fishConsumptionDays
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: int
+      - name: meatConsumptionDays
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: int
   - name: Symptom
     properties:
       - name: order
@@ -925,6 +946,11 @@ enums:
     identifiers:
     - FISH
     - MEAT
+  - name: NutritionClass
+    identifiers:
+    - OMNIVOR
+    - PESCETARIAN
+    - VEGETARIAN
   - name: WhoBloodPressureClassification
     identifiers:
     - OPTIMAL

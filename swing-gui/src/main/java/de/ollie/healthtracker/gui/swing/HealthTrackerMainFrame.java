@@ -20,11 +20,13 @@ import de.ollie.healthtracker.core.service.MedicationLogService;
 import de.ollie.healthtracker.core.service.MedicationPlanService;
 import de.ollie.healthtracker.core.service.MedicationService;
 import de.ollie.healthtracker.core.service.MedicationUnitService;
+import de.ollie.healthtracker.core.service.NutritionClassCalculationService;
 import de.ollie.healthtracker.core.service.ReportPrintService;
 import de.ollie.healthtracker.core.service.SymptomService;
 import de.ollie.healthtracker.core.service.WeightMeasurementService;
 import de.ollie.healthtracker.core.service.WhoBloodPressureClassificationService;
 import de.ollie.healthtracker.core.service.model.MeatCategory;
+import de.ollie.healthtracker.core.service.model.NutritionCalculationData;
 import de.ollie.healthtracker.gui.swing.external.viewer.pdf.ExternalPdfViewerStarter;
 import de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement.BloodPressureMeasurementSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.bodypart.BodyPartSelectJInternalFrame;
@@ -65,6 +67,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -90,6 +93,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final MedicationPlanService medicationPlanService;
 	private final MedicationService medicationService;
 	private final MedicationUnitService medicationUnitService;
+	private final NutritionClassCalculationService nutritionClassCalculationService;
 	private final ReportPrintService reportPrintService;
 	private final SymptomService symptomService;
 	private final WeightMeasurementService weightMeasurementService;
@@ -333,17 +337,14 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 						.addFish(mc.getMeatProduct().getMeatType().getCategory() == MeatCategory.FISH ? 1 : 0)
 						.addMeat(mc.getMeatProduct().getMeatType().getCategory() == MeatCategory.MEAT ? 1 : 0);
 				});
+			Map<YearMonth, MeatConsumptionStaticRecord> dataPerMonth = new HashMap<>();
+			FirstDayProvider firstDay = new FirstDayProvider();
 			dataPerDay
 				.entrySet()
 				.stream()
-				.sorted((e0, e1) -> e0.getKey().compareTo(e1.getKey()))
-				.forEach(entry -> {
-					System.out.println(entry.getKey() + " - " + (entry.getValue().meat > 0 ? "Omnivor" : "Pescetarian"));
-				});
-			Map<YearMonth, MeatConsumptionStaticRecord> dataPerMonth = new HashMap<>();
-			dataPerDay
-				.entrySet()
+				.sorted((dpd0, dpd1) -> dpd0.getKey().compareTo(dpd1.getKey()))
 				.forEach(dpd -> {
+					firstDay.setIfNotSet(dpd.getKey());
 					YearMonth key = YearMonth.of(dpd.getKey().getYear(), dpd.getKey().getMonthValue());
 					if (!dataPerMonth.containsKey(key)) {
 						dataPerMonth.put(key, new MeatConsumptionStaticRecord());
@@ -353,22 +354,38 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 						.addFish(dpd.getValue().getFish() > 0 && !(dpd.getValue().getMeat() > 0) ? 1 : 0)
 						.addMeat((dpd.getValue().getMeat() > 0) ? 1 : 0);
 				});
+			LocalDate currentDay = firstDay.getFirstDay();
+			LocalDate now = LocalDate.now().plusDays(1);
+			while (now.isAfter(currentDay)) {
+				System.out.println(
+					currentDay +
+					" - " +
+					nutritionClassCalculationService.calculate(createNutritionCalculationData(dataPerDay.get(currentDay)))
+				);
+				currentDay = currentDay.plusDays(1);
+			}
 			dataPerMonth
 				.entrySet()
 				.stream()
 				.sorted((dpm0, dpm1) -> compareYearMonth(dpm0.getKey(), dpm1.getKey()))
 				.forEach(dpm -> {
 					System.out.println("\n" + dpm.getKey());
-					System.out.println("- Total:  " + dpm.getKey().getMonth().maxLength());
-					System.out.println("- Meat:   " + dpm.getValue().getMeat());
-					System.out.println("- Fish:   " + dpm.getValue().getFish());
+					System.out.println("- Total:   " + dpm.getKey().getMonth().maxLength());
+					System.out.println("- Meat:    " + dpm.getValue().getMeat());
+					System.out.println("- Fish:    " + dpm.getValue().getFish());
 					System.out.println(
-						"- VEGGIE: " + (dpm.getKey().getMonth().maxLength() - dpm.getValue().getMeat() - dpm.getValue().getFish())
+						"- VEGGIE:  " + (dpm.getKey().getMonth().maxLength() - dpm.getValue().getMeat() - dpm.getValue().getFish())
 					);
 				});
 		} else if (e.getSource() == menuItemFileQuit) {
 			System.exit(0);
 		}
+	}
+
+	private NutritionCalculationData createNutritionCalculationData(MeatConsumptionStaticRecord mcsr) {
+		return mcsr == null
+			? null
+			: new NutritionCalculationData().setFishConsumptionDays(mcsr.getFish()).setMeatConsumptionDays(mcsr.getMeat());
 	}
 
 	@Accessors(chain = true)
@@ -391,6 +408,19 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 
 		MeatConsumptionStaticRecord addMeat(int toAdd) {
 			meat += toAdd;
+			return this;
+		}
+	}
+
+	private static class FirstDayProvider {
+
+		@Getter
+		private LocalDate firstDay;
+
+		FirstDayProvider setIfNotSet(LocalDate firstDay) {
+			if (this.firstDay == null) {
+				this.firstDay = firstDay;
+			}
 			return this;
 		}
 	}
