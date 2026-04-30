@@ -66,7 +66,8 @@ public class MedicationLogSelectJPanel extends AbstractSelectJPanel<MedicationLo
 			"Medication",
 			"Unit",
 			"Count",
-			"Self Medication"
+			"Self Medication",
+			"Comment"
 		) {
 			@Override
 			protected Object getColumnValueFor(MedicationLog t, int columnIndex) {
@@ -77,6 +78,7 @@ public class MedicationLogSelectJPanel extends AbstractSelectJPanel<MedicationLo
 					case 3 -> t.getMedicationUnit().getName();
 					case 4 -> t.getUnitCount();
 					case 5 -> t.isSelfMedication();
+					case 6 -> t.getComment();
 					default -> null;
 				};
 			}
@@ -114,6 +116,7 @@ public class MedicationLogSelectJPanel extends AbstractSelectJPanel<MedicationLo
 			.sorted((d0, d1) -> d0.getName().compareTo(d1.getName()))
 			.toList();
 		return medicationLogService.createMedicationLog(
+			null,
 			true,
 			medications.get(0),
 			medicationUnits.get(0),

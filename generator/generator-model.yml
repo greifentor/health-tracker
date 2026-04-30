@@ -611,6 +611,9 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
+      - name: comment
+        type:
+          name: String
       - name: confirmed
         default-value: true
         type:

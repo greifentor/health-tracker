@@ -29,6 +29,7 @@ public class MedicationLogEditJPanel extends AbstractEditPanel<MedicationLog> {
 	private JComboBox<Medication> comboBoxMedication;
 	private JComboBox<MedicationUnit> comboBoxMedicationUnit;
 	private JSpinner spinnerUnitCount;
+	private JTextField textFieldComment;
 	private JTextField textFieldDateOfIntake;
 	private JTextField textFieldTimeOfIntake;
 	private JCheckBox checkboxSelfMedication;
@@ -45,13 +46,15 @@ public class MedicationLogEditJPanel extends AbstractEditPanel<MedicationLog> {
 			"Medication:",
 			"Medication Units:",
 			"Unit Count:",
-			"Self Medication:"
+			"Self Medication:",
+			"Comment:"
 		);
 	}
 
 	@Override
 	protected JPanel createComponentPanel(MedicationLog toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		JPanel p = new JPanel(new GridLayout(6, 1, HGAP, VGAP));
+		JPanel p = new JPanel(new GridLayout(7, 1, HGAP, VGAP));
+		textFieldComment = new JTextField(toEdit.getComment(), 50);
 		textFieldDateOfIntake = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.getDateOfIntake()), 50);
 		textFieldTimeOfIntake = new JTextField(DateTimeUtil.DE_TIME_FORMAT.format(toEdit.getTimeOfIntake()), 50);
 		List<Medication> medications = ((ItemProvider<Medication>) itemProviders.get(MEDICATIONS_PROVIDER_ID)).getItem();
@@ -82,12 +85,14 @@ public class MedicationLogEditJPanel extends AbstractEditPanel<MedicationLog> {
 		p.add(comboBoxMedicationUnit);
 		p.add(spinnerUnitCount);
 		p.add(checkboxSelfMedication);
+		p.add(textFieldComment);
 		return p;
 	}
 
 	@Override
 	public MedicationLog getCurrentContent() {
 		return new MedicationLog()
+			.setComment(textFieldComment.getText())
 			.setDateOfIntake(DateTimeUtil.dateFromString(textFieldDateOfIntake.getText()))
 			.setId(toEdit.getId())
 			.setMedication((Medication) comboBoxMedication.getSelectedItem())

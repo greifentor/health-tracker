@@ -239,6 +239,7 @@ class DboFactory {
 	}
 
 	MedicationLogDbo createMedicationLog(
+		String comment,
 		boolean confirmed,
 		UUID medicationId,
 		UUID medicationUnitId,
@@ -259,6 +260,7 @@ class DboFactory {
 			.findById(medicationUnitId)
 			.orElseThrow(() -> new NoSuchElementException("no medication unit found with id: " + medicationUnitId));
 		return new MedicationLogDbo()
+			.setComment(comment)
 			.setConfirmed(confirmed)
 			.setDateOfIntake(dateOfIntake)
 			.setId(uuidFactory.create())
