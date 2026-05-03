@@ -1,5 +1,6 @@
 package de.ollie.healthtracker.core.service.impl;
 
+import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.ReportService;
 import de.ollie.healthtracker.core.service.model.Comment;
 import de.ollie.healthtracker.core.service.model.report.DataPerDay;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 class ReportServiceImpl implements ReportService {
 
 	private final ReportServiceCommentReader commentReader;
+	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 
 	@Override
 	public HealthTrackingReport collectData(LocalDate from, LocalDate to) {
@@ -27,7 +29,12 @@ class ReportServiceImpl implements ReportService {
 				.setComments(commentMap.getOrDefault(currentDay, new ArrayList<>()));
 			dataPerDays.add(dataPerDay);
 		}
-		// TODO Auto-generated method stub
-		return new HealthTrackingReport().setDataPerDayOrderedByDate(dataPerDays).setFrom(from).setTo(to);
+		return new HealthTrackingReport()
+			.setDataPerDayOrderedByDate(dataPerDays)
+			.setFrom(from)
+			.setTo(to)
+			.setBloodPressureMeasurements(
+				bloodPressureMeasurementService.findAllBloodPressureMeasurementsPrettifiedByTimeInterval(from, to)
+			);
 	}
 }

@@ -2,16 +2,21 @@ package de.ollie.healthtracker.print.jasper;
 
 import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.exception.PrintReportException;
+import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.Comment;
+import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
 import de.ollie.healthtracker.core.service.model.report.HealthTrackingReport;
 import de.ollie.healthtracker.core.service.port.print.PrintPort;
+import de.ollie.healthtracker.print.jasper.po.BloodPressureMeasurementPO;
 import de.ollie.healthtracker.print.jasper.po.CommentPO;
 import de.ollie.healthtracker.print.jasper.po.DataPerDayPO;
 import de.ollie.healthtracker.print.jasper.po.HealthTrackingReportPO;
 import jakarta.inject.Named;
 import java.io.ByteArrayOutputStream;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.JRException;
@@ -23,6 +28,11 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @Named
 @RequiredArgsConstructor
 class JasperPrintAdapter implements PrintPort {
+
+	private static final DateTimeFormatter GERMAN_DATE_FORMATTER = DateTimeFormatter
+		.ofPattern("dd.MM.yyyy")
+		.withLocale(Locale.GERMANY);
+	private static final DateTimeFormatter GERMAN_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
 	private final JasperConfiguration jasperConfiguration;
 
@@ -62,11 +72,56 @@ class JasperPrintAdapter implements PrintPort {
 							.setComments(mapToCommentsPO(dpd.getComments()))
 					)
 					.toList()
-			);
+			)
+			.setBloodPressureMeasurements(mapToBloodPressureMeasurements(report.getBloodPressureMeasurements()));
 	}
 
 	private List<CommentPO> mapToCommentsPO(List<Comment> comments) {
 		return comments.stream().map(c -> new CommentPO(c.getCommentType().getName(), c.getContent())).toList();
+	}
+
+	private List<BloodPressureMeasurementPO> mapToBloodPressureMeasurements(
+		List<BloodPressureMeasurement> bloodPressureMeasurements
+	) {
+		return bloodPressureMeasurements
+			.stream()
+			.map(bpm ->
+				new BloodPressureMeasurementPO()
+					.setClassificationWho(getGermanString(bpm.getStatus()))
+					.setDate(getGermanTime(bpm))
+					.setDiaMmHg("" + bpm.getDiaMmHg())
+					.setIrregularHeartbeat(bpm.isIrregularHeartbeat())
+					.setPulsePerMinute("" + bpm.getPulsePerMinute())
+					.setSysMmHg("" + bpm.getSysMmHg())
+			)
+			.toList();
+	}
+
+	private String getGermanString(WhoBloodPressureClassification status) {
+		switch (status) {
+			case OPTIMAL:
+				return "Optimal";
+			case NORMAL:
+				return "Normal";
+			case HIGH_NORMAL:
+				return "Hoch-normal";
+			case HYPERTENSION_GRADE_1:
+				return "Hypertonie Grad 1";
+			case HYPERTENSION_GRADE_2:
+				return "Hypertonie Grad 2";
+			case HYPERTENSION_GRADE_3:
+				return "Hypertonie Grad 3";
+			default:
+				return "???";
+		}
+	}
+
+	private String getGermanTime(BloodPressureMeasurement bpm) {
+		return (
+			bpm.getDateOfRecording().format(GERMAN_DATE_FORMATTER) +
+			" " +
+			bpm.getTimeOfRecording().format(GERMAN_TIME_FORMATTER)
+		);
 	}
 
 	private JasperPrint createDocument(

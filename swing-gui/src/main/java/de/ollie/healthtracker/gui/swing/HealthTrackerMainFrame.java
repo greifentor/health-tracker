@@ -122,6 +122,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemEditWeightMeasurement;
 	private JMenuItem menuItemEditSymptom;
 	private JMenuItem menuItemFilePrintBPM;
+	private JMenuItem menuItemFilePrintHealthReportCurrentMonth;
+	private JMenuItem menuItemFilePrintHealthReportPreviousMonth;
 	private JMenuItem menuItemFilePrintMeatConsumptionStatistic;
 	private JMenuItem menuItemFileQuit;
 
@@ -150,6 +152,11 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuBar createJMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("File");
+		menuItemFilePrintHealthReportPreviousMonth = createMenuItem("Health Report (Previous Month)", this);
+		menu.add(menuItemFilePrintHealthReportPreviousMonth);
+		menuItemFilePrintHealthReportCurrentMonth = createMenuItem("Health Report (Current Month)", this);
+		menu.add(menuItemFilePrintHealthReportCurrentMonth);
+		menu.add(new JSeparator());
 		menuItemFilePrintBPM = createMenuItem("Print Blood Pressure Measurement", this);
 		menu.add(menuItemFilePrintBPM);
 		menuItemFilePrintMeatConsumptionStatistic = createMenuItem("Print Meat Consumption", this);
@@ -323,6 +330,32 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 						)
 					)
 				);
+		} else if (e.getSource() == menuItemFilePrintHealthReportCurrentMonth) {
+			LocalDate now = LocalDate.now();
+			byte[] pdf = reportPrintService.printForTimeInterval(
+				now.withDayOfMonth(1),
+				now.withDayOfMonth(now.lengthOfMonth()),
+				"jasper",
+				new HashMap<>()
+			);
+			try {
+				externalPdfViewerStarter.show(pdf);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		} else if (e.getSource() == menuItemFilePrintHealthReportPreviousMonth) {
+			LocalDate now = LocalDate.now().minusMonths(1);
+			byte[] pdf = reportPrintService.printForTimeInterval(
+				now.withDayOfMonth(1),
+				now.withDayOfMonth(now.lengthOfMonth()),
+				"jasper",
+				new HashMap<>()
+			);
+			try {
+				externalPdfViewerStarter.show(pdf);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		} else if (e.getSource() == menuItemFilePrintMeatConsumptionStatistic) {
 			Map<LocalDate, MeatConsumptionStaticRecord> dataPerDay = new HashMap<>();
 			meatConsumptionService

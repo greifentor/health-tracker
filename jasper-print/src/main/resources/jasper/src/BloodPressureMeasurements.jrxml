@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DataPerDays" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="0af76f33-e37a-43f0-bd7c-ed6f5f90e6dd">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="classificationWho" class="java.lang.String"/>
+	<field name="date" class="java.lang.String"/>
+	<field name="diaMmHg" class="java.lang.String"/>
+	<field name="irregularHeartbeat" class="java.lang.Boolean"/>
+	<field name="pulsePerMinute" class="java.lang.String"/>
+	<field name="sysMmHg" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="21" splitType="Prevent">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="14" uuid="ae8adbac-5457-4cdc-a3eb-0e389e706d80">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Datum / Zeit"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="105" y="0" width="70" height="14" uuid="fc7a0081-e988-4293-ae2c-291cad019eb7">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["SYS (mmHg)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="0" width="70" height="14" uuid="92384a23-aaec-46ad-810f-356ce1d8cd91">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["DIA (mmHg)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="255" y="0" width="70" height="14" uuid="ad20e425-1eb4-437a-89bf-ca4cc9ee0de5">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pulse (pM)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="330" y="0" width="35" height="14" uuid="b5f8c506-d55b-4950-9afc-2898782d4d3f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["IHB"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="17" width="595" height="1" uuid="82c692c5-399c-4195-94f1-fa1bc00d338f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<textField>
+				<reportElement x="370" y="0" width="130" height="14" uuid="3efcdd47-1440-49b0-ae2e-08644c515143">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Klassifikation (WHO)"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="19" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="14" uuid="99d0c3d1-a606-4d41-b287-ad54cfefe143">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="105" y="0" width="70" height="14" uuid="247a6a7e-1f2f-4f7a-87ec-b2fb32948078">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{sysMmHg}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="0" width="70" height="14" uuid="cab5968d-0af8-43f9-a924-1a9f45ec3c57">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{diaMmHg}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="255" y="0" width="70" height="14" uuid="c257685b-8345-4950-b108-3b663ff4b0d7">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{pulsePerMinute}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="330" y="0" width="35" height="14" uuid="c67e1f8a-54c9-401f-b89c-80034c611d9a">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[(Boolean.TRUE.equals($F{irregularHeartbeat}) ? "X" : "")]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="370" y="0" width="225" height="14" uuid="48251266-1848-4d60-aef0-d8c11eea2d37">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{classificationWho}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
