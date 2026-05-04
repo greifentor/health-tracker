@@ -1,6 +1,8 @@
 package de.ollie.healthtracker.print.jasper;
 
 import de.ollie.baselib.util.DateTimeUtil;
+import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
+import de.ollie.healthtracker.core.service.WhoBloodPressureClassificationService;
 import de.ollie.healthtracker.core.service.exception.PrintReportException;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.Comment;
@@ -34,7 +36,9 @@ class JasperPrintAdapter implements PrintPort {
 		.withLocale(Locale.GERMANY);
 	private static final DateTimeFormatter GERMAN_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
+	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final JasperConfiguration jasperConfiguration;
+	private final WhoBloodPressureClassificationService whoBloodPressureClassificationService;
 
 	@Override
 	public Details getDetails() {
@@ -73,7 +77,8 @@ class JasperPrintAdapter implements PrintPort {
 					)
 					.toList()
 			)
-			.setBloodPressureMeasurements(mapToBloodPressureMeasurements(report.getBloodPressureMeasurements()));
+			.setBloodPressureMeasurements(mapToBloodPressureMeasurements(report.getBloodPressureMeasurements()))
+			.setBloodPressureMeasurementsCumulated(mapToBloodPressureMeasurementsCumulated(report));
 	}
 
 	private List<CommentPO> mapToCommentsPO(List<Comment> comments) {
@@ -87,7 +92,11 @@ class JasperPrintAdapter implements PrintPort {
 			.stream()
 			.map(bpm ->
 				new BloodPressureMeasurementPO()
-					.setClassificationWho(getGermanString(bpm.getStatus()))
+					.setClassificationWho(
+						getGermanString(
+							whoBloodPressureClassificationService.calculateClassification(bpm.getSysMmHg(), bpm.getDiaMmHg())
+						)
+					)
 					.setDate(getGermanTime(bpm))
 					.setDiaMmHg("" + bpm.getDiaMmHg())
 					.setIrregularHeartbeat(bpm.isIrregularHeartbeat())
@@ -95,6 +104,15 @@ class JasperPrintAdapter implements PrintPort {
 					.setSysMmHg("" + bpm.getSysMmHg())
 			)
 			.toList();
+	}
+
+	private List<BloodPressureMeasurementPO> mapToBloodPressureMeasurementsCumulated(HealthTrackingReport report) {
+		return mapToBloodPressureMeasurements(
+			bloodPressureMeasurementService.findAllBloodPressureMeasurementsPrettifiedByTimeInterval(
+				report.getFrom(),
+				report.getTo()
+			)
+		);
 	}
 
 	private String getGermanString(WhoBloodPressureClassification status) {

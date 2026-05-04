@@ -10,6 +10,9 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="HEAD_LINE" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Blutdruckwerte (einzeln)"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -22,6 +25,20 @@
 	<background>
 		<band splitType="Stretch"/>
 	</background>
+	<title>
+		<band height="27">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement x="0" y="0" width="595" height="24" uuid="ac918004-bfa9-4404-a177-84391b9826f3">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{HEAD_LINE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
 	<columnHeader>
 		<band height="21" splitType="Prevent">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>

@@ -48,6 +48,11 @@ class BloodPressureMeasurementServiceImpl implements BloodPressureMeasurementSer
 	}
 
 	@Override
+	public List<BloodPressureMeasurement> findAllBloodPressureMeasurementsByTimeInterval(LocalDate from, LocalDate to) {
+		return bloodPressureMeasurementPersistencePort.findAllByTimeInterval(from, to);
+	}
+
+	@Override
 	public List<BloodPressureMeasurement> findAllBloodPressureMeasurementsPrettifiedByTimeInterval(
 		LocalDate from,
 		LocalDate to

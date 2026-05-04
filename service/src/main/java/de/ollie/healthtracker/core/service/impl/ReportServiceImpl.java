@@ -34,7 +34,7 @@ class ReportServiceImpl implements ReportService {
 			.setFrom(from)
 			.setTo(to)
 			.setBloodPressureMeasurements(
-				bloodPressureMeasurementService.findAllBloodPressureMeasurementsPrettifiedByTimeInterval(from, to)
+				bloodPressureMeasurementService.findAllBloodPressureMeasurementsByTimeInterval(from, to)
 			);
 	}
 }

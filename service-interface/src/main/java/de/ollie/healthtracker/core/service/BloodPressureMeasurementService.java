@@ -22,6 +22,8 @@ public interface BloodPressureMeasurementService {
 
 	void deleteBloodPressureMeasurement(UUID id);
 
+	List<BloodPressureMeasurement> findAllBloodPressureMeasurementsByTimeInterval(LocalDate from, LocalDate to);
+
 	List<BloodPressureMeasurement> findAllBloodPressureMeasurementsPrettifiedByTimeInterval(LocalDate from, LocalDate to);
 
 	Optional<BloodPressureMeasurement> findById(UUID id);
