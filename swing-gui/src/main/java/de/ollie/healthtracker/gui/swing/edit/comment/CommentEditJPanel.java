@@ -16,6 +16,7 @@ import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -71,7 +72,7 @@ public class CommentEditJPanel extends AbstractEditPanel<Comment> {
 		pLabel.add(new JLabel("Content:                 "));
 		textAreaContent = new JTextArea(toEdit.getContent(), 5, 40);
 		p.add(pLabel, BorderLayout.WEST);
-		p.add(textAreaContent, BorderLayout.CENTER);
+		p.add(new JScrollPane(textAreaContent), BorderLayout.CENTER);
 		return p;
 	}
 }
