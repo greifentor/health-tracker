@@ -31,6 +31,9 @@ public class MedicationLogDbo {
 	@Column(name = "ID", nullable = false)
 	private UUID id;
 
+	@Column(name = "COMMENT", nullable = true)
+	private String comment;
+
 	@Column(name = "CONFIRMED", nullable = true)
 	private boolean confirmed;
 

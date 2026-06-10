@@ -21,6 +21,7 @@ import lombok.Generated;
 @Named
 public interface MedicationLogPersistencePort {
 	MedicationLog create(
+		String comment,
 		boolean confirmed,
 		Medication medication,
 		MedicationUnit medicationUnit,

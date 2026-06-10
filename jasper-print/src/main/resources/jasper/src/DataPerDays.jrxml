@@ -27,7 +27,7 @@
 				<textElement>
 					<font size="14" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Blutdruckwerte"]]></textFieldExpression>
 			</textField>
 			<subreport>
 				<reportElement x="0" y="21" width="595" height="13" uuid="b58ce5dd-f32c-4f90-a4b5-a2d54131ff49">

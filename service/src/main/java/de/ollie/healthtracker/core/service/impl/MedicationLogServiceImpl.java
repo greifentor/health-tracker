@@ -29,6 +29,7 @@ class MedicationLogServiceImpl implements MedicationLogService {
 
 	@Override
 	public MedicationLog createMedicationLog(
+		String comment,
 		boolean confirmed,
 		Medication medication,
 		MedicationUnit medicationUnit,
@@ -38,6 +39,7 @@ class MedicationLogServiceImpl implements MedicationLogService {
 		BigDecimal unitCount
 	) {
 		return medicationLogPersistencePort.create(
+			comment,
 			confirmed,
 			medication,
 			medicationUnit,

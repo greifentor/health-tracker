@@ -24,6 +24,7 @@ properties:
 generators:
 # --- Service ---
   - type: CLASS
+    suppress-when: classModel Load suppress-service HasProperty
     package: de.ollie.healthtracker.core.service.model
     target-file-name: ${UnitName}
     path: generator
@@ -32,6 +33,7 @@ generators:
       - name: target-path
         value: service-interface/src/main/java
   - type: ENUM
+    suppress-when: classModel Load suppress-service HasProperty
     package: de.ollie.healthtracker.core.service.model
     resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
     template: templates/core/Enum.vc
@@ -39,6 +41,7 @@ generators:
       - name: target-path
         value: service-interface/src/main/java
   - type: CLASS
+    suppress-when: classModel Load suppress-service HasProperty
     package: de.ollie.healthtracker.core.service.port.persistence
     target-file-name: ${UnitName}PersistencePort
     path: generator
@@ -47,6 +50,7 @@ generators:
       - name: target-path
         value: service-interface/src/main/java
   - type: CLASS
+    suppress-when: classModel Load suppress-service HasProperty
     package: de.ollie.healthtracker.core.service
     target-file-name: ${UnitName}Service
     path: generator
@@ -55,6 +59,7 @@ generators:
       - name: target-path
         value: service-interface/src/main/java
   - type: CLASS
+    suppress-when: classModel Load suppress-service HasProperty
     package: de.ollie.healthtracker.core.service.impl
     target-file-name: ${UnitName}ServiceImpl
     path: generator
@@ -64,6 +69,7 @@ generators:
         value: service/src/main/java
 # --- JPA ---
   - type: CLASS
+    suppress-when: classModel Load suppress-persistence HasProperty
     package: de.ollie.healthtracker.persistence.jpa.dbo
     resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
     target-file-name: ${UnitName}Dbo
@@ -72,6 +78,7 @@ generators:
       - name: target-path
         value: jpa-persistence/src/main/java
   - type: ENUM
+    suppress-when: classModel Load suppress-persistence HasProperty
     package: de.ollie.healthtracker.persistence.jpa.dbo
     resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
     target-file-name: ${UnitName}Dbo
@@ -80,6 +87,7 @@ generators:
       - name: target-path
         value: jpa-persistence/src/main/java
   - type: CLASS
+    suppress-when: classModel Load suppress-persistence HasProperty
     package: de.ollie.healthtracker.persistence.jpa.mapper
     path: generator
     target-file-name: ${UnitName}DboMapper
@@ -88,6 +96,7 @@ generators:
       - name: target-path
         value: jpa-persistence/src/main/java
   - type: CLASS
+    suppress-when: classModel Load suppress-persistence HasProperty
     package: de.ollie.healthtracker.persistence.jpa.repository
     target-file-name: ${UnitName}DboRepository
     path: generator
@@ -96,6 +105,7 @@ generators:
       - name: target-path
         value: jpa-persistence/src/main/java
   - type: CLASS
+    suppress-when: classModel Load suppress-persistence HasProperty
     package: de.ollie.healthtracker.persistence.jpa
     target-file-name: ${UnitName}PersistenceJpaAdapter
     path: generator
@@ -105,6 +115,7 @@ generators:
         value: jpa-persistence/src/main/java
 # --- Shell ---
   - type: CLASS
+    suppress-when: classModel Load suppress-shell HasProperty
     package: de.ollie.healthtracker.shell.mapper.impl
     target-file-name: ${UnitName}ToStringMapperImpl
     path: generator
@@ -113,6 +124,7 @@ generators:
       - name: target-path
         value: shell/src/main/java
   - type: CLASS
+    suppress-when: classModel Load suppress-shell HasProperty
     package: de.ollie.healthtracker.shell.mapper
     target-file-name: ${UnitName}ToStringMapper
     path: generator

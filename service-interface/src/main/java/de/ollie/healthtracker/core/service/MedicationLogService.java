@@ -19,6 +19,7 @@ import lombok.Generated;
 @Generated
 public interface MedicationLogService {
 	MedicationLog createMedicationLog(
+		String comment,
 		boolean confirmed,
 		Medication medication,
 		MedicationUnit medicationUnit,

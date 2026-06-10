@@ -33,3 +33,5 @@ tmp0/
 /pom.xml.versionsBackup
 /generate-code.sh
 /test.pdf
+
+*/*.jasper

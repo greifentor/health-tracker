@@ -35,6 +35,7 @@ class MedicationLogPersistenceJpaAdapter implements MedicationLogPersistencePort
 
 	@Override
 	public MedicationLog create(
+		String comment,
 		boolean confirmed,
 		Medication medication,
 		MedicationUnit medicationUnit,
@@ -46,6 +47,7 @@ class MedicationLogPersistenceJpaAdapter implements MedicationLogPersistencePort
 		return mapper.toModel(
 			repository.save(
 				dboFactory.createMedicationLog(
+					comment,
 					confirmed,
 					medication.getId(),
 					medicationUnit.getId(),

@@ -452,4 +452,9 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet author="dm-comp" id="Add-Field-COMMENT-to-Table-MEDICATION_LOG" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <addColumn tableName="MEDICATION_LOG">
+            <column name="COMMENT" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

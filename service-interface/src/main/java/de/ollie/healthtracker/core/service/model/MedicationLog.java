@@ -19,6 +19,7 @@ import lombok.experimental.Accessors;
 public class MedicationLog {
 
 	private UUID id;
+	private String comment;
 	private boolean confirmed = true;
 	private Medication medication;
 	private MedicationUnit medicationUnit;
