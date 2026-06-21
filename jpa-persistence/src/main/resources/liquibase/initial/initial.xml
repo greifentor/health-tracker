@@ -457,4 +457,39 @@
             <column name="COMMENT" type="VARCHAR(255)"/>
         </addColumn>
     </changeSet>
+    <changeSet author="ollie" id="Add-Table-ALCOHOL_PRODUCT" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="ALCOHOL_PRODUCT">
+            <column name="ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PERCENT_VOL" type="NUMERIC(5, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LITER" type="NUMERIC(5, 2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="ALCOHOL_PRODUCT"/>
+    </changeSet>
+    <changeSet author="ollie" id="Add-Table-ALCOHOL_CONSUMPTION" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="ALCOHOL_CONSUMPTION">
+            <column name="ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="COMMENT" type="LONGVARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ALCOHOL_PRODUCT" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="ALCOHOL_CONSUMPTION"/>
+        <addForeignKeyConstraint constraintName="FK_ALCOHOL_CONSUMPTION_ALCOHOL_PRODUCT_TO_ALCOHOL_PRODUCT" baseColumnNames="ALCOHOL_PRODUCT" baseTableName="ALCOHOL_CONSUMPTION" referencedColumnNames="ID" referencedTableName="ALCOHOL_PRODUCT"/>
+    </changeSet>
 </databaseChangeLog>

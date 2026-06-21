@@ -1,4 +1,100 @@
 classes:
+  - name: AlcoholConsumption
+    properties:
+      - name: order
+        value: date DESC
+      - name: gui
+        value: true
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: date
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 1
+        type:
+          name: LocalDate
+          properties:
+            - name: import
+              value: java.time.LocalDate
+      - name: alcoholProduct
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 2
+        type:
+          name: AlcoholProduct
+      - name: comment
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 3
+        type:
+          name: String
+  - name: AlcoholProduct
+    properties:
+      - name: order
+        value: name
+      - name: gui
+        value: true
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+          - name: editor-position
+            value: 1
+        type:
+          name: String
+      - name: percentVol
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 2
+        type:
+          name: BigDecimal
+          properties:
+            - name: import
+              value: java.math.BigDecimal
+      - name: liter
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 3
+        type:
+          name: BigDecimal
+          properties:
+            - name: import
+              value: java.math.BigDecimal
   - name: BloodPressureMeasurement
     properties:
       - name: order

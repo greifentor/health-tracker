@@ -10,6 +10,8 @@ import static org.mockito.Mockito.when;
 import de.ollie.healthtracker.core.service.UuidFactory;
 import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
+import de.ollie.healthtracker.persistence.jpa.dbo.AlcoholConsumptionDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.AlcoholProductDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BodyPartDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
@@ -27,6 +29,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.WhoBloodPressureClassificationDbo;
+import de.ollie.healthtracker.persistence.jpa.repository.AlcoholProductDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.BodyPartDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.CommentTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
@@ -61,7 +64,9 @@ class DboFactoryTest {
 	private static final int DIA_MM_HG = 70;
 	private static final UUID ID = UUID.randomUUID();
 	private static final boolean IRREGULAR_HEARTBEAT = false;
+	private static final BigDecimal LITER = new BigDecimal("0.75");
 	private static final String NAME = "name";
+	private static final BigDecimal PERCENT_VOL = new BigDecimal("12.5");
 	private static final int PULSE_PER_MINUTE = 60;
 	private static final String REASON = "reason";
 	private static final String RESULT = "result";
@@ -73,6 +78,12 @@ class DboFactoryTest {
 	private static final LocalTime TIME_OF_RECORDING = LocalTime.of(23, 31, 42);
 	private static final String TOKEN = "token";
 	private static final BigDecimal UNIT_COUNT = new BigDecimal(42);
+
+	@Mock
+	private AlcoholProductDbo alcoholProductDbo;
+
+	@Mock
+	private AlcoholProductDboRepository alcoholProductDboRepository;
 
 	@Mock
 	private BodyPartDbo bodyPartDbo;
@@ -124,6 +135,124 @@ class DboFactoryTest {
 
 	@InjectMocks
 	private DboFactory unitUnderTest;
+
+	@Nested
+	class createAlcoholConsumption_LocalDate_UUID_String {
+
+		@Test
+		void throwsAnException_passingANullValue_asAlcoholProductId() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholConsumption(DATE, null, COMMENT));
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asComment() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholConsumption(DATE, ID, null));
+		}
+
+		@Test
+		void throwsAnException_passingABlankString_asComment() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholConsumption(DATE, ID, BLANK_STR));
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asDate() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholConsumption(null, ID, COMMENT));
+		}
+
+		@Test
+		void throwsAnException_whenThereIsNoAlcoholProductForThePassedId() {
+			// Prepare
+			when(alcoholProductDboRepository.findById(ID)).thenReturn(Optional.empty());
+			// Run & Check
+			assertThrows(NoSuchElementException.class, () -> unitUnderTest.createAlcoholConsumption(DATE, ID, COMMENT));
+		}
+
+		@Test
+		void returnANewObject() {
+			// Prepare
+			when(alcoholProductDboRepository.findById(ID)).thenReturn(Optional.of(alcoholProductDbo));
+			// Run & Check
+			assertNotNull(unitUnderTest.createAlcoholConsumption(DATE, ID, COMMENT));
+		}
+
+		@Test
+		void returnANewObject_onEachCall() {
+			// Prepare
+			when(alcoholProductDboRepository.findById(ID)).thenReturn(Optional.of(alcoholProductDbo));
+			// Run & Check
+			assertNotSame(
+				unitUnderTest.createAlcoholConsumption(DATE, ID, COMMENT),
+				unitUnderTest.createAlcoholConsumption(DATE, ID, COMMENT)
+			);
+		}
+
+		@Test
+		void returnANewObject_withCorrectlySetAttributes() {
+			// Prepare
+			AlcoholConsumptionDbo expected = new AlcoholConsumptionDbo()
+				.setAlcoholProduct(alcoholProductDbo)
+				.setComment(COMMENT)
+				.setDate(DATE)
+				.setId(ID);
+			when(alcoholProductDboRepository.findById(ID)).thenReturn(Optional.of(alcoholProductDbo));
+			when(uuidFactory.create()).thenReturn(ID);
+			// Run & Check
+			assertEquals(expected, unitUnderTest.createAlcoholConsumption(DATE, ID, COMMENT));
+		}
+	}
+
+	@Nested
+	class createAlcoholProduct_String_BigDecimal_BigDecimal {
+
+		@Test
+		void throwsAnException_passingANullValue_asLiter() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL, null));
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asName() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholProduct(null, PERCENT_VOL, LITER));
+		}
+
+		@Test
+		void throwsAnException_passingABlankString_asName() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createAlcoholProduct(BLANK_STR, PERCENT_VOL, LITER)
+			);
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asPercentVol() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholProduct(NAME, null, LITER));
+		}
+
+		@Test
+		void returnANewObject() {
+			assertNotNull(unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL, LITER));
+		}
+
+		@Test
+		void returnANewObject_onEachCall() {
+			assertNotSame(
+				unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL, LITER),
+				unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL, LITER)
+			);
+		}
+
+		@Test
+		void returnANewObject_withCorrectlySetAttributes() {
+			// Prepare
+			AlcoholProductDbo expected = new AlcoholProductDbo()
+				.setId(ID)
+				.setLiter(LITER)
+				.setName(NAME)
+				.setPercentVol(PERCENT_VOL);
+			when(uuidFactory.create()).thenReturn(ID);
+			// Run & Check
+			assertEquals(expected, unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL, LITER));
+		}
+	}
 
 	@Nested
 	class createBloodPressureMeasurement_int_int_int_BloodPresureMeasurementStatus_LocalDate_LocalTime {
