@@ -3,6 +3,8 @@ package de.ollie.healthtracker.gui.swing;
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
+import de.ollie.healthtracker.core.service.AlcoholConsumptionService;
+import de.ollie.healthtracker.core.service.AlcoholProductService;
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.BodyPartService;
 import de.ollie.healthtracker.core.service.CommentService;
@@ -28,6 +30,8 @@ import de.ollie.healthtracker.core.service.WhoBloodPressureClassificationService
 import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.NutritionCalculationData;
 import de.ollie.healthtracker.gui.swing.external.viewer.pdf.ExternalPdfViewerStarter;
+import de.ollie.healthtracker.gui.swing.select.alcoholconsumption.AlcoholConsumptionSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.alcoholproduct.AlcoholProductSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement.BloodPressureMeasurementSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.bodypart.BodyPartSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.comment.CommentSelectJInternalFrame;
@@ -75,6 +79,8 @@ import lombok.experimental.Accessors;
 @RequiredArgsConstructor
 public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 
+	private final AlcoholConsumptionService alcoholConsumptionService;
+	private final AlcoholProductService alcoholProductService;
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final BodyPartService bodyPartService;
 	private final CommentService commentService;
@@ -102,6 +108,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 
 	private JDesktopPane desktopPane;
 	private JMenuItem menuItemDuplicateLastSymtoms;
+	private JMenuItem menuItemEditAlcoholConsumption;
+	private JMenuItem menuItemEditAlcoholProduct;
 	private JMenuItem menuItemEditBloodPressureMeasurement;
 	private JMenuItem menuItemEditBodyPart;
 	private JMenuItem menuItemEditComment;
@@ -166,6 +174,10 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemFileQuit);
 		menuBar.add(menu);
 		menu = new JMenu("Edit");
+		menuItemEditAlcoholConsumption = createMenuItem("Alcohol Consumption", this);
+		menu.add(menuItemEditAlcoholConsumption);
+		menuItemEditAlcoholProduct = createMenuItem("Alcohol Product", this);
+		menu.add(menuItemEditAlcoholProduct);
 		menuItemEditBloodPressureMeasurement = createMenuItem("Blood Pressure Measurement", this);
 		menu.add(menuItemEditBloodPressureMeasurement);
 		menuItemEditBodyPart = createMenuItem("Body Part", this);
@@ -221,6 +233,15 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		if (e.getSource() == menuItemDuplicateLastSymtoms) {
 			symptomService.duplicateNewestSymptomEntries();
 			new SymptomSelectJInternalFrame(symptomService, bodyPartService, desktopPane, editDialogComponentFactory);
+		} else if (e.getSource() == menuItemEditAlcoholConsumption) {
+			new AlcoholConsumptionSelectJInternalFrame(
+				alcoholConsumptionService,
+				alcoholProductService,
+				desktopPane,
+				editDialogComponentFactory
+			);
+		} else if (e.getSource() == menuItemEditAlcoholProduct) {
+			new AlcoholProductSelectJInternalFrame(alcoholProductService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditBloodPressureMeasurement) {
 			new BloodPressureMeasurementSelectJInternalFrame(
 				bloodPressureMeasurementService,
