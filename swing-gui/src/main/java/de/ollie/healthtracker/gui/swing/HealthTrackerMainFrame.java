@@ -29,6 +29,8 @@ import de.ollie.healthtracker.core.service.WeightMeasurementService;
 import de.ollie.healthtracker.core.service.WhoBloodPressureClassificationService;
 import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.NutritionCalculationData;
+import de.ollie.healthtracker.gui.swing.chart.NutritionChartData;
+import de.ollie.healthtracker.gui.swing.chart.NutritionChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.external.viewer.pdf.ExternalPdfViewerStarter;
 import de.ollie.healthtracker.gui.swing.select.alcoholconsumption.AlcoholConsumptionSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.alcoholproduct.AlcoholProductSelectJInternalFrame;
@@ -59,8 +61,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -134,6 +140,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemFilePrintHealthReportPreviousMonth;
 	private JMenuItem menuItemFilePrintMeatConsumptionStatistic;
 	private JMenuItem menuItemFileQuit;
+	private JMenuItem menuItemFileShowNutritionChart;
 
 	@PostConstruct
 	void postConstruct() {
@@ -169,6 +176,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemFilePrintBPM);
 		menuItemFilePrintMeatConsumptionStatistic = createMenuItem("Print Meat Consumption", this);
 		menu.add(menuItemFilePrintMeatConsumptionStatistic);
+		menuItemFileShowNutritionChart = createMenuItem("Show Nutrition Chart", this);
+		menu.add(menuItemFileShowNutritionChart);
 		menu.add(new JSeparator());
 		menuItemFileQuit = createMenuItem("Quit", this);
 		menu.add(menuItemFileQuit);
@@ -443,9 +452,48 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 						"- VEGGIE:  " + (dpm.getKey().getMonth().maxLength() - dpm.getValue().getMeat() - dpm.getValue().getFish())
 					);
 				});
+		} else if (e.getSource() == menuItemFileShowNutritionChart) {
+			new NutritionChartJInternalFrame(desktopPane, createNutritionChartData());
 		} else if (e.getSource() == menuItemFileQuit) {
 			System.exit(0);
 		}
+	}
+
+	private List<NutritionChartData> createNutritionChartData() {
+		// Classify each day of recording as meat / fish day.
+		Map<LocalDate, MeatConsumptionStaticRecord> dataPerDay = new HashMap<>();
+		meatConsumptionService
+			.listMeatConsumptions()
+			.forEach(mc ->
+				dataPerDay
+					.computeIfAbsent(mc.getDateOfRecording(), d -> new MeatConsumptionStaticRecord())
+					.addFish(mc.getMeatProduct().getMeatType().getCategory() == MeatCategory.FISH ? 1 : 0)
+					.addMeat(mc.getMeatProduct().getMeatType().getCategory() == MeatCategory.MEAT ? 1 : 0)
+			);
+		// Total days per calendar month (1-12), summed over the years that actually have data.
+		Set<YearMonth> activeMonths = new HashSet<>();
+		dataPerDay.keySet().forEach(day -> activeMonths.add(YearMonth.of(day.getYear(), day.getMonthValue())));
+		int[] totalDays = new int[13];
+		activeMonths.forEach(ym -> totalDays[ym.getMonthValue()] += ym.lengthOfMonth());
+		// Meat and pescetarian (fish-only) day counts per calendar month.
+		int[] meat = new int[13];
+		int[] pescetarian = new int[13];
+		dataPerDay.forEach((day, record) -> {
+			if (record.getMeat() > 0) {
+				meat[day.getMonthValue()]++;
+			} else if (record.getFish() > 0) {
+				pescetarian[day.getMonthValue()]++;
+			}
+		});
+		List<NutritionChartData> result = new ArrayList<>();
+		for (int month = 1; month <= 12; month++) {
+			if (totalDays[month] == 0) {
+				continue;
+			}
+			int veggie = totalDays[month] - meat[month] - pescetarian[month];
+			result.add(new NutritionChartData(month, meat[month], pescetarian[month], veggie));
+		}
+		return result;
 	}
 
 	private NutritionCalculationData createNutritionCalculationData(MeatConsumptionStaticRecord mcsr) {
