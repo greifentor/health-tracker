@@ -29,6 +29,10 @@ import de.ollie.healthtracker.core.service.WeightMeasurementService;
 import de.ollie.healthtracker.core.service.WhoBloodPressureClassificationService;
 import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.NutritionCalculationData;
+import de.ollie.healthtracker.gui.swing.chart.NutritionChartData;
+import de.ollie.healthtracker.gui.swing.chart.NutritionChartJInternalFrame;
+import de.ollie.healthtracker.gui.swing.event.MeatConsumptionChangeNotifier;
+import de.ollie.healthtracker.gui.swing.event.NotifyingMeatConsumptionService;
 import de.ollie.healthtracker.gui.swing.external.viewer.pdf.ExternalPdfViewerStarter;
 import de.ollie.healthtracker.gui.swing.select.alcoholconsumption.AlcoholConsumptionSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.alcoholproduct.AlcoholProductSelectJInternalFrame;
@@ -59,7 +63,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -92,6 +98,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final ExternalPdfViewerStarter externalPdfViewerStarter;
 	private final GeneralBodyPartService generalBodyPartService;
 	private final ManufacturerService manufacturerService;
+	private final MeatConsumptionChangeNotifier meatConsumptionChangeNotifier;
 	private final MeatConsumptionService meatConsumptionService;
 	private final MeatProductService meatProductService;
 	private final MeatTypeService meatTypeService;
@@ -134,6 +141,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemFilePrintHealthReportPreviousMonth;
 	private JMenuItem menuItemFilePrintMeatConsumptionStatistic;
 	private JMenuItem menuItemFileQuit;
+	private JMenuItem menuItemFileShowNutritionChart;
 
 	@PostConstruct
 	void postConstruct() {
@@ -169,6 +177,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemFilePrintBPM);
 		menuItemFilePrintMeatConsumptionStatistic = createMenuItem("Print Meat Consumption", this);
 		menu.add(menuItemFilePrintMeatConsumptionStatistic);
+		menuItemFileShowNutritionChart = createMenuItem("Show Nutrition Chart", this);
+		menu.add(menuItemFileShowNutritionChart);
 		menu.add(new JSeparator());
 		menuItemFileQuit = createMenuItem("Quit", this);
 		menu.add(menuItemFileQuit);
@@ -290,7 +300,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			new ManufacturerSelectJInternalFrame(manufacturerService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditMeatConsumption) {
 			new MeatConsumptionSelectJInternalFrame(
-				meatConsumptionService,
+				new NotifyingMeatConsumptionService(meatConsumptionService, meatConsumptionChangeNotifier),
 				meatProductService,
 				desktopPane,
 				editDialogComponentFactory
@@ -443,9 +453,45 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 						"- VEGGIE:  " + (dpm.getKey().getMonth().maxLength() - dpm.getValue().getMeat() - dpm.getValue().getFish())
 					);
 				});
+		} else if (e.getSource() == menuItemFileShowNutritionChart) {
+			new NutritionChartJInternalFrame(desktopPane, this::createNutritionChartData, meatConsumptionChangeNotifier);
 		} else if (e.getSource() == menuItemFileQuit) {
 			System.exit(0);
 		}
+	}
+
+	private List<NutritionChartData> createNutritionChartData() {
+		// Classify each recording day as meat / fish day (same logic as the meat consumption print).
+		Map<LocalDate, MeatConsumptionStaticRecord> dataPerDay = new HashMap<>();
+		meatConsumptionService
+			.listMeatConsumptions()
+			.forEach(mc ->
+				dataPerDay
+					.computeIfAbsent(mc.getDateOfRecording(), d -> new MeatConsumptionStaticRecord())
+					.addFish(mc.getMeatProduct().getMeatType().getCategory() == MeatCategory.FISH ? 1 : 0)
+					.addMeat(mc.getMeatProduct().getMeatType().getCategory() == MeatCategory.MEAT ? 1 : 0)
+			);
+		// Aggregate the classified days per month (same logic as the meat consumption print).
+		Map<YearMonth, MeatConsumptionStaticRecord> dataPerMonth = new HashMap<>();
+		dataPerDay.forEach((day, record) ->
+			dataPerMonth
+				.computeIfAbsent(YearMonth.of(day.getYear(), day.getMonthValue()), ym -> new MeatConsumptionStaticRecord())
+				.addFish(record.getFish() > 0 && !(record.getMeat() > 0) ? 1 : 0)
+				.addMeat(record.getMeat() > 0 ? 1 : 0)
+		);
+		// One chart point per month, sorted chronologically; veggie = days in month - meat - fish.
+		List<NutritionChartData> result = new ArrayList<>();
+		dataPerMonth
+			.entrySet()
+			.stream()
+			.sorted((e0, e1) -> compareYearMonth(e0.getKey(), e1.getKey()))
+			.forEach(entry -> {
+				int meat = entry.getValue().getMeat();
+				int fish = entry.getValue().getFish();
+				int veggie = entry.getKey().getMonth().maxLength() - meat - fish;
+				result.add(new NutritionChartData(entry.getKey().getMonthValue(), meat, fish, veggie));
+			});
+		return result;
 	}
 
 	private NutritionCalculationData createNutritionCalculationData(MeatConsumptionStaticRecord mcsr) {
