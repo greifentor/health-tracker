@@ -1,4 +1,4 @@
-package de.ollie.healthtracker.gui.swing.chart;
+package de.ollie.healthtracker.gui.swing.chart.nutrition;
 
 /**
  * A single data point for the {@link NutritionChartJComponent}. The {@code month} (1-12) is shown as the x-axis label,

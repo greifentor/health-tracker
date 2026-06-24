@@ -1,4 +1,4 @@
-package de.ollie.healthtracker.gui.swing.chart;
+package de.ollie.healthtracker.gui.swing.chart.nutrition;
 
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;

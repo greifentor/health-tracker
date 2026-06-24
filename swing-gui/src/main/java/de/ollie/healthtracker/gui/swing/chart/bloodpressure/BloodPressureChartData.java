@@ -1,4 +1,4 @@
-package de.ollie.healthtracker.gui.swing.chart;
+package de.ollie.healthtracker.gui.swing.chart.bloodpressure;
 
 import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
 
