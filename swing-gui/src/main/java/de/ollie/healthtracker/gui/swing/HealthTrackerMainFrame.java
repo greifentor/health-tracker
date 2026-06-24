@@ -33,8 +33,12 @@ import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartDa
 import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartData;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartJInternalFrame;
+import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartData;
+import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.event.MeatConsumptionChangeNotifier;
 import de.ollie.healthtracker.gui.swing.event.NotifyingMeatConsumptionService;
+import de.ollie.healthtracker.gui.swing.event.NotifyingWeightMeasurementService;
+import de.ollie.healthtracker.gui.swing.event.WeightMeasurementChangeNotifier;
 import de.ollie.healthtracker.gui.swing.external.viewer.pdf.ExternalPdfViewerStarter;
 import de.ollie.healthtracker.gui.swing.select.alcoholconsumption.AlcoholConsumptionSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.alcoholproduct.AlcoholProductSelectJInternalFrame;
@@ -111,6 +115,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final NutritionClassCalculationService nutritionClassCalculationService;
 	private final ReportPrintService reportPrintService;
 	private final SymptomService symptomService;
+	private final WeightMeasurementChangeNotifier weightMeasurementChangeNotifier;
 	private final WeightMeasurementService weightMeasurementService;
 	private final WhoBloodPressureClassificationService whoBloodPressureClassificationService;
 	private final EditDialogComponentFactory editDialogComponentFactory;
@@ -145,6 +150,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemFileQuit;
 	private JMenuItem menuItemFileShowBloodPressureChart;
 	private JMenuItem menuItemFileShowNutritionChart;
+	private JMenuItem menuItemFileShowWeightChart;
 
 	@PostConstruct
 	void postConstruct() {
@@ -184,6 +190,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemFileShowBloodPressureChart);
 		menuItemFileShowNutritionChart = createMenuItem("Show Nutrition Chart", this);
 		menu.add(menuItemFileShowNutritionChart);
+		menuItemFileShowWeightChart = createMenuItem("Show Weight Chart", this);
+		menu.add(menuItemFileShowWeightChart);
 		menu.add(new JSeparator());
 		menuItemFileQuit = createMenuItem("Quit", this);
 		menu.add(menuItemFileQuit);
@@ -342,7 +350,11 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		} else if (e.getSource() == menuItemEditSymptom) {
 			new SymptomSelectJInternalFrame(symptomService, bodyPartService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditWeightMeasurement) {
-			new WeightMeasurementSelectJInternalFrame(weightMeasurementService, desktopPane, editDialogComponentFactory);
+			new WeightMeasurementSelectJInternalFrame(
+				new NotifyingWeightMeasurementService(weightMeasurementService, weightMeasurementChangeNotifier),
+				desktopPane,
+				editDialogComponentFactory
+			);
 		} else if (e.getSource() == menuItemFilePrintBPM) {
 			//			LocalDate now = LocalDate.now();
 			//			byte[] pdf = reportPrintService.printForTimeInterval(
@@ -466,9 +478,40 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			);
 		} else if (e.getSource() == menuItemFileShowNutritionChart) {
 			new NutritionChartJInternalFrame(desktopPane, this::createNutritionChartData, meatConsumptionChangeNotifier);
+		} else if (e.getSource() == menuItemFileShowWeightChart) {
+			new WeightChartJInternalFrame(
+				desktopPane,
+				this::createWeightChartData,
+				LocalDate.now().lengthOfMonth(),
+				70.0,
+				100.0,
+				weightMeasurementChangeNotifier
+			);
 		} else if (e.getSource() == menuItemFileQuit) {
 			System.exit(0);
 		}
+	}
+
+	private List<WeightChartData> createWeightChartData() {
+		LocalDate now = LocalDate.now();
+		LocalDate from = now.withDayOfMonth(1);
+		LocalDate to = now.withDayOfMonth(now.lengthOfMonth());
+		// Sum weight per day of month, then average. Index: [kgSum, count].
+		Map<Integer, double[]> perDay = new HashMap<>();
+		weightMeasurementService
+			.listWeightMeasurements()
+			.forEach(wm -> {
+				LocalDate date = wm.getDateOfRecording();
+				if (date == null || wm.getKg() == null || date.isBefore(from) || date.isAfter(to)) {
+					return;
+				}
+				double[] sums = perDay.computeIfAbsent(date.getDayOfMonth(), d -> new double[2]);
+				sums[0] += wm.getKg().doubleValue();
+				sums[1]++;
+			});
+		List<WeightChartData> result = new ArrayList<>();
+		perDay.forEach((day, sums) -> result.add(new WeightChartData(day, sums[0] / sums[1])));
+		return result;
 	}
 
 	private List<BloodPressureChartData> createBloodPressureChartData() {
