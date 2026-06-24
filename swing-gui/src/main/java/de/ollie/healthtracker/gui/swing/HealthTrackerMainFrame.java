@@ -487,16 +487,20 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				sums[3]++;
 			});
 		List<BloodPressureChartData> result = new ArrayList<>();
-		perDay.forEach((day, sums) ->
+		perDay.forEach((day, sums) -> {
+			int sys = Math.round((float) sums[0] / sums[3]);
+			int dia = Math.round((float) sums[1] / sums[3]);
+			int pulse = Math.round((float) sums[2] / sums[3]);
 			result.add(
 				new BloodPressureChartData(
 					day,
-					Math.round((float) sums[0] / sums[3]),
-					Math.round((float) sums[1] / sums[3]),
-					Math.round((float) sums[2] / sums[3])
+					sys,
+					dia,
+					pulse,
+					whoBloodPressureClassificationService.calculateClassification(sys, dia)
 				)
-			)
-		);
+			);
+		});
 		return result;
 	}
 
