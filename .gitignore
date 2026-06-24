@@ -35,3 +35,4 @@ tmp0/
 /test.pdf
 
 */*.jasper
+/start-home.sh
