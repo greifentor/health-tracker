@@ -9,6 +9,7 @@ import de.ollie.healthtracker.core.service.port.persistence.AlcoholConsumptionPe
 import de.ollie.healthtracker.persistence.jpa.mapper.AlcoholConsumptionDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.AlcoholConsumptionDboRepository;
 import jakarta.inject.Named;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -31,8 +32,10 @@ class AlcoholConsumptionPersistenceJpaAdapter implements AlcoholConsumptionPersi
 	private final AlcoholConsumptionDboRepository repository;
 
 	@Override
-	public AlcoholConsumption create(LocalDate date, AlcoholProduct alcoholProduct, String comment) {
-		return mapper.toModel(repository.save(dboFactory.createAlcoholConsumption(date, alcoholProduct.getId(), comment)));
+	public AlcoholConsumption create(LocalDate date, AlcoholProduct alcoholProduct, String comment, BigDecimal liter) {
+		return mapper.toModel(
+			repository.save(dboFactory.createAlcoholConsumption(date, alcoholProduct.getId(), comment, liter))
+		);
 	}
 
 	@Override

@@ -45,6 +45,17 @@ classes:
             value: 3
         type:
           name: String
+      - name: liter
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 4
+        type:
+          name: BigDecimal
+          properties:
+            - name: import
+              value: java.math.BigDecimal
   - name: AlcoholProduct
     properties:
       - name: order
@@ -79,17 +90,6 @@ classes:
             value: false
           - name: editor-position
             value: 2
-        type:
-          name: BigDecimal
-          properties:
-            - name: import
-              value: java.math.BigDecimal
-      - name: liter
-        properties:
-          - name: nullable
-            value: false
-          - name: editor-position
-            value: 3
         type:
           name: BigDecimal
           properties:

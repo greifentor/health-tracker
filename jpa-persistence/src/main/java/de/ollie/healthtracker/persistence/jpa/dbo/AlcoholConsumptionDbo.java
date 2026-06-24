@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 import lombok.Data;
@@ -38,4 +39,7 @@ public class AlcoholConsumptionDbo {
 
 	@Column(name = "COMMENT", nullable = false)
 	private String comment;
+
+	@Column(name = "LITER", nullable = false)
+	private BigDecimal liter;
 }

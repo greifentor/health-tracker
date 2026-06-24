@@ -42,13 +42,12 @@ public class AlcoholProductSelectJPanel extends AbstractSelectJPanel<AlcoholProd
 
 	@Override
 	protected AbstractSelectionTableModel<AlcoholProduct> createSelectionModel() {
-		return new AbstractSelectionTableModel<AlcoholProduct>(getObjectsToSelect(), "Name", "Percent Vol", "Liter") {
+		return new AbstractSelectionTableModel<AlcoholProduct>(getObjectsToSelect(), "Name", "Percent Vol") {
 			@Override
 			protected Object getColumnValueFor(AlcoholProduct t, int columnIndex) {
 				return switch (columnIndex) {
 					case 0 -> t.getName();
 					case 1 -> t.getPercentVol();
-					case 2 -> t.getLiter();
 					default -> null;
 				};
 			}
@@ -62,7 +61,7 @@ public class AlcoholProductSelectJPanel extends AbstractSelectJPanel<AlcoholProd
 
 	@Override
 	protected AlcoholProduct createNewObject() {
-		return new AlcoholProduct().setId(UUID.randomUUID()).setName("").setPercentVol(null).setLiter(null);
+		return new AlcoholProduct().setId(UUID.randomUUID()).setName("").setPercentVol(null);
 	}
 
 	@Override

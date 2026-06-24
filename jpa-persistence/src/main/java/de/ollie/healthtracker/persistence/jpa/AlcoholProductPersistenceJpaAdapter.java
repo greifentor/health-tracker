@@ -31,8 +31,8 @@ class AlcoholProductPersistenceJpaAdapter implements AlcoholProductPersistencePo
 	private final AlcoholProductDboRepository repository;
 
 	@Override
-	public AlcoholProduct create(String name, BigDecimal percentVol, BigDecimal liter) {
-		return mapper.toModel(repository.save(dboFactory.createAlcoholProduct(name, percentVol, liter)));
+	public AlcoholProduct create(String name, BigDecimal percentVol) {
+		return mapper.toModel(repository.save(dboFactory.createAlcoholProduct(name, percentVol)));
 	}
 
 	@Override

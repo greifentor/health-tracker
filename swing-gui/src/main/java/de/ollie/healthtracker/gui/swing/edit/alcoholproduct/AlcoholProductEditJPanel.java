@@ -18,7 +18,6 @@ public class AlcoholProductEditJPanel extends AbstractEditPanel<AlcoholProduct> 
 
 	private JTextField textFieldName;
 	private JSpinner spinnerPercentVol;
-	private JSpinner spinnerLiter;
 
 	public AlcoholProductEditJPanel(AlcoholProduct toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		super(toEdit, itemProviders);
@@ -26,12 +25,12 @@ public class AlcoholProductEditJPanel extends AbstractEditPanel<AlcoholProduct> 
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel("Name:", "Percent Vol:", "Liter:");
+		return createLabelSubPanel("Name:", "Percent Vol:");
 	}
 
 	@Override
 	protected JPanel createComponentPanel(AlcoholProduct toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
+		JPanel p = new JPanel(new GridLayout(2, 1, HGAP, VGAP));
 		textFieldName = new JTextField(toEdit.getName(), 40);
 		p.add(textFieldName);
 		spinnerPercentVol =
@@ -44,11 +43,6 @@ public class AlcoholProductEditJPanel extends AbstractEditPanel<AlcoholProduct> 
 				)
 			);
 		p.add(spinnerPercentVol);
-		spinnerLiter =
-			new JSpinner(
-				new SpinnerNumberModel(toEdit.getLiter() == null ? 0.0 : toEdit.getLiter().doubleValue(), 0.0, 10.0, 0.1)
-			);
-		p.add(spinnerLiter);
 		return p;
 	}
 
@@ -57,7 +51,6 @@ public class AlcoholProductEditJPanel extends AbstractEditPanel<AlcoholProduct> 
 		return new AlcoholProduct()
 			.setId(toEdit.getId())
 			.setName(textFieldName.getText())
-			.setPercentVol(new BigDecimal(((Number) spinnerPercentVol.getValue()).doubleValue()))
-			.setLiter(new BigDecimal(((Number) spinnerLiter.getValue()).doubleValue()));
+			.setPercentVol(new BigDecimal(((Number) spinnerPercentVol.getValue()).doubleValue()));
 	}
 }

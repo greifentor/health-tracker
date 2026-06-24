@@ -2,6 +2,7 @@ package de.ollie.healthtracker.core.service;
 
 import de.ollie.healthtracker.core.service.model.AlcoholConsumption;
 import de.ollie.healthtracker.core.service.model.AlcoholProduct;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,12 @@ import lombok.Generated;
  */
 @Generated
 public interface AlcoholConsumptionService {
-	AlcoholConsumption createAlcoholConsumption(LocalDate date, AlcoholProduct alcoholProduct, String comment);
+	AlcoholConsumption createAlcoholConsumption(
+		LocalDate date,
+		AlcoholProduct alcoholProduct,
+		String comment,
+		BigDecimal liter
+	);
 
 	void deleteAlcoholConsumption(UUID id);
 

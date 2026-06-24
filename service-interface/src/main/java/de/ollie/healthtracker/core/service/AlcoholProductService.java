@@ -14,7 +14,7 @@ import lombok.Generated;
  */
 @Generated
 public interface AlcoholProductService {
-	AlcoholProduct createAlcoholProduct(String name, BigDecimal percentVol, BigDecimal liter);
+	AlcoholProduct createAlcoholProduct(String name, BigDecimal percentVol);
 
 	void deleteAlcoholProduct(UUID id);
 

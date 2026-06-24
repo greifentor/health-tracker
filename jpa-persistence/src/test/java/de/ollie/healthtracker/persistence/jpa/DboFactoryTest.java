@@ -137,26 +137,43 @@ class DboFactoryTest {
 	private DboFactory unitUnderTest;
 
 	@Nested
-	class createAlcoholConsumption_LocalDate_UUID_String {
+	class createAlcoholConsumption_LocalDate_UUID_String_BigDecimal {
 
 		@Test
 		void throwsAnException_passingANullValue_asAlcoholProductId() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholConsumption(DATE, null, COMMENT));
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createAlcoholConsumption(DATE, null, COMMENT, LITER)
+			);
 		}
 
 		@Test
 		void throwsAnException_passingANullValue_asComment() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholConsumption(DATE, ID, null));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholConsumption(DATE, ID, null, LITER));
 		}
 
 		@Test
 		void throwsAnException_passingABlankString_asComment() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholConsumption(DATE, ID, BLANK_STR));
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createAlcoholConsumption(DATE, ID, BLANK_STR, LITER)
+			);
 		}
 
 		@Test
 		void throwsAnException_passingANullValue_asDate() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholConsumption(null, ID, COMMENT));
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createAlcoholConsumption(null, ID, COMMENT, LITER)
+			);
+		}
+
+		@Test
+		void throwsAnException_passingANullValue_asLiter() {
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createAlcoholConsumption(DATE, ID, COMMENT, null)
+			);
 		}
 
 		@Test
@@ -164,7 +181,10 @@ class DboFactoryTest {
 			// Prepare
 			when(alcoholProductDboRepository.findById(ID)).thenReturn(Optional.empty());
 			// Run & Check
-			assertThrows(NoSuchElementException.class, () -> unitUnderTest.createAlcoholConsumption(DATE, ID, COMMENT));
+			assertThrows(
+				NoSuchElementException.class,
+				() -> unitUnderTest.createAlcoholConsumption(DATE, ID, COMMENT, LITER)
+			);
 		}
 
 		@Test
@@ -172,7 +192,7 @@ class DboFactoryTest {
 			// Prepare
 			when(alcoholProductDboRepository.findById(ID)).thenReturn(Optional.of(alcoholProductDbo));
 			// Run & Check
-			assertNotNull(unitUnderTest.createAlcoholConsumption(DATE, ID, COMMENT));
+			assertNotNull(unitUnderTest.createAlcoholConsumption(DATE, ID, COMMENT, LITER));
 		}
 
 		@Test
@@ -181,8 +201,8 @@ class DboFactoryTest {
 			when(alcoholProductDboRepository.findById(ID)).thenReturn(Optional.of(alcoholProductDbo));
 			// Run & Check
 			assertNotSame(
-				unitUnderTest.createAlcoholConsumption(DATE, ID, COMMENT),
-				unitUnderTest.createAlcoholConsumption(DATE, ID, COMMENT)
+				unitUnderTest.createAlcoholConsumption(DATE, ID, COMMENT, LITER),
+				unitUnderTest.createAlcoholConsumption(DATE, ID, COMMENT, LITER)
 			);
 		}
 
@@ -193,64 +213,53 @@ class DboFactoryTest {
 				.setAlcoholProduct(alcoholProductDbo)
 				.setComment(COMMENT)
 				.setDate(DATE)
-				.setId(ID);
+				.setId(ID)
+				.setLiter(LITER);
 			when(alcoholProductDboRepository.findById(ID)).thenReturn(Optional.of(alcoholProductDbo));
 			when(uuidFactory.create()).thenReturn(ID);
 			// Run & Check
-			assertEquals(expected, unitUnderTest.createAlcoholConsumption(DATE, ID, COMMENT));
+			assertEquals(expected, unitUnderTest.createAlcoholConsumption(DATE, ID, COMMENT, LITER));
 		}
 	}
 
 	@Nested
-	class createAlcoholProduct_String_BigDecimal_BigDecimal {
-
-		@Test
-		void throwsAnException_passingANullValue_asLiter() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL, null));
-		}
+	class createAlcoholProduct_String_BigDecimal {
 
 		@Test
 		void throwsAnException_passingANullValue_asName() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholProduct(null, PERCENT_VOL, LITER));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholProduct(null, PERCENT_VOL));
 		}
 
 		@Test
 		void throwsAnException_passingABlankString_asName() {
-			assertThrows(
-				IllegalArgumentException.class,
-				() -> unitUnderTest.createAlcoholProduct(BLANK_STR, PERCENT_VOL, LITER)
-			);
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholProduct(BLANK_STR, PERCENT_VOL));
 		}
 
 		@Test
 		void throwsAnException_passingANullValue_asPercentVol() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholProduct(NAME, null, LITER));
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholProduct(NAME, null));
 		}
 
 		@Test
 		void returnANewObject() {
-			assertNotNull(unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL, LITER));
+			assertNotNull(unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL));
 		}
 
 		@Test
 		void returnANewObject_onEachCall() {
 			assertNotSame(
-				unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL, LITER),
-				unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL, LITER)
+				unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL),
+				unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL)
 			);
 		}
 
 		@Test
 		void returnANewObject_withCorrectlySetAttributes() {
 			// Prepare
-			AlcoholProductDbo expected = new AlcoholProductDbo()
-				.setId(ID)
-				.setLiter(LITER)
-				.setName(NAME)
-				.setPercentVol(PERCENT_VOL);
+			AlcoholProductDbo expected = new AlcoholProductDbo().setId(ID).setName(NAME).setPercentVol(PERCENT_VOL);
 			when(uuidFactory.create()).thenReturn(ID);
 			// Run & Check
-			assertEquals(expected, unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL, LITER));
+			assertEquals(expected, unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL));
 		}
 	}
 

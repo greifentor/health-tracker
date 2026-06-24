@@ -492,4 +492,26 @@
         <addPrimaryKey columnNames="ID" tableName="ALCOHOL_CONSUMPTION"/>
         <addForeignKeyConstraint constraintName="FK_ALCOHOL_CONSUMPTION_ALCOHOL_PRODUCT_TO_ALCOHOL_PRODUCT" baseColumnNames="ALCOHOL_PRODUCT" baseTableName="ALCOHOL_CONSUMPTION" referencedColumnNames="ID" referencedTableName="ALCOHOL_PRODUCT"/>
     </changeSet>
+    <changeSet author="ollie" id="Add-Field-LITER-to-Table-ALCOHOL_CONSUMPTION" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <addColumn tableName="ALCOHOL_CONSUMPTION">
+            <column name="LITER" type="NUMERIC(5, 2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="ollie" id="Copy-ALCOHOL_PRODUCT-LITER-to-ALCOHOL_CONSUMPTION-LITER" objectQuotingStrategy="LEGACY">
+        <sql>
+            UPDATE ALCOHOL_CONSUMPTION
+            SET LITER = (
+                SELECT ap.LITER
+                FROM ALCOHOL_PRODUCT ap
+                WHERE ap.ID = ALCOHOL_CONSUMPTION.ALCOHOL_PRODUCT
+            )
+        </sql>
+    </changeSet>
+    <changeSet author="ollie" id="Drop-Field-LITER-from-Table-ALCOHOL_PRODUCT" objectQuotingStrategy="LEGACY">
+        <dropColumn tableName="ALCOHOL_PRODUCT">
+            <column name="LITER"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>

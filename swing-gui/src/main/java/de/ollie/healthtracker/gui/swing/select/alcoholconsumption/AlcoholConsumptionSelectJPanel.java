@@ -9,6 +9,7 @@ import de.ollie.healthtracker.gui.swing.edit.alcoholconsumption.AlcoholConsumpti
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -55,7 +56,8 @@ public class AlcoholConsumptionSelectJPanel
 			getObjectsToSelect(),
 			"Date",
 			"Alcohol Product",
-			"Comment"
+			"Comment",
+			"Liter"
 		) {
 			@Override
 			protected Object getColumnValueFor(AlcoholConsumption t, int columnIndex) {
@@ -63,6 +65,7 @@ public class AlcoholConsumptionSelectJPanel
 					case 0 -> DateTimeUtil.DE_DATE_FORMAT.format(t.getDate());
 					case 1 -> (t.getAlcoholProduct() != null ? t.getAlcoholProduct().getName() : "-");
 					case 2 -> t.getComment();
+					case 3 -> t.getLiter();
 					default -> null;
 				};
 			}
@@ -86,7 +89,8 @@ public class AlcoholConsumptionSelectJPanel
 			.setId(UUID.randomUUID())
 			.setDate(LocalDate.now())
 			.setAlcoholProduct(null)
-			.setComment("");
+			.setComment("")
+			.setLiter(null);
 	}
 
 	@Override

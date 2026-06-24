@@ -66,11 +66,17 @@ class DboFactory {
 	private final MedicationUnitDboRepository medicationUnitDboRepository;
 	private final UuidFactory uuidFactory;
 
-	AlcoholConsumptionDbo createAlcoholConsumption(LocalDate date, UUID alcoholProductId, String comment) {
+	AlcoholConsumptionDbo createAlcoholConsumption(
+		LocalDate date,
+		UUID alcoholProductId,
+		String comment,
+		BigDecimal liter
+	) {
 		ensure(alcoholProductId != null, "alcohol product id cannot be null!");
 		ensure(comment != null, "comment cannot be null!");
 		ensure(!comment.isBlank(), "comment cannot be blank!");
 		ensure(date != null, "date cannot be null!");
+		ensure(liter != null, "liter cannot be null!");
 		AlcoholProductDbo alcoholProduct = alcoholProductDboRepository
 			.findById(alcoholProductId)
 			.orElseThrow(() -> new NoSuchElementException("no alcohol product found with id: " + alcoholProductId));
@@ -78,15 +84,15 @@ class DboFactory {
 			.setAlcoholProduct(alcoholProduct)
 			.setComment(comment)
 			.setDate(date)
-			.setId(uuidFactory.create());
+			.setId(uuidFactory.create())
+			.setLiter(liter);
 	}
 
-	AlcoholProductDbo createAlcoholProduct(String name, BigDecimal percentVol, BigDecimal liter) {
-		ensure(liter != null, "liter cannot be null!");
+	AlcoholProductDbo createAlcoholProduct(String name, BigDecimal percentVol) {
 		ensure(name != null, "name cannot be null!");
 		ensure(!name.isBlank(), "name cannot be blank!");
 		ensure(percentVol != null, "percent vol cannot be null!");
-		return new AlcoholProductDbo().setId(uuidFactory.create()).setLiter(liter).setName(name).setPercentVol(percentVol);
+		return new AlcoholProductDbo().setId(uuidFactory.create()).setName(name).setPercentVol(percentVol);
 	}
 
 	BloodPressureMeasurementDbo createBloodPressureMeasurement(

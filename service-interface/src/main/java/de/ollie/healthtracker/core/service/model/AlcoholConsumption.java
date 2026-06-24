@@ -1,5 +1,6 @@
 package de.ollie.healthtracker.core.service.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 import lombok.Data;
@@ -20,4 +21,5 @@ public class AlcoholConsumption {
 	private LocalDate date;
 	private AlcoholProduct alcoholProduct;
 	private String comment;
+	private BigDecimal liter;
 }

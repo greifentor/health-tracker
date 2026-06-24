@@ -5,6 +5,7 @@ import de.ollie.healthtracker.core.service.model.AlcoholConsumption;
 import de.ollie.healthtracker.core.service.model.AlcoholProduct;
 import de.ollie.healthtracker.core.service.port.persistence.AlcoholConsumptionPersistencePort;
 import jakarta.inject.Named;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -25,8 +26,13 @@ class AlcoholConsumptionServiceImpl implements AlcoholConsumptionService {
 	private final AlcoholConsumptionPersistencePort alcoholConsumptionPersistencePort;
 
 	@Override
-	public AlcoholConsumption createAlcoholConsumption(LocalDate date, AlcoholProduct alcoholProduct, String comment) {
-		return alcoholConsumptionPersistencePort.create(date, alcoholProduct, comment);
+	public AlcoholConsumption createAlcoholConsumption(
+		LocalDate date,
+		AlcoholProduct alcoholProduct,
+		String comment,
+		BigDecimal liter
+	) {
+		return alcoholConsumptionPersistencePort.create(date, alcoholProduct, comment, liter);
 	}
 
 	@Override

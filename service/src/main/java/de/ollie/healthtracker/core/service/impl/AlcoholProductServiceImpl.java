@@ -24,8 +24,8 @@ class AlcoholProductServiceImpl implements AlcoholProductService {
 	private final AlcoholProductPersistencePort alcoholProductPersistencePort;
 
 	@Override
-	public AlcoholProduct createAlcoholProduct(String name, BigDecimal percentVol, BigDecimal liter) {
-		return alcoholProductPersistencePort.create(name, percentVol, liter);
+	public AlcoholProduct createAlcoholProduct(String name, BigDecimal percentVol) {
+		return alcoholProductPersistencePort.create(name, percentVol);
 	}
 
 	@Override

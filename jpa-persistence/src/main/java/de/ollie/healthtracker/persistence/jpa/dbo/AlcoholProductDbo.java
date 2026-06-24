@@ -31,7 +31,4 @@ public class AlcoholProductDbo {
 
 	@Column(name = "PERCENT_VOL", nullable = false)
 	private BigDecimal percentVol;
-
-	@Column(name = "LITER", nullable = false)
-	private BigDecimal liter;
 }

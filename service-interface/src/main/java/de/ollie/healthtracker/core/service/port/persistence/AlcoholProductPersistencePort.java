@@ -16,7 +16,7 @@ import lombok.Generated;
 @Generated
 @Named
 public interface AlcoholProductPersistencePort {
-	AlcoholProduct create(String name, BigDecimal percentVol, BigDecimal liter);
+	AlcoholProduct create(String name, BigDecimal percentVol);
 
 	void deleteById(UUID id);
 
