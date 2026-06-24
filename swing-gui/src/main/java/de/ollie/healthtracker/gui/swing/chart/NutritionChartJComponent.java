@@ -5,8 +5,11 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JComponent;
 
 /**
@@ -28,16 +31,41 @@ public class NutritionChartJComponent extends JComponent {
 	}
 
 	/**
-	 * Replaces the displayed data and repaints. Only the last {@value #MAX_ENTRIES} entries of the passed list are kept,
-	 * in the given order; the list is copied, so the caller keeps ownership of it.
+	 * Replaces the displayed data and repaints. First the last {@value #MAX_ENTRIES} entries of the passed list are
+	 * taken; any calendar month missing within the 12-month window ending at the last entry is then inserted in its
+	 * place as a full-veggie month (no meat/fish, veggie = the month's number of days). The order of the passed entries
+	 * is preserved, so the last passed entry stays the last item on the x-axis. The passed list is not modified.
 	 */
 	public void setData(List<NutritionChartData> data) {
 		List<NutritionChartData> entries = data == null ? new ArrayList<>() : new ArrayList<>(data);
 		if (entries.size() > MAX_ENTRIES) {
 			entries = new ArrayList<>(entries.subList(entries.size() - MAX_ENTRIES, entries.size()));
 		}
-		this.data = entries;
+		this.data = withFullVeggieForMissingMonths(entries);
 		repaint();
+	}
+
+	/**
+	 * Returns the 12-month window ending at the last entry's month: the present entries keep their (chronological)
+	 * order, and every calendar month missing in between is inserted at its place as a full-veggie month - a month
+	 * without meat or fish consumption counts as fully vegetarian, so its veggie value is the month's number of days.
+	 */
+	private static List<NutritionChartData> withFullVeggieForMissingMonths(List<NutritionChartData> data) {
+		if (data.isEmpty()) {
+			return new ArrayList<>(data);
+		}
+		Map<Integer, NutritionChartData> byMonth = new HashMap<>();
+		for (NutritionChartData entry : data) {
+			byMonth.put(entry.month(), entry);
+		}
+		int lastMonth = data.get(data.size() - 1).month();
+		List<NutritionChartData> result = new ArrayList<>();
+		for (int offset = 1; offset <= 12; offset++) {
+			int month = (lastMonth + offset - 1) % 12 + 1;
+			NutritionChartData entry = byMonth.get(month);
+			result.add(entry != null ? entry : new NutritionChartData(month, 0, 0, Month.of(month).maxLength()));
+		}
+		return result;
 	}
 
 	@Override
