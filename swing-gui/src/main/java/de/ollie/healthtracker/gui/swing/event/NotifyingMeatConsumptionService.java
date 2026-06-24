@@ -26,8 +26,8 @@ public class NotifyingMeatConsumptionService implements MeatConsumptionService {
 	}
 
 	@Override
-	public MeatConsumption createMeatConsumption(LocalDate dateOfRecording, MeatProduct meatProduct) {
-		MeatConsumption created = delegate.createMeatConsumption(dateOfRecording, meatProduct);
+	public MeatConsumption createMeatConsumption(LocalDate dateOfRecording, MeatProduct meatProduct, int amountInGr) {
+		MeatConsumption created = delegate.createMeatConsumption(dateOfRecording, meatProduct, amountInGr);
 		changeNotifier.notifyChanged();
 		return created;
 	}

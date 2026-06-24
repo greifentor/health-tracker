@@ -16,7 +16,10 @@ import java.util.UUID;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import lombok.Generated;
 
 /**
@@ -31,6 +34,7 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 
 	private JTextField textFieldDateOfRecording;
 	private JComboBox<MeatProduct> comboBoxMeatProduct;
+	private JSpinner spinnerAmountInGr;
 
 	public MeatConsumptionEditJPanel(MeatConsumption toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		super(toEdit, itemProviders);
@@ -38,12 +42,12 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel("Date Of Recording:", "Meat Product:");
+		return createLabelSubPanel("Date Of Recording:", "Meat Product:", "Amount In Gr:");
 	}
 
 	@Override
 	protected JPanel createComponentPanel(MeatConsumption toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		JPanel p = new JPanel(new GridLayout(2, 1, HGAP, VGAP));
+		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
 		textFieldDateOfRecording = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.getDateOfRecording()), 40);
 		p.add(textFieldDateOfRecording);
 		List<MeatProduct> listMeatProduct =
@@ -57,6 +61,9 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 			return new JLabel("-");
 		});
 		p.add(comboBoxMeatProduct);
+		SpinnerModel spinnerModelAmountInGr = new SpinnerNumberModel(toEdit.getAmountInGr(), 0, 1000, 1);
+		spinnerAmountInGr = new JSpinner(spinnerModelAmountInGr);
+		p.add(spinnerAmountInGr);
 		return p;
 	}
 
@@ -65,6 +72,7 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 		return new MeatConsumption()
 			.setId(toEdit.getId())
 			.setDateOfRecording(DateTimeUtil.dateFromString(textFieldDateOfRecording.getText()))
-			.setMeatProduct(((MeatProduct) comboBoxMeatProduct.getSelectedItem()));
+			.setMeatProduct(((MeatProduct) comboBoxMeatProduct.getSelectedItem()))
+			.setAmountInGr((Integer) spinnerAmountInGr.getValue());
 	}
 }

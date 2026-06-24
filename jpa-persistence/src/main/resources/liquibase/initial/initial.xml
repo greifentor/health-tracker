@@ -514,4 +514,22 @@
             <column name="LITER"/>
         </dropColumn>
     </changeSet>
+    <changeSet author="ollie" id="Add-Field-AMOUNT_IN_GR-to-Table-MEAT_CONSUMPTION" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <addColumn tableName="MEAT_CONSUMPTION">
+            <column name="AMOUNT_IN_GR" type="INTEGER" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="ollie" id="Copy-MEAT_PRODUCT-AMOUNT_IN_GR-to-MEAT_CONSUMPTION-AMOUNT_IN_GR" objectQuotingStrategy="LEGACY">
+        <sql>
+            UPDATE MEAT_CONSUMPTION
+            SET AMOUNT_IN_GR = (
+                SELECT mp.AMOUNT_IN_GR
+                FROM MEAT_PRODUCT mp
+                WHERE mp.ID = MEAT_CONSUMPTION.MEAT_PRODUCT
+            )
+            WHERE MEAT_CONSUMPTION.MEAT_PRODUCT IS NOT NULL
+        </sql>
+    </changeSet>
 </databaseChangeLog>

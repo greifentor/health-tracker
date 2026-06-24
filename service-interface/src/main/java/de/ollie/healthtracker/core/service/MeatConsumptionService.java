@@ -15,7 +15,7 @@ import lombok.Generated;
  */
 @Generated
 public interface MeatConsumptionService {
-	MeatConsumption createMeatConsumption(LocalDate dateOfRecording, MeatProduct meatProduct);
+	MeatConsumption createMeatConsumption(LocalDate dateOfRecording, MeatProduct meatProduct, int amountInGr);
 
 	void deleteMeatConsumption(UUID id);
 

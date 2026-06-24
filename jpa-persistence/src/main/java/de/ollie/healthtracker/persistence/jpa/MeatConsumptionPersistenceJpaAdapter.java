@@ -31,8 +31,10 @@ class MeatConsumptionPersistenceJpaAdapter implements MeatConsumptionPersistence
 	private final MeatConsumptionDboRepository repository;
 
 	@Override
-	public MeatConsumption create(LocalDate dateOfRecording, MeatProduct meatProduct) {
-		return mapper.toModel(repository.save(dboFactory.createMeatConsumption(dateOfRecording, meatProduct.getId())));
+	public MeatConsumption create(LocalDate dateOfRecording, MeatProduct meatProduct, int amountInGr) {
+		return mapper.toModel(
+			repository.save(dboFactory.createMeatConsumption(dateOfRecording, meatProduct.getId(), amountInGr))
+		);
 	}
 
 	@Override

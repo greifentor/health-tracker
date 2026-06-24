@@ -19,4 +19,5 @@ public class MeatConsumption {
 	private UUID id;
 	private LocalDate dateOfRecording;
 	private MeatProduct meatProduct;
+	private int amountInGr;
 }

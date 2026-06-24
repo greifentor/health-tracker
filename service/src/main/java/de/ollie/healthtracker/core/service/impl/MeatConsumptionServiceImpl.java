@@ -25,8 +25,8 @@ class MeatConsumptionServiceImpl implements MeatConsumptionService {
 	private final MeatConsumptionPersistencePort meatConsumptionPersistencePort;
 
 	@Override
-	public MeatConsumption createMeatConsumption(LocalDate dateOfRecording, MeatProduct meatProduct) {
-		return meatConsumptionPersistencePort.create(dateOfRecording, meatProduct);
+	public MeatConsumption createMeatConsumption(LocalDate dateOfRecording, MeatProduct meatProduct, int amountInGr) {
+		return meatConsumptionPersistencePort.create(dateOfRecording, meatProduct, amountInGr);
 	}
 
 	@Override

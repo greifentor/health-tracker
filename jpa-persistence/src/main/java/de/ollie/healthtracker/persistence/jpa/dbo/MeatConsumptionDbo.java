@@ -35,4 +35,7 @@ public class MeatConsumptionDbo {
 	@JoinColumn(name = "MEAT_PRODUCT", referencedColumnName = "ID", nullable = true)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private MeatProductDbo meatProduct;
+
+	@Column(name = "AMOUNT_IN_GR", nullable = false)
+	private int amountInGr;
 }

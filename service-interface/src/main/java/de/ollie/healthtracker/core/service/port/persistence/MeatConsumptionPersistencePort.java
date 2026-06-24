@@ -17,7 +17,7 @@ import lombok.Generated;
 @Generated
 @Named
 public interface MeatConsumptionPersistencePort {
-	MeatConsumption create(LocalDate dateOfRecording, MeatProduct meatProduct);
+	MeatConsumption create(LocalDate dateOfRecording, MeatProduct meatProduct, int amountInGr);
 
 	void deleteById(UUID id);
 

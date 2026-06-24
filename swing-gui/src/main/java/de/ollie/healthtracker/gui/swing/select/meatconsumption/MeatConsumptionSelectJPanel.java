@@ -49,12 +49,18 @@ public class MeatConsumptionSelectJPanel
 
 	@Override
 	protected AbstractSelectionTableModel<MeatConsumption> createSelectionModel() {
-		return new AbstractSelectionTableModel<MeatConsumption>(getObjectsToSelect(), "Date Of Recording", "Meat Product") {
+		return new AbstractSelectionTableModel<MeatConsumption>(
+			getObjectsToSelect(),
+			"Date Of Recording",
+			"Meat Product",
+			"Amount In Gr"
+		) {
 			@Override
 			protected Object getColumnValueFor(MeatConsumption t, int columnIndex) {
 				return switch (columnIndex) {
 					case 0 -> DateTimeUtil.DE_DATE_FORMAT.format(t.getDateOfRecording());
 					case 1 -> (t.getMeatProduct() != null ? t.getMeatProduct().getName() : "-");
+					case 2 -> t.getAmountInGr();
 					default -> null;
 				};
 			}
@@ -74,7 +80,11 @@ public class MeatConsumptionSelectJPanel
 
 	@Override
 	protected MeatConsumption createNewObject() {
-		return new MeatConsumption().setId(UUID.randomUUID()).setDateOfRecording(LocalDate.now()).setMeatProduct(null);
+		return new MeatConsumption()
+			.setId(UUID.randomUUID())
+			.setDateOfRecording(LocalDate.now())
+			.setMeatProduct(null)
+			.setAmountInGr(0);
 	}
 
 	@Override
