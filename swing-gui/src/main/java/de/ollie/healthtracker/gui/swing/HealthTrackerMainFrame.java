@@ -29,6 +29,8 @@ import de.ollie.healthtracker.core.service.WeightMeasurementService;
 import de.ollie.healthtracker.core.service.WhoBloodPressureClassificationService;
 import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.NutritionCalculationData;
+import de.ollie.healthtracker.gui.swing.chart.BloodPressureChartData;
+import de.ollie.healthtracker.gui.swing.chart.BloodPressureChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.chart.NutritionChartData;
 import de.ollie.healthtracker.gui.swing.chart.NutritionChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.event.MeatConsumptionChangeNotifier;
@@ -141,6 +143,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemFilePrintHealthReportPreviousMonth;
 	private JMenuItem menuItemFilePrintMeatConsumptionStatistic;
 	private JMenuItem menuItemFileQuit;
+	private JMenuItem menuItemFileShowBloodPressureChart;
 	private JMenuItem menuItemFileShowNutritionChart;
 
 	@PostConstruct
@@ -177,6 +180,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemFilePrintBPM);
 		menuItemFilePrintMeatConsumptionStatistic = createMenuItem("Print Meat Consumption", this);
 		menu.add(menuItemFilePrintMeatConsumptionStatistic);
+		menuItemFileShowBloodPressureChart = createMenuItem("Show Blood Pressure Chart", this);
+		menu.add(menuItemFileShowBloodPressureChart);
 		menuItemFileShowNutritionChart = createMenuItem("Show Nutrition Chart", this);
 		menu.add(menuItemFileShowNutritionChart);
 		menu.add(new JSeparator());
@@ -453,11 +458,46 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 						"- VEGGIE:  " + (dpm.getKey().getMonth().maxLength() - dpm.getValue().getMeat() - dpm.getValue().getFish())
 					);
 				});
+		} else if (e.getSource() == menuItemFileShowBloodPressureChart) {
+			new BloodPressureChartJInternalFrame(
+				desktopPane,
+				createBloodPressureChartData(),
+				LocalDate.now().lengthOfMonth()
+			);
 		} else if (e.getSource() == menuItemFileShowNutritionChart) {
 			new NutritionChartJInternalFrame(desktopPane, this::createNutritionChartData, meatConsumptionChangeNotifier);
 		} else if (e.getSource() == menuItemFileQuit) {
 			System.exit(0);
 		}
+	}
+
+	private List<BloodPressureChartData> createBloodPressureChartData() {
+		LocalDate now = LocalDate.now();
+		LocalDate from = now.withDayOfMonth(1);
+		LocalDate to = now.withDayOfMonth(now.lengthOfMonth());
+		// Sum sys / dia / pulse per day of month, then average. Index: [sysSum, diaSum, pulseSum, count].
+		Map<Integer, int[]> perDay = new HashMap<>();
+		bloodPressureMeasurementService
+			.findAllBloodPressureMeasurementsByTimeInterval(from, to)
+			.forEach(bpm -> {
+				int[] sums = perDay.computeIfAbsent(bpm.getDateOfRecording().getDayOfMonth(), d -> new int[4]);
+				sums[0] += bpm.getSysMmHg();
+				sums[1] += bpm.getDiaMmHg();
+				sums[2] += bpm.getPulsePerMinute();
+				sums[3]++;
+			});
+		List<BloodPressureChartData> result = new ArrayList<>();
+		perDay.forEach((day, sums) ->
+			result.add(
+				new BloodPressureChartData(
+					day,
+					Math.round((float) sums[0] / sums[3]),
+					Math.round((float) sums[1] / sums[3]),
+					Math.round((float) sums[2] / sums[3])
+				)
+			)
+		);
+		return result;
 	}
 
 	private List<NutritionChartData> createNutritionChartData() {
