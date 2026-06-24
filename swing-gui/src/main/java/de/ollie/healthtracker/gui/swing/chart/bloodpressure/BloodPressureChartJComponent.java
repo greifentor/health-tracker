@@ -1,4 +1,4 @@
-package de.ollie.healthtracker.gui.swing.chart;
+package de.ollie.healthtracker.gui.swing.chart.bloodpressure;
 
 import java.awt.Color;
 import java.awt.Dimension;

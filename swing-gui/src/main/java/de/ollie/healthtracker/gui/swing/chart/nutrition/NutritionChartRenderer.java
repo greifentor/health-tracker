@@ -1,7 +1,8 @@
-package de.ollie.healthtracker.gui.swing.chart;
+package de.ollie.healthtracker.gui.swing.chart.nutrition;
 
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 
+import de.ollie.healthtracker.gui.swing.chart.PlotArea;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FontMetrics;
