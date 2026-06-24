@@ -31,6 +31,8 @@ import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.NutritionCalculationData;
 import de.ollie.healthtracker.gui.swing.chart.NutritionChartData;
 import de.ollie.healthtracker.gui.swing.chart.NutritionChartJInternalFrame;
+import de.ollie.healthtracker.gui.swing.event.MeatConsumptionChangeNotifier;
+import de.ollie.healthtracker.gui.swing.event.NotifyingMeatConsumptionService;
 import de.ollie.healthtracker.gui.swing.external.viewer.pdf.ExternalPdfViewerStarter;
 import de.ollie.healthtracker.gui.swing.select.alcoholconsumption.AlcoholConsumptionSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.alcoholproduct.AlcoholProductSelectJInternalFrame;
@@ -96,6 +98,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final ExternalPdfViewerStarter externalPdfViewerStarter;
 	private final GeneralBodyPartService generalBodyPartService;
 	private final ManufacturerService manufacturerService;
+	private final MeatConsumptionChangeNotifier meatConsumptionChangeNotifier;
 	private final MeatConsumptionService meatConsumptionService;
 	private final MeatProductService meatProductService;
 	private final MeatTypeService meatTypeService;
@@ -297,7 +300,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			new ManufacturerSelectJInternalFrame(manufacturerService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditMeatConsumption) {
 			new MeatConsumptionSelectJInternalFrame(
-				meatConsumptionService,
+				new NotifyingMeatConsumptionService(meatConsumptionService, meatConsumptionChangeNotifier),
 				meatProductService,
 				desktopPane,
 				editDialogComponentFactory
@@ -451,7 +454,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 					);
 				});
 		} else if (e.getSource() == menuItemFileShowNutritionChart) {
-			new NutritionChartJInternalFrame(desktopPane, createNutritionChartData());
+			new NutritionChartJInternalFrame(desktopPane, this::createNutritionChartData, meatConsumptionChangeNotifier);
 		} else if (e.getSource() == menuItemFileQuit) {
 			System.exit(0);
 		}
