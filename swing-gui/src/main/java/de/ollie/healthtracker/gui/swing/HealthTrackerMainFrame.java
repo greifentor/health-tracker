@@ -35,7 +35,9 @@ import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartData;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartData;
 import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartJInternalFrame;
+import de.ollie.healthtracker.gui.swing.event.BloodPressureMeasurementChangeNotifier;
 import de.ollie.healthtracker.gui.swing.event.MeatConsumptionChangeNotifier;
+import de.ollie.healthtracker.gui.swing.event.NotifyingBloodPressureMeasurementService;
 import de.ollie.healthtracker.gui.swing.event.NotifyingMeatConsumptionService;
 import de.ollie.healthtracker.gui.swing.event.NotifyingWeightMeasurementService;
 import de.ollie.healthtracker.gui.swing.event.WeightMeasurementChangeNotifier;
@@ -93,6 +95,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 
 	private final AlcoholConsumptionService alcoholConsumptionService;
 	private final AlcoholProductService alcoholProductService;
+	private final BloodPressureMeasurementChangeNotifier bloodPressureMeasurementChangeNotifier;
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final BodyPartService bodyPartService;
 	private final CommentService commentService;
@@ -279,7 +282,10 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			new AlcoholProductSelectJInternalFrame(alcoholProductService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditBloodPressureMeasurement) {
 			new BloodPressureMeasurementSelectJInternalFrame(
-				bloodPressureMeasurementService,
+				new NotifyingBloodPressureMeasurementService(
+					bloodPressureMeasurementService,
+					bloodPressureMeasurementChangeNotifier
+				),
 				desktopPane,
 				editDialogComponentFactory
 			);
@@ -473,8 +479,9 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		} else if (e.getSource() == menuItemFileShowBloodPressureChart) {
 			new BloodPressureChartJInternalFrame(
 				desktopPane,
-				createBloodPressureChartData(),
-				LocalDate.now().lengthOfMonth()
+				this::createBloodPressureChartData,
+				LocalDate.now().lengthOfMonth(),
+				bloodPressureMeasurementChangeNotifier
 			);
 		} else if (e.getSource() == menuItemFileShowNutritionChart) {
 			new NutritionChartJInternalFrame(desktopPane, this::createNutritionChartData, meatConsumptionChangeNotifier);
