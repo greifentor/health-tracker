@@ -231,14 +231,14 @@ class DboFactory {
 		return new ManufacturerDbo().setId(uuidFactory.create()).setName(name);
 	}
 
-	MeatConsumptionDbo createMeatConsumption(LocalDate dateOfRecording, UUID meatProductId, int amountInGr) {
+	MeatConsumptionDbo createMeatConsumption(LocalDate dateOfRecording, UUID meatProductId, BigDecimal units) {
 		ensure(dateOfRecording != null, "date of recording cannot be null!");
 		MeatProductDbo meatProduct = meatProductDboRepository.findById(meatProductId).orElse(null);
 		return new MeatConsumptionDbo()
-			.setAmountInGr(amountInGr)
 			.setDateOfRecording(dateOfRecording)
 			.setId(uuidFactory.create())
-			.setMeatProduct(meatProduct);
+			.setMeatProduct(meatProduct)
+			.setUnits(units);
 	}
 
 	MeatProductDbo createMeatProduct(int amoutInGr, String description, UUID meatTypeId) {

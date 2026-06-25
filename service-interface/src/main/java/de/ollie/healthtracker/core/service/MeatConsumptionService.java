@@ -2,6 +2,7 @@ package de.ollie.healthtracker.core.service;
 
 import de.ollie.healthtracker.core.service.model.MeatConsumption;
 import de.ollie.healthtracker.core.service.model.MeatProduct;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,7 @@ import lombok.Generated;
  */
 @Generated
 public interface MeatConsumptionService {
-	MeatConsumption createMeatConsumption(LocalDate dateOfRecording, MeatProduct meatProduct, int amountInGr);
+	MeatConsumption createMeatConsumption(LocalDate dateOfRecording, MeatProduct meatProduct, BigDecimal units);
 
 	void deleteMeatConsumption(UUID id);
 

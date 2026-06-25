@@ -9,6 +9,7 @@ import de.ollie.healthtracker.gui.swing.edit.meatconsumption.MeatConsumptionEdit
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectionTableModel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -53,14 +54,14 @@ public class MeatConsumptionSelectJPanel
 			getObjectsToSelect(),
 			"Date Of Recording",
 			"Meat Product",
-			"Amount In Gr"
+			"Units"
 		) {
 			@Override
 			protected Object getColumnValueFor(MeatConsumption t, int columnIndex) {
 				return switch (columnIndex) {
 					case 0 -> DateTimeUtil.DE_DATE_FORMAT.format(t.getDateOfRecording());
 					case 1 -> (t.getMeatProduct() != null ? t.getMeatProduct().getName() : "-");
-					case 2 -> t.getAmountInGr();
+					case 2 -> t.getUnits();
 					default -> null;
 				};
 			}
@@ -84,7 +85,7 @@ public class MeatConsumptionSelectJPanel
 			.setId(UUID.randomUUID())
 			.setDateOfRecording(LocalDate.now())
 			.setMeatProduct(null)
-			.setAmountInGr(0);
+			.setUnits(new BigDecimal("1.0"));
 	}
 
 	@Override

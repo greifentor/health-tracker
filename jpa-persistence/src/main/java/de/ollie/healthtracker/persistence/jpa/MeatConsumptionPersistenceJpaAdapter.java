@@ -9,6 +9,7 @@ import de.ollie.healthtracker.core.service.port.persistence.MeatConsumptionPersi
 import de.ollie.healthtracker.persistence.jpa.mapper.MeatConsumptionDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.MeatConsumptionDboRepository;
 import jakarta.inject.Named;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -31,9 +32,9 @@ class MeatConsumptionPersistenceJpaAdapter implements MeatConsumptionPersistence
 	private final MeatConsumptionDboRepository repository;
 
 	@Override
-	public MeatConsumption create(LocalDate dateOfRecording, MeatProduct meatProduct, int amountInGr) {
+	public MeatConsumption create(LocalDate dateOfRecording, MeatProduct meatProduct, BigDecimal units) {
 		return mapper.toModel(
-			repository.save(dboFactory.createMeatConsumption(dateOfRecording, meatProduct.getId(), amountInGr))
+			repository.save(dboFactory.createMeatConsumption(dateOfRecording, meatProduct.getId(), units))
 		);
 	}
 

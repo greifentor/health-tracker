@@ -9,32 +9,23 @@ import de.ollie.healthtracker.core.service.model.MeatProduct;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
 import java.awt.GridLayout;
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
-import lombok.Generated;
 
-/**
- * GENERATED CODE - DO NOT TOUCH
- *
- * Remove this comment to suspend class from generation process.
- */
-@Generated
 public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption> {
 
 	public static final String MEAT_PRODUCT_ITEM_PROVIDER_ID = "meat-product-item-provider";
 
 	private JTextField textFieldDateOfRecording;
 	private JComboBox<MeatProduct> comboBoxMeatProduct;
-	private JSpinner spinnerAmountInGr;
+	private JSpinner spinnerUnits;
 
 	public MeatConsumptionEditJPanel(MeatConsumption toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		super(toEdit, itemProviders);
@@ -42,7 +33,7 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel("Date Of Recording:", "Meat Product:", "Amount In Gr:");
+		return createLabelSubPanel("Date Of Recording:", "Meat Product:", "Units:");
 	}
 
 	@Override
@@ -61,9 +52,11 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 			return new JLabel("-");
 		});
 		p.add(comboBoxMeatProduct);
-		SpinnerModel spinnerModelAmountInGr = new SpinnerNumberModel(toEdit.getAmountInGr(), 0, 1000, 1);
-		spinnerAmountInGr = new JSpinner(spinnerModelAmountInGr);
-		p.add(spinnerAmountInGr);
+		spinnerUnits =
+			new JSpinner(
+				new SpinnerNumberModel(toEdit.getUnits() == null ? 1.0 : toEdit.getUnits().doubleValue(), 0.0, 99, 0.1)
+			);
+		p.add(spinnerUnits);
 		return p;
 	}
 
@@ -73,6 +66,6 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 			.setId(toEdit.getId())
 			.setDateOfRecording(DateTimeUtil.dateFromString(textFieldDateOfRecording.getText()))
 			.setMeatProduct(((MeatProduct) comboBoxMeatProduct.getSelectedItem()))
-			.setAmountInGr((Integer) spinnerAmountInGr.getValue());
+			.setUnits(new BigDecimal(((Number) spinnerUnits.getValue()).doubleValue()));
 	}
 }

@@ -532,4 +532,9 @@
             WHERE MEAT_CONSUMPTION.MEAT_PRODUCT IS NOT NULL
         </sql>
     </changeSet>
+    <changeSet author="ollie" id="Rename-AMOUNT_IN_GR-to-UNITS-and-Change-Type-in-Table-MEAT_CONSUMPTION" objectQuotingStrategy="LEGACY">
+        <renameColumn tableName="MEAT_CONSUMPTION" oldColumnName="AMOUNT_IN_GR" newColumnName="UNITS" columnDataType="INTEGER"/>
+        <modifyDataType tableName="MEAT_CONSUMPTION" columnName="UNITS" newDataType="NUMERIC(5, 2)"/>
+        <addDefaultValue tableName="MEAT_CONSUMPTION" columnName="UNITS" columnDataType="NUMERIC(5, 2)" defaultValueNumeric="1.0"/>
+    </changeSet>
 </databaseChangeLog>

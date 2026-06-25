@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.persistence.jpa.repository;
 
 import de.ollie.healthtracker.persistence.jpa.dbo.MeatConsumptionDbo;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;

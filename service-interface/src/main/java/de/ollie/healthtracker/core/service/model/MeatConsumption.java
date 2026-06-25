@@ -1,5 +1,6 @@
 package de.ollie.healthtracker.core.service.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 import lombok.Data;
@@ -19,5 +20,5 @@ public class MeatConsumption {
 	private UUID id;
 	private LocalDate dateOfRecording;
 	private MeatProduct meatProduct;
-	private int amountInGr;
+	private BigDecimal units = new BigDecimal("1.0");
 }

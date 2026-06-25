@@ -3,6 +3,7 @@ package de.ollie.healthtracker.core.service.port.persistence;
 import de.ollie.healthtracker.core.service.model.MeatConsumption;
 import de.ollie.healthtracker.core.service.model.MeatProduct;
 import jakarta.inject.Named;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ import lombok.Generated;
 @Generated
 @Named
 public interface MeatConsumptionPersistencePort {
-	MeatConsumption create(LocalDate dateOfRecording, MeatProduct meatProduct, int amountInGr);
+	MeatConsumption create(LocalDate dateOfRecording, MeatProduct meatProduct, BigDecimal units);
 
 	void deleteById(UUID id);
 

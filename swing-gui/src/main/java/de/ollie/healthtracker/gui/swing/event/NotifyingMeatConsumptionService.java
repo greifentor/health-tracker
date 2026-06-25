@@ -3,6 +3,7 @@ package de.ollie.healthtracker.gui.swing.event;
 import de.ollie.healthtracker.core.service.MeatConsumptionService;
 import de.ollie.healthtracker.core.service.model.MeatConsumption;
 import de.ollie.healthtracker.core.service.model.MeatProduct;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +27,8 @@ public class NotifyingMeatConsumptionService implements MeatConsumptionService {
 	}
 
 	@Override
-	public MeatConsumption createMeatConsumption(LocalDate dateOfRecording, MeatProduct meatProduct, int amountInGr) {
-		MeatConsumption created = delegate.createMeatConsumption(dateOfRecording, meatProduct, amountInGr);
+	public MeatConsumption createMeatConsumption(LocalDate dateOfRecording, MeatProduct meatProduct, BigDecimal units) {
+		MeatConsumption created = delegate.createMeatConsumption(dateOfRecording, meatProduct, units);
 		changeNotifier.notifyChanged();
 		return created;
 	}
