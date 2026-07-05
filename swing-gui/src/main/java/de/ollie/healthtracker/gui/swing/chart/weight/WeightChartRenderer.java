@@ -8,6 +8,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Stroke;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -39,7 +40,8 @@ class WeightChartRenderer {
 		int width,
 		int height,
 		List<WeightChartData> data,
-		int daysInMonth,
+		int days,
+		LocalDate windowEndDate,
 		double minWeight,
 		double maxWeight
 	) {
@@ -51,11 +53,11 @@ class WeightChartRenderer {
 			return;
 		}
 		drawValueGridAndLabels(g2, plotLeft, plotRight, plotTop, plotBottom, minWeight, maxWeight);
-		drawDayGridAndLabels(g2, plotLeft, plotRight, plotTop, plotBottom, daysInMonth);
+		drawDayGridAndLabels(g2, plotLeft, plotRight, plotTop, plotBottom, days, windowEndDate);
 		g2.setColor(COLOR_AXIS);
 		g2.drawLine(plotLeft, plotTop, plotLeft, plotBottom);
 		g2.drawLine(plotLeft, plotBottom, plotRight, plotBottom);
-		drawWeightLine(g2, plotLeft, plotRight, plotTop, plotBottom, data, daysInMonth, minWeight, maxWeight);
+		drawWeightLine(g2, plotLeft, plotRight, plotTop, plotBottom, data, days, minWeight, maxWeight);
 		drawLegend(g2, plotLeft, height - LEGEND_HEIGHT);
 	}
 
@@ -81,25 +83,30 @@ class WeightChartRenderer {
 		}
 	}
 
-	/** A vertical grid line and a centered day label for the first day, every {@value #DAY_LABEL_STEP}th day and the last. */
+	/**
+	 * A vertical grid line and a centered day-of-month label for the first day position, every
+	 * {@value #DAY_LABEL_STEP}th position and the last. The label is derived from {@code windowEndDate}, which is the
+	 * calendar date of the last (right-most) position.
+	 */
 	private void drawDayGridAndLabels(
 		Graphics2D g2,
 		int plotLeft,
 		int plotRight,
 		int plotTop,
 		int plotBottom,
-		int daysInMonth
+		int days,
+		LocalDate windowEndDate
 	) {
 		FontMetrics fm = g2.getFontMetrics();
-		for (int day = 1; day <= daysInMonth; day++) {
-			if (day != 1 && day != daysInMonth && day % DAY_LABEL_STEP != 0) {
+		for (int position = 1; position <= days; position++) {
+			if (position != 1 && position != days && position % DAY_LABEL_STEP != 0) {
 				continue;
 			}
-			int x = xForDay(plotLeft, plotRight, day, daysInMonth);
+			int x = xForDay(plotLeft, plotRight, position, days);
 			g2.setColor(COLOR_GRID);
 			g2.drawLine(x, plotTop, x, plotBottom);
 			g2.setColor(COLOR_AXIS);
-			String label = Integer.toString(day);
+			String label = Integer.toString(windowEndDate.minusDays((long) days - position).getDayOfMonth());
 			g2.drawString(label, x - fm.stringWidth(label) / 2, plotBottom + fm.getAscent() + LABEL_GAP);
 		}
 	}

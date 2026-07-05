@@ -6,6 +6,7 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 import de.ollie.healthtracker.gui.swing.event.WeightMeasurementChangeNotifier;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Supplier;
 import javax.swing.JButton;
@@ -16,8 +17,9 @@ import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
 /**
- * An internal frame that displays a {@link WeightChartJComponent} for the daily weight measurements of a month, using
- * the given (configurable) value range. The chart is (re)loaded from {@code dataSupplier} when the frame opens and again
+ * An internal frame that displays a {@link WeightChartJComponent} for the daily weight measurements of the last
+ * {@code days} days (ending today), using the given (configurable) value range. The chart is (re)loaded from
+ * {@code dataSupplier} when the frame opens and again
  * whenever the {@link WeightMeasurementChangeNotifier} signals a change, so it stays in sync with the weight measurement
  * data. The change listener is removed again when the frame is closed.
  */
@@ -26,7 +28,7 @@ public class WeightChartJInternalFrame extends JInternalFrame {
 	public WeightChartJInternalFrame(
 		JDesktopPane desktopPane,
 		Supplier<List<WeightChartData>> dataSupplier,
-		int daysInMonth,
+		int days,
 		double minWeight,
 		double maxWeight,
 		WeightMeasurementChangeNotifier changeNotifier
@@ -34,8 +36,8 @@ public class WeightChartJInternalFrame extends JInternalFrame {
 		super("Weight Chart", true, true, true, true);
 		WeightChartJComponent chart = new WeightChartJComponent();
 		chart.setValueRange(minWeight, maxWeight);
-		chart.setData(dataSupplier.get(), daysInMonth);
-		Runnable changeListener = () -> chart.setData(dataSupplier.get(), daysInMonth);
+		Runnable changeListener = () -> chart.setData(dataSupplier.get(), days, LocalDate.now());
+		changeListener.run();
 		changeNotifier.addListener(changeListener);
 		addInternalFrameListener(
 			new InternalFrameAdapter() {

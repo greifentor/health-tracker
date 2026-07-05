@@ -6,6 +6,7 @@ import de.ollie.healthtracker.gui.swing.chart.PlotArea;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.time.LocalDate;
 
 /**
  * Draws the static raster of the blood pressure chart: the horizontal value grid with its y-axis labels, the vertical
@@ -20,9 +21,9 @@ class BloodPressureChartGridRenderer {
 	private static final Color COLOR_AXIS = Color.DARK_GRAY;
 	private static final Color COLOR_GRID = new Color(0xE0E0E0);
 
-	void draw(Graphics2D g2, PlotArea area, int daysInMonth) {
+	void draw(Graphics2D g2, PlotArea area, int days, LocalDate windowEndDate) {
 		drawValueGridAndLabels(g2, area);
-		drawDayGridAndLabels(g2, area, daysInMonth);
+		drawDayGridAndLabels(g2, area, days, windowEndDate);
 		g2.setColor(COLOR_AXIS);
 		g2.drawLine(area.left(), area.top(), area.left(), area.bottom());
 		g2.drawLine(area.left(), area.bottom(), area.right(), area.bottom());
@@ -41,18 +42,22 @@ class BloodPressureChartGridRenderer {
 		}
 	}
 
-	/** A vertical grid line and a centered day label for the first day, every {@value #DAY_LABEL_STEP}th day and the last. */
-	private void drawDayGridAndLabels(Graphics2D g2, PlotArea area, int daysInMonth) {
+	/**
+	 * A vertical grid line and a centered day-of-month label for the first day position, every
+	 * {@value #DAY_LABEL_STEP}th position and the last. The label is derived from {@code windowEndDate}, which is the
+	 * calendar date of the last (right-most) position.
+	 */
+	private void drawDayGridAndLabels(Graphics2D g2, PlotArea area, int days, LocalDate windowEndDate) {
 		FontMetrics fm = g2.getFontMetrics();
-		for (int day = 1; day <= daysInMonth; day++) {
-			if (day != 1 && day != daysInMonth && day % DAY_LABEL_STEP != 0) {
+		for (int position = 1; position <= days; position++) {
+			if (position != 1 && position != days && position % DAY_LABEL_STEP != 0) {
 				continue;
 			}
-			int x = area.xFor(day - 1, daysInMonth);
+			int x = area.xFor(position - 1, days);
 			g2.setColor(COLOR_GRID);
 			g2.drawLine(x, area.top(), x, area.bottom());
 			g2.setColor(COLOR_AXIS);
-			String label = Integer.toString(day);
+			String label = Integer.toString(windowEndDate.minusDays((long) days - position).getDayOfMonth());
 			g2.drawString(label, x - fm.stringWidth(label) / 2, area.bottom() + fm.getAscent() + LABEL_GAP);
 		}
 	}

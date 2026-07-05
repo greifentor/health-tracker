@@ -5,6 +5,7 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
 import de.ollie.healthtracker.core.service.AlcoholConsumptionService;
 import de.ollie.healthtracker.core.service.AlcoholProductService;
+import de.ollie.healthtracker.core.service.BloodPressureMeasurementHistoryService;
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.BodyPartService;
 import de.ollie.healthtracker.core.service.CommentService;
@@ -15,6 +16,7 @@ import de.ollie.healthtracker.core.service.DoctorTypeService;
 import de.ollie.healthtracker.core.service.ExerciseService;
 import de.ollie.healthtracker.core.service.GeneralBodyPartService;
 import de.ollie.healthtracker.core.service.ManufacturerService;
+import de.ollie.healthtracker.core.service.MeatConsumptionHistoryService;
 import de.ollie.healthtracker.core.service.MeatConsumptionService;
 import de.ollie.healthtracker.core.service.MeatProductService;
 import de.ollie.healthtracker.core.service.MeatTypeService;
@@ -25,6 +27,7 @@ import de.ollie.healthtracker.core.service.MedicationUnitService;
 import de.ollie.healthtracker.core.service.NutritionClassCalculationService;
 import de.ollie.healthtracker.core.service.ReportPrintService;
 import de.ollie.healthtracker.core.service.SymptomService;
+import de.ollie.healthtracker.core.service.WeightMeasurementHistoryService;
 import de.ollie.healthtracker.core.service.WeightMeasurementService;
 import de.ollie.healthtracker.core.service.WhoBloodPressureClassificationService;
 import de.ollie.healthtracker.core.service.model.MeatCategory;
@@ -88,14 +91,20 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.springframework.beans.factory.annotation.Value;
 
 @Named
 @RequiredArgsConstructor
 public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 
+	/** Number of days shown on the x-axis of the blood pressure and weight charts (ending today), configurable via the {@code chart.window.days} property. */
+	@Value("${chart.window.days:31}")
+	private int chartWindowDays;
+
 	private final AlcoholConsumptionService alcoholConsumptionService;
 	private final AlcoholProductService alcoholProductService;
 	private final BloodPressureMeasurementChangeNotifier bloodPressureMeasurementChangeNotifier;
+	private final BloodPressureMeasurementHistoryService bloodPressureMeasurementHistoryService;
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final BodyPartService bodyPartService;
 	private final CommentService commentService;
@@ -108,6 +117,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final GeneralBodyPartService generalBodyPartService;
 	private final ManufacturerService manufacturerService;
 	private final MeatConsumptionChangeNotifier meatConsumptionChangeNotifier;
+	private final MeatConsumptionHistoryService meatConsumptionHistoryService;
 	private final MeatConsumptionService meatConsumptionService;
 	private final MeatProductService meatProductService;
 	private final MeatTypeService meatTypeService;
@@ -119,6 +129,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final ReportPrintService reportPrintService;
 	private final SymptomService symptomService;
 	private final WeightMeasurementChangeNotifier weightMeasurementChangeNotifier;
+	private final WeightMeasurementHistoryService weightMeasurementHistoryService;
 	private final WeightMeasurementService weightMeasurementService;
 	private final WhoBloodPressureClassificationService whoBloodPressureClassificationService;
 	private final EditDialogComponentFactory editDialogComponentFactory;
@@ -480,7 +491,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			new BloodPressureChartJInternalFrame(
 				desktopPane,
 				this::createBloodPressureChartData,
-				LocalDate.now().lengthOfMonth(),
+				chartWindowDays,
 				bloodPressureMeasurementChangeNotifier
 			);
 		} else if (e.getSource() == menuItemFileShowNutritionChart) {
@@ -489,7 +500,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			new WeightChartJInternalFrame(
 				desktopPane,
 				this::createWeightChartData,
-				LocalDate.now().lengthOfMonth(),
+				chartWindowDays,
 				70.0,
 				100.0,
 				weightMeasurementChangeNotifier
@@ -499,51 +510,51 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		}
 	}
 
+	/** Maps a date to its 1-based position within the {@code chartWindowDays}-day window ending today (today = last). */
+	private int windowPosition(LocalDate date, LocalDate today) {
+		return chartWindowDays - (int) (today.toEpochDay() - date.toEpochDay());
+	}
+
 	private List<WeightChartData> createWeightChartData() {
-		LocalDate now = LocalDate.now();
-		LocalDate from = now.withDayOfMonth(1);
-		LocalDate to = now.withDayOfMonth(now.lengthOfMonth());
-		// Sum weight per day of month, then average. Index: [kgSum, count].
-		Map<Integer, double[]> perDay = new HashMap<>();
-		weightMeasurementService
-			.listWeightMeasurements()
+		LocalDate today = LocalDate.now();
+		// Average the weight per day over the last chartWindowDays days. Index: [kgSum, count].
+		Map<LocalDate, double[]> perDay = new HashMap<>();
+		weightMeasurementHistoryService
+			.findAllOfLastDays(chartWindowDays - 1)
 			.forEach(wm -> {
-				LocalDate date = wm.getDateOfRecording();
-				if (date == null || wm.getKg() == null || date.isBefore(from) || date.isAfter(to)) {
+				if (wm.getKg() == null) {
 					return;
 				}
-				double[] sums = perDay.computeIfAbsent(date.getDayOfMonth(), d -> new double[2]);
+				double[] sums = perDay.computeIfAbsent(wm.getDateOfRecording(), d -> new double[2]);
 				sums[0] += wm.getKg().doubleValue();
 				sums[1]++;
 			});
 		List<WeightChartData> result = new ArrayList<>();
-		perDay.forEach((day, sums) -> result.add(new WeightChartData(day, sums[0] / sums[1])));
+		perDay.forEach((date, sums) -> result.add(new WeightChartData(windowPosition(date, today), sums[0] / sums[1])));
 		return result;
 	}
 
 	private List<BloodPressureChartData> createBloodPressureChartData() {
-		LocalDate now = LocalDate.now();
-		LocalDate from = now.withDayOfMonth(1);
-		LocalDate to = now.withDayOfMonth(now.lengthOfMonth());
-		// Sum sys / dia / pulse per day of month, then average. Index: [sysSum, diaSum, pulseSum, count].
-		Map<Integer, int[]> perDay = new HashMap<>();
-		bloodPressureMeasurementService
-			.findAllBloodPressureMeasurementsByTimeInterval(from, to)
+		LocalDate today = LocalDate.now();
+		// Average sys / dia / pulse per day over the last chartWindowDays days. Index: [sysSum, diaSum, pulseSum, count].
+		Map<LocalDate, int[]> perDay = new HashMap<>();
+		bloodPressureMeasurementHistoryService
+			.findAllOfLastDays(chartWindowDays - 1)
 			.forEach(bpm -> {
-				int[] sums = perDay.computeIfAbsent(bpm.getDateOfRecording().getDayOfMonth(), d -> new int[4]);
+				int[] sums = perDay.computeIfAbsent(bpm.getDateOfRecording(), d -> new int[4]);
 				sums[0] += bpm.getSysMmHg();
 				sums[1] += bpm.getDiaMmHg();
 				sums[2] += bpm.getPulsePerMinute();
 				sums[3]++;
 			});
 		List<BloodPressureChartData> result = new ArrayList<>();
-		perDay.forEach((day, sums) -> {
+		perDay.forEach((date, sums) -> {
 			int sys = Math.round((float) sums[0] / sums[3]);
 			int dia = Math.round((float) sums[1] / sums[3]);
 			int pulse = Math.round((float) sums[2] / sums[3]);
 			result.add(
 				new BloodPressureChartData(
-					day,
+					windowPosition(date, today),
 					sys,
 					dia,
 					pulse,
@@ -557,8 +568,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private List<NutritionChartData> createNutritionChartData() {
 		// Classify each recording day as meat / fish day (same logic as the meat consumption print).
 		Map<LocalDate, MeatConsumptionStaticRecord> dataPerDay = new HashMap<>();
-		meatConsumptionService
-			.listMeatConsumptions()
+		meatConsumptionHistoryService
+			.findAllOfLastDays(366)
 			.forEach(mc ->
 				dataPerDay
 					.computeIfAbsent(mc.getDateOfRecording(), d -> new MeatConsumptionStaticRecord())

@@ -17,4 +17,14 @@ public interface BloodPressureMeasurementDboRepository extends JpaRepository<Blo
 		"SELECT dbo FROM BloodPressureMeasurementDbo dbo WHERE dbo.dateOfRecording >= :from AND dbo.dateOfRecording <= :until ORDER BY dbo.dateOfRecording DESC, dbo.timeOfRecording DESC"
 	)
 	List<BloodPressureMeasurementDbo> findAllBetweenDates(LocalDate from, LocalDate until);
+
+	@Query(
+		"SELECT dbo FROM BloodPressureMeasurementDbo dbo WHERE dbo.dateOfRecording >= :from ORDER BY dbo.dateOfRecording DESC, dbo.timeOfRecording DESC"
+	)
+	List<BloodPressureMeasurementDbo> findAllSince(LocalDate from);
+
+	/** Returns the measurements recorded within the last {@code days} days (dateOfRecording on or after today - days). */
+	default List<BloodPressureMeasurementDbo> findAllOfLastDays(int days) {
+		return findAllSince(LocalDate.now().minusDays(days));
+	}
 }

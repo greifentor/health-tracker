@@ -6,6 +6,7 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 import de.ollie.healthtracker.gui.swing.event.BloodPressureMeasurementChangeNotifier;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Supplier;
 import javax.swing.JButton;
@@ -16,8 +17,8 @@ import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
 /**
- * An internal frame that displays a {@link BloodPressureChartJComponent} for the daily blood pressure values of a month.
- * The chart is (re)loaded from {@code dataSupplier} when the frame opens and again whenever the
+ * An internal frame that displays a {@link BloodPressureChartJComponent} for the daily blood pressure values of the last
+ * {@code days} days (ending today). The chart is (re)loaded from {@code dataSupplier} when the frame opens and again whenever the
  * {@link BloodPressureMeasurementChangeNotifier} signals a change, so it stays in sync with the measurement data. The
  * change listener is removed again when the frame is closed.
  */
@@ -26,13 +27,13 @@ public class BloodPressureChartJInternalFrame extends JInternalFrame {
 	public BloodPressureChartJInternalFrame(
 		JDesktopPane desktopPane,
 		Supplier<List<BloodPressureChartData>> dataSupplier,
-		int daysInMonth,
+		int days,
 		BloodPressureMeasurementChangeNotifier changeNotifier
 	) {
 		super("Blood Pressure Chart", true, true, true, true);
 		BloodPressureChartJComponent chart = new BloodPressureChartJComponent();
-		chart.setData(dataSupplier.get(), daysInMonth);
-		Runnable changeListener = () -> chart.setData(dataSupplier.get(), daysInMonth);
+		Runnable changeListener = () -> chart.setData(dataSupplier.get(), days, LocalDate.now());
+		changeListener.run();
 		changeNotifier.addListener(changeListener);
 		addInternalFrameListener(
 			new InternalFrameAdapter() {
