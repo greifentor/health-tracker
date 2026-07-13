@@ -80,6 +80,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -189,6 +190,34 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		}
 		setTitle("Health-Tracker");
 		setVisible(true);
+		// Once the maximized layout is applied and the desktop pane has its real size, open the three
+		// standard charts and stack them on top of each other.
+		SwingUtilities.invokeLater(this::openInitialCharts);
+	}
+
+	private void openInitialCharts() {
+		JInternalFrame[] charts = {
+			new WeightChartJInternalFrame(
+				desktopPane,
+				this::createWeightChartData,
+				chartWindowDays,
+				70.0,
+				100.0,
+				weightMeasurementChangeNotifier
+			),
+			new BloodPressureChartJInternalFrame(
+				desktopPane,
+				this::createBloodPressureChartData,
+				chartWindowDays,
+				bloodPressureMeasurementChangeNotifier
+			),
+			new NutritionChartJInternalFrame(desktopPane, this::createNutritionChartData, meatConsumptionChangeNotifier),
+		};
+		int width = 700;
+		int height = desktopPane.getHeight() / charts.length;
+		for (int i = 0; i < charts.length; i++) {
+			charts[i].setBounds(0, i * height, width, height);
+		}
 	}
 
 	private JMenuBar createJMenuBar() {

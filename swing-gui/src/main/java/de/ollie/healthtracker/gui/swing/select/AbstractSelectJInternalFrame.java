@@ -19,8 +19,15 @@ public abstract class AbstractSelectJInternalFrame<T> extends JInternalFrame imp
 		this.editDialogComponentFactory = editDialogComponentFactory;
 	}
 
+	/** Pixels each newly opened dialog is shifted relative to the previous one (cascade). */
+	private static final int CASCADE_STEP = 25;
+
+	/** Number of dialogs after which the cascade offset wraps back to the base position, so it stays on screen. */
+	private static final int CASCADE_WRAP = 8;
+
 	protected void finishConstruct() {
-		setBounds(10, 10, 600, 400);
+		int offset = (countOpenSelectFrames() % CASCADE_WRAP) * CASCADE_STEP;
+		setBounds(10 + offset, 10 + offset, 600, 400);
 		setContentPane(createSelectPanel());
 		desktopPane.add(this);
 		try {
@@ -29,6 +36,17 @@ public abstract class AbstractSelectJInternalFrame<T> extends JInternalFrame imp
 			e.printStackTrace();
 		}
 		setVisible(true);
+	}
+
+	/** Counts the select dialogs currently open on the desktop pane (excluding this one), used for the cascade offset. */
+	private int countOpenSelectFrames() {
+		int count = 0;
+		for (JInternalFrame frame : desktopPane.getAllFrames()) {
+			if (frame != this && frame instanceof AbstractSelectJInternalFrame) {
+				count++;
+			}
+		}
+		return count;
 	}
 
 	protected abstract AbstractSelectJPanel<T> createSelectPanel();
