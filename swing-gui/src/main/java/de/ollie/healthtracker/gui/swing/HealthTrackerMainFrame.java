@@ -176,7 +176,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		setJMenuBar(createJMenuBar());
 		setContentPane(mainPanel);
 		// Restore bounds when the window is un-maximized ...
-		setBounds(100, 100, 800, 800);
+		setBounds(100, 100, 1400, 800);
 		// ... but start maximized to fill the whole screen.
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
 	}
@@ -213,10 +213,10 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			),
 			new NutritionChartJInternalFrame(desktopPane, this::createNutritionChartData, meatConsumptionChangeNotifier),
 		};
-		int width = 700;
-		int height = desktopPane.getHeight() / charts.length;
+		int width = desktopPane.getWidth() / charts.length;
+		int height = 600;
 		for (int i = 0; i < charts.length; i++) {
-			charts[i].setBounds(0, i * height, width, height);
+			charts[i].setBounds(i * width, 0, width, height);
 		}
 	}
 
