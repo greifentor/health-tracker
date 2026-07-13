@@ -174,7 +174,10 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		mainPanel.add(desktopPane, BorderLayout.CENTER);
 		setJMenuBar(createJMenuBar());
 		setContentPane(mainPanel);
+		// Restore bounds when the window is un-maximized ...
 		setBounds(100, 100, 800, 800);
+		// ... but start maximized to fill the whole screen.
+		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
 	}
 
 	public void showFrame() {
