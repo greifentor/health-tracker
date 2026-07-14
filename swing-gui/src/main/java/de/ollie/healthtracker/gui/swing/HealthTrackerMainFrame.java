@@ -25,6 +25,7 @@ import de.ollie.healthtracker.core.service.MedicationPlanService;
 import de.ollie.healthtracker.core.service.MedicationService;
 import de.ollie.healthtracker.core.service.MedicationUnitService;
 import de.ollie.healthtracker.core.service.NutritionClassCalculationService;
+import de.ollie.healthtracker.core.service.OpenTaskService;
 import de.ollie.healthtracker.core.service.ReportPrintService;
 import de.ollie.healthtracker.core.service.SymptomService;
 import de.ollie.healthtracker.core.service.WeightMeasurementHistoryService;
@@ -45,6 +46,7 @@ import de.ollie.healthtracker.gui.swing.event.NotifyingMeatConsumptionService;
 import de.ollie.healthtracker.gui.swing.event.NotifyingWeightMeasurementService;
 import de.ollie.healthtracker.gui.swing.event.WeightMeasurementChangeNotifier;
 import de.ollie.healthtracker.gui.swing.external.viewer.pdf.ExternalPdfViewerStarter;
+import de.ollie.healthtracker.gui.swing.opentask.OpenTaskJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.alcoholconsumption.AlcoholConsumptionSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.alcoholproduct.AlcoholProductSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement.BloodPressureMeasurementSelectJInternalFrame;
@@ -75,6 +77,8 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,6 +92,8 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -127,6 +133,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final MedicationService medicationService;
 	private final MedicationUnitService medicationUnitService;
 	private final NutritionClassCalculationService nutritionClassCalculationService;
+	private final OpenTaskService openTaskService;
 	private final ReportPrintService reportPrintService;
 	private final SymptomService symptomService;
 	private final WeightMeasurementChangeNotifier weightMeasurementChangeNotifier;
@@ -165,6 +172,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemFileQuit;
 	private JMenuItem menuItemFileShowBloodPressureChart;
 	private JMenuItem menuItemFileShowNutritionChart;
+	private JMenuItem menuItemFileShowOpenTasks;
 	private JMenuItem menuItemFileShowWeightChart;
 
 	@PostConstruct
@@ -218,6 +226,15 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		for (int i = 0; i < charts.length; i++) {
 			charts[i].setBounds(i * width, 0, width, height);
 		}
+		// Only pop up the open task dialog when there actually are open tasks to show.
+		if (!openTaskService.findAllOpenTasks().isEmpty()) {
+			new OpenTaskJInternalFrame(
+				desktopPane,
+				openTaskService,
+				bloodPressureMeasurementChangeNotifier,
+				weightMeasurementChangeNotifier
+			);
+		}
 	}
 
 	private JMenuBar createJMenuBar() {
@@ -232,6 +249,11 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemFilePrintBPM);
 		menuItemFilePrintMeatConsumptionStatistic = createMenuItem("Print Meat Consumption", this);
 		menu.add(menuItemFilePrintMeatConsumptionStatistic);
+		menu.add(new JSeparator());
+		menuItemFileQuit = createMenuItem("Quit", this);
+		menu.add(menuItemFileQuit);
+		menuBar.add(menu);
+		menu = new JMenu("Show");
 		menuItemFileShowBloodPressureChart = createMenuItem("Show Blood Pressure Chart", this);
 		menu.add(menuItemFileShowBloodPressureChart);
 		menuItemFileShowNutritionChart = createMenuItem("Show Nutrition Chart", this);
@@ -239,8 +261,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menuItemFileShowWeightChart = createMenuItem("Show Weight Chart", this);
 		menu.add(menuItemFileShowWeightChart);
 		menu.add(new JSeparator());
-		menuItemFileQuit = createMenuItem("Quit", this);
-		menu.add(menuItemFileQuit);
+		menuItemFileShowOpenTasks = createMenuItem("Show Open Tasks", this);
+		menu.add(menuItemFileShowOpenTasks);
 		menuBar.add(menu);
 		menu = new JMenu("Edit");
 		menuItemEditBloodPressureMeasurement = createMenuItem("Blood Pressure Measurement", this);
@@ -300,7 +322,62 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menuItemDuplicateLastSymtoms = createMenuItem("Duplicate Last Symptoms", this);
 		menu.add(menuItemDuplicateLastSymtoms);
 		menuBar.add(menu);
+		menuBar.add(createWindowMenu());
 		return menuBar;
+	}
+
+	/**
+	 * Creates the "Window" menu. It is (re)populated with the internal frames currently open on the desktop pane every
+	 * time it is selected, so it always reflects the current state. Selecting an entry brings the corresponding frame to
+	 * the front.
+	 */
+	private JMenu createWindowMenu() {
+		JMenu windowMenu = new JMenu("Window");
+		windowMenu.addMenuListener(
+			new MenuListener() {
+				@Override
+				public void menuSelected(MenuEvent e) {
+					windowMenu.removeAll();
+					JInternalFrame[] frames = desktopPane.getAllFrames();
+					if (frames.length == 0) {
+						JMenuItem emptyItem = new JMenuItem("(no windows open)");
+						emptyItem.setEnabled(false);
+						windowMenu.add(emptyItem);
+						return;
+					}
+					Arrays.sort(frames, Comparator.comparing(JInternalFrame::getTitle, String.CASE_INSENSITIVE_ORDER));
+					for (JInternalFrame frame : frames) {
+						JMenuItem item = new JMenuItem(frame.getTitle());
+						item.addActionListener(ev -> bringToFront(frame));
+						windowMenu.add(item);
+					}
+				}
+
+				@Override
+				public void menuDeselected(MenuEvent e) {
+					// nothing to do
+				}
+
+				@Override
+				public void menuCanceled(MenuEvent e) {
+					// nothing to do
+				}
+			}
+		);
+		return windowMenu;
+	}
+
+	/** Brings the given internal frame to the front, de-iconifying and selecting it. */
+	private void bringToFront(JInternalFrame frame) {
+		try {
+			if (frame.isIcon()) {
+				frame.setIcon(false);
+			}
+			frame.moveToFront();
+			frame.setSelected(true);
+		} catch (java.beans.PropertyVetoException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private JMenuItem createMenuItem(String text, ActionListener listener) {
@@ -525,6 +602,13 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				this::createBloodPressureChartData,
 				chartWindowDays,
 				bloodPressureMeasurementChangeNotifier
+			);
+		} else if (e.getSource() == menuItemFileShowOpenTasks) {
+			new OpenTaskJInternalFrame(
+				desktopPane,
+				openTaskService,
+				bloodPressureMeasurementChangeNotifier,
+				weightMeasurementChangeNotifier
 			);
 		} else if (e.getSource() == menuItemFileShowNutritionChart) {
 			new NutritionChartJInternalFrame(desktopPane, this::createNutritionChartData, meatConsumptionChangeNotifier);
