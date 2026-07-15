@@ -115,6 +115,10 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	@Value("${chart.window.days:31}")
 	private int chartWindowDays;
 
+	/** Application version, injected from the (Maven-filtered) {@code app.version} property, i.e. the pom.xml project version. */
+	@Value("${app.version}")
+	private String appVersion;
+
 	private final AlcoholConsumptionService alcoholConsumptionService;
 	private final AlcoholProductService alcoholProductService;
 	private final BloodPressureMeasurementChangeNotifier bloodPressureMeasurementChangeNotifier;
@@ -208,7 +212,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		setTitle("Health-Tracker");
+		setTitle("Health-Tracker (Version %app.version%)".replace("%app.version%", appVersion));
 		setVisible(true);
 		// Once the maximized layout is applied and the desktop pane has its real size, open the three
 		// standard charts and stack them on top of each other.
