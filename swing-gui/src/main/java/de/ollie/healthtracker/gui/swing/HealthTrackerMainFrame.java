@@ -8,6 +8,8 @@ import de.ollie.healthtracker.core.service.AlcoholProductService;
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementHistoryService;
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.BodyPartService;
+import de.ollie.healthtracker.core.service.BodyTemperatureMeasurementHistoryService;
+import de.ollie.healthtracker.core.service.BodyTemperatureMeasurementService;
 import de.ollie.healthtracker.core.service.CommentService;
 import de.ollie.healthtracker.core.service.CommentTypeService;
 import de.ollie.healthtracker.core.service.DoctorConsultationService;
@@ -35,13 +37,17 @@ import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.NutritionCalculationData;
 import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartData;
 import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartJInternalFrame;
+import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartData;
+import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartData;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartData;
 import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.event.BloodPressureMeasurementChangeNotifier;
+import de.ollie.healthtracker.gui.swing.event.BodyTemperatureMeasurementChangeNotifier;
 import de.ollie.healthtracker.gui.swing.event.MeatConsumptionChangeNotifier;
 import de.ollie.healthtracker.gui.swing.event.NotifyingBloodPressureMeasurementService;
+import de.ollie.healthtracker.gui.swing.event.NotifyingBodyTemperatureMeasurementService;
 import de.ollie.healthtracker.gui.swing.event.NotifyingMeatConsumptionService;
 import de.ollie.healthtracker.gui.swing.event.NotifyingWeightMeasurementService;
 import de.ollie.healthtracker.gui.swing.event.WeightMeasurementChangeNotifier;
@@ -51,6 +57,7 @@ import de.ollie.healthtracker.gui.swing.select.alcoholconsumption.AlcoholConsump
 import de.ollie.healthtracker.gui.swing.select.alcoholproduct.AlcoholProductSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement.BloodPressureMeasurementSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.bodypart.BodyPartSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.bodytemperaturemeasurement.BodyTemperatureMeasurementSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.comment.CommentSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.commenttype.CommentTypeSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.doctor.DoctorSelectJInternalFrame;
@@ -114,6 +121,9 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final BloodPressureMeasurementHistoryService bloodPressureMeasurementHistoryService;
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final BodyPartService bodyPartService;
+	private final BodyTemperatureMeasurementChangeNotifier bodyTemperatureMeasurementChangeNotifier;
+	private final BodyTemperatureMeasurementHistoryService bodyTemperatureMeasurementHistoryService;
+	private final BodyTemperatureMeasurementService bodyTemperatureMeasurementService;
 	private final CommentService commentService;
 	private final CommentTypeService commentTypeService;
 	private final DoctorConsultationService doctorConsultationService;
@@ -148,6 +158,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemEditAlcoholProduct;
 	private JMenuItem menuItemEditBloodPressureMeasurement;
 	private JMenuItem menuItemEditBodyPart;
+	private JMenuItem menuItemEditBodyTemperatureMeasurement;
 	private JMenuItem menuItemEditComment;
 	private JMenuItem menuItemEditCommentType;
 	private JMenuItem menuItemEditDoctor;
@@ -171,6 +182,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemFilePrintMeatConsumptionStatistic;
 	private JMenuItem menuItemFileQuit;
 	private JMenuItem menuItemFileShowBloodPressureChart;
+	private JMenuItem menuItemFileShowBodyTemperatureChart;
 	private JMenuItem menuItemFileShowNutritionChart;
 	private JMenuItem menuItemFileShowOpenTasks;
 	private JMenuItem menuItemFileShowWeightChart;
@@ -219,6 +231,14 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				chartWindowDays,
 				bloodPressureMeasurementChangeNotifier
 			),
+			new BodyTemperatureChartJInternalFrame(
+				desktopPane,
+				this::createBodyTemperatureChartData,
+				chartWindowDays,
+				34.0,
+				43.0,
+				bodyTemperatureMeasurementChangeNotifier
+			),
 			new NutritionChartJInternalFrame(desktopPane, this::createNutritionChartData, meatConsumptionChangeNotifier),
 		};
 		int width = desktopPane.getWidth() / charts.length;
@@ -232,6 +252,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				desktopPane,
 				openTaskService,
 				bloodPressureMeasurementChangeNotifier,
+				bodyTemperatureMeasurementChangeNotifier,
 				weightMeasurementChangeNotifier
 			);
 		}
@@ -256,6 +277,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu = new JMenu("Show");
 		menuItemFileShowBloodPressureChart = createMenuItem("Show Blood Pressure Chart", this);
 		menu.add(menuItemFileShowBloodPressureChart);
+		menuItemFileShowBodyTemperatureChart = createMenuItem("Show Body Temperature Chart", this);
+		menu.add(menuItemFileShowBodyTemperatureChart);
 		menuItemFileShowNutritionChart = createMenuItem("Show Nutrition Chart", this);
 		menu.add(menuItemFileShowNutritionChart);
 		menuItemFileShowWeightChart = createMenuItem("Show Weight Chart", this);
@@ -267,6 +290,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu = new JMenu("Edit");
 		menuItemEditBloodPressureMeasurement = createMenuItem("Blood Pressure Measurement", this);
 		menu.add(menuItemEditBloodPressureMeasurement);
+		menuItemEditBodyTemperatureMeasurement = createMenuItem("Body Temperature Measurement", this);
+		menu.add(menuItemEditBodyTemperatureMeasurement);
 		menuItemEditComment = createMenuItem("Comment", this);
 		menu.add(menuItemEditComment);
 		menuItemEditCommentType = createMenuItem("Comment Type", this);
@@ -405,6 +430,15 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				new NotifyingBloodPressureMeasurementService(
 					bloodPressureMeasurementService,
 					bloodPressureMeasurementChangeNotifier
+				),
+				desktopPane,
+				editDialogComponentFactory
+			);
+		} else if (e.getSource() == menuItemEditBodyTemperatureMeasurement) {
+			new BodyTemperatureMeasurementSelectJInternalFrame(
+				new NotifyingBodyTemperatureMeasurementService(
+					bodyTemperatureMeasurementService,
+					bodyTemperatureMeasurementChangeNotifier
 				),
 				desktopPane,
 				editDialogComponentFactory
@@ -603,11 +637,21 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				chartWindowDays,
 				bloodPressureMeasurementChangeNotifier
 			);
+		} else if (e.getSource() == menuItemFileShowBodyTemperatureChart) {
+			new BodyTemperatureChartJInternalFrame(
+				desktopPane,
+				this::createBodyTemperatureChartData,
+				chartWindowDays,
+				34.0,
+				43.0,
+				bodyTemperatureMeasurementChangeNotifier
+			);
 		} else if (e.getSource() == menuItemFileShowOpenTasks) {
 			new OpenTaskJInternalFrame(
 				desktopPane,
 				openTaskService,
 				bloodPressureMeasurementChangeNotifier,
+				bodyTemperatureMeasurementChangeNotifier,
 				weightMeasurementChangeNotifier
 			);
 		} else if (e.getSource() == menuItemFileShowNutritionChart) {
@@ -647,6 +691,27 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			});
 		List<WeightChartData> result = new ArrayList<>();
 		perDay.forEach((date, sums) -> result.add(new WeightChartData(windowPosition(date, today), sums[0] / sums[1])));
+		return result;
+	}
+
+	private List<BodyTemperatureChartData> createBodyTemperatureChartData() {
+		LocalDate today = LocalDate.now();
+		// Average the body temperature per day over the last chartWindowDays days. Index: [celsiusSum, count].
+		Map<LocalDate, double[]> perDay = new HashMap<>();
+		bodyTemperatureMeasurementHistoryService
+			.findAllOfLastDays(chartWindowDays - 1)
+			.forEach(btm -> {
+				if (btm.getCelsius() == null) {
+					return;
+				}
+				double[] sums = perDay.computeIfAbsent(btm.getDateOfRecording(), d -> new double[2]);
+				sums[0] += btm.getCelsius().doubleValue();
+				sums[1]++;
+			});
+		List<BodyTemperatureChartData> result = new ArrayList<>();
+		perDay.forEach((date, sums) ->
+			result.add(new BodyTemperatureChartData(windowPosition(date, today), sums[0] / sums[1]))
+		);
 		return result;
 	}
 

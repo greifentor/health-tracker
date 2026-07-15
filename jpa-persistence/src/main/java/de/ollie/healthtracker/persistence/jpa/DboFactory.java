@@ -9,6 +9,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.AlcoholConsumptionDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.AlcoholProductDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BodyPartDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.BodyTemperatureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorConsultationDbo;
@@ -131,6 +132,23 @@ class DboFactory {
 			.findById(generalBodyPartId)
 			.orElseThrow(() -> new NoSuchElementException("no general body part found with id: " + generalBodyPartId));
 		return new BodyPartDbo().setId(uuidFactory.create()).setGeneralBodyPart(generalBodyPart).setName(name);
+	}
+
+	BodyTemperatureMeasurementDbo createBodyTemperatureMeasurement(
+		String comment,
+		LocalDate dateOfRecording,
+		BigDecimal celsius,
+		LocalTime timeOfRecording
+	) {
+		ensure(celsius != null, "celsius cannot be null!");
+		ensure(dateOfRecording != null, "date of recording cannot be null!");
+		ensure(timeOfRecording != null, "time of recording cannot be null!");
+		return new BodyTemperatureMeasurementDbo()
+			.setComment(comment)
+			.setDateOfRecording(dateOfRecording)
+			.setId(uuidFactory.create())
+			.setCelsius(celsius)
+			.setTimeOfRecording(timeOfRecording);
 	}
 
 	CommentDbo createComment(UUID commentTypeId, String content, LocalDate dateOfRecording) {

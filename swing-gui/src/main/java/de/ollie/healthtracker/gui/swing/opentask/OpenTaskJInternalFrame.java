@@ -5,6 +5,7 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
 import de.ollie.healthtracker.core.service.OpenTaskService;
 import de.ollie.healthtracker.gui.swing.event.BloodPressureMeasurementChangeNotifier;
+import de.ollie.healthtracker.gui.swing.event.BodyTemperatureMeasurementChangeNotifier;
 import de.ollie.healthtracker.gui.swing.event.WeightMeasurementChangeNotifier;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -20,8 +21,8 @@ import javax.swing.event.InternalFrameEvent;
 
 /**
  * An internal frame that lists the open tasks provided by the {@link OpenTaskService}. The tasks are (re)loaded from the
- * service when the frame opens and again whenever a blood pressure or weight measurement changes, so the list stays in
- * sync with the underlying data. The change listeners are removed again when the frame is closed.
+ * service when the frame opens and again whenever a blood pressure, body temperature or weight measurement changes, so
+ * the list stays in sync with the underlying data. The change listeners are removed again when the frame is closed.
  */
 public class OpenTaskJInternalFrame extends JInternalFrame {
 
@@ -29,6 +30,7 @@ public class OpenTaskJInternalFrame extends JInternalFrame {
 		JDesktopPane desktopPane,
 		OpenTaskService openTaskService,
 		BloodPressureMeasurementChangeNotifier bloodPressureMeasurementChangeNotifier,
+		BodyTemperatureMeasurementChangeNotifier bodyTemperatureMeasurementChangeNotifier,
 		WeightMeasurementChangeNotifier weightMeasurementChangeNotifier
 	) {
 		super("Open Tasks", true, true, true, true);
@@ -47,12 +49,14 @@ public class OpenTaskJInternalFrame extends JInternalFrame {
 			}
 		};
 		bloodPressureMeasurementChangeNotifier.addListener(changeListener);
+		bodyTemperatureMeasurementChangeNotifier.addListener(changeListener);
 		weightMeasurementChangeNotifier.addListener(changeListener);
 		addInternalFrameListener(
 			new InternalFrameAdapter() {
 				@Override
 				public void internalFrameClosed(InternalFrameEvent e) {
 					bloodPressureMeasurementChangeNotifier.removeListener(changeListener);
+					bodyTemperatureMeasurementChangeNotifier.removeListener(changeListener);
 					weightMeasurementChangeNotifier.removeListener(changeListener);
 				}
 			}

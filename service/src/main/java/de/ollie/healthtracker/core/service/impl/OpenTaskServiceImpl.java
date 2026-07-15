@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.core.service.impl;
 
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
+import de.ollie.healthtracker.core.service.BodyTemperatureMeasurementHistoryService;
 import de.ollie.healthtracker.core.service.OpenTaskService;
 import de.ollie.healthtracker.core.service.WeightMeasurementHistoryService;
 import de.ollie.healthtracker.core.service.model.OpenTask;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 class OpenTaskServiceImpl implements OpenTaskService {
 
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
+	private final BodyTemperatureMeasurementHistoryService bodyTemperatureMeasurementHistoryService;
 	private final WeightMeasurementHistoryService weightMeasurementHistoryService;
 
 	@Override
@@ -23,10 +25,21 @@ class OpenTaskServiceImpl implements OpenTaskService {
 		if (hasNoBloodPressureMeasurementForToday()) {
 			openTasks.add(new OpenTask().setDescription("No blood pressure measurement has been recorded for today yet."));
 		}
+		if (hasNoBodyTemperatureMeasurementForToday()) {
+			openTasks.add(new OpenTask().setDescription("No body temperature measurement has been recorded for today yet."));
+		}
 		if (hasNoWeightMeasurementForToday()) {
 			openTasks.add(new OpenTask().setDescription("No weight measurement has been recorded for today yet."));
 		}
 		return openTasks;
+	}
+
+	private boolean hasNoBodyTemperatureMeasurementForToday() {
+		LocalDate today = LocalDate.now();
+		return bodyTemperatureMeasurementHistoryService
+			.findAllOfLastDays(0)
+			.stream()
+			.noneMatch(btm -> today.equals(btm.getDateOfRecording()));
 	}
 
 	private boolean hasNoBloodPressureMeasurementForToday() {

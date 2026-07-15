@@ -224,6 +224,70 @@ classes:
             value: 1
         type:
           name: String
+  - name: BodyTemperatureMeasurement
+    properties:
+      - name: order
+        value: dateOfRecording DESC
+      - name: order
+        value: timeOfRecording DESC
+      - name: gui
+        value: true
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: comment
+        properties:
+          - name: editor-position
+            value: 99
+          - name: nullable
+            value: true
+        type:
+          name: String
+      - name: dateOfRecording
+        default-value: LocalDate.now()
+        properties:
+          - name: editor-position
+            value: 1
+          - name: nullable
+            value: false
+        type:
+          name: LocalDate
+          properties:
+            - name: import
+              value: java.time.LocalDate
+      - name: celsius
+        default-value: new BigDecimal(37.0)
+        properties:
+          - name: editor-position
+            value: 3
+          - name: nullable
+            value: false
+        type:
+          name: BigDecimal
+          properties:
+            - name: import
+              value: java.math.BigDecimal
+      - name: timeOfRecording
+        default-value: LocalTime.now()
+        properties:
+          - name: editor-position
+            value: 2
+          - name: nullable
+            value: false
+        type:
+          name: LocalTime
+          properties:
+            - name: import
+              value: java.time.LocalTime
   - name: Comment
     properties:
       - name: order
