@@ -1,11 +1,10 @@
 package de.ollie.healthtracker.gui.swing.select.medicationlog;
 
+import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.MedicationLogService;
 import de.ollie.healthtracker.core.service.MedicationService;
 import de.ollie.healthtracker.core.service.MedicationUnitService;
-import de.ollie.healthtracker.core.service.model.Medication;
 import de.ollie.healthtracker.core.service.model.MedicationLog;
-import de.ollie.healthtracker.core.service.model.MedicationUnit;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.edit.medicationlog.MedicationLogEditJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
@@ -15,69 +14,64 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 import javax.swing.JDesktopPane;
+import lombok.Generated;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
 public class MedicationLogSelectJPanel extends AbstractSelectJPanel<MedicationLog> implements SelectionPanelObserver {
 
-	private MedicationService medicationService;
-	private MedicationLogService medicationLogService;
-	private MedicationUnitService medicationUnitService;
+	private final MedicationLogService medicationLogService;
+	private final MedicationService medicationService;
+	private final MedicationUnitService medicationUnitService;
 
 	public MedicationLogSelectJPanel(
-		MedicationService medicationService,
 		MedicationLogService medicationLogService,
+		MedicationService medicationService,
 		MedicationUnitService medicationUnitService,
 		String className,
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory,
 		SelectionPanelObserver observer
 	) {
-		super(desktopPane, className, editDialogComponentFactory, observer);
-		this.medicationService = medicationService;
+		super(desktopPane, className + "s", editDialogComponentFactory, observer);
 		this.medicationLogService = medicationLogService;
+		this.medicationService = medicationService;
 		this.medicationUnitService = medicationUnitService;
 		updateTableSelection();
 	}
 
 	@Override
 	protected List<MedicationLog> getObjectsToSelect() {
-		return medicationLogService != null
-			? medicationLogService.listMedicationLogs().stream().sorted((ml0, ml1) -> compare(ml0, ml1)).toList()
-			: List.of();
-	}
-
-	private int compare(MedicationLog ml0, MedicationLog ml1) {
-		int r = ml1.getDateOfIntake().compareTo(ml0.getDateOfIntake());
-		if (r == 0) {
-			r = ml1.getTimeOfIntake().compareTo(ml0.getTimeOfIntake());
-			if (r == 0) {
-				r = ml0.getMedication().getName().compareTo(ml1.getMedication().getName());
-			}
-		}
-		return r;
+		return medicationLogService != null ? medicationLogService.listMedicationLogs().stream().toList() : List.of();
 	}
 
 	@Override
 	protected AbstractSelectionTableModel<MedicationLog> createSelectionModel() {
-		return new AbstractSelectionTableModel<>(
+		return new AbstractSelectionTableModel<MedicationLog>(
 			getObjectsToSelect(),
-			"Date",
-			"Time",
+			"Date Of Intake",
+			"Time Of Intake",
 			"Medication",
-			"Unit",
-			"Count",
+			"Medication Unit",
 			"Self Medication",
+			"Confirmed",
 			"Comment"
 		) {
 			@Override
 			protected Object getColumnValueFor(MedicationLog t, int columnIndex) {
 				return switch (columnIndex) {
-					case 0 -> t.getDateOfIntake();
-					case 1 -> t.getTimeOfIntake();
-					case 2 -> t.getMedication().getName();
-					case 3 -> t.getMedicationUnit().getName();
-					case 4 -> t.getUnitCount();
-					case 5 -> t.isSelfMedication();
+					case 0 -> DateTimeUtil.DE_DATE_FORMAT.format(t.getDateOfIntake());
+					case 1 -> DateTimeUtil.DE_TIME_FORMAT.format(t.getTimeOfIntake());
+					case 2 -> (t.getMedication() != null ? t.getMedication().getName() : "-");
+					case 3 -> (t.getMedicationUnit() != null ? t.getMedicationUnit().getName() : "-");
+					case 4 -> t.isSelfMedication();
+					case 5 -> t.isConfirmed();
 					case 6 -> t.getComment();
 					default -> null;
 				};
@@ -89,14 +83,8 @@ public class MedicationLogSelectJPanel extends AbstractSelectJPanel<MedicationLo
 	protected void createEditInternalFrame(MedicationLog selected) {
 		new MedicationLogEditJInternalFrame(
 			selected,
-			() ->
-				medicationService.listMedications().stream().sorted((m0, m1) -> m0.getName().compareTo(m1.getName())).toList(),
-			() ->
-				medicationUnitService
-					.listMedicationUnits()
-					.stream()
-					.sorted((m0, m1) -> m0.getName().compareTo(m1.getName()))
-					.toList(),
+			() -> medicationService.listMedications(),
+			() -> medicationUnitService.listMedicationUnits(),
 			getEditDialogComponentFactory(),
 			this,
 			getDesktopPane()
@@ -105,26 +93,16 @@ public class MedicationLogSelectJPanel extends AbstractSelectJPanel<MedicationLo
 
 	@Override
 	protected MedicationLog createNewObject() {
-		List<Medication> medications = medicationService
-			.listMedications()
-			.stream()
-			.sorted((d0, d1) -> d0.getName().compareTo(d1.getName()))
-			.toList();
-		List<MedicationUnit> medicationUnits = medicationUnitService
-			.listMedicationUnits()
-			.stream()
-			.sorted((d0, d1) -> d0.getName().compareTo(d1.getName()))
-			.toList();
-		return medicationLogService.createMedicationLog(
-			null,
-			true,
-			medications.get(0),
-			medicationUnits.get(0),
-			LocalDate.now(),
-			false,
-			LocalTime.now(),
-			new BigDecimal(1)
-		);
+		return new MedicationLog()
+			.setId(UUID.randomUUID())
+			.setComment("")
+			.setConfirmed(true)
+			.setMedication(null)
+			.setMedicationUnit(null)
+			.setDateOfIntake(LocalDate.now())
+			.setSelfMedication(false)
+			.setTimeOfIntake(LocalTime.now())
+			.setUnitCount(null);
 	}
 
 	@Override

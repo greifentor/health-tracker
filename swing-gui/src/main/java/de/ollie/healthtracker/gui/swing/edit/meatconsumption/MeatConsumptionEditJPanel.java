@@ -10,15 +10,23 @@ import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
 import java.awt.GridLayout;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
+import lombok.Generated;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
 public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption> {
 
 	public static final String MEAT_PRODUCT_ITEM_PROVIDER_ID = "meat-product-item-provider";
@@ -52,10 +60,7 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 			return new JLabel("-");
 		});
 		p.add(comboBoxMeatProduct);
-		spinnerUnits =
-			new JSpinner(
-				new SpinnerNumberModel(toEdit.getUnits() == null ? 1.0 : toEdit.getUnits().doubleValue(), 0.0, 99, 0.1)
-			);
+		spinnerUnits = createDecimalSpinner(toEdit.getUnits(), 0, 1000000, 0.1, 1);
 		p.add(spinnerUnits);
 		return p;
 	}
@@ -66,6 +71,6 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 			.setId(toEdit.getId())
 			.setDateOfRecording(DateTimeUtil.dateFromString(textFieldDateOfRecording.getText()))
 			.setMeatProduct(((MeatProduct) comboBoxMeatProduct.getSelectedItem()))
-			.setUnits(new BigDecimal(((Number) spinnerUnits.getValue()).doubleValue()));
+			.setUnits(decimalValueOf(spinnerUnits));
 	}
 }

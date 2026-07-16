@@ -65,7 +65,7 @@ public class AlcoholConsumptionSelectJPanel
 					case 0 -> DateTimeUtil.DE_DATE_FORMAT.format(t.getDate());
 					case 1 -> (t.getAlcoholProduct() != null ? t.getAlcoholProduct().getName() : "-");
 					case 2 -> t.getComment();
-					case 3 -> t.getLiter();
+					case 3 -> t.getLiter() == null ? null : t.getLiter().setScale(1, java.math.RoundingMode.HALF_UP);
 					default -> null;
 				};
 			}

@@ -2,6 +2,7 @@ package de.ollie.healthtracker.gui.swing.edit.bodytemperaturemeasurement;
 
 import de.ollie.healthtracker.core.service.BodyTemperatureMeasurementService;
 import de.ollie.healthtracker.core.service.model.BodyTemperatureMeasurement;
+import de.ollie.healthtracker.core.service.model.PointOfMeasurement;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditJInternalFrame;
@@ -25,11 +26,19 @@ public class BodyTemperatureMeasurementEditJInternalFrame
 
 	public BodyTemperatureMeasurementEditJInternalFrame(
 		BodyTemperatureMeasurement toEdit,
+		ItemProvider<PointOfMeasurement> pointOfMeasurements,
 		EditDialogComponentFactory editDialogComponentFactory,
 		Observer<BodyTemperatureMeasurement> observer,
 		JDesktopPane desktopPane
 	) {
-		super(desktopPane, "Body Temperature Measurement", toEdit, editDialogComponentFactory, observer, Map.of());
+		super(
+			desktopPane,
+			"Body Temperature Measurement",
+			toEdit,
+			editDialogComponentFactory,
+			observer,
+			Map.of(BodyTemperatureMeasurementEditJPanel.POINT_OF_MEASUREMENT_ITEM_PROVIDER_ID, pointOfMeasurements)
+		);
 	}
 
 	@Override

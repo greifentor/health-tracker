@@ -1,15 +1,12 @@
-package de.ollie.healthtracker.gui.swing.select.bodytemperaturemeasurement;
+package de.ollie.healthtracker.gui.swing.select.pointofmeasurement;
 
-import de.ollie.healthtracker.core.service.BodyTemperatureMeasurementService;
 import de.ollie.healthtracker.core.service.PointOfMeasurementService;
-import de.ollie.healthtracker.core.service.model.BodyTemperatureMeasurement;
+import de.ollie.healthtracker.core.service.model.PointOfMeasurement;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJPanel;
 import de.ollie.healthtracker.gui.swing.select.SelectionPanelObserver;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.UUID;
 import javax.swing.JDesktopPane;
 import lombok.Generated;
@@ -20,31 +17,27 @@ import lombok.Generated;
  * Remove this comment to suspend class from generation process.
  */
 @Generated
-public class BodyTemperatureMeasurementSelectJInternalFrame
-	extends AbstractSelectJInternalFrame<BodyTemperatureMeasurement>
+public class PointOfMeasurementSelectJInternalFrame
+	extends AbstractSelectJInternalFrame<PointOfMeasurement>
 	implements SelectionPanelObserver {
 
-	private static final String CLASS_NAME = "BodyTemperatureMeasurement";
+	private static final String CLASS_NAME = "PointOfMeasurement";
 
-	private final BodyTemperatureMeasurementService bodyTemperatureMeasurementService;
 	private final PointOfMeasurementService pointOfMeasurementService;
 
-	public BodyTemperatureMeasurementSelectJInternalFrame(
-		BodyTemperatureMeasurementService bodyTemperatureMeasurementService,
+	public PointOfMeasurementSelectJInternalFrame(
 		PointOfMeasurementService pointOfMeasurementService,
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
 		super(desktopPane, CLASS_NAME, editDialogComponentFactory);
-		this.bodyTemperatureMeasurementService = bodyTemperatureMeasurementService;
 		this.pointOfMeasurementService = pointOfMeasurementService;
 		finishConstruct();
 	}
 
 	@Override
-	protected AbstractSelectJPanel<BodyTemperatureMeasurement> createSelectPanel() {
-		return new BodyTemperatureMeasurementSelectJPanel(
-			bodyTemperatureMeasurementService,
+	protected AbstractSelectJPanel<PointOfMeasurement> createSelectPanel() {
+		return new PointOfMeasurementSelectJPanel(
 			pointOfMeasurementService,
 			CLASS_NAME,
 			desktopPane,

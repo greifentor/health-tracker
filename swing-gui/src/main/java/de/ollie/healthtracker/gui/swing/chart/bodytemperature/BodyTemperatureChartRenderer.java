@@ -29,13 +29,21 @@ class BodyTemperatureChartRenderer {
 	private static final int LABEL_GAP = 2;
 	private static final int DAY_LABEL_STEP = 5;
 	private static final int TARGET_VALUE_GRID_LINES = 6;
-	private static final double REFERENCE_CELSIUS = 37.0;
+	private static final double REFERENCE_CELSIUS_LOWER = 36.5;
+	private static final double REFERENCE_CELSIUS_UPPER = 37.4;
+	private static final int STATUS_BAR_TOP = 5;
+	private static final int STATUS_BAR_HEIGHT = 8;
 
 	private static final Color COLOR_AXIS = Color.DARK_GRAY;
 	private static final Color COLOR_GRID = new Color(0xE0E0E0);
 	private static final Color COLOR_TEMPERATURE = new Color(0xC0392B);
 	private static final Color COLOR_REFERENCE = new Color(0x27AE60);
+	private static final Color COLOR_STATUS_BACKGROUND = new Color(0xE0E0E0);
+	private static final Color COLOR_STATUS_BELOW = new Color(0x2980B9);
+	private static final Color COLOR_STATUS_NORMAL = new Color(0x27AE60);
+	private static final Color COLOR_STATUS_ABOVE = new Color(0xC0392B);
 	private static final Stroke SERIES_STROKE = new BasicStroke(2f);
+	private static final Stroke REFERENCE_STROKE = new BasicStroke(1f);
 
 	void render(
 		Graphics2D g2,
@@ -60,8 +68,45 @@ class BodyTemperatureChartRenderer {
 		g2.drawLine(plotLeft, plotTop, plotLeft, plotBottom);
 		g2.drawLine(plotLeft, plotBottom, plotRight, plotBottom);
 		drawReferenceLine(g2, plotLeft, plotRight, plotTop, plotBottom, minCelsius, maxCelsius);
+		drawStatusBar(g2, plotLeft, plotRight, data, days);
 		drawTemperatureLine(g2, plotLeft, plotRight, plotTop, plotBottom, data, days, minCelsius, maxCelsius);
 		drawLegend(g2, plotLeft, height - LEGEND_HEIGHT);
+	}
+
+	/**
+	 * Draws the thin status bar above the plot: a per-day segment colored by the {@link BodyTemperatureStatus} of that
+	 * day - green when the (averaged) temperature is within the regular range, blue when it is below the minimum, red
+	 * when it is above the maximum. Days without data stay on the gray background.
+	 */
+	private void drawStatusBar(
+		Graphics2D g2,
+		int plotLeft,
+		int plotRight,
+		List<BodyTemperatureChartData> data,
+		int days
+	) {
+		g2.setColor(COLOR_STATUS_BACKGROUND);
+		g2.fillRect(plotLeft, STATUS_BAR_TOP, plotRight - plotLeft, STATUS_BAR_HEIGHT);
+		double spacing = days > 1 ? (double) (plotRight - plotLeft) / (days - 1) : (plotRight - plotLeft);
+		int half = Math.max(1, (int) Math.round(spacing / 2));
+		for (BodyTemperatureChartData entry : data) {
+			int center = xForDay(plotLeft, plotRight, entry.day(), days);
+			int left = Math.max(plotLeft, center - half);
+			int right = Math.min(plotRight, center + half);
+			g2.setColor(statusColor(entry.status()));
+			g2.fillRect(left, STATUS_BAR_TOP, right - left, STATUS_BAR_HEIGHT);
+		}
+	}
+
+	private static Color statusColor(BodyTemperatureStatus status) {
+		if (status == null) {
+			return COLOR_STATUS_NORMAL;
+		}
+		return switch (status) {
+			case BELOW -> COLOR_STATUS_BELOW;
+			case ABOVE -> COLOR_STATUS_ABOVE;
+			default -> COLOR_STATUS_NORMAL;
+		};
 	}
 
 	/** Horizontal grid lines and the right-aligned y-axis value labels at "nice" steps within [min, max]. */
@@ -146,7 +191,11 @@ class BodyTemperatureChartRenderer {
 		}
 	}
 
-	/** A horizontal green reference line at {@value #REFERENCE_CELSIUS} °C, drawn only when it falls within [min, max]. */
+	/**
+	 * Two thin horizontal green reference lines marking the normal body temperature band at
+	 * {@value #REFERENCE_CELSIUS_LOWER} °C and {@value #REFERENCE_CELSIUS_UPPER} °C. Each line is only drawn when it falls
+	 * within [min, max].
+	 */
 	private void drawReferenceLine(
 		Graphics2D g2,
 		int plotLeft,
@@ -156,12 +205,26 @@ class BodyTemperatureChartRenderer {
 		double min,
 		double max
 	) {
-		if (REFERENCE_CELSIUS < min || REFERENCE_CELSIUS > max) {
+		g2.setColor(COLOR_REFERENCE);
+		g2.setStroke(REFERENCE_STROKE);
+		drawReferenceValue(g2, plotLeft, plotRight, plotTop, plotBottom, min, max, REFERENCE_CELSIUS_LOWER);
+		drawReferenceValue(g2, plotLeft, plotRight, plotTop, plotBottom, min, max, REFERENCE_CELSIUS_UPPER);
+	}
+
+	private void drawReferenceValue(
+		Graphics2D g2,
+		int plotLeft,
+		int plotRight,
+		int plotTop,
+		int plotBottom,
+		double min,
+		double max,
+		double value
+	) {
+		if (value < min || value > max) {
 			return;
 		}
-		int y = yForTemperature(REFERENCE_CELSIUS, plotTop, plotBottom, min, max);
-		g2.setColor(COLOR_REFERENCE);
-		g2.setStroke(SERIES_STROKE);
+		int y = yForTemperature(value, plotTop, plotBottom, min, max);
 		g2.drawLine(plotLeft, y, plotRight, y);
 	}
 

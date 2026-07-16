@@ -61,7 +61,7 @@ public class MeatConsumptionSelectJPanel
 				return switch (columnIndex) {
 					case 0 -> DateTimeUtil.DE_DATE_FORMAT.format(t.getDateOfRecording());
 					case 1 -> (t.getMeatProduct() != null ? t.getMeatProduct().getName() : "-");
-					case 2 -> t.getUnits();
+					case 2 -> t.getUnits() == null ? null : t.getUnits().setScale(1, java.math.RoundingMode.HALF_UP);
 					default -> null;
 				};
 			}

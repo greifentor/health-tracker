@@ -2,6 +2,7 @@ package de.ollie.healthtracker.core.service.impl;
 
 import de.ollie.healthtracker.core.service.BodyTemperatureMeasurementService;
 import de.ollie.healthtracker.core.service.model.BodyTemperatureMeasurement;
+import de.ollie.healthtracker.core.service.model.PointOfMeasurement;
 import de.ollie.healthtracker.core.service.port.persistence.BodyTemperatureMeasurementPersistencePort;
 import jakarta.inject.Named;
 import java.math.BigDecimal;
@@ -30,9 +31,16 @@ class BodyTemperatureMeasurementServiceImpl implements BodyTemperatureMeasuremen
 		String comment,
 		LocalDate dateOfRecording,
 		BigDecimal celsius,
-		LocalTime timeOfRecording
+		LocalTime timeOfRecording,
+		PointOfMeasurement pointOfMeasurement
 	) {
-		return bodyTemperatureMeasurementPersistencePort.create(comment, dateOfRecording, celsius, timeOfRecording);
+		return bodyTemperatureMeasurementPersistencePort.create(
+			comment,
+			dateOfRecording,
+			celsius,
+			timeOfRecording,
+			pointOfMeasurement
+		);
 	}
 
 	@Override

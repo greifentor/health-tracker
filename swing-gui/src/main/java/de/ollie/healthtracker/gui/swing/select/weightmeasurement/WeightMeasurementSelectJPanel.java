@@ -61,7 +61,7 @@ public class WeightMeasurementSelectJPanel
 				return switch (columnIndex) {
 					case 0 -> DateTimeUtil.DE_DATE_FORMAT.format(t.getDateOfRecording());
 					case 1 -> DateTimeUtil.DE_TIME_FORMAT.format(t.getTimeOfRecording());
-					case 2 -> t.getKg();
+					case 2 -> t.getKg() == null ? null : t.getKg().setScale(1, java.math.RoundingMode.HALF_UP);
 					case 3 -> t.getComment();
 					default -> null;
 				};

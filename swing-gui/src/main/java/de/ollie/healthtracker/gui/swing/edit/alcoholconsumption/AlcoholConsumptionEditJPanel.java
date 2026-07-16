@@ -10,15 +10,23 @@ import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
 import java.awt.GridLayout;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
+import lombok.Generated;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
 public class AlcoholConsumptionEditJPanel extends AbstractEditPanel<AlcoholConsumption> {
 
 	public static final String ALCOHOL_PRODUCT_ITEM_PROVIDER_ID = "alcohol-product-item-provider";
@@ -55,10 +63,7 @@ public class AlcoholConsumptionEditJPanel extends AbstractEditPanel<AlcoholConsu
 		p.add(comboBoxAlcoholProduct);
 		textFieldComment = new JTextField(toEdit.getComment(), 40);
 		p.add(textFieldComment);
-		spinnerLiter =
-			new JSpinner(
-				new SpinnerNumberModel(toEdit.getLiter() == null ? 0.0 : toEdit.getLiter().doubleValue(), 0.0, 10.0, 0.1)
-			);
+		spinnerLiter = createDecimalSpinner(toEdit.getLiter(), 0, 1000000, 0.1, 1);
 		p.add(spinnerLiter);
 		return p;
 	}
@@ -70,6 +75,6 @@ public class AlcoholConsumptionEditJPanel extends AbstractEditPanel<AlcoholConsu
 			.setDate(DateTimeUtil.dateFromString(textFieldDate.getText()))
 			.setAlcoholProduct(((AlcoholProduct) comboBoxAlcoholProduct.getSelectedItem()))
 			.setComment(textFieldComment.getText())
-			.setLiter(new BigDecimal(((Number) spinnerLiter.getValue()).doubleValue()));
+			.setLiter(decimalValueOf(spinnerLiter));
 	}
 }

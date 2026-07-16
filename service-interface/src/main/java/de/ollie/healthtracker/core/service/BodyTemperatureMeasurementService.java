@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.core.service;
 
 import de.ollie.healthtracker.core.service.model.BodyTemperatureMeasurement;
+import de.ollie.healthtracker.core.service.model.PointOfMeasurement;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,7 +21,8 @@ public interface BodyTemperatureMeasurementService {
 		String comment,
 		LocalDate dateOfRecording,
 		BigDecimal celsius,
-		LocalTime timeOfRecording
+		LocalTime timeOfRecording,
+		PointOfMeasurement pointOfMeasurement
 	);
 
 	void deleteBodyTemperatureMeasurement(UUID id);

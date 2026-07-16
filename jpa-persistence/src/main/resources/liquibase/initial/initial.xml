@@ -558,4 +558,23 @@
     <changeSet author="ollie" id="Add-Not-Null-Constraint-to-Field-DATE_OF_RECORDING-in-Table-WEIGHT_MEASUREMENT" failOnError="true" runInTransaction="true">
         <addNotNullConstraint columnName="DATE_OF_RECORDING" tableName="WEIGHT_MEASUREMENT" columnDataType="DATE"/>
     </changeSet>
+    <changeSet author="ollie" id="Add-Table-POINT_OF_MEASUREMENT" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="POINT_OF_MEASUREMENT">
+            <column name="ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="REGULAR_MAX_CELSIUS" type="NUMERIC(4, 1)"/>
+            <column name="REGULAR_MIN_CELSIUS" type="NUMERIC(4, 1)"/>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="POINT_OF_MEASUREMENT"/>
+    </changeSet>
+    <changeSet author="ollie" id="Add-Field-POINT_OF_MEASUREMENT-to-Table-BODY_TEMPERATURE_MEASUREMENT" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <addColumn tableName="BODY_TEMPERATURE_MEASUREMENT">
+            <column name="POINT_OF_MEASUREMENT" type="UUID"/>
+        </addColumn>
+        <addForeignKeyConstraint baseColumnNames="POINT_OF_MEASUREMENT" baseTableName="BODY_TEMPERATURE_MEASUREMENT" constraintName="FK_BODY_TEMPERATURE_MEASUREMENT_POINT_OF_MEASUREMENT" referencedColumnNames="ID" referencedTableName="POINT_OF_MEASUREMENT"/>
+    </changeSet>
 </databaseChangeLog>

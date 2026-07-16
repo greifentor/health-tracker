@@ -25,13 +25,10 @@ import javax.swing.JCheckBox;
 #if($Class.hasAnAttributeWithTypeName("Boolean") == true)
 import javax.swing.JCheckBox;
 #end
-#if($Class.hasAnAttributeWithTypeName("int") == true)
+#if($Class.hasAnAttributeWithTypeName("int") || $Class.hasAnAttributeWithTypeName("Integer") || $Class.hasAnAttributeWithTypeName("BigDecimal"))
 import javax.swing.JSpinner;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 #end
-#if($Class.hasAnAttributeWithTypeName("Integer") == true)
-import javax.swing.JSpinner;
+#if($Class.hasAnAttributeWithTypeName("int") || $Class.hasAnAttributeWithTypeName("Integer"))
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 #end
@@ -67,7 +64,7 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 	private JComboBox<${Attribute.getTypeClassType().getName()}> comboBox${Attribute.getNameCamelCase()};
 	#elseif(${Attribute.getTypeName()} == "boolean" || ${Attribute.getTypeName()} == "Boolean")
 	private JCheckBox checkBox${Attribute.getNameCamelCase()};
-	#elseif(${Attribute.getTypeName()} == "int" || ${Attribute.getTypeName()} == "Integer")
+	#elseif(${Attribute.getTypeName()} == "int" || ${Attribute.getTypeName()} == "Integer" || ${Attribute.getTypeName()} == "BigDecimal")
 	private JSpinner spinner${Attribute.getNameCamelCase()};
 	#elseif($Attribute.isTypeEnum() == true)
 	private JComboBox<${Attribute.getTypeName()}> comboBox${Attribute.getNameCamelCase()};
@@ -120,6 +117,9 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 		SpinnerModel spinnerModel${Attribute.getNameCamelCase()} = new SpinnerNumberModel(toEdit.get${Attribute.getNameCamelCase()}(), 0, 1000, 1);
 		spinner${Attribute.getNameCamelCase()} = new JSpinner(spinnerModel${Attribute.getNameCamelCase()});
 		p.add(spinner${Attribute.getNameCamelCase()});
+		#elseif(${Attribute.getTypeName()} == "BigDecimal")
+		spinner${Attribute.getNameCamelCase()} = createDecimalSpinner(toEdit.get${Attribute.getNameCamelCase()}(), #if($Attribute.hasProperty("editor-min"))$Attribute.getPropertyValue("editor-min")#{else}0#end, #if($Attribute.hasProperty("editor-max"))$Attribute.getPropertyValue("editor-max")#{else}1000000#end, #if($Attribute.hasProperty("editor-step"))$Attribute.getPropertyValue("editor-step")#{else}0.1#end, #if($Attribute.hasProperty("editor-fraction-digits"))$Attribute.getPropertyValue("editor-fraction-digits")#{else}1#end);
+		p.add(spinner${Attribute.getNameCamelCase()});
 		#elseif(${Attribute.isTypeEnum()} == true)
 		comboBox${Attribute.getNameCamelCase()} = new JComboBox<>(${Attribute.getTypeName()}.values());
 		comboBox${Attribute.getNameCamelCase()}.setSelectedItem(toEdit.get${Attribute.getNameCamelCase()}());
@@ -145,6 +145,8 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 				.set${Attribute.getNameCamelCase()}(checkBox${Attribute.getNameCamelCase()}.isSelected())
 			#elseif(${Attribute.getTypeName()} == "int")
 				.set${Attribute.getNameCamelCase()}((Integer) spinner${Attribute.getNameCamelCase()}.getValue())
+			#elseif(${Attribute.getTypeName()} == "BigDecimal")
+				.set${Attribute.getNameCamelCase()}(decimalValueOf(spinner${Attribute.getNameCamelCase()}))
 			#elseif(${Attribute.isReference()} == true)
 				.set${Attribute.getNameCamelCase()}(((${Attribute.getTypeClassType().getName()}) comboBox${Attribute.getNameCamelCase()}.getSelectedItem()))
 			#elseif(${Attribute.isTypeEnum()} == true)

@@ -5,28 +5,37 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
 import de.ollie.baselib.util.DateTimeUtil;
 import de.ollie.healthtracker.core.service.model.BodyTemperatureMeasurement;
+import de.ollie.healthtracker.core.service.model.PointOfMeasurement;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Map;
-import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
+import java.util.UUID;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.SpinnerNumberModel;
+import lombok.Generated;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
 public class BodyTemperatureMeasurementEditJPanel extends AbstractEditPanel<BodyTemperatureMeasurement> {
+
+	public static final String POINT_OF_MEASUREMENT_ITEM_PROVIDER_ID = "point-of-measurement-item-provider";
 
 	private JTextField textFieldDateOfRecording;
 	private JTextField textFieldTimeOfRecording;
 	private JSpinner spinnerCelsius;
+	private JComboBox<PointOfMeasurement> comboBoxPointOfMeasurement;
 	private JTextField textFieldComment;
 
 	public BodyTemperatureMeasurementEditJPanel(
@@ -38,56 +47,39 @@ public class BodyTemperatureMeasurementEditJPanel extends AbstractEditPanel<Body
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel("Date Of Recording:", "Time Of Recording:", "Celsius:", "Comment:");
+		return createLabelSubPanel(
+			"Date Of Recording:",
+			"Time Of Recording:",
+			"Celsius:",
+			"Point Of Measurement:",
+			"Comment:"
+		);
 	}
 
 	@Override
 	protected JPanel createComponentPanel(BodyTemperatureMeasurement toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		JPanel p = new JPanel(new GridLayout(4, 1, HGAP, VGAP));
+		JPanel p = new JPanel(new GridLayout(5, 1, HGAP, VGAP));
 		textFieldDateOfRecording = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.getDateOfRecording()), 40);
 		p.add(textFieldDateOfRecording);
 		textFieldTimeOfRecording = new JTextField(DateTimeUtil.DE_TIME_FORMAT.format(toEdit.getTimeOfRecording()), 40);
 		p.add(textFieldTimeOfRecording);
-		spinnerCelsius = new JSpinner(new SpinnerNumberModel(toEdit.getCelsius().doubleValue(), 30, 45, 0.1));
-		JSpinner.NumberEditor celsiusEditor = new JSpinner.NumberEditor(spinnerCelsius, "0.0");
-		spinnerCelsius.setEditor(celsiusEditor);
-		installStepKeyBindings(spinnerCelsius, celsiusEditor.getTextField());
+		spinnerCelsius = createDecimalSpinner(toEdit.getCelsius(), 30, 45, 0.1, 1);
 		p.add(spinnerCelsius);
+		List<PointOfMeasurement> listPointOfMeasurement =
+			((ItemProvider<PointOfMeasurement>) itemProviders.get(POINT_OF_MEASUREMENT_ITEM_PROVIDER_ID)).getItem();
+		comboBoxPointOfMeasurement =
+			new JComboBox<>(listPointOfMeasurement.toArray(new PointOfMeasurement[listPointOfMeasurement.size()]));
+		comboBoxPointOfMeasurement.setSelectedItem(toEdit.getPointOfMeasurement());
+		comboBoxPointOfMeasurement.setRenderer((list, value, index, isSelected, cellHasFocus) -> {
+			if (value != null) {
+				return new JLabel(value.getName());
+			}
+			return new JLabel("-");
+		});
+		p.add(comboBoxPointOfMeasurement);
 		textFieldComment = new JTextField(toEdit.getComment(), 40);
 		p.add(textFieldComment);
 		return p;
-	}
-
-	/** Binds the '+' / '-' keys to step the spinner up / down by its model step (0.1 °C). */
-	private void installStepKeyBindings(JSpinner spinner, JFormattedTextField editorField) {
-		InputMap inputMap = editorField.getInputMap(JComponent.WHEN_FOCUSED);
-		ActionMap actionMap = editorField.getActionMap();
-		inputMap.put(KeyStroke.getKeyStroke('+'), "stepUp");
-		inputMap.put(KeyStroke.getKeyStroke('-'), "stepDown");
-		actionMap.put(
-			"stepUp",
-			new AbstractAction() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					Object next = spinner.getNextValue();
-					if (next != null) {
-						spinner.setValue(next);
-					}
-				}
-			}
-		);
-		actionMap.put(
-			"stepDown",
-			new AbstractAction() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					Object previous = spinner.getPreviousValue();
-					if (previous != null) {
-						spinner.setValue(previous);
-					}
-				}
-			}
-		);
 	}
 
 	@Override
@@ -96,7 +88,8 @@ public class BodyTemperatureMeasurementEditJPanel extends AbstractEditPanel<Body
 			.setId(toEdit.getId())
 			.setDateOfRecording(DateTimeUtil.dateFromString(textFieldDateOfRecording.getText()))
 			.setTimeOfRecording(DateTimeUtil.timeFromString(textFieldTimeOfRecording.getText()))
-			.setCelsius(new BigDecimal(((Number) spinnerCelsius.getValue()).doubleValue()))
+			.setCelsius(decimalValueOf(spinnerCelsius))
+			.setPointOfMeasurement(((PointOfMeasurement) comboBoxPointOfMeasurement.getSelectedItem()))
 			.setComment(textFieldComment.getText().isEmpty() ? null : textFieldComment.getText());
 	}
 }

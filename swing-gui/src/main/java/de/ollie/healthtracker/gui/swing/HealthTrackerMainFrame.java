@@ -28,6 +28,7 @@ import de.ollie.healthtracker.core.service.MedicationService;
 import de.ollie.healthtracker.core.service.MedicationUnitService;
 import de.ollie.healthtracker.core.service.NutritionClassCalculationService;
 import de.ollie.healthtracker.core.service.OpenTaskService;
+import de.ollie.healthtracker.core.service.PointOfMeasurementService;
 import de.ollie.healthtracker.core.service.ReportPrintService;
 import de.ollie.healthtracker.core.service.SymptomService;
 import de.ollie.healthtracker.core.service.WeightMeasurementHistoryService;
@@ -35,10 +36,12 @@ import de.ollie.healthtracker.core.service.WeightMeasurementService;
 import de.ollie.healthtracker.core.service.WhoBloodPressureClassificationService;
 import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.NutritionCalculationData;
+import de.ollie.healthtracker.core.service.model.PointOfMeasurement;
 import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartData;
 import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartData;
 import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartJInternalFrame;
+import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureStatus;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartData;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartData;
@@ -73,6 +76,7 @@ import de.ollie.healthtracker.gui.swing.select.medication.MedicationSelectJInter
 import de.ollie.healthtracker.gui.swing.select.medicationlog.MedicationLogSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.medicationplan.MedicationPlanSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.medicationunit.MedicationUnitSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.pointofmeasurement.PointOfMeasurementSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.symptom.SymptomSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.weightmeasurement.WeightMeasurementSelectJInternalFrame;
 import jakarta.annotation.PostConstruct;
@@ -148,6 +152,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final MedicationUnitService medicationUnitService;
 	private final NutritionClassCalculationService nutritionClassCalculationService;
 	private final OpenTaskService openTaskService;
+	private final PointOfMeasurementService pointOfMeasurementService;
 	private final ReportPrintService reportPrintService;
 	private final SymptomService symptomService;
 	private final WeightMeasurementChangeNotifier weightMeasurementChangeNotifier;
@@ -179,6 +184,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemEditMedicationPlan;
 	private JMenuItem menuItemEditMedicationUnit;
 	private JMenuItem menuItemEditWeightMeasurement;
+	private JMenuItem menuItemEditPointOfMeasurement;
 	private JMenuItem menuItemEditSymptom;
 	private JMenuItem menuItemFilePrintBPM;
 	private JMenuItem menuItemFilePrintHealthReportCurrentMonth;
@@ -294,8 +300,6 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu = new JMenu("Edit");
 		menuItemEditBloodPressureMeasurement = createMenuItem("Blood Pressure Measurement", this);
 		menu.add(menuItemEditBloodPressureMeasurement);
-		menuItemEditBodyTemperatureMeasurement = createMenuItem("Body Temperature Measurement", this);
-		menu.add(menuItemEditBodyTemperatureMeasurement);
 		menuItemEditComment = createMenuItem("Comment", this);
 		menu.add(menuItemEditComment);
 		menuItemEditCommentType = createMenuItem("Comment Type", this);
@@ -318,6 +322,12 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		subMenu.add(menuItemEditExercise);
 		menuItemEditGeneralBodyPart = createMenuItem("General Body Part", this);
 		subMenu.add(menuItemEditGeneralBodyPart);
+		menu.add(subMenu);
+		subMenu = new JMenu("Body Temperature");
+		menuItemEditBodyTemperatureMeasurement = createMenuItem("Body Temperature Measurement", this);
+		subMenu.add(menuItemEditBodyTemperatureMeasurement);
+		menuItemEditPointOfMeasurement = createMenuItem("Point Of Measurement", this);
+		subMenu.add(menuItemEditPointOfMeasurement);
 		menu.add(subMenu);
 		subMenu = new JMenu("Doctor");
 		menuItemEditDoctor = createMenuItem("Doctor", this);
@@ -444,6 +454,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 					bodyTemperatureMeasurementService,
 					bodyTemperatureMeasurementChangeNotifier
 				),
+				pointOfMeasurementService,
 				desktopPane,
 				editDialogComponentFactory
 			);
@@ -495,8 +506,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			);
 		} else if (e.getSource() == menuItemEditMedicationLog) {
 			new MedicationLogSelectJInternalFrame(
-				medicationService,
 				medicationLogService,
+				medicationService,
 				medicationUnitService,
 				desktopPane,
 				editDialogComponentFactory
@@ -511,6 +522,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			);
 		} else if (e.getSource() == menuItemEditMedicationUnit) {
 			new MedicationUnitSelectJInternalFrame(medicationUnitService, desktopPane, editDialogComponentFactory);
+		} else if (e.getSource() == menuItemEditPointOfMeasurement) {
+			new PointOfMeasurementSelectJInternalFrame(pointOfMeasurementService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditSymptom) {
 			new SymptomSelectJInternalFrame(symptomService, bodyPartService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditWeightMeasurement) {
@@ -698,9 +711,14 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		return result;
 	}
 
+	/** Default lower / upper bound of the normal body temperature range used when a measurement has no point of measurement. */
+	private static final double DEFAULT_BODY_TEMPERATURE_MIN = 36.5;
+	private static final double DEFAULT_BODY_TEMPERATURE_MAX = 37.4;
+
 	private List<BodyTemperatureChartData> createBodyTemperatureChartData() {
 		LocalDate today = LocalDate.now();
-		// Average the body temperature per day over the last chartWindowDays days. Index: [celsiusSum, count].
+		// Average the body temperature and its applicable range per day over the last chartWindowDays days.
+		// Index: [celsiusSum, count, minSum, maxSum]; the range comes from the point of measurement (or the default range).
 		Map<LocalDate, double[]> perDay = new HashMap<>();
 		bodyTemperatureMeasurementHistoryService
 			.findAllOfLastDays(chartWindowDays - 1)
@@ -708,14 +726,29 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				if (btm.getCelsius() == null) {
 					return;
 				}
-				double[] sums = perDay.computeIfAbsent(btm.getDateOfRecording(), d -> new double[2]);
+				PointOfMeasurement pointOfMeasurement = btm.getPointOfMeasurement();
+				double min = pointOfMeasurement != null && pointOfMeasurement.getRegularMinCelsius() != null
+					? pointOfMeasurement.getRegularMinCelsius().doubleValue()
+					: DEFAULT_BODY_TEMPERATURE_MIN;
+				double max = pointOfMeasurement != null && pointOfMeasurement.getRegularMaxCelsius() != null
+					? pointOfMeasurement.getRegularMaxCelsius().doubleValue()
+					: DEFAULT_BODY_TEMPERATURE_MAX;
+				double[] sums = perDay.computeIfAbsent(btm.getDateOfRecording(), d -> new double[4]);
 				sums[0] += btm.getCelsius().doubleValue();
 				sums[1]++;
+				sums[2] += min;
+				sums[3] += max;
 			});
 		List<BodyTemperatureChartData> result = new ArrayList<>();
-		perDay.forEach((date, sums) ->
-			result.add(new BodyTemperatureChartData(windowPosition(date, today), sums[0] / sums[1]))
-		);
+		perDay.forEach((date, sums) -> {
+			double celsius = sums[0] / sums[1];
+			double min = sums[2] / sums[1];
+			double max = sums[3] / sums[1];
+			BodyTemperatureStatus status = celsius < min
+				? BodyTemperatureStatus.BELOW
+				: celsius > max ? BodyTemperatureStatus.ABOVE : BodyTemperatureStatus.NORMAL;
+			result.add(new BodyTemperatureChartData(windowPosition(date, today), celsius, status));
+		});
 		return result;
 	}
 

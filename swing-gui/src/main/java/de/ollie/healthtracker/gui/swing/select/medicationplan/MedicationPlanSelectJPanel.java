@@ -73,7 +73,7 @@ public class MedicationPlanSelectJPanel extends AbstractSelectJPanel<MedicationP
 					case 3 -> DateTimeUtil.DE_TIME_FORMAT.format(t.getTimeOfIntake());
 					case 4 -> (t.getMedication() != null ? t.getMedication().getName() : "-");
 					case 5 -> (t.getMedicationUnit() != null ? t.getMedicationUnit().getName() : "-");
-					case 6 -> t.getUnitCount();
+					case 6 -> t.getUnitCount() == null ? null : t.getUnitCount().setScale(1, java.math.RoundingMode.HALF_UP);
 					case 7 -> t.isSelfMedication();
 					default -> null;
 				};

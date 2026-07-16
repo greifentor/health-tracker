@@ -87,6 +87,8 @@ public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}>
 					case $count -> DateTimeUtil.DE_TIME_FORMAT.format(t.get$Attribute.getNameCamelCase()());
 					#elseif($Attribute.getTypeName().equalsIgnoreCase("boolean"))
 					case $count -> t.is${Attribute.getNameCamelCase()}();
+					#elseif($Attribute.getTypeName() == "BigDecimal")
+					case $count -> t.get${Attribute.getNameCamelCase()}() == null ? null : t.get${Attribute.getNameCamelCase()}().setScale(#if($Attribute.hasProperty("editor-fraction-digits"))$Attribute.getPropertyValue("editor-fraction-digits")#{else}1#end, java.math.RoundingMode.HALF_UP);
 					#else
 					case $count -> t.get${Attribute.getNameCamelCase()}();
 					#end

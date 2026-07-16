@@ -2,6 +2,7 @@ package de.ollie.healthtracker.gui.swing.event;
 
 import de.ollie.healthtracker.core.service.BodyTemperatureMeasurementService;
 import de.ollie.healthtracker.core.service.model.BodyTemperatureMeasurement;
+import de.ollie.healthtracker.core.service.model.PointOfMeasurement;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -32,13 +33,15 @@ public class NotifyingBodyTemperatureMeasurementService implements BodyTemperatu
 		String comment,
 		LocalDate dateOfRecording,
 		BigDecimal celsius,
-		LocalTime timeOfRecording
+		LocalTime timeOfRecording,
+		PointOfMeasurement pointOfMeasurement
 	) {
 		BodyTemperatureMeasurement created = delegate.createBodyTemperatureMeasurement(
 			comment,
 			dateOfRecording,
 			celsius,
-			timeOfRecording
+			timeOfRecording,
+			pointOfMeasurement
 		);
 		changeNotifier.notifyChanged();
 		return created;

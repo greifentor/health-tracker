@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.core.service.port.persistence;
 
 import de.ollie.healthtracker.core.service.model.BodyTemperatureMeasurement;
+import de.ollie.healthtracker.core.service.model.PointOfMeasurement;
 import jakarta.inject.Named;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -22,7 +23,8 @@ public interface BodyTemperatureMeasurementPersistencePort {
 		String comment,
 		LocalDate dateOfRecording,
 		BigDecimal celsius,
-		LocalTime timeOfRecording
+		LocalTime timeOfRecording,
+		PointOfMeasurement pointOfMeasurement
 	);
 
 	void deleteById(UUID id);

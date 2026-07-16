@@ -47,7 +47,7 @@ public class AlcoholProductSelectJPanel extends AbstractSelectJPanel<AlcoholProd
 			protected Object getColumnValueFor(AlcoholProduct t, int columnIndex) {
 				return switch (columnIndex) {
 					case 0 -> t.getName();
-					case 1 -> t.getPercentVol();
+					case 1 -> t.getPercentVol() == null ? null : t.getPercentVol().setScale(1, java.math.RoundingMode.HALF_UP);
 					default -> null;
 				};
 			}

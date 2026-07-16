@@ -4,6 +4,7 @@ import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.BodyTemperatureMeasurement;
+import de.ollie.healthtracker.core.service.model.PointOfMeasurement;
 import de.ollie.healthtracker.core.service.port.persistence.BodyTemperatureMeasurementPersistencePort;
 import de.ollie.healthtracker.persistence.jpa.mapper.BodyTemperatureMeasurementDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.BodyTemperatureMeasurementDboRepository;
@@ -36,10 +37,19 @@ class BodyTemperatureMeasurementPersistenceJpaAdapter implements BodyTemperature
 		String comment,
 		LocalDate dateOfRecording,
 		BigDecimal celsius,
-		LocalTime timeOfRecording
+		LocalTime timeOfRecording,
+		PointOfMeasurement pointOfMeasurement
 	) {
 		return mapper.toModel(
-			repository.save(dboFactory.createBodyTemperatureMeasurement(comment, dateOfRecording, celsius, timeOfRecording))
+			repository.save(
+				dboFactory.createBodyTemperatureMeasurement(
+					comment,
+					dateOfRecording,
+					celsius,
+					timeOfRecording,
+					pointOfMeasurement.getId()
+				)
+			)
 		);
 	}
 

@@ -271,6 +271,14 @@ classes:
             value: 3
           - name: nullable
             value: false
+          - name: editor-min
+            value: 30
+          - name: editor-max
+            value: 45
+          - name: editor-step
+            value: 0.1
+          - name: editor-fraction-digits
+            value: 1
         type:
           name: BigDecimal
           properties:
@@ -288,6 +296,15 @@ classes:
           properties:
             - name: import
               value: java.time.LocalTime
+      - name: pointOfMeasurement
+        reference: true
+        properties:
+          - name: editor-position
+            value: 4
+          - name: nullable
+            value: true
+        type:
+          name: PointOfMeasurement
   - name: Comment
     properties:
       - name: order
@@ -784,10 +801,16 @@ classes:
             - name: import
               value: java.util.UUID
       - name: comment
+        properties:
+          - name: editor-position
+            value: 7
         type:
           name: String
       - name: confirmed
         default-value: true
+        properties:
+          - name: editor-position
+            value: 6
         type:
           name: boolean
       - name: medication
@@ -795,6 +818,8 @@ classes:
         properties:
           - name: nullable
             value: false
+          - name: editor-position
+            value: 3
         type:
           name: Medication
       - name: medicationUnit
@@ -802,24 +827,33 @@ classes:
         properties:
           - name: nullable
             value: false
+          - name: editor-position
+            value: 4
         type:
           name: MedicationUnit
       - name: dateOfIntake
         properties:
           - name: nullable
             value: false
+          - name: editor-position
+            value: 1
         type:
           name: LocalDate
           properties:
             - name: import
               value: java.time.LocalDate
       - name: selfMedication
+        properties:
+          - name: editor-position
+            value: 5
         type:
           name: boolean
       - name: timeOfIntake
         properties:
           - name: nullable
             value: false
+          - name: editor-position
+            value: 2
         type:
           name: LocalTime
           properties:
@@ -990,6 +1024,72 @@ classes:
             value: false
         type:
           name: int
+  - name: PointOfMeasurement
+    properties:
+      - name: gui
+        value: true
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+          - name: editor-position
+            value: 1
+        type:
+          name: String
+      - name: regularMaxCelsius
+        default-value: new BigDecimal(37.0)
+        properties:
+          - name: editor-position
+            value: 2
+          - name: nullable
+            value: true
+          - name: editor-min
+            value: 30
+          - name: editor-max
+            value: 45
+          - name: editor-step
+            value: 0.1
+          - name: editor-fraction-digits
+            value: 1
+        type:
+          name: BigDecimal
+          properties:
+            - name: import
+              value: java.math.BigDecimal
+      - name: regularMinCelsius
+        default-value: new BigDecimal(37.0)
+        properties:
+          - name: editor-position
+            value: 3
+          - name: nullable
+            value: true
+          - name: editor-min
+            value: 30
+          - name: editor-max
+            value: 45
+          - name: editor-step
+            value: 0.1
+          - name: editor-fraction-digits
+            value: 1
+        type:
+          name: BigDecimal
+          properties:
+            - name: import
+              value: java.math.BigDecimal
   - name: Symptom
     properties:
       - name: order
@@ -1099,6 +1199,14 @@ classes:
             value: 3
           - name: nullable
             value: false
+          - name: editor-min
+            value: 0
+          - name: editor-max
+            value: 499
+          - name: editor-step
+            value: 1
+          - name: editor-fraction-digits
+            value: 1
         type:
           name: BigDecimal
           properties:

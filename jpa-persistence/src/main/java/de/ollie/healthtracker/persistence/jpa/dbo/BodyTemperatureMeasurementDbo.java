@@ -2,7 +2,10 @@ package de.ollie.healthtracker.persistence.jpa.dbo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -39,4 +42,8 @@ public class BodyTemperatureMeasurementDbo {
 
 	@Column(name = "TIME_OF_RECORDING", nullable = false)
 	private LocalTime timeOfRecording;
+
+	@JoinColumn(name = "POINT_OF_MEASUREMENT", referencedColumnName = "ID", nullable = true)
+	@ManyToOne(fetch = FetchType.EAGER)
+	private PointOfMeasurementDbo pointOfMeasurement;
 }

@@ -26,6 +26,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationPlanDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.PointOfMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.WeightMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.WhoBloodPressureClassificationDbo;
@@ -41,6 +42,7 @@ import de.ollie.healthtracker.persistence.jpa.repository.MeatProductDboRepositor
 import de.ollie.healthtracker.persistence.jpa.repository.MeatTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.MedicationDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.MedicationUnitDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.PointOfMeasurementDboRepository;
 import jakarta.inject.Named;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -65,6 +67,7 @@ class DboFactory {
 	private final MeatTypeDboRepository meatTypeDboRepository;
 	private final MedicationDboRepository medicationDboRepository;
 	private final MedicationUnitDboRepository medicationUnitDboRepository;
+	private final PointOfMeasurementDboRepository pointOfMeasurementDboRepository;
 	private final UuidFactory uuidFactory;
 
 	AlcoholConsumptionDbo createAlcoholConsumption(
@@ -138,17 +141,22 @@ class DboFactory {
 		String comment,
 		LocalDate dateOfRecording,
 		BigDecimal celsius,
-		LocalTime timeOfRecording
+		LocalTime timeOfRecording,
+		UUID pointOfMeasurementId
 	) {
 		ensure(celsius != null, "celsius cannot be null!");
 		ensure(dateOfRecording != null, "date of recording cannot be null!");
 		ensure(timeOfRecording != null, "time of recording cannot be null!");
+		PointOfMeasurementDbo pointOfMeasurement = pointOfMeasurementId == null
+			? null
+			: pointOfMeasurementDboRepository.findById(pointOfMeasurementId).orElse(null);
 		return new BodyTemperatureMeasurementDbo()
 			.setComment(comment)
 			.setDateOfRecording(dateOfRecording)
 			.setId(uuidFactory.create())
 			.setCelsius(celsius)
-			.setTimeOfRecording(timeOfRecording);
+			.setTimeOfRecording(timeOfRecording)
+			.setPointOfMeasurement(pointOfMeasurement);
 	}
 
 	CommentDbo createComment(UUID commentTypeId, String content, LocalDate dateOfRecording) {
@@ -362,6 +370,20 @@ class DboFactory {
 		ensure(token != null, "doctor type id cannot be null!");
 		ensure(!token.isBlank(), "token cannot be blank!");
 		return new MedicationUnitDbo().setId(uuidFactory.create()).setName(name).setToken(token);
+	}
+
+	PointOfMeasurementDbo createPointOfMeasurement(
+		String name,
+		BigDecimal regularMaxCelsius,
+		BigDecimal regularMinCelsius
+	) {
+		ensure(name != null, "name cannot be null!");
+		ensure(!name.isBlank(), "name cannot be blank!");
+		return new PointOfMeasurementDbo()
+			.setId(uuidFactory.create())
+			.setName(name)
+			.setRegularMaxCelsius(regularMaxCelsius)
+			.setRegularMinCelsius(regularMinCelsius);
 	}
 
 	SymptomDbo createSymptom(String description, LocalDate dateOfRecording, UUID bodyPartId) {

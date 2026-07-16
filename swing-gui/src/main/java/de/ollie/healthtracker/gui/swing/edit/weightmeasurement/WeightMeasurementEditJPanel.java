@@ -9,17 +9,26 @@ import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
 import java.awt.GridLayout;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Map;
+import java.util.UUID;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
+import lombok.Generated;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
 public class WeightMeasurementEditJPanel extends AbstractEditPanel<WeightMeasurement> {
 
-	private JSpinner spinnerKg;
 	private JTextField textFieldDateOfRecording;
 	private JTextField textFieldTimeOfRecording;
+	private JSpinner spinnerKg;
 	private JTextField textFieldComment;
 
 	public WeightMeasurementEditJPanel(WeightMeasurement toEdit, Map<String, ItemProvider<?>> itemProviders) {
@@ -38,7 +47,7 @@ public class WeightMeasurementEditJPanel extends AbstractEditPanel<WeightMeasure
 		p.add(textFieldDateOfRecording);
 		textFieldTimeOfRecording = new JTextField(DateTimeUtil.DE_TIME_FORMAT.format(toEdit.getTimeOfRecording()), 40);
 		p.add(textFieldTimeOfRecording);
-		spinnerKg = new JSpinner(new SpinnerNumberModel(toEdit.getKg().doubleValue(), 0, 499, 1.0));
+		spinnerKg = createDecimalSpinner(toEdit.getKg(), 0, 499, 1, 1);
 		p.add(spinnerKg);
 		textFieldComment = new JTextField(toEdit.getComment(), 40);
 		p.add(textFieldComment);
@@ -51,7 +60,7 @@ public class WeightMeasurementEditJPanel extends AbstractEditPanel<WeightMeasure
 			.setId(toEdit.getId())
 			.setDateOfRecording(DateTimeUtil.dateFromString(textFieldDateOfRecording.getText()))
 			.setTimeOfRecording(DateTimeUtil.timeFromString(textFieldTimeOfRecording.getText()))
-			.setKg(new BigDecimal(((Number) spinnerKg.getValue()).doubleValue()))
+			.setKg(decimalValueOf(spinnerKg))
 			.setComment(textFieldComment.getText().isEmpty() ? null : textFieldComment.getText());
 	}
 }

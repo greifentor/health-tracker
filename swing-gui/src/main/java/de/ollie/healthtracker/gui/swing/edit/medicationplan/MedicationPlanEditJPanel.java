@@ -11,17 +11,24 @@ import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditPanel;
 import java.awt.GridLayout;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
 import lombok.Generated;
 
+/**
+ * GENERATED CODE - DO NOT TOUCH
+ *
+ * Remove this comment to suspend class from generation process.
+ */
 @Generated
 public class MedicationPlanEditJPanel extends AbstractEditPanel<MedicationPlan> {
 
@@ -88,7 +95,7 @@ public class MedicationPlanEditJPanel extends AbstractEditPanel<MedicationPlan> 
 			return new JLabel("-");
 		});
 		p.add(comboBoxMedicationUnit);
-		spinnerUnitCount = new JSpinner(new SpinnerNumberModel(toEdit.getUnitCount().doubleValue(), -100, 100, 0.1));
+		spinnerUnitCount = createDecimalSpinner(toEdit.getUnitCount(), 0, 1000000, 0.1, 1);
 		p.add(spinnerUnitCount);
 		checkBoxSelfMedication = new JCheckBox();
 		checkBoxSelfMedication.setSelected(toEdit.isSelfMedication());
@@ -106,7 +113,7 @@ public class MedicationPlanEditJPanel extends AbstractEditPanel<MedicationPlan> 
 			.setTimeOfIntake(DateTimeUtil.timeFromString(textFieldTimeOfIntake.getText()))
 			.setMedication(((Medication) comboBoxMedication.getSelectedItem()))
 			.setMedicationUnit(((MedicationUnit) comboBoxMedicationUnit.getSelectedItem()))
-			.setUnitCount(new BigDecimal(((Number) spinnerUnitCount.getValue()).doubleValue()))
+			.setUnitCount(decimalValueOf(spinnerUnitCount))
 			.setSelfMedication(checkBoxSelfMedication.isSelected());
 	}
 }
