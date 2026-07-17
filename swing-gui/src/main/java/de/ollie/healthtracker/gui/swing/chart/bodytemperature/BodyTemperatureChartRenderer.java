@@ -2,6 +2,7 @@ package de.ollie.healthtracker.gui.swing.chart.bodytemperature;
 
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 
+import de.ollie.healthtracker.core.service.model.BodyTemperatureStatus;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FontMetrics;

@@ -1,5 +1,7 @@
 package de.ollie.healthtracker.gui.swing.chart.bodytemperature;
 
+import de.ollie.healthtracker.core.service.model.BodyTemperatureStatus;
+
 /**
  * A single data point for the {@link BodyTemperatureChartJComponent}: the (averaged) body temperature of one day of the
  * month plus the resulting {@link BodyTemperatureStatus}. The {@code day} (1-31) is plotted on the x-axis, the

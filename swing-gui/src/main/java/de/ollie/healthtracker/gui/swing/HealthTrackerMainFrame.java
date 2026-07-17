@@ -5,10 +5,8 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
 import de.ollie.healthtracker.core.service.AlcoholConsumptionService;
 import de.ollie.healthtracker.core.service.AlcoholProductService;
-import de.ollie.healthtracker.core.service.BloodPressureMeasurementHistoryService;
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.BodyPartService;
-import de.ollie.healthtracker.core.service.BodyTemperatureMeasurementHistoryService;
 import de.ollie.healthtracker.core.service.BodyTemperatureMeasurementService;
 import de.ollie.healthtracker.core.service.CommentService;
 import de.ollie.healthtracker.core.service.CommentTypeService;
@@ -18,7 +16,6 @@ import de.ollie.healthtracker.core.service.DoctorTypeService;
 import de.ollie.healthtracker.core.service.ExerciseService;
 import de.ollie.healthtracker.core.service.GeneralBodyPartService;
 import de.ollie.healthtracker.core.service.ManufacturerService;
-import de.ollie.healthtracker.core.service.MeatConsumptionHistoryService;
 import de.ollie.healthtracker.core.service.MeatConsumptionService;
 import de.ollie.healthtracker.core.service.MeatProductService;
 import de.ollie.healthtracker.core.service.MeatTypeService;
@@ -31,20 +28,21 @@ import de.ollie.healthtracker.core.service.OpenTaskService;
 import de.ollie.healthtracker.core.service.PointOfMeasurementService;
 import de.ollie.healthtracker.core.service.ReportPrintService;
 import de.ollie.healthtracker.core.service.SymptomService;
-import de.ollie.healthtracker.core.service.WeightMeasurementHistoryService;
 import de.ollie.healthtracker.core.service.WeightMeasurementService;
 import de.ollie.healthtracker.core.service.WhoBloodPressureClassificationService;
 import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.NutritionCalculationData;
-import de.ollie.healthtracker.core.service.model.PointOfMeasurement;
 import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartData;
+import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartData;
+import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartJInternalFrame;
-import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureStatus;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartData;
+import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartData;
+import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.event.BloodPressureMeasurementChangeNotifier;
 import de.ollie.healthtracker.gui.swing.event.BodyTemperatureMeasurementChangeNotifier;
@@ -85,9 +83,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -125,12 +124,12 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 
 	private final AlcoholConsumptionService alcoholConsumptionService;
 	private final AlcoholProductService alcoholProductService;
+	private final BloodPressureChartDataProvider bloodPressureChartDataProvider;
 	private final BloodPressureMeasurementChangeNotifier bloodPressureMeasurementChangeNotifier;
-	private final BloodPressureMeasurementHistoryService bloodPressureMeasurementHistoryService;
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final BodyPartService bodyPartService;
+	private final BodyTemperatureChartDataProvider bodyTemperatureChartDataProvider;
 	private final BodyTemperatureMeasurementChangeNotifier bodyTemperatureMeasurementChangeNotifier;
-	private final BodyTemperatureMeasurementHistoryService bodyTemperatureMeasurementHistoryService;
 	private final BodyTemperatureMeasurementService bodyTemperatureMeasurementService;
 	private final CommentService commentService;
 	private final CommentTypeService commentTypeService;
@@ -142,7 +141,6 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final GeneralBodyPartService generalBodyPartService;
 	private final ManufacturerService manufacturerService;
 	private final MeatConsumptionChangeNotifier meatConsumptionChangeNotifier;
-	private final MeatConsumptionHistoryService meatConsumptionHistoryService;
 	private final MeatConsumptionService meatConsumptionService;
 	private final MeatProductService meatProductService;
 	private final MeatTypeService meatTypeService;
@@ -150,13 +148,14 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final MedicationPlanService medicationPlanService;
 	private final MedicationService medicationService;
 	private final MedicationUnitService medicationUnitService;
+	private final NutritionChartDataProvider nutritionChartDataProvider;
 	private final NutritionClassCalculationService nutritionClassCalculationService;
 	private final OpenTaskService openTaskService;
 	private final PointOfMeasurementService pointOfMeasurementService;
 	private final ReportPrintService reportPrintService;
 	private final SymptomService symptomService;
 	private final WeightMeasurementChangeNotifier weightMeasurementChangeNotifier;
-	private final WeightMeasurementHistoryService weightMeasurementHistoryService;
+	private final WeightChartDataProvider weightChartDataProvider;
 	private final WeightMeasurementService weightMeasurementService;
 	private final WhoBloodPressureClassificationService whoBloodPressureClassificationService;
 	private final EditDialogComponentFactory editDialogComponentFactory;
@@ -205,10 +204,24 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		mainPanel.add(desktopPane, BorderLayout.CENTER);
 		setJMenuBar(createJMenuBar());
 		setContentPane(mainPanel);
+		// Route the title bar's close button through onExit() instead of a hard EXIT_ON_CLOSE.
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(
+			new WindowAdapter() {
+				@Override
+				public void windowClosing(WindowEvent e) {
+					closeApplication();
+				}
+			}
+		);
 		// Restore bounds when the window is un-maximized ...
 		setBounds(100, 100, 1400, 800);
 		// ... but start maximized to fill the whole screen.
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+	}
+
+	void closeApplication() {
+		System.exit(0);
 	}
 
 	public void showFrame() {
@@ -683,138 +696,24 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				weightMeasurementChangeNotifier
 			);
 		} else if (e.getSource() == menuItemFileQuit) {
-			System.exit(0);
+			closeApplication();
 		}
 	}
 
-	/** Maps a date to its 1-based position within the {@code chartWindowDays}-day window ending today (today = last). */
-	private int windowPosition(LocalDate date, LocalDate today) {
-		return chartWindowDays - (int) (today.toEpochDay() - date.toEpochDay());
-	}
-
 	private List<WeightChartData> createWeightChartData() {
-		LocalDate today = LocalDate.now();
-		// Average the weight per day over the last chartWindowDays days. Index: [kgSum, count].
-		Map<LocalDate, double[]> perDay = new HashMap<>();
-		weightMeasurementHistoryService
-			.findAllOfLastDays(chartWindowDays - 1)
-			.forEach(wm -> {
-				if (wm.getKg() == null) {
-					return;
-				}
-				double[] sums = perDay.computeIfAbsent(wm.getDateOfRecording(), d -> new double[2]);
-				sums[0] += wm.getKg().doubleValue();
-				sums[1]++;
-			});
-		List<WeightChartData> result = new ArrayList<>();
-		perDay.forEach((date, sums) -> result.add(new WeightChartData(windowPosition(date, today), sums[0] / sums[1])));
-		return result;
+		return weightChartDataProvider.create(chartWindowDays);
 	}
-
-	/** Default lower / upper bound of the normal body temperature range used when a measurement has no point of measurement. */
-	private static final double DEFAULT_BODY_TEMPERATURE_MIN = 36.5;
-	private static final double DEFAULT_BODY_TEMPERATURE_MAX = 37.4;
 
 	private List<BodyTemperatureChartData> createBodyTemperatureChartData() {
-		LocalDate today = LocalDate.now();
-		// Average the body temperature and its applicable range per day over the last chartWindowDays days.
-		// Index: [celsiusSum, count, minSum, maxSum]; the range comes from the point of measurement (or the default range).
-		Map<LocalDate, double[]> perDay = new HashMap<>();
-		bodyTemperatureMeasurementHistoryService
-			.findAllOfLastDays(chartWindowDays - 1)
-			.forEach(btm -> {
-				if (btm.getCelsius() == null) {
-					return;
-				}
-				PointOfMeasurement pointOfMeasurement = btm.getPointOfMeasurement();
-				double min = pointOfMeasurement != null && pointOfMeasurement.getRegularMinCelsius() != null
-					? pointOfMeasurement.getRegularMinCelsius().doubleValue()
-					: DEFAULT_BODY_TEMPERATURE_MIN;
-				double max = pointOfMeasurement != null && pointOfMeasurement.getRegularMaxCelsius() != null
-					? pointOfMeasurement.getRegularMaxCelsius().doubleValue()
-					: DEFAULT_BODY_TEMPERATURE_MAX;
-				double[] sums = perDay.computeIfAbsent(btm.getDateOfRecording(), d -> new double[4]);
-				sums[0] += btm.getCelsius().doubleValue();
-				sums[1]++;
-				sums[2] += min;
-				sums[3] += max;
-			});
-		List<BodyTemperatureChartData> result = new ArrayList<>();
-		perDay.forEach((date, sums) -> {
-			double celsius = sums[0] / sums[1];
-			double min = sums[2] / sums[1];
-			double max = sums[3] / sums[1];
-			BodyTemperatureStatus status = celsius < min
-				? BodyTemperatureStatus.BELOW
-				: celsius > max ? BodyTemperatureStatus.ABOVE : BodyTemperatureStatus.NORMAL;
-			result.add(new BodyTemperatureChartData(windowPosition(date, today), celsius, status));
-		});
-		return result;
+		return bodyTemperatureChartDataProvider.create(chartWindowDays);
 	}
 
 	private List<BloodPressureChartData> createBloodPressureChartData() {
-		LocalDate today = LocalDate.now();
-		// Average sys / dia / pulse per day over the last chartWindowDays days. Index: [sysSum, diaSum, pulseSum, count].
-		Map<LocalDate, int[]> perDay = new HashMap<>();
-		bloodPressureMeasurementHistoryService
-			.findAllOfLastDays(chartWindowDays - 1)
-			.forEach(bpm -> {
-				int[] sums = perDay.computeIfAbsent(bpm.getDateOfRecording(), d -> new int[4]);
-				sums[0] += bpm.getSysMmHg();
-				sums[1] += bpm.getDiaMmHg();
-				sums[2] += bpm.getPulsePerMinute();
-				sums[3]++;
-			});
-		List<BloodPressureChartData> result = new ArrayList<>();
-		perDay.forEach((date, sums) -> {
-			int sys = Math.round((float) sums[0] / sums[3]);
-			int dia = Math.round((float) sums[1] / sums[3]);
-			int pulse = Math.round((float) sums[2] / sums[3]);
-			result.add(
-				new BloodPressureChartData(
-					windowPosition(date, today),
-					sys,
-					dia,
-					pulse,
-					whoBloodPressureClassificationService.calculateClassification(sys, dia)
-				)
-			);
-		});
-		return result;
+		return bloodPressureChartDataProvider.create(chartWindowDays);
 	}
 
 	private List<NutritionChartData> createNutritionChartData() {
-		// Classify each recording day as meat / fish day (same logic as the meat consumption print).
-		Map<LocalDate, MeatConsumptionStaticRecord> dataPerDay = new HashMap<>();
-		meatConsumptionHistoryService
-			.findAllOfLastDays(366)
-			.forEach(mc ->
-				dataPerDay
-					.computeIfAbsent(mc.getDateOfRecording(), d -> new MeatConsumptionStaticRecord())
-					.addFish(mc.getMeatProduct().getMeatType().getCategory() == MeatCategory.FISH ? 1 : 0)
-					.addMeat(mc.getMeatProduct().getMeatType().getCategory() == MeatCategory.MEAT ? 1 : 0)
-			);
-		// Aggregate the classified days per month (same logic as the meat consumption print).
-		Map<YearMonth, MeatConsumptionStaticRecord> dataPerMonth = new HashMap<>();
-		dataPerDay.forEach((day, record) ->
-			dataPerMonth
-				.computeIfAbsent(YearMonth.of(day.getYear(), day.getMonthValue()), ym -> new MeatConsumptionStaticRecord())
-				.addFish(record.getFish() > 0 && !(record.getMeat() > 0) ? 1 : 0)
-				.addMeat(record.getMeat() > 0 ? 1 : 0)
-		);
-		// One chart point per month, sorted chronologically; veggie = days in month - meat - fish.
-		List<NutritionChartData> result = new ArrayList<>();
-		dataPerMonth
-			.entrySet()
-			.stream()
-			.sorted((e0, e1) -> compareYearMonth(e0.getKey(), e1.getKey()))
-			.forEach(entry -> {
-				int meat = entry.getValue().getMeat();
-				int fish = entry.getValue().getFish();
-				int veggie = entry.getKey().getMonth().maxLength() - meat - fish;
-				result.add(new NutritionChartData(entry.getKey().getMonthValue(), meat, fish, veggie));
-			});
-		return result;
+		return nutritionChartDataProvider.create();
 	}
 
 	private NutritionCalculationData createNutritionCalculationData(MeatConsumptionStaticRecord mcsr) {
