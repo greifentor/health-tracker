@@ -1054,7 +1054,7 @@ classes:
         default-value: new BigDecimal(37.0)
         properties:
           - name: editor-position
-            value: 3
+            value: 2
           - name: nullable
             value: true
           - name: editor-min
@@ -1074,7 +1074,7 @@ classes:
         default-value: new BigDecimal(37.0)
         properties:
           - name: editor-position
-            value: 2
+            value: 3
           - name: nullable
             value: true
           - name: editor-min
@@ -1204,9 +1204,9 @@ classes:
           - name: editor-max
             value: 499
           - name: editor-step
-            value: 0.1
+            value: 1
           - name: editor-fraction-digits
-            value: 2
+            value: 1
         type:
           name: BigDecimal
           properties:

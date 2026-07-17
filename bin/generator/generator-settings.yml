@@ -1,0 +1,171 @@
+default-target-path: tmp
+ucg-version: 1.0
+properties:
+  - name: baselib
+    value: de.ollie.baselib
+  - name: core-exception-package
+    value: de.ollie.healthtracker.core.service.exception
+  - name: core-model-package
+    value: de.ollie.healthtracker.core.service.model
+  - name: core-port-persistence-package
+    value: de.ollie.healthtracker.core.service.port.persistence
+  - name: core-service-package
+    value: de.ollie.healthtracker.core.service
+  - name: jpa-entity-package
+    value: de.ollie.healthtracker.persistence.jpa.dbo
+  - name: jpa-mapper-package
+    value: de.ollie.healthtracker.persistence.jpa.mapper
+  - name: jpa-repository-package
+    value: de.ollie.healthtracker.persistence.jpa.repository
+  - name: shell-mapper-package
+    value: de.ollie.healthtracker.shell.mapper
+  - name: swing-gui-package
+    value: de.ollie.healthtracker.gui.swing
+generators:
+# --- Service ---
+  - type: CLASS
+    suppress-when: classModel Load suppress-service HasProperty
+    package: de.ollie.healthtracker.core.service.model
+    target-file-name: ${UnitName}
+    path: generator
+    template: templates/core/Model.vc
+    properties:
+      - name: target-path
+        value: service-interface/src/main/java
+  - type: ENUM
+    suppress-when: classModel Load suppress-service HasProperty
+    package: de.ollie.healthtracker.core.service.model
+    resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+    template: templates/core/Enum.vc
+    properties:
+      - name: target-path
+        value: service-interface/src/main/java
+  - type: CLASS
+    suppress-when: classModel Load suppress-service HasProperty
+    package: de.ollie.healthtracker.core.service.port.persistence
+    target-file-name: ${UnitName}PersistencePort
+    path: generator
+    template: templates/core/PersistencePort.vc
+    properties:
+      - name: target-path
+        value: service-interface/src/main/java
+  - type: CLASS
+    suppress-when: classModel Load suppress-service HasProperty
+    package: de.ollie.healthtracker.core.service
+    target-file-name: ${UnitName}Service
+    path: generator
+    template: templates/core/Service.vc
+    properties:
+      - name: target-path
+        value: service-interface/src/main/java
+  - type: CLASS
+    suppress-when: classModel Load suppress-service HasProperty
+    package: de.ollie.healthtracker.core.service.impl
+    target-file-name: ${UnitName}ServiceImpl
+    path: generator
+    template: templates/core/ServiceImpl.vc
+    properties:
+      - name: target-path
+        value: service/src/main/java
+# --- JPA ---
+  - type: CLASS
+    suppress-when: classModel Load suppress-persistence HasProperty
+    package: de.ollie.healthtracker.persistence.jpa.dbo
+    resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+    target-file-name: ${UnitName}Dbo
+    template: templates/persistence/jpa/Dbo.vc
+    properties:
+      - name: target-path
+        value: jpa-persistence/src/main/java
+  - type: ENUM
+    suppress-when: classModel Load suppress-persistence HasProperty
+    package: de.ollie.healthtracker.persistence.jpa.dbo
+    resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+    target-file-name: ${UnitName}Dbo
+    template: templates/persistence/jpa/EnumDbo.vc
+    properties:
+      - name: target-path
+        value: jpa-persistence/src/main/java
+  - type: CLASS
+    suppress-when: classModel Load suppress-persistence HasProperty
+    package: de.ollie.healthtracker.persistence.jpa.mapper
+    path: generator
+    target-file-name: ${UnitName}DboMapper
+    template: templates/jpa/DboMapper.vc
+    properties:
+      - name: target-path
+        value: jpa-persistence/src/main/java
+  - type: CLASS
+    suppress-when: classModel Load suppress-persistence HasProperty
+    package: de.ollie.healthtracker.persistence.jpa.repository
+    target-file-name: ${UnitName}DboRepository
+    path: generator
+    template: templates/jpa/DboRepository.vc
+    properties:
+      - name: target-path
+        value: jpa-persistence/src/main/java
+  - type: CLASS
+    suppress-when: classModel Load suppress-persistence HasProperty
+    package: de.ollie.healthtracker.persistence.jpa
+    target-file-name: ${UnitName}PersistenceJpaAdapter
+    path: generator
+    template: templates/jpa/PersistenceAdapter.vc
+    properties:
+      - name: target-path
+        value: jpa-persistence/src/main/java
+# --- Shell ---
+  - type: CLASS
+    suppress-when: classModel Load suppress-shell HasProperty
+    package: de.ollie.healthtracker.shell.mapper.impl
+    target-file-name: ${UnitName}ToStringMapperImpl
+    path: generator
+    template: templates/shell/ToStringMapperImpl.vc
+    properties:
+      - name: target-path
+        value: shell/src/main/java
+  - type: CLASS
+    suppress-when: classModel Load suppress-shell HasProperty
+    package: de.ollie.healthtracker.shell.mapper
+    target-file-name: ${UnitName}ToStringMapper
+    path: generator
+    template: templates/shell/ToStringMapper.vc
+    properties:
+      - name: target-path
+        value: shell/src/main/java
+# --- Swing-GUI ---
+  - type: CLASS
+    generate-when: classModel Load gui HasProperty
+    package: de.ollie.healthtracker.gui.swing.select.${UnitNameLowerCase}
+    target-file-name: ${UnitName}SelectJInternalFrame
+    path: generator
+    template: templates/swing-gui/SelectJInternalFrame.vc
+    properties:
+      - name: target-path
+        value: swing-gui/src/main/java
+  - type: CLASS
+    generate-when: classModel Load gui HasProperty
+    package: de.ollie.healthtracker.gui.swing.select.${UnitNameLowerCase}
+    target-file-name: ${UnitName}SelectJPanel
+    path: generator
+    template: templates/swing-gui/SelectJPanel.vc
+    properties:
+      - name: target-path
+        value: swing-gui/src/main/java
+  - type: CLASS
+    generate-when: classModel Load gui HasProperty
+    package: de.ollie.healthtracker.gui.swing.edit.${UnitNameLowerCase}
+    target-file-name: ${UnitName}EditJInternalFrame
+    path: generator
+    template: templates/swing-gui/EditJInternalFrame.vc
+    properties:
+      - name: target-path
+        value: swing-gui/src/main/java
+  - type: CLASS
+    generate-when: classModel Load gui HasProperty
+    package: de.ollie.healthtracker.gui.swing.edit.${UnitNameLowerCase}
+    target-file-name: ${UnitName}EditJPanel
+    path: generator
+    template: templates/swing-gui/EditJPanel.vc
+    properties:
+      - name: target-path
+        value: swing-gui/src/main/java

@@ -1,0 +1,67 @@
+package ${PackageName};
+
+import ${Properties.get("core-service-package")}.${ClassName}Service;
+import ${Properties.get("core-model-package")}.${ClassName};
+#foreach($Attribute in $Attributes)
+#if (${Attribute.isReference()})
+import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
+#end
+#if (${Attribute.isTypeEnum()})
+import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
+#end
+#end
+import ${Properties.get("core-port-persistence-package")}.${ClassName}PersistencePort;
+import jakarta.inject.Named;
+import java.util.List;
+import java.util.Optional;
+import lombok.Generated;
+import lombok.RequiredArgsConstructor;
+
+#foreach($Import in $Imports)
+import ${Import};
+#end
+
+/**
+ * ${GeneratedCodeMarker}
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
+@Named
+@RequiredArgsConstructor
+class ${ClassName}ServiceImpl implements ${ClassName}Service {
+
+	private final ${ClassName}PersistencePort ${ClassNameAsAttribute}PersistencePort;
+
+	@Override
+	public ${ClassName} create${ClassName}(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})${Attribute.getTypeName()} ${Attribute.getName()}#if($foreach.hasNext), #end#end) {
+		return ${ClassNameAsAttribute}PersistencePort.create(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})${Attribute.getName()}#if($foreach.hasNext), #end#end);
+	}
+
+	@Override
+	public void delete${ClassName}(UUID id) {
+		${ClassNameAsAttribute}PersistencePort.deleteById(id);
+	}
+
+	@Override
+	public Optional<${ClassName}> findById(${Class.getAttributeTypeNameByPropertyName("id")} id) {
+		return ${ClassNameAsAttribute}PersistencePort.findById(id);
+	}
+#foreach($Attribute in ${Class.getAttributesWithPropertySet("findable")})
+
+	@Override
+	public Optional<${ClassName}> findByIdOr${Attribute.getNameCamelCase()}Particle(String namePartOrId) {
+		return ${ClassNameAsAttribute}PersistencePort.findByIdOr${Attribute.getNameCamelCase()}Particle(namePartOrId);
+	}
+#end
+
+	@Override
+	public List<${ClassName}> list${ClassName}s() {
+		return ${ClassNameAsAttribute}PersistencePort.list();
+	}
+	
+	@Override
+	public ${ClassName} update${ClassName}(${ClassName} toSave) {
+		return ${ClassNameAsAttribute}PersistencePort.update(toSave);
+	}
+}

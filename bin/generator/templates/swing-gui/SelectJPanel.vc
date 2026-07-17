@@ -1,0 +1,147 @@
+package ${PackageName};
+
+#if($Class.hasAnAttributeWithTypeName("LocalDate") || $Class.hasAnAttributeWithTypeName("LocalTime"))
+import ${Properties.get("baselib")}.util.DateTimeUtil;
+#end
+import ${Properties.get("core-service-package")}.${ClassName}Service;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+#set($TypeClassName = $Attribute.getTypeClassType().getName())
+import ${Properties.get("core-service-package")}.${TypeClassName}Service;
+#end
+import ${Properties.get("core-model-package")}.${ClassName};
+import ${Properties.get("swing-gui-package")}.EditDialogComponentFactory;
+import ${Properties.get("swing-gui-package")}.edit.${ClassName.toLowerCase()}.${ClassName}EditJInternalFrame;
+import ${Properties.get("swing-gui-package")}.select.AbstractSelectJPanel;
+import ${Properties.get("swing-gui-package")}.select.AbstractSelectionTableModel;
+import ${Properties.get("swing-gui-package")}.select.SelectionPanelObserver;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+#if($Attribute.isTypeEnum() == true)
+import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
+#end
+#end
+import java.util.List;
+import javax.swing.JDesktopPane;
+import lombok.Generated;
+
+#foreach($Import in $Imports)
+import ${Import};
+#end
+
+/**
+ * ${GeneratedCodeMarker}
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
+public class ${ClassName}SelectJPanel extends AbstractSelectJPanel<${ClassName}> implements SelectionPanelObserver {
+
+	private final ${ClassName}Service ${ClassNameAsAttribute}Service;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+#set($TypeClassName = $Attribute.getTypeClassType())
+	private final ${TypeClassName.getName()}Service ${TypeClassName.getNameAsAttribute()}Service;
+#end
+
+	public ${ClassName}SelectJPanel(
+		${ClassName}Service ${ClassNameAsAttribute}Service,
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+#set($TypeClassName = $Attribute.getTypeClassType())
+		${TypeClassName.getName()}Service ${TypeClassName.getNameAsAttribute()}Service,
+#end
+		String className,
+		JDesktopPane desktopPane,
+		EditDialogComponentFactory editDialogComponentFactory,
+		SelectionPanelObserver observer
+	) {
+		super(desktopPane, className + "s", editDialogComponentFactory, observer);
+		this.${ClassNameAsAttribute}Service = ${ClassNameAsAttribute}Service;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+#set($TypeClassName = $Attribute.getTypeClassType())
+		this.${TypeClassName.getNameAsAttribute()}Service = ${TypeClassName.getNameAsAttribute()}Service;
+#end
+		updateTableSelection();
+	}
+
+	@Override
+	protected List<${ClassName}> getObjectsToSelect() {
+		return ${ClassNameAsAttribute}Service != null
+			? ${ClassNameAsAttribute}Service
+				.list${ClassName}s()
+				.stream()
+				.toList()
+			: List.of();
+	}
+
+	@Override
+	protected AbstractSelectionTableModel<${ClassName}> createSelectionModel() {
+		return new AbstractSelectionTableModel<${ClassName}>(getObjectsToSelect(), #foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))"${Attribute.getCamelCaseNameSeparated(" ")}"#if($foreach.hasNext), #end#end) {
+			@Override
+			protected Object getColumnValueFor(${ClassName} t, int columnIndex) {
+				return switch (columnIndex) {
+					#set($count = 0)
+					#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+					#if($Attribute.isReference() == true)
+					case $count -> (t.get${Attribute.getNameCamelCase()}() != null ? t.get${Attribute.getNameCamelCase()}().getName() : "-");
+					#elseif($Attribute.getTypeName() == "LocalDate")
+					case $count -> DateTimeUtil.DE_DATE_FORMAT.format(t.get$Attribute.getNameCamelCase()());
+					#elseif($Attribute.getTypeName() == "LocalTime")
+					case $count -> DateTimeUtil.DE_TIME_FORMAT.format(t.get$Attribute.getNameCamelCase()());
+					#elseif($Attribute.getTypeName().equalsIgnoreCase("boolean"))
+					case $count -> t.is${Attribute.getNameCamelCase()}();
+					#elseif($Attribute.getTypeName() == "BigDecimal")
+					case $count -> t.get${Attribute.getNameCamelCase()}() == null ? null : t.get${Attribute.getNameCamelCase()}().setScale(#if($Attribute.hasProperty("editor-fraction-digits"))$Attribute.getPropertyValue("editor-fraction-digits")#{else}1#end, java.math.RoundingMode.HALF_UP);
+					#else
+					case $count -> t.get${Attribute.getNameCamelCase()}();
+					#end
+					#set($count = $count + 1)
+					#end
+					default -> null;
+				};
+			}
+		};
+	}
+
+	@Override
+	protected void createEditInternalFrame(${ClassName} selected) {
+		new ${ClassName}EditJInternalFrame(
+				selected,
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+#set($TypeClassName = $Attribute.getTypeClassType())
+				() -> ${TypeClassName.getNameAsAttribute()}Service.list${TypeClassName.getName()}s(),
+#end
+				getEditDialogComponentFactory(),
+				this,
+				getDesktopPane()
+		);
+	}
+
+	@Override
+	protected ${ClassName} createNewObject() {
+		return new ${ClassName}()
+				.setId(UUID.randomUUID())
+		#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})
+			#if($Attribute.getTypeName() == "LocalDate")
+				.set${Attribute.getNameCamelCase()}(LocalDate.now())
+			#elseif($Attribute.getTypeName() == "LocalTime")
+				.set${Attribute.getNameCamelCase()}(LocalTime.now())
+			#elseif($Attribute.getTypeName() == "String")
+				.set${Attribute.getNameCamelCase()}("")
+			#elseif($Attribute.getTypeName() == "boolean")
+				.set${Attribute.getNameCamelCase()}(#if(${Attribute.getDefaultValue()})${Attribute.getDefaultValue()} #else false#end)
+			#elseif($Attribute.getTypeName() == "int")
+				.set${Attribute.getNameCamelCase()}(#if(${Attribute.getDefaultValue()})${Attribute.getDefaultValue()} #else 0#end)
+			#else
+				.set${Attribute.getNameCamelCase()}(#if(${Attribute.getDefaultValue()})${Attribute.getDefaultValue()} #else null#end)
+			#end
+		#end;
+	}
+
+	@Override
+	protected void delete(${ClassName} toDelete) {
+		${ClassNameAsAttribute}Service.delete${ClassName}(toDelete.getId());
+	}
+
+	@Override
+	protected void save(${ClassName} toSave) {
+		${ClassNameAsAttribute}Service.update${ClassName}(toSave);
+	}
+}

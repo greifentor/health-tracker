@@ -49,19 +49,19 @@ public class PointOfMeasurementSelectJPanel
 		return new AbstractSelectionTableModel<PointOfMeasurement>(
 			getObjectsToSelect(),
 			"Name",
-			"Regular Max Celsius",
-			"Regular Min Celsius"
+			"Regular Min Celsius",
+			"Regular Max Celsius"
 		) {
 			@Override
 			protected Object getColumnValueFor(PointOfMeasurement t, int columnIndex) {
 				return switch (columnIndex) {
 					case 0 -> t.getName();
-					case 1 -> t.getRegularMaxCelsius() == null
-						? null
-						: t.getRegularMaxCelsius().setScale(1, java.math.RoundingMode.HALF_UP);
-					case 2 -> t.getRegularMinCelsius() == null
+					case 1 -> t.getRegularMinCelsius() == null
 						? null
 						: t.getRegularMinCelsius().setScale(1, java.math.RoundingMode.HALF_UP);
+					case 2 -> t.getRegularMaxCelsius() == null
+						? null
+						: t.getRegularMaxCelsius().setScale(1, java.math.RoundingMode.HALF_UP);
 					default -> null;
 				};
 			}

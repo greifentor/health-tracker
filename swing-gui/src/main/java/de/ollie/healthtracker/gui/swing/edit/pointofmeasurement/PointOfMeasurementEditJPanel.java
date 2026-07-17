@@ -24,8 +24,8 @@ import lombok.Generated;
 public class PointOfMeasurementEditJPanel extends AbstractEditPanel<PointOfMeasurement> {
 
 	private JTextField textFieldName;
-	private JSpinner spinnerRegularMaxCelsius;
 	private JSpinner spinnerRegularMinCelsius;
+	private JSpinner spinnerRegularMaxCelsius;
 
 	public PointOfMeasurementEditJPanel(PointOfMeasurement toEdit, Map<String, ItemProvider<?>> itemProviders) {
 		super(toEdit, itemProviders);
@@ -33,7 +33,7 @@ public class PointOfMeasurementEditJPanel extends AbstractEditPanel<PointOfMeasu
 
 	@Override
 	protected JPanel createLabelPanel() {
-		return createLabelSubPanel("Name:", "Regular Max Celsius:", "Regular Min Celsius:");
+		return createLabelSubPanel("Name:", "Regular Min Celsius:", "Regular Max Celsius:");
 	}
 
 	@Override
@@ -41,10 +41,10 @@ public class PointOfMeasurementEditJPanel extends AbstractEditPanel<PointOfMeasu
 		JPanel p = new JPanel(new GridLayout(3, 1, HGAP, VGAP));
 		textFieldName = new JTextField(toEdit.getName(), 40);
 		p.add(textFieldName);
-		spinnerRegularMaxCelsius = createDecimalSpinner(toEdit.getRegularMaxCelsius(), 30, 45, 0.1, 1);
-		p.add(spinnerRegularMaxCelsius);
 		spinnerRegularMinCelsius = createDecimalSpinner(toEdit.getRegularMinCelsius(), 30, 45, 0.1, 1);
 		p.add(spinnerRegularMinCelsius);
+		spinnerRegularMaxCelsius = createDecimalSpinner(toEdit.getRegularMaxCelsius(), 30, 45, 0.1, 1);
+		p.add(spinnerRegularMaxCelsius);
 		return p;
 	}
 
@@ -53,7 +53,7 @@ public class PointOfMeasurementEditJPanel extends AbstractEditPanel<PointOfMeasu
 		return new PointOfMeasurement()
 			.setId(toEdit.getId())
 			.setName(textFieldName.getText())
-			.setRegularMaxCelsius(decimalValueOf(spinnerRegularMaxCelsius))
-			.setRegularMinCelsius(decimalValueOf(spinnerRegularMinCelsius));
+			.setRegularMinCelsius(decimalValueOf(spinnerRegularMinCelsius))
+			.setRegularMaxCelsius(decimalValueOf(spinnerRegularMaxCelsius));
 	}
 }

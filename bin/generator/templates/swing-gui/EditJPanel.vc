@@ -1,0 +1,159 @@
+package ${PackageName};
+
+import static ${Properties.get("swing-gui-package")}.Constants.HGAP;
+import static ${Properties.get("swing-gui-package")}.Constants.VGAP;
+
+import ${Properties.get("core-model-package")}.${ClassName};
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+import ${Properties.get("core-model-package")}.$Attribute.getTypeClassType().getName();
+#end
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+#if($Attribute.isTypeEnum() == true)
+import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
+#end
+#end
+import ${Properties.get("swing-gui-package")}.ItemProvider;
+import ${Properties.get("swing-gui-package")}.edit.AbstractEditPanel;
+import lombok.Generated;
+import java.awt.GridLayout;
+import java.util.Map;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+#if($Class.hasAnAttributeWithTypeName("boolean") == true)
+import javax.swing.JCheckBox;
+#end
+#if($Class.hasAnAttributeWithTypeName("Boolean") == true)
+import javax.swing.JCheckBox;
+#end
+#if($Class.hasAnAttributeWithTypeName("int") || $Class.hasAnAttributeWithTypeName("Integer") || $Class.hasAnAttributeWithTypeName("BigDecimal"))
+import javax.swing.JSpinner;
+#end
+#if($Class.hasAnAttributeWithTypeName("int") || $Class.hasAnAttributeWithTypeName("Integer"))
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+#end
+#if($Class.hasAReferenceAttribute() == true  || $Class.hasAnEnumTypeAttribute() == true)
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import java.util.List;
+#end
+#if($Class.hasAnAttributeWithTypeName("LocalDate") == true)
+import ${Properties.get("baselib")}.util.DateTimeUtil;
+#end
+
+#foreach($Import in $Imports)
+import ${Import};
+#end
+
+/**
+ * ${GeneratedCodeMarker}
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
+public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
+
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+	public static final String ${Attribute.getTypeClassType().getNameSeparated("_").toUpperCase()}_ITEM_PROVIDER_ID = "${Attribute.getTypeClassType().getNameSeparated("-").toLowerCase()}-item-provider";
+	#if($foreach.hasNext)#else
+
+	#end
+#end
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+	#if($Attribute.isReference() == true)
+	private JComboBox<${Attribute.getTypeClassType().getName()}> comboBox${Attribute.getNameCamelCase()};
+	#elseif(${Attribute.getTypeName()} == "boolean" || ${Attribute.getTypeName()} == "Boolean")
+	private JCheckBox checkBox${Attribute.getNameCamelCase()};
+	#elseif(${Attribute.getTypeName()} == "int" || ${Attribute.getTypeName()} == "Integer" || ${Attribute.getTypeName()} == "BigDecimal")
+	private JSpinner spinner${Attribute.getNameCamelCase()};
+	#elseif($Attribute.isTypeEnum() == true)
+	private JComboBox<${Attribute.getTypeName()}> comboBox${Attribute.getNameCamelCase()};
+	#else
+	private JTextField textField${Attribute.getNameCamelCase()};
+	#end
+#end
+
+	public ${ClassName}EditJPanel(${ClassName} toEdit, Map<String, ItemProvider<?>> itemProviders) {
+		super(toEdit, itemProviders);
+	}
+
+	@Override
+	protected JPanel createLabelPanel() {
+		return createLabelSubPanel(
+		#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+				"${Attribute.getCamelCaseNameSeparated(" ")}:"#if($foreach.hasNext),#end
+		#end
+		);
+	}
+
+	@Override
+	protected JPanel createComponentPanel(${ClassName} toEdit, Map<String, ItemProvider<?>> itemProviders) {
+		JPanel p = new JPanel(new GridLayout(${Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position").size()}, 1, HGAP, VGAP));
+		#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+		#if(${Attribute.isReference()} == true)
+		#set($ReferencedClassName = ${Attribute.getTypeClassType().getName()})
+		List<$ReferencedClassName> list${Attribute.getNameCamelCase()} = ((ItemProvider<$ReferencedClassName>) itemProviders.get(${Attribute.getTypeClassType().getNameSeparated("_").toUpperCase()}_ITEM_PROVIDER_ID)).getItem();
+		comboBox${Attribute.getNameCamelCase()} = new JComboBox<>(list${Attribute.getNameCamelCase()}.toArray(new ${ReferencedClassName}[list${Attribute.getNameCamelCase()}.size()]));
+		comboBox${Attribute.getNameCamelCase()}.setSelectedItem(toEdit.get${Attribute.getNameCamelCase()}());
+		comboBox${Attribute.getNameCamelCase()}.setRenderer((list, value, index, isSelected, cellHasFocus) -> {
+			if (value != null) {
+				return new JLabel(value.getName());
+			}
+			return new JLabel("-");
+		});
+		p.add(comboBox${Attribute.getNameCamelCase()});
+		#else
+		#if(${Attribute.getTypeName()} == "LocalDate")
+		textField${Attribute.getNameCamelCase()} = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.get${Attribute.getNameCamelCase()}()), 40);
+		p.add(textField${Attribute.getNameCamelCase()});
+		#elseif(${Attribute.getTypeName()} == "LocalTime")
+		textField${Attribute.getNameCamelCase()} = new JTextField(DateTimeUtil.DE_TIME_FORMAT.format(toEdit.get${Attribute.getNameCamelCase()}()), 40);
+		p.add(textField${Attribute.getNameCamelCase()});
+		#elseif(${Attribute.getTypeName()} == "boolean" || ${Attribute.getTypeName()} == "Boolean")
+		checkBox${Attribute.getNameCamelCase()} = new JCheckBox();
+		checkBox${Attribute.getNameCamelCase()}.setSelected(toEdit.is${Attribute.getNameCamelCase()}());
+		p.add(checkBox${Attribute.getNameCamelCase()});
+		#elseif(${Attribute.getTypeName()} == "int")
+		SpinnerModel spinnerModel${Attribute.getNameCamelCase()} = new SpinnerNumberModel(toEdit.get${Attribute.getNameCamelCase()}(), 0, 1000, 1);
+		spinner${Attribute.getNameCamelCase()} = new JSpinner(spinnerModel${Attribute.getNameCamelCase()});
+		p.add(spinner${Attribute.getNameCamelCase()});
+		#elseif(${Attribute.getTypeName()} == "BigDecimal")
+		spinner${Attribute.getNameCamelCase()} = createDecimalSpinner(toEdit.get${Attribute.getNameCamelCase()}(), #if($Attribute.hasProperty("editor-min"))$Attribute.getPropertyValue("editor-min")#{else}0#end, #if($Attribute.hasProperty("editor-max"))$Attribute.getPropertyValue("editor-max")#{else}1000000#end, #if($Attribute.hasProperty("editor-step"))$Attribute.getPropertyValue("editor-step")#{else}0.1#end, #if($Attribute.hasProperty("editor-fraction-digits"))$Attribute.getPropertyValue("editor-fraction-digits")#{else}1#end);
+		p.add(spinner${Attribute.getNameCamelCase()});
+		#elseif(${Attribute.isTypeEnum()} == true)
+		comboBox${Attribute.getNameCamelCase()} = new JComboBox<>(${Attribute.getTypeName()}.values());
+		comboBox${Attribute.getNameCamelCase()}.setSelectedItem(toEdit.get${Attribute.getNameCamelCase()}());
+		p.add(comboBox${Attribute.getNameCamelCase()});
+		#else
+		textField${Attribute.getNameCamelCase()} = new JTextField(toEdit.get${Attribute.getNameCamelCase()}(), 40);
+		p.add(textField${Attribute.getNameCamelCase()});
+		#end
+		#end
+		#end
+		return p;
+	}
+
+	@Override
+	public ${ClassName} getCurrentContent() {
+		return new ${ClassName}().setId(toEdit.getId())
+		#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValue("editor-position"))
+			#if(${Attribute.getTypeName()} == "LocalDate")
+				.set${Attribute.getNameCamelCase()}(DateTimeUtil.dateFromString(textField${Attribute.getNameCamelCase()}.getText()))
+			#elseif(${Attribute.getTypeName()} == "LocalTime")
+				.set${Attribute.getNameCamelCase()}(DateTimeUtil.timeFromString(textField${Attribute.getNameCamelCase()}.getText()))
+			#elseif(${Attribute.getTypeName()} == "boolean")
+				.set${Attribute.getNameCamelCase()}(checkBox${Attribute.getNameCamelCase()}.isSelected())
+			#elseif(${Attribute.getTypeName()} == "int")
+				.set${Attribute.getNameCamelCase()}((Integer) spinner${Attribute.getNameCamelCase()}.getValue())
+			#elseif(${Attribute.getTypeName()} == "BigDecimal")
+				.set${Attribute.getNameCamelCase()}(decimalValueOf(spinner${Attribute.getNameCamelCase()}))
+			#elseif(${Attribute.isReference()} == true)
+				.set${Attribute.getNameCamelCase()}(((${Attribute.getTypeClassType().getName()}) comboBox${Attribute.getNameCamelCase()}.getSelectedItem()))
+			#elseif(${Attribute.isTypeEnum()} == true)
+				.set${Attribute.getNameCamelCase()}(((${Attribute.getTypeName()}) comboBox${Attribute.getNameCamelCase()}.getSelectedItem()))
+			#else
+				.set${Attribute.getNameCamelCase()}(textField${Attribute.getNameCamelCase()}#if(${Attribute.hasPropertyWithValue("nullable", "true")}).getText().isEmpty() ? null : textField${Attribute.getNameCamelCase()}#end .getText())
+			#end
+		#end;
+	}
+}

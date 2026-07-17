@@ -1,0 +1,96 @@
+package ${PackageName};
+
+import static de.ollie.baselib.util.Check.ensure;
+
+import ${Properties.get("core-exception-package")}.TooManyElementsException;
+import ${Properties.get("core-model-package")}.${ClassName};
+#foreach($Attribute in $Attributes)
+#if (${Attribute.isReference()})
+import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
+#end
+#if (${Attribute.isTypeEnum()})
+import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
+#end
+#end
+#if (!$Class.getAttributesWithPropertySet("findable").isEmpty())
+import ${Properties.get("jpa-entity-package")}.${ClassName}Dbo;
+#end
+import ${Properties.get("core-port-persistence-package")}.${ClassName}PersistencePort;
+import ${Properties.get("jpa-mapper-package")}.${ClassName}DboMapper;
+import ${Properties.get("jpa-repository-package")}.${ClassName}DboRepository;
+import jakarta.inject.Named;
+import java.util.List;
+import java.util.Optional;
+import lombok.Generated;
+import lombok.RequiredArgsConstructor;
+
+#foreach($Import in $Imports)
+import ${Import};
+#end
+
+/**
+ * ${GeneratedCodeMarker}
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
+@Named
+@RequiredArgsConstructor
+class ${ClassName}PersistenceJpaAdapter implements ${ClassName}PersistencePort {
+
+	private final DboFactory dboFactory;
+	private final ${ClassName}DboMapper mapper;
+	private final ${ClassName}DboRepository repository;
+
+	@Override
+	public ${ClassName} create(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})${Attribute.getTypeName()} ${Attribute.getName()}#if($foreach.hasNext), #end#end) {
+		return mapper.toModel(repository.save(dboFactory.create${ClassName}(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})${Attribute.getName()}#if($Attribute.isReference()).get${Attribute.getTypeClassType().getAttributeNameByTypePropertyNameCamelCase("id")}()#end#if($foreach.hasNext), #end#end)));
+	}
+
+	@Override
+	public void deleteById(${Class.getAttributeTypeNameByPropertyName("id")} id) {
+		ensure(id != null, "id cannot be null!");
+		repository.deleteById(id);
+	}
+
+	@Override
+	public Optional<${ClassName}> findById(${Class.getAttributeTypeNameByPropertyName("id")} id) {
+		ensure(id != null, "id cannot be null!");
+		return repository.findById(id).map(mapper::toModel);
+	}
+#foreach($Attribute in ${Class.getAttributesWithPropertySet("findable")})
+
+	@Override
+	public Optional<${ClassName}> findByIdOr${Attribute.getNameCamelCase()}Particle(String nameParticleOrId) {
+		ensure(nameParticleOrId != null, "name particle or id cannot be null");
+		Optional<${ClassName}Dbo> dbo = Optional.empty();
+		try {
+			UUID uuid = UUID.fromString(nameParticleOrId);
+			dbo = repository.findById(uuid);
+		} catch (Exception e) {
+			// NOP
+		}
+		return Optional.ofNullable(
+			mapper.toModel(
+				dbo.orElseGet(() -> {
+					List<${ClassName}Dbo> found = repository.findAllBy${Attribute.getNameCamelCase()}Match(nameParticleOrId);
+					if (found.size() < 2) {
+						return found.size() == 0 ? null : found.get(0);
+					}
+					throw new TooManyElementsException();
+				})
+			)
+		);
+	}
+#end
+
+	@Override
+	public List<${ClassName}> list() {
+		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
+	}
+	
+	@Override
+	public ${ClassName} update(${ClassName} toSave) {
+		return mapper.toModel(repository.save(mapper.toDbo(toSave)));
+	}
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataAdapter class="net.sf.jasperreports.data.xml.XmlDataAdapterImpl">
+    <name>HealthTrackingReportPO XML Simulation</name>
+
+    <xmlData>
+<![CDATA[
+<records>
+    <record>
+        <from>2024-01-01</from>
+        <to>2024-01-07</to>
+
+        <dataPerDayOrderedByDate>
+            <item>
+                <date>2024-01-01</date>
+                <steps>8123</steps>
+                <calories>2300</calories>
+                <sleepHours>7.2</sleepHours>
+            </item>
+            <item>
+                <date>2024-01-02</date>
+                <steps>10234</steps>
+                <calories>2450</calories>
+                <sleepHours>6.8</sleepHours>
+            </item>
+        </dataPerDayOrderedByDate>
+
+        <bloodPressureMeasurements>
+            <item>
+                <date>2024-01-01</date>
+                <time>08:15</time>
+                <sysMmHg>128</sysMmHg>
+                <diaMmHg>82</diaMmHg>
+                <pulsePerMinute>72</pulsePerMinute>
+                <irregularHeartbeat>false</irregularHeartbeat>
+                <status>NORMAL</status>
+            </item>
+            <item>
+                <date>2024-01-02</date>
+                <time>08:20</time>
+                <sysMmHg>142</sysMmHg>
+                <diaMmHg>90</diaMmHg>
+                <pulsePerMinute>78</pulsePerMinute>
+                <irregularHeartbeat>true</irregularHeartbeat>
+                <status>HIGH</status>
+            </item>
+        </bloodPressureMeasurements>
+
+    </record>
+</records>
+]]>
+    </xmlData>
+
+    <useConnection>false</useConnection>
+    <selectExpression>/records/record</selectExpression>
+</dataAdapter>

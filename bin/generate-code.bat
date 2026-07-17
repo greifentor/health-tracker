@@ -1,0 +1,1 @@
+java -jar generator\lib\ucg-cli-0.5.0.jar --model=generator\generator-model.yml --config=generator\generator-settings.yml

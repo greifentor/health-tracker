@@ -1,0 +1,18 @@
+package ${PackageName};
+
+import ${Properties.get("core-model-package")}.${ClassName};
+import lombok.Generated;
+
+/**
+ * ${GeneratedCodeMarker}
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
+public interface ${ClassName}ToStringMapper extends ToStringMapper {
+	String getHeadLine();
+
+	String getUnderLine();
+
+	String map(${ClassName} model);
+}

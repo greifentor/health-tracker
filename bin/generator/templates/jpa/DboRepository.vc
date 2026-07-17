@@ -1,0 +1,27 @@
+package ${PackageName};
+
+import ${Properties.get("jpa-entity-package")}.${ClassName}Dbo;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+
+#foreach($Import in $Imports)
+import ${Import};
+#end
+
+/**
+ * ${GeneratedCodeMarker}
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Repository
+public interface ${ClassName}DboRepository extends JpaRepository<${ClassName}Dbo, ${Class.getAttributeTypeNameByPropertyName("id")}> {
+	@Query("SELECT dbo FROM ${ClassName}Dbo dbo#if((!$Class.getPropertiesWithName("order").isEmpty())) ORDER BY #foreach($Property in $Class.getPropertiesWithName("order"))dbo.$Property.getValue()#if($foreach.hasNext), #end#end#end")
+	List<${ClassName}Dbo> findAllOrdered();
+#foreach($Attribute in ${Class.getAttributesWithPropertySet("findable")})
+
+	@Query("SELECT dbo FROM ${ClassName}Dbo dbo WHERE dbo.${Attribute.getName()} LIKE CONCAT('%', :${Attribute.getName()}, '%')")
+	List<${ClassName}Dbo> findAllBy${Attribute.getNameCamelCase()}Match(String ${Attribute.getName()});
+#end
+}

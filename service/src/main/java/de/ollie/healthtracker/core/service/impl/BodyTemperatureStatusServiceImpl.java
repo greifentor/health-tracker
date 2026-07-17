@@ -21,12 +21,16 @@ public class BodyTemperatureStatusServiceImpl implements BodyTemperatureStatusSe
 		double max = pointOfMeasurement != null && pointOfMeasurement.getRegularMaxCelsius() != null
 			? pointOfMeasurement.getRegularMaxCelsius().doubleValue()
 			: DEFAULT_MAX_CELSIUS;
+		System.out.println(value + " - " + min + " / " + max + " -- " + pointOfMeasurement);
 		if (value < min) {
+			System.out.println(BodyTemperatureStatus.BELOW);
 			return BodyTemperatureStatus.BELOW;
 		}
 		if (value > max) {
+			System.out.println(BodyTemperatureStatus.ABOVE);
 			return BodyTemperatureStatus.ABOVE;
 		}
+		System.out.println(BodyTemperatureStatus.NORMAL);
 		return BodyTemperatureStatus.NORMAL;
 	}
 }

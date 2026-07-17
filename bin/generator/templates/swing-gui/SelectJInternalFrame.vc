@@ -1,0 +1,69 @@
+package ${PackageName};
+
+import ${Properties.get("core-service-package")}.${ClassName}Service;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+#set($TypeClassName = $Attribute.getTypeClassType().getName())
+import ${Properties.get("core-service-package")}.${TypeClassName}Service;
+#end
+import ${Properties.get("core-model-package")}.${ClassName};
+import ${Properties.get("swing-gui-package")}.EditDialogComponentFactory;
+import ${Properties.get("swing-gui-package")}.select.AbstractSelectJInternalFrame;
+import ${Properties.get("swing-gui-package")}.select.AbstractSelectJPanel;
+import ${Properties.get("swing-gui-package")}.select.SelectionPanelObserver;
+import javax.swing.JDesktopPane;
+import lombok.Generated;
+
+#foreach($Import in $Imports)
+import ${Import};
+#end
+
+/**
+ * ${GeneratedCodeMarker}
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
+public class ${ClassName}SelectJInternalFrame
+	extends AbstractSelectJInternalFrame<${ClassName}>
+	implements SelectionPanelObserver {
+
+	private static final String CLASS_NAME = "${ClassName}";
+
+	private final ${ClassName}Service ${ClassNameAsAttribute}Service;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+#set($TypeClassName = $Attribute.getTypeClassType())
+	private final ${TypeClassName.getName()}Service ${TypeClassName.getNameAsAttribute()}Service;
+#end
+
+	public ${ClassName}SelectJInternalFrame(
+		${ClassName}Service ${ClassNameAsAttribute}Service,
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+#set($TypeClassName = $Attribute.getTypeClassType())
+		${TypeClassName.getName()}Service ${TypeClassName.getNameAsAttribute()}Service,
+#end
+		JDesktopPane desktopPane,
+		EditDialogComponentFactory editDialogComponentFactory
+	) {
+		super(desktopPane, CLASS_NAME, editDialogComponentFactory);
+		this.${ClassNameAsAttribute}Service = ${ClassNameAsAttribute}Service;
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+#set($TypeClassName = $Attribute.getTypeClassType())
+		this.${TypeClassName.getNameAsAttribute()}Service = ${TypeClassName.getNameAsAttribute()}Service;
+#end
+		finishConstruct();
+	}
+
+	@Override
+	protected AbstractSelectJPanel<${ClassName}> createSelectPanel() {
+		return new ${ClassName}SelectJPanel(
+				${ClassNameAsAttribute}Service,
+#foreach($Attribute in $Class.getAttributesWithPropertySetSortedByPropertyValueReferencesOnly("editor-position"))
+#set($TypeClassName = $Attribute.getTypeClassType())
+				${TypeClassName.getNameAsAttribute()}Service,
+#end
+				CLASS_NAME,
+				desktopPane,
+				editDialogComponentFactory,
+				this);
+	}
+}

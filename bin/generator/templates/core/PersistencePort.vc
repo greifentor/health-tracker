@@ -1,0 +1,43 @@
+package ${PackageName};
+
+import ${Properties.get("core-model-package")}.${ClassName};
+#foreach($Attribute in $Attributes)
+#if (${Attribute.isReference()})
+import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
+#end
+#if (${Attribute.isTypeEnum()})
+import ${Properties.get("core-model-package")}.${Attribute.getTypeName()};
+#end
+#end
+import jakarta.inject.Named;
+import java.util.List;
+import java.util.Optional;
+import lombok.Generated;
+
+#foreach($Import in $Imports)
+import ${Import};
+#end
+
+/**
+ * ${GeneratedCodeMarker}
+ *
+ * Remove this comment to suspend class from generation process.
+ */
+@Generated
+@Named
+public interface ${ClassName}PersistencePort {
+
+	${ClassName} create(#foreach($Attribute in ${Class.getAttributesWithPropertyNotSet("id")})${Attribute.getTypeName()} ${Attribute.getName()}#if($foreach.hasNext), #end#end);
+
+	void deleteById(${Class.getAttributeTypeNameByPropertyName("id")} id);
+
+	Optional<${ClassName}> findById(${Class.getAttributeTypeNameByPropertyName("id")} id);
+#foreach($Attribute in ${Class.getAttributesWithPropertySet("findable")})
+
+	Optional<${ClassName}> findByIdOr${Attribute.getNameCamelCase()}Particle(String ${Attribute.getName()});
+#end
+
+	List<${ClassName}> list();
+	
+	${ClassName} update(${ClassName} toSave);
+}

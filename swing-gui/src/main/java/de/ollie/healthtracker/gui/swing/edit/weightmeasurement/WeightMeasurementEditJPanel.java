@@ -47,7 +47,7 @@ public class WeightMeasurementEditJPanel extends AbstractEditPanel<WeightMeasure
 		p.add(textFieldDateOfRecording);
 		textFieldTimeOfRecording = new JTextField(DateTimeUtil.DE_TIME_FORMAT.format(toEdit.getTimeOfRecording()), 40);
 		p.add(textFieldTimeOfRecording);
-		spinnerKg = createDecimalSpinner(toEdit.getKg(), 0, 499, 1, 1);
+		spinnerKg = createDecimalSpinner(toEdit.getKg(), 0, 499, 0.1, 2);
 		p.add(spinnerKg);
 		textFieldComment = new JTextField(toEdit.getComment(), 40);
 		p.add(textFieldComment);
