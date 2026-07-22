@@ -53,6 +53,8 @@ import de.ollie.healthtracker.gui.swing.event.NotifyingMeatConsumptionService;
 import de.ollie.healthtracker.gui.swing.event.NotifyingWeightMeasurementService;
 import de.ollie.healthtracker.gui.swing.event.WeightMeasurementChangeNotifier;
 import de.ollie.healthtracker.gui.swing.external.viewer.pdf.ExternalPdfViewerStarter;
+import de.ollie.healthtracker.gui.swing.frame.BoundsTrackingDesktopPane;
+import de.ollie.healthtracker.gui.swing.frame.InternalFrameBoundsManager;
 import de.ollie.healthtracker.gui.swing.opentask.OpenTaskJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.alcoholconsumption.AlcoholConsumptionSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.alcoholproduct.AlcoholProductSelectJInternalFrame;
@@ -139,6 +141,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final ExerciseService exerciseService;
 	private final ExternalPdfViewerStarter externalPdfViewerStarter;
 	private final GeneralBodyPartService generalBodyPartService;
+	private final InternalFrameBoundsManager internalFrameBoundsManager;
 	private final ManufacturerService manufacturerService;
 	private final MeatConsumptionChangeNotifier meatConsumptionChangeNotifier;
 	private final MeatConsumptionService meatConsumptionService;
@@ -198,7 +201,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 
 	@PostConstruct
 	void postConstruct() {
-		desktopPane = new JDesktopPane();
+		desktopPane = new BoundsTrackingDesktopPane(internalFrameBoundsManager);
 		desktopPane.setMinimumSize(new Dimension(200, 100));
 		JPanel mainPanel = new JPanel(new BorderLayout(HGAP, VGAP));
 		mainPanel.add(desktopPane, BorderLayout.CENTER);
@@ -221,6 +224,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	}
 
 	void closeApplication() {
+		internalFrameBoundsManager.save();
 		System.exit(0);
 	}
 
@@ -267,7 +271,10 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		int width = desktopPane.getWidth() / charts.length;
 		int height = 600;
 		for (int i = 0; i < charts.length; i++) {
-			charts[i].setBounds(i * width, 0, width, height);
+			// Keep the default side-by-side layout only for charts without a remembered position from a previous run.
+			if (!internalFrameBoundsManager.hasStoredBounds(charts[i].getClass().getSimpleName())) {
+				charts[i].setBounds(i * width, 0, width, height);
+			}
 		}
 		// Only pop up the open task dialog when there actually are open tasks to show.
 		if (!openTaskService.findAllOpenTasks().isEmpty()) {
