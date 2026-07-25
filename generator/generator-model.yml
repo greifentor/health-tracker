@@ -649,6 +649,8 @@ classes:
             value: false
           - name: editor-position
             value: 3
+          - name: editor-fraction-digits
+            value: 2
         type:
           name: BigDecimal
           properties:
