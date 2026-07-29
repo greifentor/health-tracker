@@ -26,5 +26,5 @@ public class MedicationLog {
 	private LocalDate dateOfIntake;
 	private boolean selfMedication;
 	private LocalTime timeOfIntake;
-	private BigDecimal unitCount;
+	private BigDecimal unitCount = new BigDecimal("1.0");
 }

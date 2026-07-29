@@ -59,8 +59,9 @@ public class MedicationLogSelectJPanel extends AbstractSelectJPanel<MedicationLo
 			"Time Of Intake",
 			"Medication",
 			"Medication Unit",
-			"Self Medication",
+			"Unit Count",
 			"Confirmed",
+			"Self Medication",
 			"Comment"
 		) {
 			@Override
@@ -70,9 +71,10 @@ public class MedicationLogSelectJPanel extends AbstractSelectJPanel<MedicationLo
 					case 1 -> DateTimeUtil.DE_TIME_FORMAT.format(t.getTimeOfIntake());
 					case 2 -> (t.getMedication() != null ? t.getMedication().getName() : "-");
 					case 3 -> (t.getMedicationUnit() != null ? t.getMedicationUnit().getName() : "-");
-					case 4 -> t.isSelfMedication();
+					case 4 -> t.getUnitCount() == null ? null : t.getUnitCount().setScale(1, java.math.RoundingMode.HALF_UP);
 					case 5 -> t.isConfirmed();
-					case 6 -> t.getComment();
+					case 6 -> t.isSelfMedication();
+					case 7 -> t.getComment();
 					default -> null;
 				};
 			}
@@ -102,7 +104,7 @@ public class MedicationLogSelectJPanel extends AbstractSelectJPanel<MedicationLo
 			.setDateOfIntake(LocalDate.now())
 			.setSelfMedication(false)
 			.setTimeOfIntake(LocalTime.now())
-			.setUnitCount(null);
+			.setUnitCount(new BigDecimal("1.0"));
 	}
 
 	@Override

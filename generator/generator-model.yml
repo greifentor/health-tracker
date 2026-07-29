@@ -847,7 +847,7 @@ classes:
       - name: selfMedication
         properties:
           - name: editor-position
-            value: 5
+            value: 6
         type:
           name: boolean
       - name: timeOfIntake
@@ -862,9 +862,16 @@ classes:
             - name: import
               value: java.time.LocalTime
       - name: unitCount
+        default-value: new BigDecimal("1.0")
         properties:
           - name: nullable
             value: false
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 5
+          - name: editor-fraction-digits
+            value: 1
         type:
           name: BigDecimal
           properties:
