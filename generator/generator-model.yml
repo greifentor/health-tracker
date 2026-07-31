@@ -51,6 +51,12 @@ classes:
             value: false
           - name: editor-position
             value: 4
+          - name: editor-min
+            value: 0
+          - name: editor-step
+            value: 0.1
+          - name: editor-fraction-digits
+            value: 2
         type:
           name: BigDecimal
           properties:
