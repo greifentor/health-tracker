@@ -189,6 +189,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemEditPointOfMeasurement;
 	private JMenuItem menuItemEditSymptom;
 	private JMenuItem menuItemFilePrintBPM;
+	private JMenuItem menuItemFilePrintBloodPressureLast30Days;
 	private JMenuItem menuItemFilePrintHealthReportCurrentMonth;
 	private JMenuItem menuItemFilePrintHealthReportPreviousMonth;
 	private JMenuItem menuItemFilePrintMeatConsumptionStatistic;
@@ -298,6 +299,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(new JSeparator());
 		menuItemFilePrintBPM = createMenuItem("Print Blood Pressure Measurement", this);
 		menu.add(menuItemFilePrintBPM);
+		menuItemFilePrintBloodPressureLast30Days = createMenuItem("Print Blood Pressure (Last 30 Days)", this);
+		menu.add(menuItemFilePrintBloodPressureLast30Days);
 		menuItemFilePrintMeatConsumptionStatistic = createMenuItem("Print Meat Consumption", this);
 		menu.add(menuItemFilePrintMeatConsumptionStatistic);
 		menu.add(new JSeparator());
@@ -606,6 +609,19 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				now.withDayOfMonth(1),
 				now.withDayOfMonth(now.lengthOfMonth()),
 				"jasper",
+				new HashMap<>()
+			);
+			try {
+				externalPdfViewerStarter.show(pdf);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		} else if (e.getSource() == menuItemFilePrintBloodPressureLast30Days) {
+			LocalDate today = LocalDate.now();
+			byte[] pdf = reportPrintService.printForTimeInterval(
+				today.minusDays(30),
+				today,
+				"jasper-blood-pressure",
 				new HashMap<>()
 			);
 			try {
