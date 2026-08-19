@@ -60,7 +60,7 @@ public class MeatConsumptionEditJPanel extends AbstractEditPanel<MeatConsumption
 			return new JLabel("-");
 		});
 		p.add(comboBoxMeatProduct);
-		spinnerUnits = createDecimalSpinner(toEdit.getUnits(), 0, 1000000, 0.1, 1);
+		spinnerUnits = createDecimalSpinner(toEdit.getUnits(), 0, 1000000, 0.1, 2);
 		p.add(spinnerUnits);
 		return p;
 	}

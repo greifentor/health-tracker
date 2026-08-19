@@ -39,8 +39,9 @@ public class MedicationLogEditJPanel extends AbstractEditPanel<MedicationLog> {
 	private JTextField textFieldTimeOfIntake;
 	private JComboBox<Medication> comboBoxMedication;
 	private JComboBox<MedicationUnit> comboBoxMedicationUnit;
-	private JCheckBox checkBoxSelfMedication;
+	private JSpinner spinnerUnitCount;
 	private JCheckBox checkBoxConfirmed;
+	private JCheckBox checkBoxSelfMedication;
 	private JTextField textFieldComment;
 
 	public MedicationLogEditJPanel(MedicationLog toEdit, Map<String, ItemProvider<?>> itemProviders) {
@@ -54,15 +55,16 @@ public class MedicationLogEditJPanel extends AbstractEditPanel<MedicationLog> {
 			"Time Of Intake:",
 			"Medication:",
 			"Medication Unit:",
-			"Self Medication:",
+			"Unit Count:",
 			"Confirmed:",
+			"Self Medication:",
 			"Comment:"
 		);
 	}
 
 	@Override
 	protected JPanel createComponentPanel(MedicationLog toEdit, Map<String, ItemProvider<?>> itemProviders) {
-		JPanel p = new JPanel(new GridLayout(7, 1, HGAP, VGAP));
+		JPanel p = new JPanel(new GridLayout(8, 1, HGAP, VGAP));
 		textFieldDateOfIntake = new JTextField(DateTimeUtil.DE_DATE_FORMAT.format(toEdit.getDateOfIntake()), 40);
 		p.add(textFieldDateOfIntake);
 		textFieldTimeOfIntake = new JTextField(DateTimeUtil.DE_TIME_FORMAT.format(toEdit.getTimeOfIntake()), 40);
@@ -89,12 +91,14 @@ public class MedicationLogEditJPanel extends AbstractEditPanel<MedicationLog> {
 			return new JLabel("-");
 		});
 		p.add(comboBoxMedicationUnit);
-		checkBoxSelfMedication = new JCheckBox();
-		checkBoxSelfMedication.setSelected(toEdit.isSelfMedication());
-		p.add(checkBoxSelfMedication);
+		spinnerUnitCount = createDecimalSpinner(toEdit.getUnitCount(), 0, 1000000, 0.1, 1);
+		p.add(spinnerUnitCount);
 		checkBoxConfirmed = new JCheckBox();
 		checkBoxConfirmed.setSelected(toEdit.isConfirmed());
 		p.add(checkBoxConfirmed);
+		checkBoxSelfMedication = new JCheckBox();
+		checkBoxSelfMedication.setSelected(toEdit.isSelfMedication());
+		p.add(checkBoxSelfMedication);
 		textFieldComment = new JTextField(toEdit.getComment(), 40);
 		p.add(textFieldComment);
 		return p;
@@ -108,8 +112,9 @@ public class MedicationLogEditJPanel extends AbstractEditPanel<MedicationLog> {
 			.setTimeOfIntake(DateTimeUtil.timeFromString(textFieldTimeOfIntake.getText()))
 			.setMedication(((Medication) comboBoxMedication.getSelectedItem()))
 			.setMedicationUnit(((MedicationUnit) comboBoxMedicationUnit.getSelectedItem()))
-			.setSelfMedication(checkBoxSelfMedication.isSelected())
+			.setUnitCount(decimalValueOf(spinnerUnitCount))
 			.setConfirmed(checkBoxConfirmed.isSelected())
+			.setSelfMedication(checkBoxSelfMedication.isSelected())
 			.setComment(textFieldComment.getText());
 	}
 }

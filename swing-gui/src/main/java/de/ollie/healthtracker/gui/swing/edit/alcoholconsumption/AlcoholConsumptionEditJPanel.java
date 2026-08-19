@@ -63,7 +63,7 @@ public class AlcoholConsumptionEditJPanel extends AbstractEditPanel<AlcoholConsu
 		p.add(comboBoxAlcoholProduct);
 		textFieldComment = new JTextField(toEdit.getComment(), 40);
 		p.add(textFieldComment);
-		spinnerLiter = createDecimalSpinner(toEdit.getLiter(), 0, 1000000, 0.1, 1);
+		spinnerLiter = createDecimalSpinner(toEdit.getLiter(), 0, 1000000, 0.1, 2);
 		p.add(spinnerLiter);
 		return p;
 	}
