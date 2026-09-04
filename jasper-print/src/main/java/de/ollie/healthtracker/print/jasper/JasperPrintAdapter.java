@@ -27,6 +27,7 @@ class JasperPrintAdapter implements PrintPort {
 
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final BloodPressureMeasurementPOMapper bloodPressureMeasurementPOMapper;
+	private final DailyHealthReportDataCollector dailyHealthReportDataCollector;
 	private final JasperConfiguration jasperConfiguration;
 
 	@Override
@@ -38,10 +39,7 @@ class JasperPrintAdapter implements PrintPort {
 	public byte[] print(HealthTrackingReport report, Map<String, Object> parameters) {
 		String jasperPath = jasperConfiguration.getJasperPath();
 		try (ByteArrayOutputStream pdfReportStream = new ByteArrayOutputStream()) {
-			parameters.put(
-				"SUBREPORT_DIR",
-				"/home/ollie/Eclipse-Workspace/health-tracker/jasper-print/src/main/resources/jasper/src/"
-			);
+			parameters.put("SUBREPORT_DIR", jasperConfiguration.getSubReportDir());
 			JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(Arrays.asList(mapToPO(report)), true);
 			JasperPrint document = createDocument(jasperPath, dataSource, parameters);
 			JasperExportManager.exportReportToPdfStream(document, pdfReportStream);
@@ -74,7 +72,8 @@ class JasperPrintAdapter implements PrintPort {
 						report.getTo()
 					)
 				)
-			);
+			)
+			.setDailyHealthReport(dailyHealthReportDataCollector.collect(report.getFrom(), report.getTo()));
 	}
 
 	private List<CommentPO> mapToCommentsPO(List<Comment> comments) {

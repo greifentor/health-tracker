@@ -16,4 +16,5 @@ public class HealthTrackingReportPO {
 	private List<DataPerDayPO> dataPerDayOrderedByDate = new ArrayList<>();
 	private List<BloodPressureMeasurementPO> bloodPressureMeasurements = new ArrayList<>();
 	private List<BloodPressureMeasurementPO> bloodPressureMeasurementsCumulated = new ArrayList<>();
+	private List<DailyHealthReportPO> dailyHealthReport = new ArrayList<>();
 }

@@ -10,4 +10,7 @@ class JasperConfiguration {
 
 	@Value("${print.jasper.path}")
 	private String jasperPath;
+
+	@Value("${print.jasper.subreport-dir:${print.jasper.path}}")
+	private String subReportDir;
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DataPerDays" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="0af76f33-e37a-43f0-bd7c-ed6f5f90e6dd">
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DataPerDays" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="0af76f33-e37a-43f0-bd7c-ed6f5f90e6dd">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
@@ -29,7 +29,7 @@
 		<band height="27">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField>
-				<reportElement x="0" y="0" width="595" height="24" uuid="ac918004-bfa9-4404-a177-84391b9826f3">
+				<reportElement x="0" y="0" width="555" height="24" uuid="ac918004-bfa9-4404-a177-84391b9826f3">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement>
@@ -92,7 +92,7 @@
 				<textFieldExpression><![CDATA["IHB"]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="17" width="595" height="1" uuid="82c692c5-399c-4195-94f1-fa1bc00d338f">
+				<reportElement x="0" y="17" width="555" height="1" uuid="82c692c5-399c-4195-94f1-fa1bc00d338f">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 			</line>
@@ -150,7 +150,7 @@
 				<textFieldExpression><![CDATA[(Boolean.TRUE.equals($F{irregularHeartbeat}) ? "X" : "")]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight">
-				<reportElement x="370" y="0" width="225" height="14" uuid="48251266-1848-4d60-aef0-d8c11eea2d37">
+				<reportElement x="370" y="0" width="185" height="14" uuid="48251266-1848-4d60-aef0-d8c11eea2d37">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
