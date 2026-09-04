@@ -32,9 +32,11 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Collects, per day of a given interval, all health data (weight, body temperature, blood pressure measurements,
- * medications, symptoms, nutrition category and an alcohol-consumption flag) and maps it to {@link DailyHealthReportPO}s
- * ordered from the most recent day to the oldest. Only days that have at least one data point are included.
+ * Collects, per day of a given interval, all health data (weight, body
+ * temperature, blood pressure measurements, medications, symptoms, nutrition
+ * category and an alcohol-consumption flag) and maps it to
+ * {@link DailyHealthReportPO}s ordered from the most recent day to the oldest.
+ * Only days that have at least one data point are included.
  */
 @Named
 @RequiredArgsConstructor
@@ -158,9 +160,9 @@ class DailyHealthReportDataCollector {
 			.setMedications(
 				day.medications.isEmpty()
 					? "-"
-					: day.medications.values().stream().map(MedicationAmount::format).collect(Collectors.joining("\n"))
+					: day.medications.values().stream().map(MedicationAmount::format).sorted().collect(Collectors.joining("\n"))
 			)
-			.setSymptoms(day.symptoms.isEmpty() ? "-" : String.join("\n", day.symptoms))
+			.setSymptoms(day.symptoms.isEmpty() ? "-" : String.join("\n", day.symptoms.stream().sorted().toList()))
 			.setNutrition(nutritionLabel(day))
 			.setAlcohol(day.alcohol);
 	}
@@ -198,9 +200,10 @@ class DailyHealthReportDataCollector {
 	}
 
 	/**
-	 * Adds the medication (with its unit count) to the day, merging it with an already present entry for the same
-	 * medication and unit by summing the counts - so a medication given both by plan and as an individual log is listed
-	 * once with the combined amount.
+	 * Adds the medication (with its unit count) to the day, merging it with an
+	 * already present entry for the same medication and unit by summing the counts
+	 * - so a medication given both by plan and as an individual log is listed once
+	 * with the combined amount.
 	 */
 	private void addMedication(DayData day, Medication medication, MedicationUnit unit, BigDecimal count) {
 		if (count == null) {

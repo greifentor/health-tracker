@@ -78,7 +78,7 @@ generators:
       - name: target-path
         value: jpa-persistence/src/main/java
   - type: ENUM
-    suppress-when: classModel Load suppress-persistence HasProperty
+    suppress-when: propertyOwner Load suppress-persistence HasProperty
     package: de.ollie.healthtracker.persistence.jpa.dbo
     resource-class-loader: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
     target-file-name: ${UnitName}Dbo
