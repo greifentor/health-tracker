@@ -64,7 +64,7 @@ class AlcoholProductPersistenceJpaAdapter implements AlcoholProductPersistencePo
 					if (found.size() < 2) {
 						return found.size() == 0 ? null : found.get(0);
 					}
-					throw new TooManyElementsException();
+					throw new TooManyElementsException("More than one element found for name containing: " + nameParticleOrId);
 				})
 			)
 		);
