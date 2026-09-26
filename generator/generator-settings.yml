@@ -17,8 +17,8 @@ properties:
     value: de.ollie.healthtracker.persistence.jpa.mapper
   - name: jpa-repository-package
     value: de.ollie.healthtracker.persistence.jpa.repository
-  - name: shell-mapper-package
-    value: de.ollie.healthtracker.shell.mapper
+#  - name: shell-mapper-package
+#    value: de.ollie.healthtracker.shell.mapper
   - name: swing-gui-package
     value: de.ollie.healthtracker.gui.swing
 generators:
@@ -114,24 +114,24 @@ generators:
       - name: target-path
         value: jpa-persistence/src/main/java
 # --- Shell ---
-  - type: CLASS
-    suppress-when: classModel Load suppress-shell HasProperty
-    package: de.ollie.healthtracker.shell.mapper.impl
-    target-file-name: ${UnitName}ToStringMapperImpl
-    path: generator
-    template: templates/shell/ToStringMapperImpl.vc
-    properties:
-      - name: target-path
-        value: shell/src/main/java
-  - type: CLASS
-    suppress-when: classModel Load suppress-shell HasProperty
-    package: de.ollie.healthtracker.shell.mapper
-    target-file-name: ${UnitName}ToStringMapper
-    path: generator
-    template: templates/shell/ToStringMapper.vc
-    properties:
-      - name: target-path
-        value: shell/src/main/java
+#  - type: CLASS
+#    suppress-when: classModel Load suppress-shell HasProperty
+#    package: de.ollie.healthtracker.shell.mapper.impl
+#    target-file-name: ${UnitName}ToStringMapperImpl
+#    path: generator
+#    template: templates/shell/ToStringMapperImpl.vc
+#    properties:
+#      - name: target-path
+#        value: shell/src/main/java
+#  - type: CLASS
+#    suppress-when: classModel Load suppress-shell HasProperty
+#    package: de.ollie.healthtracker.shell.mapper
+#    target-file-name: ${UnitName}ToStringMapper
+#    path: generator
+#    template: templates/shell/ToStringMapper.vc
+#    properties:
+#      - name: target-path
+#        value: shell/src/main/java
 # --- Swing-GUI ---
   - type: CLASS
     generate-when: classModel Load gui HasProperty
