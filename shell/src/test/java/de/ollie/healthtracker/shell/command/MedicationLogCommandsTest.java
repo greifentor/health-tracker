@@ -3,10 +3,15 @@ package de.ollie.healthtracker.shell.command;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+import de.ollie.healthtracker.core.service.MedicationLogService;
 import de.ollie.healthtracker.core.service.MedicationService;
 import de.ollie.healthtracker.core.service.MedicationUnitService;
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.Medication;
+import de.ollie.healthtracker.core.service.model.MedicationUnit;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 import org.junit.jupiter.api.Nested;
@@ -27,13 +32,22 @@ class MedicationLogCommandsTest {
 	private static final String UNIT_STRING = "unit";
 
 	@Mock
+	private BigDecimalFactory bigDecimalFactory;
+
+	@Mock
 	private DateStringToLocalDateConverter dateStringToLocalDateConverter;
 
 	@Mock
 	private Medication medication;
 
 	@Mock
+	private MedicationUnit medicationUnit;
+
+	@Mock
 	private MedicationService medicationService;
+
+	@Mock
+	private MedicationLogService medicationLogService;
 
 	@Mock
 	private MedicationUnitService medicationUnitService;
@@ -328,6 +342,44 @@ class MedicationLogCommandsTest {
 				MESSAGE;
 			when(medicationService.findByIdOrNameParticle(MEDICATION_SEARCH_STRING)).thenReturn(Optional.of(medication));
 			when(medicationUnitService.findByIdOrNameParticle(UNIT_STRING)).thenThrow(new TooManyElementsException(MESSAGE));
+			// Run & Check
+			assertEquals(
+				expected,
+				unitUnderTest.addMedicationLogEntry(
+					DATE_STRING,
+					TIME_STRING,
+					MEDICATION_SEARCH_STRING,
+					UNIT_COUNT_STRING,
+					UNIT_STRING
+				)
+			);
+		}
+
+		@Test
+		void returnsACorrectErrorMessage_passingAlreadyExistingData() {
+			// Prepare
+			String expected =
+				"ERROR in line: MEDICATION_LOG " +
+				DATE_STRING +
+				" " +
+				TIME_STRING +
+				" " +
+				MEDICATION_SEARCH_STRING +
+				" " +
+				UNIT_COUNT_STRING +
+				" " +
+				UNIT_STRING +
+				" > " +
+				"Medication log entry is already existing!";
+			BigDecimal units = new BigDecimal(1701);
+			LocalDate date = LocalDate.now();
+			LocalTime time = LocalTime.now();
+			when(bigDecimalFactory.create(UNIT_COUNT_STRING)).thenReturn(units);
+			when(dateStringToLocalDateConverter.convert(DATE_STRING)).thenReturn(date);
+			when(timeStringToLocalDateConverter.convert(TIME_STRING)).thenReturn(time);
+			when(medicationService.findByIdOrNameParticle(MEDICATION_SEARCH_STRING)).thenReturn(Optional.of(medication));
+			when(medicationLogService.isDuplicate(medication, medicationUnit, date, time, units)).thenReturn(true);
+			when(medicationUnitService.findByIdOrNameParticle(UNIT_STRING)).thenReturn(Optional.of(medicationUnit));
 			// Run & Check
 			assertEquals(
 				expected,

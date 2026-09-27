@@ -5,9 +5,11 @@ import static de.ollie.baselib.util.Check.ensure;
 import de.ollie.healthtracker.core.service.MedicationLogService;
 import de.ollie.healthtracker.core.service.MedicationService;
 import de.ollie.healthtracker.core.service.MedicationUnitService;
+import de.ollie.healthtracker.core.service.exception.RecordAlreadyExistingException;
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.Medication;
 import de.ollie.healthtracker.core.service.model.MedicationUnit;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
@@ -21,6 +23,7 @@ import org.springframework.shell.standard.ShellOption;
 @RequiredArgsConstructor
 public class MedicationLogCommands {
 
+	private final BigDecimalFactory bigDecimalFactory;
 	private final DateStringToLocalDateConverter dateStringToLocalDateConverter;
 	private final MedicationService medicationService;
 	private final MedicationLogService medicationLogService;
@@ -49,13 +52,17 @@ public class MedicationLogCommands {
 			ensure(unitCountStr != null, "Unit count is not set!");
 			LocalDate date = dateStringToLocalDateConverter.convert(dateStr);
 			LocalTime time = timeStringToLocalDateConverter.convert(timeStr);
+			BigDecimal units = bigDecimalFactory.create(unitCountStr);
 			Medication medication = medicationService
 				.findByIdOrNameParticle(medicationSearchStr)
 				.orElseThrow(() -> new NoSuchElementException("No medication found for: " + medicationSearchStr + "!"));
 			MedicationUnit medicationUnit = medicationUnitService
 				.findByIdOrNameParticle(unitSearchStr)
 				.orElseThrow(() -> new NoSuchElementException("No medication unit found for: " + unitSearchStr + "!"));
-			// Check for already existing data record.
+			ensure(
+				!medicationLogService.isDuplicate(medication, medicationUnit, date, time, units),
+				() -> new RecordAlreadyExistingException("Medication log entry is already existing!")
+			);
 			return null;
 		} catch (DateTimeParseException dtpe) {
 			return (
@@ -71,7 +78,9 @@ public class MedicationLogCommands {
 				unitSearchStr +
 				" > Date string does not contain a valid date!"
 			);
-		} catch (IllegalArgumentException | NoSuchElementException | TooManyElementsException e) {
+		} catch (
+			IllegalArgumentException | NoSuchElementException | RecordAlreadyExistingException | TooManyElementsException e
+		) {
 			return (
 				"ERROR in line: MEDICATION_LOG " +
 				dateStr +
