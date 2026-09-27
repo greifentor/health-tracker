@@ -24,4 +24,9 @@ public interface ${ClassName}DboRepository extends JpaRepository<${ClassName}Dbo
 	@Query("SELECT dbo FROM ${ClassName}Dbo dbo WHERE dbo.${Attribute.getName()} LIKE CONCAT('%', :${Attribute.getName()}, '%')")
 	List<${ClassName}Dbo> findAllBy${Attribute.getNameCamelCase()}Match(String ${Attribute.getName()});
 #end
+#if (${Class.isPropertyWithNameInAttributesPresent("duplicate-check")})
+
+	@Query("SELECT COUNT(*) > 1 FROM ${ClassName}Dbo dbo WHERE #foreach($Attribute in ${Class.getAttributesWithPropertySet("duplicate-check")})dbo.${Attribute.getName()} == :${Attribute.getName()}#if ($foreach.hasNext) AND #end#end")
+	boolean isDuplicate(#foreach($Attribute in ${Class.getAttributesWithPropertySet("duplicate-check")})#if ($Attribute.isReference())UUID#else${Attribute.getTypeName()}#end ${Attribute.getName()}#if ($foreach.hasNext), #end#end);
+#end
 }

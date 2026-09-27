@@ -61,6 +61,17 @@ class MedicationLogServiceImpl implements MedicationLogService {
 	}
 
 	@Override
+	public boolean isDuplicate(
+		Medication medication,
+		MedicationUnit medicationUnit,
+		LocalDate dateOfIntake,
+		LocalTime timeOfIntake,
+		BigDecimal unitCount
+	) {
+		return medicationLogPersistencePort.isDuplicate(medication, medicationUnit, dateOfIntake, timeOfIntake, unitCount);
+	}
+
+	@Override
 	public List<MedicationLog> listMedicationLogs() {
 		return medicationLogPersistencePort.list();
 	}

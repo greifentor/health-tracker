@@ -19,4 +19,15 @@ import org.springframework.stereotype.Repository;
 public interface MedicationLogDboRepository extends JpaRepository<MedicationLogDbo, UUID> {
 	@Query("SELECT dbo FROM MedicationLogDbo dbo ORDER BY dbo.dateOfIntake DESC, dbo.timeOfIntake DESC")
 	List<MedicationLogDbo> findAllOrdered();
+
+	@Query(
+		"SELECT COUNT(*) > 1 FROM MedicationLogDbo dbo WHERE dbo.medication == :medication AND dbo.medicationUnit == :medicationUnit AND dbo.dateOfIntake == :dateOfIntake AND dbo.timeOfIntake == :timeOfIntake AND dbo.unitCount == :unitCount"
+	)
+	boolean isDuplicate(
+		UUID medication,
+		UUID medicationUnit,
+		LocalDate dateOfIntake,
+		LocalTime timeOfIntake,
+		BigDecimal unitCount
+	);
 }

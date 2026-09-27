@@ -34,6 +34,10 @@ public interface ${ClassName}Service {
 
 	Optional<${ClassName}> findByIdOr${Attribute.getNameCamelCase()}Particle(String namePartOrId);
 #end
+#if (${Class.isPropertyWithNameInAttributesPresent("duplicate-check")})
+
+	boolean isDuplicate(#foreach($Attribute in ${Class.getAttributesWithPropertySet("duplicate-check")})${Attribute.getTypeName()} ${Attribute.getName()}#if ($foreach.hasNext), #end#end);
+#end
 
 	List<${ClassName}> list${ClassName}s();
 

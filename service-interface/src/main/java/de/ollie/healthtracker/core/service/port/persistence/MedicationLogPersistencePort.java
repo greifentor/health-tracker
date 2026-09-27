@@ -35,6 +35,14 @@ public interface MedicationLogPersistencePort {
 
 	Optional<MedicationLog> findById(UUID id);
 
+	boolean isDuplicate(
+		Medication medication,
+		MedicationUnit medicationUnit,
+		LocalDate dateOfIntake,
+		LocalTime timeOfIntake,
+		BigDecimal unitCount
+	);
+
 	List<MedicationLog> list();
 
 	MedicationLog update(MedicationLog toSave);

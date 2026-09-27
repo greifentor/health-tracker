@@ -828,6 +828,8 @@ classes:
             value: false
           - name: editor-position
             value: 3
+          - name: duplicate-check
+            value: true
         type:
           name: Medication
       - name: medicationUnit
@@ -837,6 +839,8 @@ classes:
             value: false
           - name: editor-position
             value: 4
+          - name: duplicate-check
+            value: true
         type:
           name: MedicationUnit
       - name: dateOfIntake
@@ -845,6 +849,8 @@ classes:
             value: false
           - name: editor-position
             value: 1
+          - name: duplicate-check
+            value: true
         type:
           name: LocalDate
           properties:
@@ -862,6 +868,8 @@ classes:
             value: false
           - name: editor-position
             value: 2
+          - name: duplicate-check
+            value: true
         type:
           name: LocalTime
           properties:
@@ -878,6 +886,8 @@ classes:
             value: 5
           - name: editor-fraction-digits
             value: 1
+          - name: duplicate-check
+            value: true
         type:
           name: BigDecimal
           properties:

@@ -36,6 +36,10 @@ public interface ${ClassName}PersistencePort {
 
 	Optional<${ClassName}> findByIdOr${Attribute.getNameCamelCase()}Particle(String ${Attribute.getName()});
 #end
+#if (${Class.isPropertyWithNameInAttributesPresent("duplicate-check")})
+
+	boolean isDuplicate(#foreach($Attribute in ${Class.getAttributesWithPropertySet("duplicate-check")})${Attribute.getTypeName()} ${Attribute.getName()}#if ($foreach.hasNext), #end#end);
+#end
 
 	List<${ClassName}> list();
 	

@@ -83,6 +83,13 @@ class ${ClassName}PersistenceJpaAdapter implements ${ClassName}PersistencePort {
 		);
 	}
 #end
+#if (${Class.isPropertyWithNameInAttributesPresent("duplicate-check")})
+
+	@Override
+	public boolean isDuplicate(#foreach($Attribute in ${Class.getAttributesWithPropertySet("duplicate-check")})${Attribute.getTypeName()} ${Attribute.getName()}#if ($foreach.hasNext), #end#end) {
+		return repository.isDuplicate(#foreach($Attribute in ${Class.getAttributesWithPropertySet("duplicate-check")})${Attribute.getName()}#if($Attribute.isReference()).get${Attribute.getTypeClassType().getAttributeNameByTypePropertyNameCamelCase("id")}()#end#if($foreach.hasNext), #end#end);
+	}
+#end
 
 	@Override
 	public List<${ClassName}> list() {

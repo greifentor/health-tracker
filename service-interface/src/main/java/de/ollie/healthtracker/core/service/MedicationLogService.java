@@ -33,6 +33,14 @@ public interface MedicationLogService {
 
 	Optional<MedicationLog> findById(UUID id);
 
+	boolean isDuplicate(
+		Medication medication,
+		MedicationUnit medicationUnit,
+		LocalDate dateOfIntake,
+		LocalTime timeOfIntake,
+		BigDecimal unitCount
+	);
+
 	List<MedicationLog> listMedicationLogs();
 
 	MedicationLog updateMedicationLog(MedicationLog toSave);

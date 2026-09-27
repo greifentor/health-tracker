@@ -54,6 +54,13 @@ class ${ClassName}ServiceImpl implements ${ClassName}Service {
 		return ${ClassNameAsAttribute}PersistencePort.findByIdOr${Attribute.getNameCamelCase()}Particle(namePartOrId);
 	}
 #end
+#if (${Class.isPropertyWithNameInAttributesPresent("duplicate-check")})
+
+	@Override
+	public boolean isDuplicate(#foreach($Attribute in ${Class.getAttributesWithPropertySet("duplicate-check")})${Attribute.getTypeName()} ${Attribute.getName()}#if ($foreach.hasNext), #end#end) {
+		return ${ClassNameAsAttribute}PersistencePort.isDuplicate(#foreach($Attribute in ${Class.getAttributesWithPropertySet("duplicate-check")})${Attribute.getName()}#if ($foreach.hasNext), #end#end);
+	}
+#end
 
 	@Override
 	public List<${ClassName}> list${ClassName}s() {

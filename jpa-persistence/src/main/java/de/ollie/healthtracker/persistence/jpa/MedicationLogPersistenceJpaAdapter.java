@@ -73,6 +73,17 @@ class MedicationLogPersistenceJpaAdapter implements MedicationLogPersistencePort
 	}
 
 	@Override
+	public boolean isDuplicate(
+		Medication medication,
+		MedicationUnit medicationUnit,
+		LocalDate dateOfIntake,
+		LocalTime timeOfIntake,
+		BigDecimal unitCount
+	) {
+		return repository.isDuplicate(medication.getId(), medicationUnit.getId(), dateOfIntake, timeOfIntake, unitCount);
+	}
+
+	@Override
 	public List<MedicationLog> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}
