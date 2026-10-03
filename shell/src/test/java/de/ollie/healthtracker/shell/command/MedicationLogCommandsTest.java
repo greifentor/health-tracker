@@ -1,6 +1,8 @@
 package de.ollie.healthtracker.shell.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.ollie.healthtracker.core.service.MedicationLogService;
@@ -391,6 +393,107 @@ class MedicationLogCommandsTest {
 					UNIT_STRING
 				)
 			);
+		}
+
+		@Test
+		void returnsACorrectErrorMessage_whenSomethingWentWrongWhileSavingTheData() {
+			// Prepare
+			String expected =
+				"ERROR in line: MEDICATION_LOG " +
+				DATE_STRING +
+				" " +
+				TIME_STRING +
+				" " +
+				MEDICATION_SEARCH_STRING +
+				" " +
+				UNIT_COUNT_STRING +
+				" " +
+				UNIT_STRING +
+				" > " +
+				MESSAGE;
+			BigDecimal units = new BigDecimal(1701);
+			LocalDate date = LocalDate.now();
+			LocalTime time = LocalTime.now();
+			when(bigDecimalFactory.create(UNIT_COUNT_STRING)).thenReturn(units);
+			when(dateStringToLocalDateConverter.convert(DATE_STRING)).thenReturn(date);
+			when(timeStringToLocalDateConverter.convert(TIME_STRING)).thenReturn(time);
+			when(medicationService.findByIdOrNameParticle(MEDICATION_SEARCH_STRING)).thenReturn(Optional.of(medication));
+			when(medicationLogService.isDuplicate(medication, medicationUnit, date, time, units)).thenReturn(false);
+			when(medicationLogService.createMedicationLog("", false, medication, medicationUnit, date, false, time, units))
+				.thenThrow(new RuntimeException(MESSAGE));
+			when(medicationUnitService.findByIdOrNameParticle(UNIT_STRING)).thenReturn(Optional.of(medicationUnit));
+			// Run & Check
+			assertEquals(
+				expected,
+				unitUnderTest.addMedicationLogEntry(
+					DATE_STRING,
+					TIME_STRING,
+					MEDICATION_SEARCH_STRING,
+					UNIT_COUNT_STRING,
+					UNIT_STRING
+				)
+			);
+		}
+
+		@Test
+		void returnsACorrectSuccessMessage_passingValidData() {
+			// Prepare
+			String expected =
+				"OK: MEDICATION_LOG " +
+				DATE_STRING +
+				" " +
+				TIME_STRING +
+				" " +
+				MEDICATION_SEARCH_STRING +
+				" " +
+				UNIT_COUNT_STRING +
+				" " +
+				UNIT_STRING;
+			BigDecimal units = new BigDecimal(1701);
+			LocalDate date = LocalDate.now();
+			LocalTime time = LocalTime.now();
+			when(bigDecimalFactory.create(UNIT_COUNT_STRING)).thenReturn(units);
+			when(dateStringToLocalDateConverter.convert(DATE_STRING)).thenReturn(date);
+			when(timeStringToLocalDateConverter.convert(TIME_STRING)).thenReturn(time);
+			when(medicationService.findByIdOrNameParticle(MEDICATION_SEARCH_STRING)).thenReturn(Optional.of(medication));
+			when(medicationLogService.isDuplicate(medication, medicationUnit, date, time, units)).thenReturn(false);
+			when(medicationUnitService.findByIdOrNameParticle(UNIT_STRING)).thenReturn(Optional.of(medicationUnit));
+			// Run & Check
+			assertEquals(
+				expected,
+				unitUnderTest.addMedicationLogEntry(
+					DATE_STRING,
+					TIME_STRING,
+					MEDICATION_SEARCH_STRING,
+					UNIT_COUNT_STRING,
+					UNIT_STRING
+				)
+			);
+		}
+
+		@Test
+		void callsTheCreateMethodOfTheMedicationLogServiceCorrectly_passingValidData() {
+			// Prepare
+			BigDecimal units = new BigDecimal(1701);
+			LocalDate date = LocalDate.now();
+			LocalTime time = LocalTime.now();
+			when(bigDecimalFactory.create(UNIT_COUNT_STRING)).thenReturn(units);
+			when(dateStringToLocalDateConverter.convert(DATE_STRING)).thenReturn(date);
+			when(timeStringToLocalDateConverter.convert(TIME_STRING)).thenReturn(time);
+			when(medicationService.findByIdOrNameParticle(MEDICATION_SEARCH_STRING)).thenReturn(Optional.of(medication));
+			when(medicationLogService.isDuplicate(medication, medicationUnit, date, time, units)).thenReturn(false);
+			when(medicationUnitService.findByIdOrNameParticle(UNIT_STRING)).thenReturn(Optional.of(medicationUnit));
+			// Run
+			unitUnderTest.addMedicationLogEntry(
+				DATE_STRING,
+				TIME_STRING,
+				MEDICATION_SEARCH_STRING,
+				UNIT_COUNT_STRING,
+				UNIT_STRING
+			);
+			// Check
+			verify(medicationLogService, times(1))
+				.createMedicationLog("", false, medication, medicationUnit, date, false, time, units);
 		}
 	}
 }

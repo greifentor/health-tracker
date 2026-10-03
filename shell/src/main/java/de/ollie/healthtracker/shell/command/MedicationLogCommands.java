@@ -6,7 +6,6 @@ import de.ollie.healthtracker.core.service.MedicationLogService;
 import de.ollie.healthtracker.core.service.MedicationService;
 import de.ollie.healthtracker.core.service.MedicationUnitService;
 import de.ollie.healthtracker.core.service.exception.RecordAlreadyExistingException;
-import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.Medication;
 import de.ollie.healthtracker.core.service.model.MedicationUnit;
 import java.math.BigDecimal;
@@ -63,7 +62,19 @@ public class MedicationLogCommands {
 				!medicationLogService.isDuplicate(medication, medicationUnit, date, time, units),
 				() -> new RecordAlreadyExistingException("Medication log entry is already existing!")
 			);
-			return null;
+			medicationLogService.createMedicationLog("", false, medication, medicationUnit, date, false, time, units);
+			return (
+				"OK: MEDICATION_LOG " +
+				dateStr +
+				" " +
+				timeStr +
+				" " +
+				medicationSearchStr +
+				" " +
+				unitCountStr +
+				" " +
+				unitSearchStr
+			);
 		} catch (DateTimeParseException dtpe) {
 			return (
 				"ERROR in line: MEDICATION_LOG " +
@@ -78,9 +89,7 @@ public class MedicationLogCommands {
 				unitSearchStr +
 				" > Date string does not contain a valid date!"
 			);
-		} catch (
-			IllegalArgumentException | NoSuchElementException | RecordAlreadyExistingException | TooManyElementsException e
-		) {
+		} catch (Exception e) {
 			return (
 				"ERROR in line: MEDICATION_LOG " +
 				dateStr +
