@@ -18,4 +18,9 @@ import org.springframework.stereotype.Repository;
 public interface AlcoholConsumptionDboRepository extends JpaRepository<AlcoholConsumptionDbo, UUID> {
 	@Query("SELECT dbo FROM AlcoholConsumptionDbo dbo ORDER BY dbo.date DESC")
 	List<AlcoholConsumptionDbo> findAllOrdered();
+
+	@Query(
+		"SELECT COUNT(dbo) > 0 FROM AlcoholConsumptionDbo dbo WHERE dbo.date = :date AND dbo.alcoholProduct.id = :alcoholProduct AND dbo.liter = :liter"
+	)
+	boolean isDuplicate(LocalDate date, UUID alcoholProduct, BigDecimal liter);
 }

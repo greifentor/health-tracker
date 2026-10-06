@@ -69,13 +69,13 @@ public class BloodPressureMeasurementEditJPanel extends AbstractEditPanel<BloodP
 		p.add(textFieldDateOfRecording);
 		textFieldTimeOfRecording = new JTextField(DateTimeUtil.DE_TIME_FORMAT.format(toEdit.getTimeOfRecording()), 40);
 		p.add(textFieldTimeOfRecording);
-		SpinnerModel spinnerModelSysMmHg = new SpinnerNumberModel(toEdit.getSysMmHg(), 0, 1000, 1);
+		SpinnerModel spinnerModelSysMmHg = new SpinnerNumberModel(toEdit.getSysMmHg(), 0, 1000000, 1);
 		spinnerSysMmHg = new JSpinner(spinnerModelSysMmHg);
 		p.add(spinnerSysMmHg);
-		SpinnerModel spinnerModelDiaMmHg = new SpinnerNumberModel(toEdit.getDiaMmHg(), 0, 1000, 1);
+		SpinnerModel spinnerModelDiaMmHg = new SpinnerNumberModel(toEdit.getDiaMmHg(), 0, 1000000, 1);
 		spinnerDiaMmHg = new JSpinner(spinnerModelDiaMmHg);
 		p.add(spinnerDiaMmHg);
-		SpinnerModel spinnerModelPulsePerMinute = new SpinnerNumberModel(toEdit.getPulsePerMinute(), 0, 1000, 1);
+		SpinnerModel spinnerModelPulsePerMinute = new SpinnerNumberModel(toEdit.getPulsePerMinute(), 0, 1000000, 1);
 		spinnerPulsePerMinute = new JSpinner(spinnerModelPulsePerMinute);
 		p.add(spinnerPulsePerMinute);
 		comboBoxStatus = new JComboBox<>(WhoBloodPressureClassification.values());

@@ -46,6 +46,11 @@ class AlcoholConsumptionServiceImpl implements AlcoholConsumptionService {
 	}
 
 	@Override
+	public boolean isDuplicate(LocalDate date, AlcoholProduct alcoholProduct, BigDecimal liter) {
+		return alcoholConsumptionPersistencePort.isDuplicate(date, alcoholProduct, liter);
+	}
+
+	@Override
 	public List<AlcoholConsumption> listAlcoholConsumptions() {
 		return alcoholConsumptionPersistencePort.list();
 	}

@@ -91,7 +91,7 @@ public class MedicationLogEditJPanel extends AbstractEditPanel<MedicationLog> {
 			return new JLabel("-");
 		});
 		p.add(comboBoxMedicationUnit);
-		spinnerUnitCount = createDecimalSpinner(toEdit.getUnitCount(), 0, 1000000, 0.1, 1);
+		spinnerUnitCount = createDecimalSpinner(toEdit.getUnitCount(), -1000, 1000000, 0.1, 1);
 		p.add(spinnerUnitCount);
 		checkBoxConfirmed = new JCheckBox();
 		checkBoxConfirmed.setSelected(toEdit.isConfirmed());

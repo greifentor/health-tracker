@@ -78,7 +78,6 @@ class DboFactory {
 	) {
 		ensure(alcoholProductId != null, "alcohol product id cannot be null!");
 		ensure(comment != null, "comment cannot be null!");
-		ensure(!comment.isBlank(), "comment cannot be blank!");
 		ensure(date != null, "date cannot be null!");
 		ensure(liter != null, "liter cannot be null!");
 		AlcoholProductDbo alcoholProduct = alcoholProductDboRepository

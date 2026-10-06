@@ -24,6 +24,8 @@ public interface AlcoholConsumptionPersistencePort {
 
 	Optional<AlcoholConsumption> findById(UUID id);
 
+	boolean isDuplicate(LocalDate date, AlcoholProduct alcoholProduct, BigDecimal liter);
+
 	List<AlcoholConsumption> list();
 
 	AlcoholConsumption update(AlcoholConsumption toSave);

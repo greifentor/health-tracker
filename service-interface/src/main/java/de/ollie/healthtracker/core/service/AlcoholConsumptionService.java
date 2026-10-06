@@ -27,6 +27,8 @@ public interface AlcoholConsumptionService {
 
 	Optional<AlcoholConsumption> findById(UUID id);
 
+	boolean isDuplicate(LocalDate date, AlcoholProduct alcoholProduct, BigDecimal liter);
+
 	List<AlcoholConsumption> listAlcoholConsumptions();
 
 	AlcoholConsumption updateAlcoholConsumption(AlcoholConsumption toSave);

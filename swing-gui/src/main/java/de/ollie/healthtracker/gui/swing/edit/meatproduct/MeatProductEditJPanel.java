@@ -58,7 +58,7 @@ public class MeatProductEditJPanel extends AbstractEditPanel<MeatProduct> {
 			return new JLabel("-");
 		});
 		p.add(comboBoxMeatType);
-		SpinnerModel spinnerModelAmountInGr = new SpinnerNumberModel(toEdit.getAmountInGr(), 0, 1000, 1);
+		SpinnerModel spinnerModelAmountInGr = new SpinnerNumberModel(toEdit.getAmountInGr(), 0, 1000000, 1);
 		spinnerAmountInGr = new JSpinner(spinnerModelAmountInGr);
 		p.add(spinnerAmountInGr);
 		return p;

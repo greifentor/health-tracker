@@ -1,5 +1,6 @@
 package de.ollie.healthtracker.persistence.jpa;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -153,11 +154,11 @@ class DboFactoryTest {
 		}
 
 		@Test
-		void throwsAnException_passingABlankString_asComment() {
-			assertThrows(
-				IllegalArgumentException.class,
-				() -> unitUnderTest.createAlcoholConsumption(DATE, ID, BLANK_STR, LITER)
-			);
+		void doesNotThrowsAnException_passingABlankString_asComment() {
+			// Prepare
+			when(alcoholProductDboRepository.findById(ID)).thenReturn(Optional.of(alcoholProductDbo));
+			// Run & Check
+			assertDoesNotThrow(() -> unitUnderTest.createAlcoholConsumption(DATE, ID, BLANK_STR, LITER));
 		}
 
 		@Test

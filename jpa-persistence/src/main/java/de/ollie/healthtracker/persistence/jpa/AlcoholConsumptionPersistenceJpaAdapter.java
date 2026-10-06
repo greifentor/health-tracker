@@ -51,6 +51,11 @@ class AlcoholConsumptionPersistenceJpaAdapter implements AlcoholConsumptionPersi
 	}
 
 	@Override
+	public boolean isDuplicate(LocalDate date, AlcoholProduct alcoholProduct, BigDecimal liter) {
+		return repository.isDuplicate(date, alcoholProduct.getId(), liter);
+	}
+
+	@Override
 	public List<AlcoholConsumption> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}

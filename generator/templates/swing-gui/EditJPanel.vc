@@ -114,7 +114,7 @@ public class ${ClassName}EditJPanel extends AbstractEditPanel<${ClassName}> {
 		checkBox${Attribute.getNameCamelCase()}.setSelected(toEdit.is${Attribute.getNameCamelCase()}());
 		p.add(checkBox${Attribute.getNameCamelCase()});
 		#elseif(${Attribute.getTypeName()} == "int")
-		SpinnerModel spinnerModel${Attribute.getNameCamelCase()} = new SpinnerNumberModel(toEdit.get${Attribute.getNameCamelCase()}(), 0, 1000, 1);
+		SpinnerModel spinnerModel${Attribute.getNameCamelCase()} = new SpinnerNumberModel(toEdit.get${Attribute.getNameCamelCase()}(), #if($Attribute.hasProperty("editor-min"))$Attribute.getPropertyValue("editor-min")#{else}0#end, #if($Attribute.hasProperty("editor-max"))$Attribute.getPropertyValue("editor-max")#{else}1000000#end, #if($Attribute.hasProperty("editor-step"))$Attribute.getPropertyValue("editor-step")#{else}1#end);
 		spinner${Attribute.getNameCamelCase()} = new JSpinner(spinnerModel${Attribute.getNameCamelCase()});
 		p.add(spinner${Attribute.getNameCamelCase()});
 		#elseif(${Attribute.getTypeName()} == "BigDecimal")

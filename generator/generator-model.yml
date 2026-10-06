@@ -23,6 +23,8 @@ classes:
             value: false
           - name: editor-position
             value: 1
+          - name: duplicate-check
+            value: true
         type:
           name: LocalDate
           properties:
@@ -35,6 +37,8 @@ classes:
             value: false
           - name: editor-position
             value: 2
+          - name: duplicate-check
+            value: true
         type:
           name: AlcoholProduct
       - name: comment
@@ -49,10 +53,12 @@ classes:
         properties:
           - name: nullable
             value: false
+          - name: duplicate-check
+            value: true
           - name: editor-position
             value: 4
           - name: editor-min
-            value: -100
+            value: 0
           - name: editor-step
             value: 0.1
           - name: editor-fraction-digits
@@ -882,6 +888,8 @@ classes:
             value: false
           - name: nullable
             value: false
+          - name: editor-min
+            value: -1000
           - name: editor-position
             value: 5
           - name: editor-fraction-digits
