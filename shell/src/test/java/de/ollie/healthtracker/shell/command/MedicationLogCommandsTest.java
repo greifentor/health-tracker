@@ -361,7 +361,7 @@ class MedicationLogCommandsTest {
 		void returnsACorrectErrorMessage_passingAlreadyExistingData() {
 			// Prepare
 			String expected =
-				"ERROR in line: MEDICATION_LOG " +
+				"ALREADY EXISTING: MEDICATION_LOG " +
 				DATE_STRING +
 				" " +
 				TIME_STRING +

@@ -21,7 +21,7 @@ public interface MedicationLogDboRepository extends JpaRepository<MedicationLogD
 	List<MedicationLogDbo> findAllOrdered();
 
 	@Query(
-		"SELECT COUNT(*) > 1 FROM MedicationLogDbo dbo WHERE dbo.medication == :medication AND dbo.medicationUnit == :medicationUnit AND dbo.dateOfIntake == :dateOfIntake AND dbo.timeOfIntake == :timeOfIntake AND dbo.unitCount == :unitCount"
+		"SELECT COUNT(dbo) > 0 FROM MedicationLogDbo dbo WHERE dbo.medication.id = :medication AND dbo.medicationUnit.id = :medicationUnit AND dbo.dateOfIntake = :dateOfIntake AND dbo.timeOfIntake = :timeOfIntake AND dbo.unitCount = :unitCount"
 	)
 	boolean isDuplicate(
 		UUID medication,

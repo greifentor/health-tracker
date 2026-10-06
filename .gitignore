@@ -36,3 +36,5 @@ tmp0/
 
 */*.jasper
 /start-home.sh
+/bin/
+/start-shell-local.sh

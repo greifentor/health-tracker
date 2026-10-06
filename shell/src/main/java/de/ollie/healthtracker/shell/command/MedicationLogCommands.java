@@ -89,6 +89,21 @@ public class MedicationLogCommands {
 				unitSearchStr +
 				" > Date string does not contain a valid date!"
 			);
+		} catch (RecordAlreadyExistingException raee) {
+			return (
+				"ALREADY EXISTING: MEDICATION_LOG " +
+				dateStr +
+				" " +
+				timeStr +
+				" " +
+				medicationSearchStr +
+				" " +
+				unitCountStr +
+				" " +
+				unitSearchStr +
+				" > " +
+				raee.getMessage()
+			);
 		} catch (Exception e) {
 			return (
 				"ERROR in line: MEDICATION_LOG " +

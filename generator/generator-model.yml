@@ -52,7 +52,7 @@ classes:
           - name: editor-position
             value: 4
           - name: editor-min
-            value: 0
+            value: -100
           - name: editor-step
             value: 0.1
           - name: editor-fraction-digits
