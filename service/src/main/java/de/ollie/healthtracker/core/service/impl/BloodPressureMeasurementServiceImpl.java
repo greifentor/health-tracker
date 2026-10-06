@@ -67,6 +67,25 @@ class BloodPressureMeasurementServiceImpl implements BloodPressureMeasurementSer
 	}
 
 	@Override
+	public boolean isDuplicate(
+		LocalDate dateOfRecording,
+		int diaMmHg,
+		int pulsePerMinute,
+		int sysMmHg,
+		LocalTime timeOfRecording,
+		WhoBloodPressureClassification status
+	) {
+		return bloodPressureMeasurementPersistencePort.isDuplicate(
+			dateOfRecording,
+			diaMmHg,
+			pulsePerMinute,
+			sysMmHg,
+			timeOfRecording,
+			status
+		);
+	}
+
+	@Override
 	public List<BloodPressureMeasurement> listBloodPressureMeasurements() {
 		return bloodPressureMeasurementPersistencePort.list();
 	}

@@ -26,7 +26,7 @@ public class AlcoholConsumptionCommands {
 
 	@ShellMethod(value = "Adds a alcohol consumption entry.", key = { "ALCOHOL_CONSUMPTION", "AC" })
 	public String addMedicationLogEntry(
-		@ShellOption(help = "The date of medication (DD.MM.JJJJ).", value = "date") String dateStr,
+		@ShellOption(help = "The date of alcohol consumption (DD.MM.JJJJ).", value = "date") String dateStr,
 		@ShellOption(
 			help = "A string which should appear in the name of logged alcohol only.",
 			value = "alcohol"
@@ -36,7 +36,7 @@ public class AlcoholConsumptionCommands {
 		BigDecimal liter = bigDecimalFactory.create("" + literDouble);
 		try {
 			ensure(dateStr != null, "Date is not set!");
-			ensure(alcoholProductSearchStr != null, "Alcohol search string is not set!");
+			ensure(alcoholProductSearchStr != null, "Alcohol product search string is not set!");
 			LocalDate date = dateStringToLocalDateConverter.convert(dateStr);
 			AlcoholProduct alcoholProduct = alcoholProductService
 				.findByIdOrNameParticle(alcoholProductSearchStr)

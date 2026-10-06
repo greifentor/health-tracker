@@ -22,6 +22,8 @@ public interface MeatConsumptionService {
 
 	Optional<MeatConsumption> findById(UUID id);
 
+	boolean isDuplicate(LocalDate dateOfRecording, MeatProduct meatProduct, BigDecimal units);
+
 	List<MeatConsumption> listMeatConsumptions();
 
 	MeatConsumption updateMeatConsumption(MeatConsumption toSave);

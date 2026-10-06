@@ -5,6 +5,7 @@ import static de.ollie.baselib.util.Check.ensure;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
 import de.ollie.healthtracker.core.service.port.persistence.BloodPressureMeasurementPersistencePort;
+import de.ollie.healthtracker.persistence.jpa.dbo.WhoBloodPressureClassificationDbo;
 import de.ollie.healthtracker.persistence.jpa.mapper.BloodPressureMeasurementDboMapper;
 import de.ollie.healthtracker.persistence.jpa.repository.BloodPressureMeasurementDboRepository;
 import jakarta.inject.Named;
@@ -65,6 +66,25 @@ class BloodPressureMeasurementPersistenceJpaAdapter implements BloodPressureMeas
 	public Optional<BloodPressureMeasurement> findById(UUID id) {
 		ensure(id != null, "id cannot be null!");
 		return repository.findById(id).map(mapper::toModel);
+	}
+
+	@Override
+	public boolean isDuplicate(
+		LocalDate dateOfRecording,
+		int diaMmHg,
+		int pulsePerMinute,
+		int sysMmHg,
+		LocalTime timeOfRecording,
+		WhoBloodPressureClassification status
+	) {
+		return repository.isDuplicate(
+			dateOfRecording,
+			diaMmHg,
+			pulsePerMinute,
+			sysMmHg,
+			timeOfRecording,
+			WhoBloodPressureClassificationDbo.valueOf(status.name())
+		);
 	}
 
 	@Override

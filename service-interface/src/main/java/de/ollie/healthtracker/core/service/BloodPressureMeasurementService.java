@@ -22,13 +22,22 @@ public interface BloodPressureMeasurementService {
 
 	void deleteBloodPressureMeasurement(UUID id);
 
-	List<BloodPressureMeasurement> findAllBloodPressureMeasurementsByTimeInterval(LocalDate from, LocalDate to);
-
-	List<BloodPressureMeasurement> findAllBloodPressureMeasurementsPrettifiedByTimeInterval(LocalDate from, LocalDate to);
-
 	Optional<BloodPressureMeasurement> findById(UUID id);
+
+	boolean isDuplicate(
+		LocalDate dateOfRecording,
+		int diaMmHg,
+		int pulsePerMinute,
+		int sysMmHg,
+		LocalTime timeOfRecording,
+		WhoBloodPressureClassification status
+	);
 
 	List<BloodPressureMeasurement> listBloodPressureMeasurements();
 
 	BloodPressureMeasurement updateBloodPressureMeasurement(BloodPressureMeasurement toSave);
+
+	List<BloodPressureMeasurement> findAllBloodPressureMeasurementsByTimeInterval(LocalDate from, LocalDate to);
+
+	List<BloodPressureMeasurement> findAllBloodPressureMeasurementsPrettifiedByTimeInterval(LocalDate from, LocalDate to);
 }

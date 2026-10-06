@@ -51,6 +51,11 @@ class MeatConsumptionPersistenceJpaAdapter implements MeatConsumptionPersistence
 	}
 
 	@Override
+	public boolean isDuplicate(LocalDate dateOfRecording, MeatProduct meatProduct, BigDecimal units) {
+		return repository.isDuplicate(dateOfRecording, meatProduct.getId(), units);
+	}
+
+	@Override
 	public List<MeatConsumption> list() {
 		return repository.findAllOrdered().stream().map(mapper::toModel).toList();
 	}

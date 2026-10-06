@@ -138,6 +138,8 @@ classes:
       - name: dateOfRecording
         default-value: LocalDate.now()
         properties:
+          - name: duplicate-check
+            value: true
           - name: editor-position
             value: 1
           - name: nullable
@@ -150,6 +152,8 @@ classes:
       - name: diaMmHg
         default-value: 80
         properties:
+          - name: duplicate-check
+            value: true
           - name: editor-position
             value: 4
         type:
@@ -157,6 +161,8 @@ classes:
       - name: pulsePerMinute
         default-value: 60
         properties:
+          - name: duplicate-check
+            value: true
           - name: editor-position
             value: 5
         type:
@@ -164,6 +170,8 @@ classes:
       - name: sysMmHg
         default-value: 130
         properties:
+          - name: duplicate-check
+            value: true
           - name: editor-position
             value: 3
         type:
@@ -171,6 +179,8 @@ classes:
       - name: timeOfRecording
         default-value: LocalTime.now()
         properties:
+          - name: duplicate-check
+            value: true
           - name: editor-position
             value: 2
           - name: nullable
@@ -183,6 +193,8 @@ classes:
       - name: status
         default-value: WhoBloodPressureClassification.HIGH_NORMAL
         properties:
+          - name: duplicate-check
+            value: true
           - name: editor-position
             value: 6
           - name: nullable
@@ -612,10 +624,10 @@ classes:
         properties:
           - name: nullable
             value: false
-          - name: findable
-            value: true
           - name: editor-position
             value: 1
+          - name: findable
+            value: true
         type:
           name: String
   - name: MeatConsumption
@@ -640,6 +652,8 @@ classes:
         properties:
           - name: nullable
             value: false
+          - name: duplicate-check
+            value: true
           - name: editor-position
             value: 1
         type:
@@ -650,6 +664,8 @@ classes:
       - name: meatProduct
         reference: true
         properties:
+          - name: duplicate-check
+            value: true
           - name: editor-position
             value: 2
         type:
@@ -659,6 +675,8 @@ classes:
         properties:
           - name: nullable
             value: false
+          - name: duplicate-check
+            value: true
           - name: editor-position
             value: 3
           - name: editor-fraction-digits

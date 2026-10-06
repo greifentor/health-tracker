@@ -28,6 +28,15 @@ public interface BloodPressureMeasurementPersistencePort {
 
 	Optional<BloodPressureMeasurement> findById(UUID id);
 
+	boolean isDuplicate(
+		LocalDate dateOfRecording,
+		int diaMmHg,
+		int pulsePerMinute,
+		int sysMmHg,
+		LocalTime timeOfRecording,
+		WhoBloodPressureClassification status
+	);
+
 	List<BloodPressureMeasurement> list();
 
 	BloodPressureMeasurement update(BloodPressureMeasurement toSave);

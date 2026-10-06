@@ -41,6 +41,11 @@ class MeatConsumptionServiceImpl implements MeatConsumptionService {
 	}
 
 	@Override
+	public boolean isDuplicate(LocalDate dateOfRecording, MeatProduct meatProduct, BigDecimal units) {
+		return meatConsumptionPersistencePort.isDuplicate(dateOfRecording, meatProduct, units);
+	}
+
+	@Override
 	public List<MeatConsumption> listMeatConsumptions() {
 		return meatConsumptionPersistencePort.list();
 	}

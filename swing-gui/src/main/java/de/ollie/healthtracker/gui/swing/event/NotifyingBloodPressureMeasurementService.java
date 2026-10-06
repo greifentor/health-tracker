@@ -87,4 +87,16 @@ public class NotifyingBloodPressureMeasurementService implements BloodPressureMe
 		changeNotifier.notifyChanged();
 		return saved;
 	}
+
+	@Override
+	public boolean isDuplicate(
+		LocalDate dateOfRecording,
+		int diaMmHg,
+		int pulsePerMinute,
+		int sysMmHg,
+		LocalTime timeOfRecording,
+		WhoBloodPressureClassification status
+	) {
+		return delegate.isDuplicate(dateOfRecording, diaMmHg, pulsePerMinute, sysMmHg, timeOfRecording, status);
+	}
 }

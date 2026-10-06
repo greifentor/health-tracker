@@ -55,4 +55,9 @@ public class NotifyingMeatConsumptionService implements MeatConsumptionService {
 		changeNotifier.notifyChanged();
 		return saved;
 	}
+
+	@Override
+	public boolean isDuplicate(LocalDate dateOfRecording, MeatProduct meatProduct, BigDecimal units) {
+		return delegate.isDuplicate(dateOfRecording, meatProduct, units);
+	}
 }

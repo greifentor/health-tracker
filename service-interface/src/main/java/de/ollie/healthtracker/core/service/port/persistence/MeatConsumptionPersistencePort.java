@@ -24,6 +24,8 @@ public interface MeatConsumptionPersistencePort {
 
 	Optional<MeatConsumption> findById(UUID id);
 
+	boolean isDuplicate(LocalDate dateOfRecording, MeatProduct meatProduct, BigDecimal units);
+
 	List<MeatConsumption> list();
 
 	MeatConsumption update(MeatConsumption toSave);
