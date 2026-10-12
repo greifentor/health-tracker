@@ -32,6 +32,9 @@ import de.ollie.healthtracker.core.service.WeightMeasurementService;
 import de.ollie.healthtracker.core.service.WhoBloodPressureClassificationService;
 import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.NutritionCalculationData;
+import de.ollie.healthtracker.gui.swing.chart.alcohol.AlcoholChartData;
+import de.ollie.healthtracker.gui.swing.chart.alcohol.AlcoholChartDataProvider;
+import de.ollie.healthtracker.gui.swing.chart.alcohol.AlcoholChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartData;
 import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartJInternalFrame;
@@ -44,9 +47,11 @@ import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartJInternalF
 import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartData;
 import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartJInternalFrame;
+import de.ollie.healthtracker.gui.swing.event.AlcoholConsumptionChangeNotifier;
 import de.ollie.healthtracker.gui.swing.event.BloodPressureMeasurementChangeNotifier;
 import de.ollie.healthtracker.gui.swing.event.BodyTemperatureMeasurementChangeNotifier;
 import de.ollie.healthtracker.gui.swing.event.MeatConsumptionChangeNotifier;
+import de.ollie.healthtracker.gui.swing.event.NotifyingAlcoholConsumptionService;
 import de.ollie.healthtracker.gui.swing.event.NotifyingBloodPressureMeasurementService;
 import de.ollie.healthtracker.gui.swing.event.NotifyingBodyTemperatureMeasurementService;
 import de.ollie.healthtracker.gui.swing.event.NotifyingMeatConsumptionService;
@@ -124,6 +129,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	@Value("${app.version}")
 	private String appVersion;
 
+	private final AlcoholChartDataProvider alcoholChartDataProvider;
+	private final AlcoholConsumptionChangeNotifier alcoholConsumptionChangeNotifier;
 	private final AlcoholConsumptionService alcoholConsumptionService;
 	private final AlcoholProductService alcoholProductService;
 	private final BloodPressureChartDataProvider bloodPressureChartDataProvider;
@@ -195,6 +202,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemFilePrintHealthReportLast30Days;
 	private JMenuItem menuItemFilePrintMeatConsumptionStatistic;
 	private JMenuItem menuItemFileQuit;
+	private JMenuItem menuItemFileShowAlcoholChart;
 	private JMenuItem menuItemFileShowBloodPressureChart;
 	private JMenuItem menuItemFileShowBodyTemperatureChart;
 	private JMenuItem menuItemFileShowNutritionChart;
@@ -269,6 +277,12 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				bodyTemperatureMeasurementChangeNotifier
 			),
 			new NutritionChartJInternalFrame(desktopPane, this::createNutritionChartData, meatConsumptionChangeNotifier),
+			new AlcoholChartJInternalFrame(
+				desktopPane,
+				this::createAlcoholChartData,
+				chartWindowDays,
+				alcoholConsumptionChangeNotifier
+			),
 		};
 		int width = desktopPane.getWidth() / charts.length;
 		int height = 600;
@@ -311,6 +325,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemFileQuit);
 		menuBar.add(menu);
 		menu = new JMenu("Show");
+		menuItemFileShowAlcoholChart = createMenuItem("Show Alcohol Chart", this);
+		menu.add(menuItemFileShowAlcoholChart);
 		menuItemFileShowBloodPressureChart = createMenuItem("Show Blood Pressure Chart", this);
 		menu.add(menuItemFileShowBloodPressureChart);
 		menuItemFileShowBodyTemperatureChart = createMenuItem("Show Body Temperature Chart", this);
@@ -458,7 +474,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			new SymptomSelectJInternalFrame(symptomService, bodyPartService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditAlcoholConsumption) {
 			new AlcoholConsumptionSelectJInternalFrame(
-				alcoholConsumptionService,
+				new NotifyingAlcoholConsumptionService(alcoholConsumptionService, alcoholConsumptionChangeNotifier),
 				alcoholProductService,
 				desktopPane,
 				editDialogComponentFactory
@@ -694,6 +710,13 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 						"- VEGGIE:  " + (dpm.getKey().getMonth().maxLength() - dpm.getValue().getMeat() - dpm.getValue().getFish())
 					);
 				});
+		} else if (e.getSource() == menuItemFileShowAlcoholChart) {
+			new AlcoholChartJInternalFrame(
+				desktopPane,
+				this::createAlcoholChartData,
+				chartWindowDays,
+				alcoholConsumptionChangeNotifier
+			);
 		} else if (e.getSource() == menuItemFileShowBloodPressureChart) {
 			new BloodPressureChartJInternalFrame(
 				desktopPane,
@@ -748,6 +771,10 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 
 	private List<NutritionChartData> createNutritionChartData() {
 		return nutritionChartDataProvider.create();
+	}
+
+	private List<AlcoholChartData> createAlcoholChartData() {
+		return alcoholChartDataProvider.create(chartWindowDays);
 	}
 
 	private NutritionCalculationData createNutritionCalculationData(MeatConsumptionStaticRecord mcsr) {
