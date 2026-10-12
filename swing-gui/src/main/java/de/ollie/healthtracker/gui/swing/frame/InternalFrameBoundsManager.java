@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 /**
  * Remembers position and size of internal frames across program runs. {@link #applyBounds} places a frame at its stored
- * bounds (if fully visible on the desktop, otherwise centered) and attaches listeners that keep the stored bounds
+ * bounds (clamped back onto the desktop should it no longer fit) and attaches listeners that keep the stored bounds
  * current while the frame is moved / resized and when it is closed (both via the close button and via a programmatic
  * {@code dispose()}). {@link #save} persists all bounds - to be called on program exit.
  */
@@ -50,7 +50,7 @@ public class InternalFrameBoundsManager {
 	}
 
 	/**
-	 * Places the frame at its stored bounds (if visible, otherwise centered on the default size) and starts tracking
+	 * Places the frame at its stored bounds (clamped back onto the desktop should it no longer fit) and starts tracking
 	 * every move, resize and close so the last bounds are remembered.
 	 */
 	public void applyBounds(JInternalFrame frame, JDesktopPane desktopPane, String key, Rectangle defaultBounds) {
@@ -98,24 +98,25 @@ public class InternalFrameBoundsManager {
 		store.save(boundsByKey);
 	}
 
-	/** Stored bounds if fully visible on the desktop; otherwise the (size-clamped) frame centered on the desktop. */
+	/**
+	 * Stored bounds, with the size clamped to the desktop and the origin shifted back onto the desktop if the stored
+	 * position would extend beyond its right/bottom edge (or is negative). Clamping instead of re-centering keeps the
+	 * remembered position stable even when the desktop is marginally smaller than on the previous run - so a frame stored
+	 * flush against an edge still reopens where the user left it.
+	 */
 	Rectangle computeBounds(Rectangle stored, Dimension desktopSize, Rectangle defaultBounds) {
 		if (stored == null) {
 			return defaultBounds;
 		}
 		int width = Math.min(stored.width, desktopSize.width);
 		int height = Math.min(stored.height, desktopSize.height);
-		Rectangle candidate = new Rectangle(stored.x, stored.y, width, height);
-		if (isFullyVisible(candidate, desktopSize)) {
-			return candidate;
-		}
-		int x = Math.max(0, (desktopSize.width - width) / 2);
-		int y = Math.max(0, (desktopSize.height - height) / 2);
+		int x = clamp(stored.x, desktopSize.width - width);
+		int y = clamp(stored.y, desktopSize.height - height);
 		return new Rectangle(x, y, width, height);
 	}
 
-	private boolean isFullyVisible(Rectangle r, Dimension desktopSize) {
-		return r.x >= 0 && r.y >= 0 && r.x + r.width <= desktopSize.width && r.y + r.height <= desktopSize.height;
+	private int clamp(int value, int max) {
+		return Math.max(0, Math.min(value, max));
 	}
 
 	private void trackChanges(JInternalFrame frame, String key) {

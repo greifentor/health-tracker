@@ -90,19 +90,29 @@ class InternalFrameBoundsManagerTest {
 		}
 
 		@Test
-		void centersTheFrameWhenTheStoredBoundsExtendBeyondTheRightOrBottom() {
+		void clampsTheOriginBackOntoTheDesktopWhenTheStoredBoundsExtendBeyondTheRightOrBottom() {
 			// Run
 			Rectangle result = unitUnderTest.computeBounds(new Rectangle(900, 700, 600, 400), DESKTOP, DEFAULT_BOUNDS);
 			// Check
-			assertEquals(new Rectangle(200, 200, 600, 400), result);
+			assertEquals(new Rectangle(400, 400, 600, 400), result);
 		}
 
 		@Test
-		void centersTheFrameWhenTheStoredOriginIsNegative() {
+		void clampsANegativeStoredOriginToZero() {
 			// Run
 			Rectangle result = unitUnderTest.computeBounds(new Rectangle(-10, 50, 600, 400), DESKTOP, DEFAULT_BOUNDS);
 			// Check
-			assertEquals(new Rectangle(200, 200, 600, 400), result);
+			assertEquals(new Rectangle(0, 50, 600, 400), result);
+		}
+
+		@Test
+		void keepsAnEdgeFlushFrameNearItsPositionWhenTheDesktopShrinks() {
+			// Prepare
+			Rectangle edgeFlush = new Rectangle(1534, 0, 386, 600);
+			// Run
+			Rectangle result = unitUnderTest.computeBounds(edgeFlush, new Dimension(1915, 1040), DEFAULT_BOUNDS);
+			// Check
+			assertEquals(new Rectangle(1529, 0, 386, 600), result);
 		}
 
 		@Test
@@ -148,14 +158,14 @@ class InternalFrameBoundsManagerTest {
 		}
 
 		@Test
-		void centersTheFrameWhenTheStoredBoundsAreOffscreen() {
+		void clampsTheFrameBackOntoTheDesktopWhenTheStoredBoundsAreOffscreen() {
 			// Prepare
 			InternalFrameBoundsManager unitUnderTest = managerWithStored(KEY, new Rectangle(900, 700, 600, 400));
 			JInternalFrame frame = new JInternalFrame();
 			// Run
 			unitUnderTest.applyBounds(frame, desktopPane(), KEY, DEFAULT_BOUNDS);
 			// Check
-			assertEquals(new Rectangle(200, 200, 600, 400), frame.getBounds());
+			assertEquals(new Rectangle(400, 400, 600, 400), frame.getBounds());
 		}
 
 		@Test
