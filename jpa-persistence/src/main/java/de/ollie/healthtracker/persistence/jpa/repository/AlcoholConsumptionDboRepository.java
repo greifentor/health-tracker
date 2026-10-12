@@ -9,11 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-/**
- * GENERATED CODE - DO NOT TOUCH
- *
- * Remove this comment to suspend class from generation process.
- */
 @Repository
 public interface AlcoholConsumptionDboRepository extends JpaRepository<AlcoholConsumptionDbo, UUID> {
 	@Query("SELECT dbo FROM AlcoholConsumptionDbo dbo ORDER BY dbo.date DESC")
@@ -23,4 +18,12 @@ public interface AlcoholConsumptionDboRepository extends JpaRepository<AlcoholCo
 		"SELECT COUNT(dbo) > 0 FROM AlcoholConsumptionDbo dbo WHERE dbo.date = :date AND dbo.alcoholProduct.id = :alcoholProduct AND dbo.liter = :liter"
 	)
 	boolean isDuplicate(LocalDate date, UUID alcoholProduct, BigDecimal liter);
+
+	@Query("SELECT dbo FROM AlcoholConsumptionDbo dbo WHERE dbo.date >= :from ORDER BY dbo.date DESC")
+	List<AlcoholConsumptionDbo> findAllSince(LocalDate from);
+
+	/** Returns the consumptions recorded within the last {@code days} days (date on or after today - days). */
+	default List<AlcoholConsumptionDbo> findAllOfLastDays(int days) {
+		return findAllSince(LocalDate.now().minusDays(days));
+	}
 }
