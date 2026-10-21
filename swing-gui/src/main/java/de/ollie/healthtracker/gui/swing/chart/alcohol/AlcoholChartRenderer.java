@@ -141,7 +141,7 @@ class AlcoholChartRenderer {
 		g2.setColor(COLOR_ALCOHOL);
 		g2.fillRect(x, y + (LEGEND_HEIGHT - swatch) / 2, swatch, swatch);
 		g2.setColor(COLOR_AXIS);
-		g2.drawString("Alcohol (l)", x + swatch + HGAP, y + (LEGEND_HEIGHT + fm.getAscent()) / 2 - 1);
+		g2.drawString("Pure alcohol (l)", x + swatch + HGAP, y + (LEGEND_HEIGHT + fm.getAscent()) / 2 - 1);
 	}
 
 	/** Evenly spaces the day positions 1..{@code days} across the width; a single position is centered. */

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import de.ollie.healthtracker.core.service.AlcoholConsumptionHistoryService;
 import de.ollie.healthtracker.core.service.model.AlcoholConsumption;
+import de.ollie.healthtracker.core.service.model.AlcoholProduct;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -27,20 +28,34 @@ class AlcoholChartDataProviderTest {
 	@InjectMocks
 	private AlcoholChartDataProvider unitUnderTest;
 
-	private AlcoholConsumption consumption(LocalDate date, double liter) {
-		return new AlcoholConsumption().setDate(date).setLiter(BigDecimal.valueOf(liter));
+	private AlcoholConsumption consumption(LocalDate date, double liter, double percentVol) {
+		return new AlcoholConsumption()
+			.setDate(date)
+			.setLiter(BigDecimal.valueOf(liter))
+			.setAlcoholProduct(new AlcoholProduct().setPercentVol(BigDecimal.valueOf(percentVol)));
 	}
 
 	@Test
-	void sumsTheLitersOfTheSameDay() {
+	void computesThePureAlcoholFromVolumeAndPercent() {
 		// Prepare
-		LocalDate today = LocalDate.now();
 		when(alcoholConsumptionHistoryService.findAllOfLastDays(anyInt()))
-			.thenReturn(List.of(consumption(today, 0.5), consumption(today, 0.3)));
+			.thenReturn(List.of(consumption(LocalDate.now(), 2.0, 10.0)));
 		// Run
 		List<AlcoholChartData> result = unitUnderTest.create(WINDOW_DAYS);
 		// Check
-		assertEquals(0.8, result.get(0).liters(), 0.0001);
+		assertEquals(0.2, result.get(0).liters(), 0.0001);
+	}
+
+	@Test
+	void sumsThePureAlcoholOfTheSameDay() {
+		// Prepare
+		LocalDate today = LocalDate.now();
+		when(alcoholConsumptionHistoryService.findAllOfLastDays(anyInt()))
+			.thenReturn(List.of(consumption(today, 1.0, 50.0), consumption(today, 2.0, 5.0)));
+		// Run
+		List<AlcoholChartData> result = unitUnderTest.create(WINDOW_DAYS);
+		// Check
+		assertEquals(0.6, result.get(0).liters(), 0.0001);
 	}
 
 	@Test
@@ -48,7 +63,7 @@ class AlcoholChartDataProviderTest {
 		// Prepare
 		LocalDate today = LocalDate.now();
 		when(alcoholConsumptionHistoryService.findAllOfLastDays(anyInt()))
-			.thenReturn(List.of(consumption(today, 0.5), consumption(today.minusDays(1), 0.3)));
+			.thenReturn(List.of(consumption(today, 0.5, 40.0), consumption(today.minusDays(1), 0.3, 40.0)));
 		// Run
 		List<AlcoholChartData> result = unitUnderTest.create(WINDOW_DAYS);
 		// Check
@@ -59,7 +74,7 @@ class AlcoholChartDataProviderTest {
 	void placesTodaysConsumptionAtTheLastWindowPosition() {
 		// Prepare
 		when(alcoholConsumptionHistoryService.findAllOfLastDays(anyInt()))
-			.thenReturn(List.of(consumption(LocalDate.now(), 0.5)));
+			.thenReturn(List.of(consumption(LocalDate.now(), 0.5, 40.0)));
 		// Run
 		List<AlcoholChartData> result = unitUnderTest.create(WINDOW_DAYS);
 		// Check
@@ -70,7 +85,7 @@ class AlcoholChartDataProviderTest {
 	void placesThePreviousDayOneWindowPositionEarlier() {
 		// Prepare
 		when(alcoholConsumptionHistoryService.findAllOfLastDays(anyInt()))
-			.thenReturn(List.of(consumption(LocalDate.now().minusDays(1), 0.5)));
+			.thenReturn(List.of(consumption(LocalDate.now().minusDays(1), 0.5, 40.0)));
 		// Run
 		List<AlcoholChartData> result = unitUnderTest.create(WINDOW_DAYS);
 		// Check
