@@ -4,6 +4,7 @@ import de.ollie.healthtracker.gui.swing.chart.PlotArea;
 import java.awt.Graphics2D;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Orchestrates rendering of the blood pressure chart: it computes the plot area and delegates the raster to a
@@ -32,7 +33,8 @@ class BloodPressureChartRenderer {
 		int height,
 		List<BloodPressureChartData> data,
 		int days,
-		LocalDate windowEndDate
+		LocalDate windowEndDate,
+		Set<String> hiddenSeries
 	) {
 		PlotArea area = new PlotArea(
 			PADDING_LEFT,
@@ -47,6 +49,6 @@ class BloodPressureChartRenderer {
 		}
 		gridRenderer.draw(g2, area, days, windowEndDate);
 		statusBarRenderer.draw(g2, area, data, days);
-		graphRenderer.draw(g2, area, data, days, height - LEGEND_HEIGHT, LEGEND_HEIGHT);
+		graphRenderer.draw(g2, area, data, days, height - LEGEND_HEIGHT, LEGEND_HEIGHT, hiddenSeries);
 	}
 }

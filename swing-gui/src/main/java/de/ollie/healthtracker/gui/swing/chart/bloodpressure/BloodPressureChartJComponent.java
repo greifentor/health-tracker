@@ -8,7 +8,9 @@ import java.awt.RenderingHints;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.JComponent;
 
 /**
@@ -24,6 +26,7 @@ public class BloodPressureChartJComponent extends JComponent {
 	private List<BloodPressureChartData> data = new ArrayList<>();
 	private int days = DEFAULT_DAYS;
 	private LocalDate windowEndDate = LocalDate.now();
+	private final Set<String> hiddenSeries = new HashSet<>();
 
 	public BloodPressureChartJComponent() {
 		setPreferredSize(new Dimension(640, 400));
@@ -45,6 +48,16 @@ public class BloodPressureChartJComponent extends JComponent {
 		repaint();
 	}
 
+	/** Shows or hides the series with the given label (as listed in {@link BloodPressureChartGraphRenderer#SERIES_LABELS}) and repaints. */
+	public void setSeriesHidden(String label, boolean hidden) {
+		if (hidden) {
+			hiddenSeries.add(label);
+		} else {
+			hiddenSeries.remove(label);
+		}
+		repaint();
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -55,7 +68,7 @@ public class BloodPressureChartJComponent extends JComponent {
 				g2.setColor(getBackground());
 				g2.fillRect(0, 0, getWidth(), getHeight());
 			}
-			renderer.render(g2, getWidth(), getHeight(), data, days, windowEndDate);
+			renderer.render(g2, getWidth(), getHeight(), data, days, windowEndDate, hiddenSeries);
 		} finally {
 			g2.dispose();
 		}

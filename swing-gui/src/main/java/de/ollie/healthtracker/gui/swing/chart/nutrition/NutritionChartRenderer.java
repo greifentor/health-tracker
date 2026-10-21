@@ -14,6 +14,7 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Draws the nutrition chart (grid, axes, month labels, the three series and the legend) onto a {@link Graphics2D}. Holds
@@ -36,6 +37,7 @@ class NutritionChartRenderer {
 
 	private static final Color COLOR_AXIS = Color.DARK_GRAY;
 	private static final Color COLOR_GRID = new Color(0xE0E0E0);
+	private static final Color COLOR_DISABLED = new Color(0xB0B0B0);
 	private static final Stroke SERIES_STROKE = new BasicStroke(2f);
 
 	private static final List<Series> SERIES = List.of(
@@ -44,7 +46,10 @@ class NutritionChartRenderer {
 		new Series("Veggie", new Color(0x27AE60), NutritionChartData::veggie)
 	);
 
-	void render(Graphics2D g2, int width, int height, List<NutritionChartData> data) {
+	/** The labels of the selectable series, in legend order, for building the visibility toggles. */
+	static final List<String> SERIES_LABELS = SERIES.stream().map(Series::label).toList();
+
+	void render(Graphics2D g2, int width, int height, List<NutritionChartData> data, Set<String> hiddenSeries) {
 		PlotArea area = new PlotArea(
 			PADDING_LEFT,
 			width - PADDING_RIGHT,
@@ -57,8 +62,12 @@ class NutritionChartRenderer {
 			return;
 		}
 		drawGridAndAxes(g2, area, data);
-		SERIES.forEach(series -> drawSeries(g2, area, data, series));
-		drawLegend(g2, area.left(), height - LEGEND_HEIGHT);
+		SERIES.forEach(series -> {
+			if (!hiddenSeries.contains(series.label())) {
+				drawSeries(g2, area, data, series);
+			}
+		});
+		drawLegend(g2, area.left(), height - LEGEND_HEIGHT, hiddenSeries);
 	}
 
 	private void drawGridAndAxes(Graphics2D g2, PlotArea area, List<NutritionChartData> data) {
@@ -134,19 +143,19 @@ class NutritionChartRenderer {
 		return points;
 	}
 
-	private void drawLegend(Graphics2D g2, int x, int y) {
+	private void drawLegend(Graphics2D g2, int x, int y, Set<String> hiddenSeries) {
 		for (Series series : SERIES) {
-			x = drawLegendEntry(g2, x, y, series);
+			x = drawLegendEntry(g2, x, y, series, hiddenSeries.contains(series.label()));
 		}
 	}
 
-	/** Draws a single legend swatch with its label and returns the x position for the next entry. */
-	private int drawLegendEntry(Graphics2D g2, int x, int y, Series series) {
+	/** Draws a single legend swatch with its label (greyed out when the series is hidden) and returns the x position for the next entry. */
+	private int drawLegendEntry(Graphics2D g2, int x, int y, Series series, boolean hidden) {
 		FontMetrics fm = g2.getFontMetrics();
 		int swatch = fm.getAscent();
-		g2.setColor(series.color());
+		g2.setColor(hidden ? COLOR_DISABLED : series.color());
 		g2.fillRect(x, y + (LEGEND_HEIGHT - swatch) / 2, swatch, swatch);
-		g2.setColor(COLOR_AXIS);
+		g2.setColor(hidden ? COLOR_DISABLED : COLOR_AXIS);
 		g2.drawString(series.label(), x + swatch + HGAP, y + (LEGEND_HEIGHT + fm.getAscent()) / 2 - 1);
 		return x + swatch + HGAP + fm.stringWidth(series.label()) + 3 * HGAP;
 	}

@@ -11,6 +11,7 @@ import java.awt.Point;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.ToIntFunction;
 
 /**
@@ -22,6 +23,7 @@ class BloodPressureChartGraphRenderer {
 	private static final int MARKER_RADIUS = 3;
 
 	private static final Color COLOR_AXIS = Color.DARK_GRAY;
+	private static final Color COLOR_DISABLED = new Color(0xB0B0B0);
 	private static final Stroke SERIES_STROKE = new BasicStroke(2f);
 
 	private static final List<BpSeries> SERIES = List.of(
@@ -30,16 +32,24 @@ class BloodPressureChartGraphRenderer {
 		new BpSeries("Pulse", new Color(0x8E44AD), BloodPressureChartData::pulse)
 	);
 
+	/** The labels of the selectable series, in legend order, for building the visibility toggles. */
+	static final List<String> SERIES_LABELS = SERIES.stream().map(BpSeries::label).toList();
+
 	void draw(
 		Graphics2D g2,
 		PlotArea area,
 		List<BloodPressureChartData> data,
 		int daysInMonth,
 		int legendTop,
-		int legendHeight
+		int legendHeight,
+		Set<String> hiddenSeries
 	) {
-		SERIES.forEach(series -> drawSeries(g2, area, data, daysInMonth, series));
-		drawLegend(g2, area.left(), legendTop, legendHeight);
+		SERIES.forEach(series -> {
+			if (!hiddenSeries.contains(series.label())) {
+				drawSeries(g2, area, data, daysInMonth, series);
+			}
+		});
+		drawLegend(g2, area.left(), legendTop, legendHeight, hiddenSeries);
 	}
 
 	private void drawSeries(
@@ -81,19 +91,19 @@ class BloodPressureChartGraphRenderer {
 		return points;
 	}
 
-	private void drawLegend(Graphics2D g2, int x, int top, int height) {
+	private void drawLegend(Graphics2D g2, int x, int top, int height, Set<String> hiddenSeries) {
 		for (BpSeries series : SERIES) {
-			x = drawLegendEntry(g2, x, top, height, series);
+			x = drawLegendEntry(g2, x, top, height, series, hiddenSeries.contains(series.label()));
 		}
 	}
 
-	/** Draws a single legend swatch with its label and returns the x position for the next entry. */
-	private int drawLegendEntry(Graphics2D g2, int x, int top, int height, BpSeries series) {
+	/** Draws a single legend swatch with its label (greyed out when the series is hidden) and returns the x position for the next entry. */
+	private int drawLegendEntry(Graphics2D g2, int x, int top, int height, BpSeries series, boolean hidden) {
 		FontMetrics fm = g2.getFontMetrics();
 		int swatch = fm.getAscent();
-		g2.setColor(series.color());
+		g2.setColor(hidden ? COLOR_DISABLED : series.color());
 		g2.fillRect(x, top + (height - swatch) / 2, swatch, swatch);
-		g2.setColor(COLOR_AXIS);
+		g2.setColor(hidden ? COLOR_DISABLED : COLOR_AXIS);
 		g2.drawString(series.label(), x + swatch + HGAP, top + (height + fm.getAscent()) / 2 - 1);
 		return x + swatch + HGAP + fm.stringWidth(series.label()) + 3 * HGAP;
 	}

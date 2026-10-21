@@ -9,6 +9,7 @@ import java.awt.FlowLayout;
 import java.util.List;
 import java.util.function.IntFunction;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -54,6 +55,11 @@ public class NutritionChartJInternalFrame extends JInternalFrame {
 		JButton buttonClose = new JButton("Close");
 		buttonClose.addActionListener(e -> dispose());
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, HGAP, VGAP));
+		for (String seriesLabel : NutritionChartRenderer.SERIES_LABELS) {
+			JCheckBox seriesCheckBox = new JCheckBox(seriesLabel, true);
+			seriesCheckBox.addActionListener(e -> chart.setSeriesHidden(seriesLabel, !seriesCheckBox.isSelected()));
+			buttonPanel.add(seriesCheckBox);
+		}
 		buttonPanel.add(new JLabel("Months:"));
 		buttonPanel.add(monthsSpinner);
 		buttonPanel.add(buttonClose);

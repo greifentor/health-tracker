@@ -6,7 +6,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.JComponent;
 
 /**
@@ -17,6 +19,7 @@ public class NutritionChartJComponent extends JComponent {
 
 	private final NutritionChartRenderer renderer = new NutritionChartRenderer();
 	private List<NutritionChartData> data = new ArrayList<>();
+	private final Set<String> hiddenSeries = new HashSet<>();
 
 	public NutritionChartJComponent() {
 		setPreferredSize(new Dimension(640, 400));
@@ -30,6 +33,16 @@ public class NutritionChartJComponent extends JComponent {
 		repaint();
 	}
 
+	/** Shows or hides the series with the given label (as listed in {@link NutritionChartRenderer#SERIES_LABELS}) and repaints. */
+	public void setSeriesHidden(String label, boolean hidden) {
+		if (hidden) {
+			hiddenSeries.add(label);
+		} else {
+			hiddenSeries.remove(label);
+		}
+		repaint();
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -40,7 +53,7 @@ public class NutritionChartJComponent extends JComponent {
 				g2.setColor(getBackground());
 				g2.fillRect(0, 0, getWidth(), getHeight());
 			}
-			renderer.render(g2, getWidth(), getHeight(), data);
+			renderer.render(g2, getWidth(), getHeight(), data, hiddenSeries);
 		} finally {
 			g2.dispose();
 		}
