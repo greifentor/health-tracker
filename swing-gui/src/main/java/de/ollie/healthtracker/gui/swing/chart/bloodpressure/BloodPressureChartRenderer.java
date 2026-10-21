@@ -19,7 +19,7 @@ class BloodPressureChartRenderer {
 	private static final int PADDING_LEFT = 40;
 	private static final int PADDING_RIGHT = 20;
 	private static final int PADDING_TOP = 20;
-	private static final int PADDING_BOTTOM = 30;
+	private static final int PADDING_BOTTOM = 44;
 	private static final int LEGEND_HEIGHT = 24;
 
 	private final BloodPressureChartGridRenderer gridRenderer = new BloodPressureChartGridRenderer();

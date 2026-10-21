@@ -38,7 +38,6 @@ import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartDa
 import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartJInternalFrame;
-import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartData;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartDataProvider;
@@ -278,7 +277,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			),
 			new NutritionChartJInternalFrame(
 				desktopPane,
-				this::createNutritionChartData,
+				nutritionChartDataProvider::create,
 				chartWindowMonths,
 				meatConsumptionChangeNotifier
 			),
@@ -749,7 +748,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		} else if (e.getSource() == menuItemFileShowNutritionChart) {
 			new NutritionChartJInternalFrame(
 				desktopPane,
-				this::createNutritionChartData,
+				nutritionChartDataProvider::create,
 				chartWindowMonths,
 				meatConsumptionChangeNotifier
 			);
@@ -765,10 +764,6 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		} else if (e.getSource() == menuItemFileQuit) {
 			closeApplication();
 		}
-	}
-
-	private List<NutritionChartData> createNutritionChartData() {
-		return nutritionChartDataProvider.create();
 	}
 
 	private NutritionCalculationData createNutritionCalculationData(MeatConsumptionStaticRecord mcsr) {

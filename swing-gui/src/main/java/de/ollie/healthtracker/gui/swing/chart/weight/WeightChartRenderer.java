@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Stroke;
 import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -23,7 +24,7 @@ class WeightChartRenderer {
 	private static final int PADDING_LEFT = 48;
 	private static final int PADDING_RIGHT = 20;
 	private static final int PADDING_TOP = 20;
-	private static final int PADDING_BOTTOM = 30;
+	private static final int PADDING_BOTTOM = 44;
 	private static final int LEGEND_HEIGHT = 24;
 	private static final int MARKER_RADIUS = 3;
 	private static final int LABEL_GAP = 2;
@@ -106,8 +107,12 @@ class WeightChartRenderer {
 			g2.setColor(COLOR_GRID);
 			g2.drawLine(x, plotTop, x, plotBottom);
 			g2.setColor(COLOR_AXIS);
-			String label = Integer.toString(windowEndDate.minusDays((long) days - position).getDayOfMonth());
-			g2.drawString(label, x - fm.stringWidth(label) / 2, plotBottom + fm.getAscent() + LABEL_GAP);
+			LocalDate date = windowEndDate.minusDays((long) days - position);
+			String dayText = Integer.toString(date.getDayOfMonth());
+			String monthText = date.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+			int dayY = plotBottom + fm.getAscent() + LABEL_GAP;
+			g2.drawString(dayText, x - fm.stringWidth(dayText) / 2, dayY);
+			g2.drawString(monthText, x - fm.stringWidth(monthText) / 2, dayY + fm.getHeight());
 		}
 	}
 

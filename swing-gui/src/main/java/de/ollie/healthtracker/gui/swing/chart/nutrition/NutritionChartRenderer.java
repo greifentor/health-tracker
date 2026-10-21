@@ -24,11 +24,12 @@ class NutritionChartRenderer {
 	private static final int MIN_VALUE = 0;
 	private static final int MAX_VALUE = 31;
 	private static final int VALUE_GRID_STEP = 5;
+	private static final int TARGET_MONTH_LABELS = 12;
 
 	private static final int PADDING_LEFT = 40;
 	private static final int PADDING_RIGHT = 20;
 	private static final int PADDING_TOP = 20;
-	private static final int PADDING_BOTTOM = 30;
+	private static final int PADDING_BOTTOM = 44;
 	private static final int LEGEND_HEIGHT = 24;
 	private static final int MARKER_RADIUS = 3;
 	private static final int LABEL_GAP = 2;
@@ -81,16 +82,27 @@ class NutritionChartRenderer {
 		}
 	}
 
-	/** One vertical grid line and a centered month label per data point. */
+	/**
+	 * One vertical grid line per data point and a centered month label at a step that keeps at most
+	 * {@value #TARGET_MONTH_LABELS} labels - so the labels do not overlap when many months are shown. The last month is
+	 * always labelled.
+	 */
 	private void drawMonthGridAndLabels(Graphics2D g2, PlotArea area, List<NutritionChartData> data) {
 		FontMetrics fm = g2.getFontMetrics();
+		int labelStep = Math.max(1, (int) Math.ceil((double) data.size() / TARGET_MONTH_LABELS));
 		for (int i = 0; i < data.size(); i++) {
 			int x = area.xFor(i, data.size());
 			g2.setColor(COLOR_GRID);
 			g2.drawLine(x, area.top(), x, area.bottom());
+			if (i % labelStep != 0 && i != data.size() - 1) {
+				continue;
+			}
 			g2.setColor(COLOR_AXIS);
-			String label = monthLabel(data.get(i).month());
-			g2.drawString(label, x - fm.stringWidth(label) / 2, area.bottom() + fm.getAscent() + LABEL_GAP);
+			String monthText = monthLabel(data.get(i).month());
+			String yearText = yearLabel(data.get(i).year());
+			int monthY = area.bottom() + fm.getAscent() + LABEL_GAP;
+			g2.drawString(monthText, x - fm.stringWidth(monthText) / 2, monthY);
+			g2.drawString(yearText, x - fm.stringWidth(yearText) / 2, monthY + fm.getHeight());
 		}
 	}
 
@@ -143,10 +155,16 @@ class NutritionChartRenderer {
 		return Math.max(MIN_VALUE, Math.min(MAX_VALUE, value));
 	}
 
+	/** Short month name, e.g. {@code "Oct"}; shown on the upper of the two x-axis label lines. */
 	private static String monthLabel(int month) {
 		if (month < 1 || month > 12) {
 			return Integer.toString(month);
 		}
 		return Month.of(month).getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+	}
+
+	/** Two-digit year, e.g. {@code "25"}; shown below the month so months of different years stay distinguishable. */
+	private static String yearLabel(int year) {
+		return String.format(Locale.ENGLISH, "%02d", Math.floorMod(year, 100));
 	}
 }
