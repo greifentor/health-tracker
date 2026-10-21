@@ -2,13 +2,17 @@ package de.ollie.healthtracker.gui.swing.chart.alcohol;
 
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 
+import de.ollie.healthtracker.gui.swing.chart.TrendLine;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * Draws the alcohol chart onto a {@link Graphics2D}: the value grid (y-axis, liters), the day grid (x-axis), the axes,
@@ -31,6 +35,14 @@ class AlcoholChartRenderer {
 	private static final Color COLOR_AXIS = Color.DARK_GRAY;
 	private static final Color COLOR_GRID = new Color(0xE0E0E0);
 	private static final Color COLOR_ALCOHOL = new Color(0x8E44AD);
+	private static final Stroke TREND_STROKE = new BasicStroke(
+		1.5f,
+		BasicStroke.CAP_BUTT,
+		BasicStroke.JOIN_MITER,
+		1f,
+		new float[] { 2f, 3f },
+		0f
+	);
 
 	void render(
 		Graphics2D g2,
@@ -54,6 +66,7 @@ class AlcoholChartRenderer {
 		g2.drawLine(plotLeft, plotTop, plotLeft, plotBottom);
 		g2.drawLine(plotLeft, plotBottom, plotRight, plotBottom);
 		drawBars(g2, plotLeft, plotRight, plotTop, plotBottom, data, days, maxLiters);
+		drawTrend(g2, plotLeft, plotRight, plotTop, plotBottom, data, days, maxLiters);
 		drawLegend(g2, plotLeft, height - LEGEND_HEIGHT);
 	}
 
@@ -133,6 +146,48 @@ class AlcoholChartRenderer {
 			int y = yForLiters(entry.liters(), plotTop, plotBottom, max);
 			g2.fillRect(x - barWidth / 2, y, barWidth, plotBottom - y);
 		}
+	}
+
+	/** Draws the dotted linear trend line of the pure-alcohol amount across the plotted day range. */
+	private void drawTrend(
+		Graphics2D g2,
+		int plotLeft,
+		int plotRight,
+		int plotTop,
+		int plotBottom,
+		List<AlcoholChartData> data,
+		int days,
+		double max
+	) {
+		if (data.size() < 2) {
+			return;
+		}
+		double[] xs = new double[data.size()];
+		double[] ys = new double[data.size()];
+		int minDay = Integer.MAX_VALUE;
+		int maxDay = Integer.MIN_VALUE;
+		for (int i = 0; i < data.size(); i++) {
+			int day = data.get(i).day();
+			xs[i] = day;
+			ys[i] = data.get(i).liters();
+			minDay = Math.min(minDay, day);
+			maxDay = Math.max(maxDay, day);
+		}
+		if (minDay == maxDay) {
+			return;
+		}
+		Optional<TrendLine> trend = TrendLine.fit(xs, ys);
+		if (trend.isEmpty()) {
+			return;
+		}
+		TrendLine line = trend.get();
+		int x1 = xForDay(plotLeft, plotRight, minDay, days);
+		int y1 = yForLiters(line.valueAt(minDay), plotTop, plotBottom, max);
+		int x2 = xForDay(plotLeft, plotRight, maxDay, days);
+		int y2 = yForLiters(line.valueAt(maxDay), plotTop, plotBottom, max);
+		g2.setColor(COLOR_ALCOHOL);
+		g2.setStroke(TREND_STROKE);
+		g2.drawLine(x1, y1, x2, y2);
 	}
 
 	private void drawLegend(Graphics2D g2, int x, int y) {

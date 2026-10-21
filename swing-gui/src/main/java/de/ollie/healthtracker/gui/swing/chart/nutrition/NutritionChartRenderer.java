@@ -3,6 +3,7 @@ package de.ollie.healthtracker.gui.swing.chart.nutrition;
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 
 import de.ollie.healthtracker.gui.swing.chart.PlotArea;
+import de.ollie.healthtracker.gui.swing.chart.TrendLine;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -14,6 +15,7 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -39,6 +41,14 @@ class NutritionChartRenderer {
 	private static final Color COLOR_GRID = new Color(0xE0E0E0);
 	private static final Color COLOR_DISABLED = new Color(0xB0B0B0);
 	private static final Stroke SERIES_STROKE = new BasicStroke(2f);
+	private static final Stroke TREND_STROKE = new BasicStroke(
+		1.5f,
+		BasicStroke.CAP_BUTT,
+		BasicStroke.JOIN_MITER,
+		1f,
+		new float[] { 2f, 3f },
+		0f
+	);
 
 	private static final List<Series> SERIES = List.of(
 		new Series("Meat", new Color(0xC0392B), NutritionChartData::meat),
@@ -65,6 +75,7 @@ class NutritionChartRenderer {
 		SERIES.forEach(series -> {
 			if (!hiddenSeries.contains(series.label())) {
 				drawSeries(g2, area, data, series);
+				drawTrend(g2, area, data, series);
 			}
 		});
 		drawLegend(g2, area.left(), height - LEGEND_HEIGHT, hiddenSeries);
@@ -130,6 +141,32 @@ class NutritionChartRenderer {
 		for (Point point : points) {
 			g2.fillOval(point.x - MARKER_RADIUS, point.y - MARKER_RADIUS, 2 * MARKER_RADIUS, 2 * MARKER_RADIUS);
 		}
+	}
+
+	/** Draws the dotted linear trend line of the series (in its color) across the months. */
+	private void drawTrend(Graphics2D g2, PlotArea area, List<NutritionChartData> data, Series series) {
+		if (data.size() < 2) {
+			return;
+		}
+		double[] xs = new double[data.size()];
+		double[] ys = new double[data.size()];
+		for (int i = 0; i < data.size(); i++) {
+			xs[i] = i;
+			ys[i] = series.valueAccessor().applyAsInt(data.get(i));
+		}
+		Optional<TrendLine> trend = TrendLine.fit(xs, ys);
+		if (trend.isEmpty()) {
+			return;
+		}
+		TrendLine line = trend.get();
+		int lastIndex = data.size() - 1;
+		int x1 = area.xFor(0, data.size());
+		int y1 = area.yFor(clampValue((int) Math.round(line.valueAt(0))));
+		int x2 = area.xFor(lastIndex, data.size());
+		int y2 = area.yFor(clampValue((int) Math.round(line.valueAt(lastIndex))));
+		g2.setColor(series.color());
+		g2.setStroke(TREND_STROKE);
+		g2.drawLine(x1, y1, x2, y2);
 	}
 
 	/** Maps each data point of the series to its pixel position within the plot area. */
