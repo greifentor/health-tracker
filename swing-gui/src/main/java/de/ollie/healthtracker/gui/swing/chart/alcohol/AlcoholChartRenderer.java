@@ -225,9 +225,6 @@ class AlcoholChartRenderer {
 	}
 
 	private static String formatValue(double value) {
-		if (value == Math.rint(value)) {
-			return Integer.toString((int) Math.rint(value));
-		}
-		return String.format(Locale.ENGLISH, "%.1f", value);
+		return String.format(Locale.ENGLISH, "%.2f", value);
 	}
 }
