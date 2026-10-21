@@ -11,14 +11,15 @@ import java.util.List;
 import javax.swing.JComponent;
 
 /**
- * A Swing component that displays the daily alcohol consumption (in liters) of a configurable number of days (ending on a
- * window end date) as a bar chart. The x-axis covers those days, the y-axis the liters over an auto-scaled value range
- * starting at zero (at least {@value #DEFAULT_MAX_LITERS}). All drawing is delegated to an {@link AlcoholChartRenderer}.
+ * A Swing component that displays the daily alcohol consumption (litres of pure alcohol) of a configurable number of days
+ * (ending on a window end date) as a bar chart. The x-axis covers those days, the y-axis the litres over a value range
+ * starting at zero and scaled to the largest displayed amount (so the tallest bar fills the plot height). All drawing is
+ * delegated to an {@link AlcoholChartRenderer}.
  */
 public class AlcoholChartJComponent extends JComponent {
 
 	private static final int DEFAULT_DAYS = 31;
-	private static final double DEFAULT_MAX_LITERS = 1.0;
+	private static final double FALLBACK_MAX_LITERS = 1.0;
 
 	private final AlcoholChartRenderer renderer = new AlcoholChartRenderer();
 	private List<AlcoholChartData> data = new ArrayList<>();
@@ -43,9 +44,10 @@ public class AlcoholChartJComponent extends JComponent {
 		repaint();
 	}
 
+	/** The y-axis maximum: the largest displayed amount, so the tallest bar fills the plot height (a fallback is used when there is no data). */
 	private double maxLiters() {
 		double max = data.stream().mapToDouble(AlcoholChartData::liters).max().orElse(0);
-		return Math.max(DEFAULT_MAX_LITERS, Math.ceil(max));
+		return max > 0 ? max : FALLBACK_MAX_LITERS;
 	}
 
 	@Override
