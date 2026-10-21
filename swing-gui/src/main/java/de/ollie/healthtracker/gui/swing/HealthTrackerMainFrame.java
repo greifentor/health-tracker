@@ -32,19 +32,15 @@ import de.ollie.healthtracker.core.service.WeightMeasurementService;
 import de.ollie.healthtracker.core.service.WhoBloodPressureClassificationService;
 import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.NutritionCalculationData;
-import de.ollie.healthtracker.gui.swing.chart.alcohol.AlcoholChartData;
 import de.ollie.healthtracker.gui.swing.chart.alcohol.AlcoholChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.alcohol.AlcoholChartJInternalFrame;
-import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartData;
 import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartJInternalFrame;
-import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartData;
 import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartData;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartJInternalFrame;
-import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartData;
 import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.event.AlcoholConsumptionChangeNotifier;
@@ -124,6 +120,10 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	/** Number of days shown on the x-axis of the blood pressure and weight charts (ending today), configurable via the {@code chart.window.days} property. */
 	@Value("${chart.window.days:31}")
 	private int chartWindowDays;
+
+	/** Number of months initially shown on the x-axis of the nutrition chart (ending with the current month), configurable via the {@code chart.window.months} property. */
+	@Value("${chart.window.months:12}")
+	private int chartWindowMonths;
 
 	/** Application version, injected from the (Maven-filtered) {@code app.version} property, i.e. the pom.xml project version. */
 	@Value("${app.version}")
@@ -256,7 +256,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		JInternalFrame[] charts = {
 			new WeightChartJInternalFrame(
 				desktopPane,
-				this::createWeightChartData,
+				weightChartDataProvider::create,
 				chartWindowDays,
 				70.0,
 				100.0,
@@ -264,22 +264,27 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			),
 			new BloodPressureChartJInternalFrame(
 				desktopPane,
-				this::createBloodPressureChartData,
+				bloodPressureChartDataProvider::create,
 				chartWindowDays,
 				bloodPressureMeasurementChangeNotifier
 			),
 			new BodyTemperatureChartJInternalFrame(
 				desktopPane,
-				this::createBodyTemperatureChartData,
+				bodyTemperatureChartDataProvider::create,
 				chartWindowDays,
 				34.0,
 				43.0,
 				bodyTemperatureMeasurementChangeNotifier
 			),
-			new NutritionChartJInternalFrame(desktopPane, this::createNutritionChartData, meatConsumptionChangeNotifier),
+			new NutritionChartJInternalFrame(
+				desktopPane,
+				this::createNutritionChartData,
+				chartWindowMonths,
+				meatConsumptionChangeNotifier
+			),
 			new AlcoholChartJInternalFrame(
 				desktopPane,
-				this::createAlcoholChartData,
+				alcoholChartDataProvider::create,
 				chartWindowDays,
 				alcoholConsumptionChangeNotifier
 			),
@@ -713,21 +718,21 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		} else if (e.getSource() == menuItemFileShowAlcoholChart) {
 			new AlcoholChartJInternalFrame(
 				desktopPane,
-				this::createAlcoholChartData,
+				alcoholChartDataProvider::create,
 				chartWindowDays,
 				alcoholConsumptionChangeNotifier
 			);
 		} else if (e.getSource() == menuItemFileShowBloodPressureChart) {
 			new BloodPressureChartJInternalFrame(
 				desktopPane,
-				this::createBloodPressureChartData,
+				bloodPressureChartDataProvider::create,
 				chartWindowDays,
 				bloodPressureMeasurementChangeNotifier
 			);
 		} else if (e.getSource() == menuItemFileShowBodyTemperatureChart) {
 			new BodyTemperatureChartJInternalFrame(
 				desktopPane,
-				this::createBodyTemperatureChartData,
+				bodyTemperatureChartDataProvider::create,
 				chartWindowDays,
 				34.0,
 				43.0,
@@ -742,11 +747,16 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				weightMeasurementChangeNotifier
 			);
 		} else if (e.getSource() == menuItemFileShowNutritionChart) {
-			new NutritionChartJInternalFrame(desktopPane, this::createNutritionChartData, meatConsumptionChangeNotifier);
+			new NutritionChartJInternalFrame(
+				desktopPane,
+				this::createNutritionChartData,
+				chartWindowMonths,
+				meatConsumptionChangeNotifier
+			);
 		} else if (e.getSource() == menuItemFileShowWeightChart) {
 			new WeightChartJInternalFrame(
 				desktopPane,
-				this::createWeightChartData,
+				weightChartDataProvider::create,
 				chartWindowDays,
 				70.0,
 				100.0,
@@ -757,24 +767,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	private List<WeightChartData> createWeightChartData() {
-		return weightChartDataProvider.create(chartWindowDays);
-	}
-
-	private List<BodyTemperatureChartData> createBodyTemperatureChartData() {
-		return bodyTemperatureChartDataProvider.create(chartWindowDays);
-	}
-
-	private List<BloodPressureChartData> createBloodPressureChartData() {
-		return bloodPressureChartDataProvider.create(chartWindowDays);
-	}
-
 	private List<NutritionChartData> createNutritionChartData() {
 		return nutritionChartDataProvider.create();
-	}
-
-	private List<AlcoholChartData> createAlcoholChartData() {
-		return alcoholChartDataProvider.create(chartWindowDays);
 	}
 
 	private NutritionCalculationData createNutritionCalculationData(MeatConsumptionStaticRecord mcsr) {
