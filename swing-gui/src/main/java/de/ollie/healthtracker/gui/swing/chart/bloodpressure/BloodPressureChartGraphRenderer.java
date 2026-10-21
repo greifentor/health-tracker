@@ -3,6 +3,7 @@ package de.ollie.healthtracker.gui.swing.chart.bloodpressure;
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 
 import de.ollie.healthtracker.gui.swing.chart.PlotArea;
+import de.ollie.healthtracker.gui.swing.chart.TrendLine;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -11,6 +12,7 @@ import java.awt.Point;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.ToIntFunction;
 
@@ -25,6 +27,14 @@ class BloodPressureChartGraphRenderer {
 	private static final Color COLOR_AXIS = Color.DARK_GRAY;
 	private static final Color COLOR_DISABLED = new Color(0xB0B0B0);
 	private static final Stroke SERIES_STROKE = new BasicStroke(2f);
+	private static final Stroke TREND_STROKE = new BasicStroke(
+		1.5f,
+		BasicStroke.CAP_BUTT,
+		BasicStroke.JOIN_MITER,
+		1f,
+		new float[] { 2f, 3f },
+		0f
+	);
 
 	private static final List<BpSeries> SERIES = List.of(
 		new BpSeries("Systolic", new Color(0xC0392B), BloodPressureChartData::systolic),
@@ -47,6 +57,7 @@ class BloodPressureChartGraphRenderer {
 		SERIES.forEach(series -> {
 			if (!hiddenSeries.contains(series.label())) {
 				drawSeries(g2, area, data, daysInMonth, series);
+				drawTrend(g2, area, data, daysInMonth, series);
 			}
 		});
 		drawLegend(g2, area.left(), legendTop, legendHeight, hiddenSeries);
@@ -73,6 +84,45 @@ class BloodPressureChartGraphRenderer {
 		for (Point point : points) {
 			g2.fillOval(point.x - MARKER_RADIUS, point.y - MARKER_RADIUS, 2 * MARKER_RADIUS, 2 * MARKER_RADIUS);
 		}
+	}
+
+	/** Draws the dotted linear trend line of the series (in its color) across the plotted day range. */
+	private void drawTrend(
+		Graphics2D g2,
+		PlotArea area,
+		List<BloodPressureChartData> data,
+		int daysInMonth,
+		BpSeries series
+	) {
+		if (data.size() < 2) {
+			return;
+		}
+		double[] xs = new double[data.size()];
+		double[] ys = new double[data.size()];
+		int minDay = Integer.MAX_VALUE;
+		int maxDay = Integer.MIN_VALUE;
+		for (int i = 0; i < data.size(); i++) {
+			int day = data.get(i).day();
+			xs[i] = day;
+			ys[i] = series.valueAccessor().applyAsInt(data.get(i));
+			minDay = Math.min(minDay, day);
+			maxDay = Math.max(maxDay, day);
+		}
+		if (minDay == maxDay) {
+			return;
+		}
+		Optional<TrendLine> trend = TrendLine.fit(xs, ys);
+		if (trend.isEmpty()) {
+			return;
+		}
+		TrendLine line = trend.get();
+		int x1 = area.xFor(clampDay(minDay, daysInMonth) - 1, daysInMonth);
+		int y1 = area.yFor(clampValue(area, (int) Math.round(line.valueAt(minDay))));
+		int x2 = area.xFor(clampDay(maxDay, daysInMonth) - 1, daysInMonth);
+		int y2 = area.yFor(clampValue(area, (int) Math.round(line.valueAt(maxDay))));
+		g2.setColor(series.color());
+		g2.setStroke(TREND_STROKE);
+		g2.drawLine(x1, y1, x2, y2);
 	}
 
 	/** Maps each data point of the series to its pixel position within the plot area. */
