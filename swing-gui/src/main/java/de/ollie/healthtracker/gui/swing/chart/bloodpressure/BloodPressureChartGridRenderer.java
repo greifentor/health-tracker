@@ -7,6 +7,8 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 /**
  * Draws the static raster of the blood pressure chart: the horizontal value grid with its y-axis labels, the vertical
@@ -57,8 +59,12 @@ class BloodPressureChartGridRenderer {
 			g2.setColor(COLOR_GRID);
 			g2.drawLine(x, area.top(), x, area.bottom());
 			g2.setColor(COLOR_AXIS);
-			String label = Integer.toString(windowEndDate.minusDays((long) days - position).getDayOfMonth());
-			g2.drawString(label, x - fm.stringWidth(label) / 2, area.bottom() + fm.getAscent() + LABEL_GAP);
+			LocalDate date = windowEndDate.minusDays((long) days - position);
+			String dayText = Integer.toString(date.getDayOfMonth());
+			String monthText = date.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+			int dayY = area.bottom() + fm.getAscent() + LABEL_GAP;
+			g2.drawString(dayText, x - fm.stringWidth(dayText) / 2, dayY);
+			g2.drawString(monthText, x - fm.stringWidth(monthText) / 2, dayY + fm.getHeight());
 		}
 	}
 }

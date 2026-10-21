@@ -3,6 +3,7 @@ package de.ollie.healthtracker.gui.swing.chart.bodytemperature;
 import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 
 import de.ollie.healthtracker.core.service.model.BodyTemperatureStatus;
+import de.ollie.healthtracker.gui.swing.chart.TrendLine;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -10,9 +11,11 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Stroke;
 import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * Draws the body temperature chart onto a {@link Graphics2D}: the value grid (y-axis, configurable celsius range), the
@@ -24,7 +27,7 @@ class BodyTemperatureChartRenderer {
 	private static final int PADDING_LEFT = 48;
 	private static final int PADDING_RIGHT = 20;
 	private static final int PADDING_TOP = 20;
-	private static final int PADDING_BOTTOM = 30;
+	private static final int PADDING_BOTTOM = 44;
 	private static final int LEGEND_HEIGHT = 24;
 	private static final int MARKER_RADIUS = 3;
 	private static final int LABEL_GAP = 2;
@@ -45,6 +48,14 @@ class BodyTemperatureChartRenderer {
 	private static final Color COLOR_STATUS_ABOVE = new Color(0xC0392B);
 	private static final Stroke SERIES_STROKE = new BasicStroke(2f);
 	private static final Stroke REFERENCE_STROKE = new BasicStroke(1f);
+	private static final Stroke TREND_STROKE = new BasicStroke(
+		1.5f,
+		BasicStroke.CAP_BUTT,
+		BasicStroke.JOIN_MITER,
+		1f,
+		new float[] { 2f, 3f },
+		0f
+	);
 
 	void render(
 		Graphics2D g2,
@@ -71,6 +82,7 @@ class BodyTemperatureChartRenderer {
 		drawReferenceLine(g2, plotLeft, plotRight, plotTop, plotBottom, minCelsius, maxCelsius);
 		drawStatusBar(g2, plotLeft, plotRight, data, days);
 		drawTemperatureLine(g2, plotLeft, plotRight, plotTop, plotBottom, data, days, minCelsius, maxCelsius);
+		drawTrend(g2, plotLeft, plotRight, plotTop, plotBottom, data, days, minCelsius, maxCelsius);
 		drawLegend(g2, plotLeft, height - LEGEND_HEIGHT);
 	}
 
@@ -155,8 +167,12 @@ class BodyTemperatureChartRenderer {
 			g2.setColor(COLOR_GRID);
 			g2.drawLine(x, plotTop, x, plotBottom);
 			g2.setColor(COLOR_AXIS);
-			String label = Integer.toString(windowEndDate.minusDays((long) days - position).getDayOfMonth());
-			g2.drawString(label, x - fm.stringWidth(label) / 2, plotBottom + fm.getAscent() + LABEL_GAP);
+			LocalDate date = windowEndDate.minusDays((long) days - position);
+			String dayText = Integer.toString(date.getDayOfMonth());
+			String monthText = date.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+			int dayY = plotBottom + fm.getAscent() + LABEL_GAP;
+			g2.drawString(dayText, x - fm.stringWidth(dayText) / 2, dayY);
+			g2.drawString(monthText, x - fm.stringWidth(monthText) / 2, dayY + fm.getHeight());
 		}
 	}
 
@@ -190,6 +206,48 @@ class BodyTemperatureChartRenderer {
 		for (Point point : points) {
 			g2.fillOval(point.x - MARKER_RADIUS, point.y - MARKER_RADIUS, 2 * MARKER_RADIUS, 2 * MARKER_RADIUS);
 		}
+	}
+
+	/** Draws the dotted linear trend line of the temperature across the plotted day range. */
+	private void drawTrend(
+		Graphics2D g2,
+		int plotLeft,
+		int plotRight,
+		int plotTop,
+		int plotBottom,
+		List<BodyTemperatureChartData> data,
+		int daysInMonth,
+		double min,
+		double max
+	) {
+		if (data.size() < 2) {
+			return;
+		}
+		double[] xs = new double[data.size()];
+		double[] ys = new double[data.size()];
+		int minDay = Integer.MAX_VALUE;
+		int maxDay = Integer.MIN_VALUE;
+		for (int i = 0; i < data.size(); i++) {
+			xs[i] = data.get(i).day();
+			ys[i] = data.get(i).celsius();
+			minDay = Math.min(minDay, data.get(i).day());
+			maxDay = Math.max(maxDay, data.get(i).day());
+		}
+		if (minDay == maxDay) {
+			return;
+		}
+		Optional<TrendLine> trend = TrendLine.fit(xs, ys);
+		if (trend.isEmpty()) {
+			return;
+		}
+		TrendLine line = trend.get();
+		int x1 = xForDay(plotLeft, plotRight, minDay, daysInMonth);
+		int y1 = yForTemperature(line.valueAt(minDay), plotTop, plotBottom, min, max);
+		int x2 = xForDay(plotLeft, plotRight, maxDay, daysInMonth);
+		int y2 = yForTemperature(line.valueAt(maxDay), plotTop, plotBottom, min, max);
+		g2.setColor(COLOR_TEMPERATURE);
+		g2.setStroke(TREND_STROKE);
+		g2.drawLine(x1, y1, x2, y2);
 	}
 
 	/**

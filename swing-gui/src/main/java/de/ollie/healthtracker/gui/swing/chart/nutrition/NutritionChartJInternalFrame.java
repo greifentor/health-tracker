@@ -7,36 +7,47 @@ import de.ollie.healthtracker.gui.swing.event.MeatConsumptionChangeNotifier;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.function.IntFunction;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
 /**
- * An internal frame that displays a {@link NutritionChartJComponent}. The chart is (re)loaded from {@code dataSupplier}
- * when the frame opens and again whenever the {@link MeatConsumptionChangeNotifier} signals a change, so it stays in
- * sync with the meat consumption data. The change listener is removed again when the frame is closed.
+ * An internal frame that displays a {@link NutritionChartJComponent} for the number of months selected in the frame's month
+ * spinner (ending with the current month). The chart is (re)loaded from {@code dataProvider} when the frame opens, whenever
+ * the selected number of months changes and whenever the {@link MeatConsumptionChangeNotifier} signals a change, so it
+ * stays in sync with the meat consumption data. The change listener is removed again when the frame is closed.
  */
 public class NutritionChartJInternalFrame extends JInternalFrame {
 
+	private static final int MIN_MONTHS = 1;
+	private static final int MAX_MONTHS = 60;
+
 	public NutritionChartJInternalFrame(
 		JDesktopPane desktopPane,
-		Supplier<List<NutritionChartData>> dataSupplier,
+		IntFunction<List<NutritionChartData>> dataProvider,
+		int months,
 		MeatConsumptionChangeNotifier changeNotifier
 	) {
 		super("Nutrition Chart", true, true, true, true);
 		NutritionChartJComponent chart = new NutritionChartJComponent();
-		chart.setData(dataSupplier.get());
-		Runnable changeListener = () -> chart.setData(dataSupplier.get());
-		changeNotifier.addListener(changeListener);
+		JSpinner monthsSpinner = new JSpinner(new SpinnerNumberModel(clampToRange(months), MIN_MONTHS, MAX_MONTHS, 1));
+		Runnable reload = () -> chart.setData(dataProvider.apply(((Number) monthsSpinner.getValue()).intValue()));
+		monthsSpinner.addChangeListener(e -> reload.run());
+		reload.run();
+		changeNotifier.addListener(reload);
 		addInternalFrameListener(
 			new InternalFrameAdapter() {
 				@Override
 				public void internalFrameClosed(InternalFrameEvent e) {
-					changeNotifier.removeListener(changeListener);
+					changeNotifier.removeListener(reload);
 				}
 			}
 		);
@@ -44,6 +55,13 @@ public class NutritionChartJInternalFrame extends JInternalFrame {
 		JButton buttonClose = new JButton("Close");
 		buttonClose.addActionListener(e -> dispose());
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, HGAP, VGAP));
+		for (String seriesLabel : NutritionChartRenderer.SERIES_LABELS) {
+			JCheckBox seriesCheckBox = new JCheckBox(seriesLabel, true);
+			seriesCheckBox.addActionListener(e -> chart.setSeriesHidden(seriesLabel, !seriesCheckBox.isSelected()));
+			buttonPanel.add(seriesCheckBox);
+		}
+		buttonPanel.add(new JLabel("Months:"));
+		buttonPanel.add(monthsSpinner);
 		buttonPanel.add(buttonClose);
 		JPanel contentPanel = new JPanel(new BorderLayout(HGAP, VGAP));
 		contentPanel.add(chart, BorderLayout.CENTER);
@@ -57,5 +75,9 @@ public class NutritionChartJInternalFrame extends JInternalFrame {
 			e.printStackTrace();
 		}
 		setVisible(true);
+	}
+
+	private static int clampToRange(int months) {
+		return Math.max(MIN_MONTHS, Math.min(MAX_MONTHS, months));
 	}
 }
