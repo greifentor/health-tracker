@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.gui.swing.select.alcoholproduct;
 
 import de.ollie.healthtracker.core.service.AlcoholProductService;
+import de.ollie.healthtracker.core.service.AlcoholTypeService;
 import de.ollie.healthtracker.core.service.model.AlcoholProduct;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.select.AbstractSelectJInternalFrame;
@@ -24,14 +25,17 @@ public class AlcoholProductSelectJInternalFrame
 	private static final String CLASS_NAME = "AlcoholProduct";
 
 	private final AlcoholProductService alcoholProductService;
+	private final AlcoholTypeService alcoholTypeService;
 
 	public AlcoholProductSelectJInternalFrame(
 		AlcoholProductService alcoholProductService,
+		AlcoholTypeService alcoholTypeService,
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory
 	) {
 		super(desktopPane, CLASS_NAME, editDialogComponentFactory);
 		this.alcoholProductService = alcoholProductService;
+		this.alcoholTypeService = alcoholTypeService;
 		finishConstruct();
 	}
 
@@ -39,6 +43,7 @@ public class AlcoholProductSelectJInternalFrame
 	protected AbstractSelectJPanel<AlcoholProduct> createSelectPanel() {
 		return new AlcoholProductSelectJPanel(
 			alcoholProductService,
+			alcoholTypeService,
 			CLASS_NAME,
 			desktopPane,
 			editDialogComponentFactory,

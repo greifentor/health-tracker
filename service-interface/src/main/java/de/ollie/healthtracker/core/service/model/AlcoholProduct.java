@@ -19,4 +19,5 @@ public class AlcoholProduct {
 	private UUID id;
 	private String name;
 	private BigDecimal percentVol;
+	private AlcoholType alcoholType;
 }

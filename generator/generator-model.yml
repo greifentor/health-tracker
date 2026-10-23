@@ -107,6 +107,43 @@ classes:
           properties:
             - name: import
               value: java.math.BigDecimal
+      - name: alcoholType
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 3
+        type:
+          name: AlcoholType
+  - name: AlcoholType
+    properties:
+      - name: order
+        value: name
+      - name: gui
+        value: true
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+          - name: editor-position
+            value: 1
+        type:
+          name: String
   - name: BloodPressureMeasurement
     properties:
       - name: order

@@ -7,6 +7,7 @@ import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
 import de.ollie.healthtracker.persistence.jpa.dbo.AlcoholConsumptionDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.AlcoholProductDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.AlcoholTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BodyPartDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BodyTemperatureMeasurementDbo;
@@ -31,6 +32,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.WeightMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.WhoBloodPressureClassificationDbo;
 import de.ollie.healthtracker.persistence.jpa.repository.AlcoholProductDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.AlcoholTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.BodyPartDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.CommentTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorConsultationDboRepository;
@@ -56,6 +58,7 @@ import lombok.RequiredArgsConstructor;
 class DboFactory {
 
 	private final AlcoholProductDboRepository alcoholProductDboRepository;
+	private final AlcoholTypeDboRepository alcoholTypeDboRepository;
 	private final BodyPartDboRepository bodyPartRepository;
 	private final CommentTypeDboRepository commentTypeDboRepository;
 	private final DoctorConsultationDboRepository doctorConsultationRepository;
@@ -91,11 +94,22 @@ class DboFactory {
 			.setLiter(liter);
 	}
 
-	AlcoholProductDbo createAlcoholProduct(String name, BigDecimal percentVol) {
+	AlcoholProductDbo createAlcoholProduct(String name, BigDecimal percentVol, UUID alcoholTypeId) {
 		ensure(name != null, "name cannot be null!");
 		ensure(!name.isBlank(), "name cannot be blank!");
 		ensure(percentVol != null, "percent vol cannot be null!");
-		return new AlcoholProductDbo().setId(uuidFactory.create()).setName(name).setPercentVol(percentVol);
+		AlcoholTypeDbo alcoholType = alcoholTypeDboRepository.findById(alcoholTypeId).orElse(null);
+		return new AlcoholProductDbo()
+			.setId(uuidFactory.create())
+			.setName(name)
+			.setPercentVol(percentVol)
+			.setAlcoholType(alcoholType);
+	}
+
+	AlcoholTypeDbo createAlcoholType(String name) {
+		ensure(name != null, "name cannot be null!");
+		ensure(!name.isBlank(), "name cannot be blank!");
+		return new AlcoholTypeDbo().setId(uuidFactory.create()).setName(name);
 	}
 
 	BloodPressureMeasurementDbo createBloodPressureMeasurement(
