@@ -4,6 +4,7 @@ import static de.ollie.baselib.util.Check.ensure;
 
 import de.ollie.healthtracker.core.service.exception.TooManyElementsException;
 import de.ollie.healthtracker.core.service.model.AlcoholProduct;
+import de.ollie.healthtracker.core.service.model.AlcoholType;
 import de.ollie.healthtracker.core.service.port.persistence.AlcoholProductPersistencePort;
 import de.ollie.healthtracker.persistence.jpa.dbo.AlcoholProductDbo;
 import de.ollie.healthtracker.persistence.jpa.mapper.AlcoholProductDboMapper;
@@ -31,8 +32,8 @@ class AlcoholProductPersistenceJpaAdapter implements AlcoholProductPersistencePo
 	private final AlcoholProductDboRepository repository;
 
 	@Override
-	public AlcoholProduct create(String name, BigDecimal percentVol) {
-		return mapper.toModel(repository.save(dboFactory.createAlcoholProduct(name, percentVol)));
+	public AlcoholProduct create(String name, BigDecimal percentVol, AlcoholType alcoholType) {
+		return mapper.toModel(repository.save(dboFactory.createAlcoholProduct(name, percentVol, alcoholType.getId())));
 	}
 
 	@Override

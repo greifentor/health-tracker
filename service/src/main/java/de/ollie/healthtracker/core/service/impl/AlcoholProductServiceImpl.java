@@ -2,6 +2,7 @@ package de.ollie.healthtracker.core.service.impl;
 
 import de.ollie.healthtracker.core.service.AlcoholProductService;
 import de.ollie.healthtracker.core.service.model.AlcoholProduct;
+import de.ollie.healthtracker.core.service.model.AlcoholType;
 import de.ollie.healthtracker.core.service.port.persistence.AlcoholProductPersistencePort;
 import jakarta.inject.Named;
 import java.math.BigDecimal;
@@ -24,8 +25,8 @@ class AlcoholProductServiceImpl implements AlcoholProductService {
 	private final AlcoholProductPersistencePort alcoholProductPersistencePort;
 
 	@Override
-	public AlcoholProduct createAlcoholProduct(String name, BigDecimal percentVol) {
-		return alcoholProductPersistencePort.create(name, percentVol);
+	public AlcoholProduct createAlcoholProduct(String name, BigDecimal percentVol, AlcoholType alcoholType) {
+		return alcoholProductPersistencePort.create(name, percentVol, alcoholType);
 	}
 
 	@Override

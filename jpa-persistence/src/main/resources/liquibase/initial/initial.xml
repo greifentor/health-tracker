@@ -577,4 +577,28 @@
         </addColumn>
         <addForeignKeyConstraint baseColumnNames="POINT_OF_MEASUREMENT" baseTableName="BODY_TEMPERATURE_MEASUREMENT" constraintName="FK_BODY_TEMPERATURE_MEASUREMENT_POINT_OF_MEASUREMENT" referencedColumnNames="ID" referencedTableName="POINT_OF_MEASUREMENT"/>
     </changeSet>
+    <changeSet author="ollie" id="Add-Table-ALCOHOL_TYPE-and-Field-to-ALCOHOL_PRODUCT" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="ALCOHOL_TYPE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="ALCOHOL_TYPE"/>
+        <addColumn tableName="ALCOHOL_PRODUCT">
+            <column name="ALCOHOL_TYPE" type="UUID"/>
+        </addColumn>
+        <addForeignKeyConstraint constraintName="FK_ALCOHOL_PRODUCT_ALCOHOL_TYPE_TO_ALCOHOL_TYPE" baseColumnNames="ALCOHOL_TYPE" baseTableName="ALCOHOL_PRODUCT" referencedColumnNames="ID" referencedTableName="ALCOHOL_TYPE"/>
+    </changeSet>
+    <changeSet author="ollie" id="Add-General-ALCOHOL_TYPE-and-Assign-to-All-ALCOHOL_PRODUCTs" objectQuotingStrategy="LEGACY">
+        <insert tableName="ALCOHOL_TYPE">
+            <column name="ID" value="93aef096-94dc-4aab-a1bc-013ae45b3d94"/>
+            <column name="NAME" value="general"/>
+        </insert>
+        <update tableName="ALCOHOL_PRODUCT">
+            <column name="ALCOHOL_TYPE" value="93aef096-94dc-4aab-a1bc-013ae45b3d94"/>
+        </update>
+    </changeSet>
 </databaseChangeLog>

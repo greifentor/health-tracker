@@ -3,5 +3,5 @@ java ^
 -Dspring.datasource.driverClassName=org.hsqldb.jdbc.JDBCDriver ^
 -Dspring.datasource.username=sa ^
 -Dspring.datasource.password= ^
--Dlogging.level.root=WARN ^
--jar swing-gui/target/health-tracker-swing-gui-1.7.0.jar
+-Dlogging.level.root=INFO ^
+-jar swing-gui/target/health-tracker-swing-gui-1.8.0.jar

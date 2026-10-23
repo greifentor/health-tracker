@@ -2,6 +2,7 @@ package de.ollie.healthtracker.gui.swing.edit.alcoholproduct;
 
 import de.ollie.healthtracker.core.service.AlcoholProductService;
 import de.ollie.healthtracker.core.service.model.AlcoholProduct;
+import de.ollie.healthtracker.core.service.model.AlcoholType;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.ItemProvider;
 import de.ollie.healthtracker.gui.swing.edit.AbstractEditJInternalFrame;
@@ -22,11 +23,19 @@ public class AlcoholProductEditJInternalFrame extends AbstractEditJInternalFrame
 
 	public AlcoholProductEditJInternalFrame(
 		AlcoholProduct toEdit,
+		ItemProvider<AlcoholType> alcoholTypes,
 		EditDialogComponentFactory editDialogComponentFactory,
 		Observer<AlcoholProduct> observer,
 		JDesktopPane desktopPane
 	) {
-		super(desktopPane, "Alcohol Product", toEdit, editDialogComponentFactory, observer, Map.of());
+		super(
+			desktopPane,
+			"Alcohol Product",
+			toEdit,
+			editDialogComponentFactory,
+			observer,
+			Map.of(AlcoholProductEditJPanel.ALCOHOL_TYPE_ITEM_PROVIDER_ID, alcoholTypes)
+		);
 	}
 
 	@Override

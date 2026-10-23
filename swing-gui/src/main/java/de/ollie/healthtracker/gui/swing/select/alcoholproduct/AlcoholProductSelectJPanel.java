@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.gui.swing.select.alcoholproduct;
 
 import de.ollie.healthtracker.core.service.AlcoholProductService;
+import de.ollie.healthtracker.core.service.AlcoholTypeService;
 import de.ollie.healthtracker.core.service.model.AlcoholProduct;
 import de.ollie.healthtracker.gui.swing.EditDialogComponentFactory;
 import de.ollie.healthtracker.gui.swing.edit.alcoholproduct.AlcoholProductEditJInternalFrame;
@@ -22,9 +23,11 @@ import lombok.Generated;
 public class AlcoholProductSelectJPanel extends AbstractSelectJPanel<AlcoholProduct> implements SelectionPanelObserver {
 
 	private final AlcoholProductService alcoholProductService;
+	private final AlcoholTypeService alcoholTypeService;
 
 	public AlcoholProductSelectJPanel(
 		AlcoholProductService alcoholProductService,
+		AlcoholTypeService alcoholTypeService,
 		String className,
 		JDesktopPane desktopPane,
 		EditDialogComponentFactory editDialogComponentFactory,
@@ -32,6 +35,7 @@ public class AlcoholProductSelectJPanel extends AbstractSelectJPanel<AlcoholProd
 	) {
 		super(desktopPane, className + "s", editDialogComponentFactory, observer);
 		this.alcoholProductService = alcoholProductService;
+		this.alcoholTypeService = alcoholTypeService;
 		updateTableSelection();
 	}
 
@@ -42,12 +46,18 @@ public class AlcoholProductSelectJPanel extends AbstractSelectJPanel<AlcoholProd
 
 	@Override
 	protected AbstractSelectionTableModel<AlcoholProduct> createSelectionModel() {
-		return new AbstractSelectionTableModel<AlcoholProduct>(getObjectsToSelect(), "Name", "Percent Vol") {
+		return new AbstractSelectionTableModel<AlcoholProduct>(
+			getObjectsToSelect(),
+			"Name",
+			"Percent Vol",
+			"Alcohol Type"
+		) {
 			@Override
 			protected Object getColumnValueFor(AlcoholProduct t, int columnIndex) {
 				return switch (columnIndex) {
 					case 0 -> t.getName();
 					case 1 -> t.getPercentVol() == null ? null : t.getPercentVol().setScale(1, java.math.RoundingMode.HALF_UP);
+					case 2 -> (t.getAlcoholType() != null ? t.getAlcoholType().getName() : "-");
 					default -> null;
 				};
 			}
@@ -56,12 +66,18 @@ public class AlcoholProductSelectJPanel extends AbstractSelectJPanel<AlcoholProd
 
 	@Override
 	protected void createEditInternalFrame(AlcoholProduct selected) {
-		new AlcoholProductEditJInternalFrame(selected, getEditDialogComponentFactory(), this, getDesktopPane());
+		new AlcoholProductEditJInternalFrame(
+			selected,
+			() -> alcoholTypeService.listAlcoholTypes(),
+			getEditDialogComponentFactory(),
+			this,
+			getDesktopPane()
+		);
 	}
 
 	@Override
 	protected AlcoholProduct createNewObject() {
-		return new AlcoholProduct().setId(UUID.randomUUID()).setName("").setPercentVol(null);
+		return new AlcoholProduct().setId(UUID.randomUUID()).setName("").setPercentVol(null).setAlcoholType(null);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.core.service.port.persistence;
 
 import de.ollie.healthtracker.core.service.model.AlcoholProduct;
+import de.ollie.healthtracker.core.service.model.AlcoholType;
 import jakarta.inject.Named;
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,7 +17,7 @@ import lombok.Generated;
 @Generated
 @Named
 public interface AlcoholProductPersistencePort {
-	AlcoholProduct create(String name, BigDecimal percentVol);
+	AlcoholProduct create(String name, BigDecimal percentVol, AlcoholType alcoholType);
 
 	void deleteById(UUID id);
 

@@ -5,6 +5,7 @@ import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
 import de.ollie.healthtracker.core.service.AlcoholConsumptionService;
 import de.ollie.healthtracker.core.service.AlcoholProductService;
+import de.ollie.healthtracker.core.service.AlcoholTypeService;
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.BodyPartService;
 import de.ollie.healthtracker.core.service.BodyTemperatureMeasurementService;
@@ -32,16 +33,23 @@ import de.ollie.healthtracker.core.service.WeightMeasurementService;
 import de.ollie.healthtracker.core.service.WhoBloodPressureClassificationService;
 import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.NutritionCalculationData;
+import de.ollie.healthtracker.gui.swing.chart.alcohol.AlcoholChartData;
 import de.ollie.healthtracker.gui.swing.chart.alcohol.AlcoholChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.alcohol.AlcoholChartJInternalFrame;
+import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartData;
 import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartJInternalFrame;
+import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartData;
 import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartJInternalFrame;
+import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartData;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartJInternalFrame;
+import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartData;
 import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.weight.WeightChartJInternalFrame;
+import de.ollie.healthtracker.gui.swing.consumption.ConsumptionOverviewJInternalFrame;
+import de.ollie.healthtracker.gui.swing.consumption.ConsumptionOverviewProvider;
 import de.ollie.healthtracker.gui.swing.event.AlcoholConsumptionChangeNotifier;
 import de.ollie.healthtracker.gui.swing.event.BloodPressureMeasurementChangeNotifier;
 import de.ollie.healthtracker.gui.swing.event.BodyTemperatureMeasurementChangeNotifier;
@@ -58,6 +66,7 @@ import de.ollie.healthtracker.gui.swing.frame.InternalFrameBoundsManager;
 import de.ollie.healthtracker.gui.swing.opentask.OpenTaskJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.alcoholconsumption.AlcoholConsumptionSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.alcoholproduct.AlcoholProductSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.alcoholtype.AlcoholTypeSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.bloodpressuremeasurement.BloodPressureMeasurementSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.bodypart.BodyPartSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.bodytemperaturemeasurement.BodyTemperatureMeasurementSelectJInternalFrame;
@@ -94,6 +103,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.IntFunction;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -103,6 +113,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -132,6 +143,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final AlcoholConsumptionChangeNotifier alcoholConsumptionChangeNotifier;
 	private final AlcoholConsumptionService alcoholConsumptionService;
 	private final AlcoholProductService alcoholProductService;
+	private final AlcoholTypeService alcoholTypeService;
 	private final BloodPressureChartDataProvider bloodPressureChartDataProvider;
 	private final BloodPressureMeasurementChangeNotifier bloodPressureMeasurementChangeNotifier;
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
@@ -141,6 +153,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final BodyTemperatureMeasurementService bodyTemperatureMeasurementService;
 	private final CommentService commentService;
 	private final CommentTypeService commentTypeService;
+	private final ConsumptionOverviewProvider consumptionOverviewProvider;
 	private final DoctorConsultationService doctorConsultationService;
 	private final DoctorService doctorService;
 	private final DoctorTypeService doctorTypeService;
@@ -173,6 +186,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemDuplicateLastSymtoms;
 	private JMenuItem menuItemEditAlcoholConsumption;
 	private JMenuItem menuItemEditAlcoholProduct;
+	private JMenuItem menuItemEditAlcoholType;
 	private JMenuItem menuItemEditBloodPressureMeasurement;
 	private JMenuItem menuItemEditBodyPart;
 	private JMenuItem menuItemEditBodyTemperatureMeasurement;
@@ -204,6 +218,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemFileShowAlcoholChart;
 	private JMenuItem menuItemFileShowBloodPressureChart;
 	private JMenuItem menuItemFileShowBodyTemperatureChart;
+	private JMenuItem menuItemFileShowConsumptionOverview;
 	private JMenuItem menuItemFileShowNutritionChart;
 	private JMenuItem menuItemFileShowOpenTasks;
 	private JMenuItem menuItemFileShowWeightChart;
@@ -251,11 +266,51 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		SwingUtilities.invokeLater(this::openInitialCharts);
 	}
 
+	/**
+	 * Loads the data of the standard charts (and the open tasks) on a background thread and only then opens the frames on
+	 * the event dispatch thread - so the main window appears and stays responsive immediately instead of being blocked by
+	 * the initial data queries while starting up.
+	 */
 	private void openInitialCharts() {
+		new SwingWorker<Void, Void>() {
+			private List<WeightChartData> weight;
+			private List<BloodPressureChartData> bloodPressure;
+			private List<BodyTemperatureChartData> bodyTemperature;
+			private List<NutritionChartData> nutrition;
+			private List<AlcoholChartData> alcohol;
+			private boolean hasOpenTasks;
+
+			@Override
+			protected Void doInBackground() {
+				weight = weightChartDataProvider.create(chartWindowDays);
+				bloodPressure = bloodPressureChartDataProvider.create(chartWindowDays);
+				bodyTemperature = bodyTemperatureChartDataProvider.create(chartWindowDays);
+				nutrition = nutritionChartDataProvider.create(chartWindowMonths);
+				alcohol = alcoholChartDataProvider.create(chartWindowDays);
+				hasOpenTasks = !openTaskService.findAllOpenTasks().isEmpty();
+				return null;
+			}
+
+			@Override
+			protected void done() {
+				showInitialCharts(weight, bloodPressure, bodyTemperature, nutrition, alcohol, hasOpenTasks);
+			}
+		}
+			.execute();
+	}
+
+	private void showInitialCharts(
+		List<WeightChartData> weight,
+		List<BloodPressureChartData> bloodPressure,
+		List<BodyTemperatureChartData> bodyTemperature,
+		List<NutritionChartData> nutrition,
+		List<AlcoholChartData> alcohol,
+		boolean hasOpenTasks
+	) {
 		JInternalFrame[] charts = {
 			new WeightChartJInternalFrame(
 				desktopPane,
-				weightChartDataProvider::create,
+				servingPrefetchedFirst(weight, weightChartDataProvider::create),
 				chartWindowDays,
 				70.0,
 				100.0,
@@ -263,13 +318,13 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			),
 			new BloodPressureChartJInternalFrame(
 				desktopPane,
-				bloodPressureChartDataProvider::create,
+				servingPrefetchedFirst(bloodPressure, bloodPressureChartDataProvider::create),
 				chartWindowDays,
 				bloodPressureMeasurementChangeNotifier
 			),
 			new BodyTemperatureChartJInternalFrame(
 				desktopPane,
-				bodyTemperatureChartDataProvider::create,
+				servingPrefetchedFirst(bodyTemperature, bodyTemperatureChartDataProvider::create),
 				chartWindowDays,
 				34.0,
 				43.0,
@@ -277,13 +332,13 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			),
 			new NutritionChartJInternalFrame(
 				desktopPane,
-				nutritionChartDataProvider::create,
+				servingPrefetchedFirst(nutrition, nutritionChartDataProvider::create),
 				chartWindowMonths,
 				meatConsumptionChangeNotifier
 			),
 			new AlcoholChartJInternalFrame(
 				desktopPane,
-				alcoholChartDataProvider::create,
+				servingPrefetchedFirst(alcohol, alcoholChartDataProvider::create),
 				chartWindowDays,
 				alcoholConsumptionChangeNotifier
 			),
@@ -297,7 +352,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			}
 		}
 		// Only pop up the open task dialog when there actually are open tasks to show.
-		if (!openTaskService.findAllOpenTasks().isEmpty()) {
+		if (hasOpenTasks) {
 			new OpenTaskJInternalFrame(
 				desktopPane,
 				openTaskService,
@@ -306,6 +361,22 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				weightMeasurementChangeNotifier
 			);
 		}
+	}
+
+	/**
+	 * Wraps a chart data provider so that the first query (the frame's initial load, for the window the data was
+	 * prefetched with) is served from the already loaded {@code prefetched} data without touching the database again; every
+	 * later query (a changed day/month selection or a data-change refresh) goes to the real {@code provider}.
+	 */
+	private <T> IntFunction<List<T>> servingPrefetchedFirst(List<T> prefetched, IntFunction<List<T>> provider) {
+		boolean[] firstCall = { true };
+		return value -> {
+			if (firstCall[0]) {
+				firstCall[0] = false;
+				return prefetched;
+			}
+			return provider.apply(value);
+		};
 	}
 
 	private JMenuBar createJMenuBar() {
@@ -340,6 +411,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menuItemFileShowWeightChart = createMenuItem("Show Weight Chart", this);
 		menu.add(menuItemFileShowWeightChart);
 		menu.add(new JSeparator());
+		menuItemFileShowConsumptionOverview = createMenuItem("Show Consumption Overview", this);
+		menu.add(menuItemFileShowConsumptionOverview);
 		menuItemFileShowOpenTasks = createMenuItem("Show Open Tasks", this);
 		menu.add(menuItemFileShowOpenTasks);
 		menuBar.add(menu);
@@ -360,6 +433,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		subMenu.add(menuItemEditAlcoholConsumption);
 		menuItemEditAlcoholProduct = createMenuItem("Alcohol Product", this);
 		subMenu.add(menuItemEditAlcoholProduct);
+		menuItemEditAlcoholType = createMenuItem("Alcohol Type", this);
+		subMenu.add(menuItemEditAlcoholType);
 		menu.add(subMenu);
 		subMenu = new JMenu("Body & Exercise");
 		menuItemEditBodyPart = createMenuItem("Body Part", this);
@@ -484,7 +559,14 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				editDialogComponentFactory
 			);
 		} else if (e.getSource() == menuItemEditAlcoholProduct) {
-			new AlcoholProductSelectJInternalFrame(alcoholProductService, desktopPane, editDialogComponentFactory);
+			new AlcoholProductSelectJInternalFrame(
+				alcoholProductService,
+				alcoholTypeService,
+				desktopPane,
+				editDialogComponentFactory
+			);
+		} else if (e.getSource() == menuItemEditAlcoholType) {
+			new AlcoholTypeSelectJInternalFrame(alcoholTypeService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditBloodPressureMeasurement) {
 			new BloodPressureMeasurementSelectJInternalFrame(
 				new NotifyingBloodPressureMeasurementService(
@@ -737,6 +819,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				43.0,
 				bodyTemperatureMeasurementChangeNotifier
 			);
+		} else if (e.getSource() == menuItemFileShowConsumptionOverview) {
+			new ConsumptionOverviewJInternalFrame(desktopPane, consumptionOverviewProvider);
 		} else if (e.getSource() == menuItemFileShowOpenTasks) {
 			new OpenTaskJInternalFrame(
 				desktopPane,

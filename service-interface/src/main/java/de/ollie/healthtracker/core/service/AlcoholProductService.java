@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.core.service;
 
 import de.ollie.healthtracker.core.service.model.AlcoholProduct;
+import de.ollie.healthtracker.core.service.model.AlcoholType;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,7 @@ import lombok.Generated;
  */
 @Generated
 public interface AlcoholProductService {
-	AlcoholProduct createAlcoholProduct(String name, BigDecimal percentVol);
+	AlcoholProduct createAlcoholProduct(String name, BigDecimal percentVol, AlcoholType alcoholType);
 
 	void deleteAlcoholProduct(UUID id);
 

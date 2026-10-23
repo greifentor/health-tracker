@@ -13,6 +13,7 @@ import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.WhoBloodPressureClassification;
 import de.ollie.healthtracker.persistence.jpa.dbo.AlcoholConsumptionDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.AlcoholProductDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.AlcoholTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BloodPressureMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.BodyPartDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.CommentDbo;
@@ -31,6 +32,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.WhoBloodPressureClassificationDbo;
 import de.ollie.healthtracker.persistence.jpa.repository.AlcoholProductDboRepository;
+import de.ollie.healthtracker.persistence.jpa.repository.AlcoholTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.BodyPartDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.CommentTypeDboRepository;
 import de.ollie.healthtracker.persistence.jpa.repository.DoctorDboRepository;
@@ -55,6 +57,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class DboFactoryTest {
 
+	private static final UUID ALCOHOL_TYPE_ID = UUID.randomUUID();
 	private static final UUID ANOTHER_ID = UUID.randomUUID();
 	private static final String BLANK_STR = "\n\t\r ";
 	private static final String COMMENT = "comment";
@@ -85,6 +88,12 @@ class DboFactoryTest {
 
 	@Mock
 	private AlcoholProductDboRepository alcoholProductDboRepository;
+
+	@Mock
+	private AlcoholTypeDbo alcoholTypeDbo;
+
+	@Mock
+	private AlcoholTypeDboRepository alcoholTypeDboRepository;
 
 	@Mock
 	private BodyPartDbo bodyPartDbo;
@@ -224,43 +233,90 @@ class DboFactoryTest {
 	}
 
 	@Nested
-	class createAlcoholProduct_String_BigDecimal {
+	class createAlcoholProduct_String_BigDecimal_UUID {
 
 		@Test
 		void throwsAnException_passingANullValue_asName() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholProduct(null, PERCENT_VOL));
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createAlcoholProduct(null, PERCENT_VOL, ALCOHOL_TYPE_ID)
+			);
 		}
 
 		@Test
 		void throwsAnException_passingABlankString_asName() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholProduct(BLANK_STR, PERCENT_VOL));
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createAlcoholProduct(BLANK_STR, PERCENT_VOL, ALCOHOL_TYPE_ID)
+			);
 		}
 
 		@Test
 		void throwsAnException_passingANullValue_asPercentVol() {
-			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholProduct(NAME, null));
+			assertThrows(
+				IllegalArgumentException.class,
+				() -> unitUnderTest.createAlcoholProduct(NAME, null, ALCOHOL_TYPE_ID)
+			);
 		}
 
 		@Test
 		void returnANewObject() {
-			assertNotNull(unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL));
+			assertNotNull(unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL, ALCOHOL_TYPE_ID));
 		}
 
 		@Test
 		void returnANewObject_onEachCall() {
 			assertNotSame(
-				unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL),
-				unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL)
+				unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL, ALCOHOL_TYPE_ID),
+				unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL, ALCOHOL_TYPE_ID)
 			);
 		}
 
 		@Test
 		void returnANewObject_withCorrectlySetAttributes() {
 			// Prepare
-			AlcoholProductDbo expected = new AlcoholProductDbo().setId(ID).setName(NAME).setPercentVol(PERCENT_VOL);
+			AlcoholProductDbo expected = new AlcoholProductDbo()
+				.setId(ID)
+				.setName(NAME)
+				.setPercentVol(PERCENT_VOL)
+				.setAlcoholType(alcoholTypeDbo);
+			when(uuidFactory.create()).thenReturn(ID);
+			when(alcoholTypeDboRepository.findById(ALCOHOL_TYPE_ID)).thenReturn(Optional.of(alcoholTypeDbo));
+			// Run & Check
+			assertEquals(expected, unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL, ALCOHOL_TYPE_ID));
+		}
+	}
+
+	@Nested
+	class createAlcoholType_String {
+
+		@Test
+		void throwsAnException_passingANullValue_asName() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholType(null));
+		}
+
+		@Test
+		void throwsAnException_passingABlankString_asName() {
+			assertThrows(IllegalArgumentException.class, () -> unitUnderTest.createAlcoholType(BLANK_STR));
+		}
+
+		@Test
+		void returnANewObject() {
+			assertNotNull(unitUnderTest.createAlcoholType(NAME));
+		}
+
+		@Test
+		void returnANewObject_onEachCall() {
+			assertNotSame(unitUnderTest.createAlcoholType(NAME), unitUnderTest.createAlcoholType(NAME));
+		}
+
+		@Test
+		void returnANewObject_withCorrectlySetAttributes() {
+			// Prepare
+			AlcoholTypeDbo expected = new AlcoholTypeDbo().setId(ID).setName(NAME);
 			when(uuidFactory.create()).thenReturn(ID);
 			// Run & Check
-			assertEquals(expected, unitUnderTest.createAlcoholProduct(NAME, PERCENT_VOL));
+			assertEquals(expected, unitUnderTest.createAlcoholType(NAME));
 		}
 	}
 
