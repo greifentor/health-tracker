@@ -33,8 +33,6 @@ class BodyTemperatureChartRenderer {
 	private static final int LABEL_GAP = 2;
 	private static final int DAY_LABEL_STEP = 5;
 	private static final int TARGET_VALUE_GRID_LINES = 6;
-	private static final double REFERENCE_CELSIUS_LOWER = 36.5;
-	private static final double REFERENCE_CELSIUS_UPPER = 37.4;
 	private static final int STATUS_BAR_TOP = 5;
 	private static final int STATUS_BAR_HEIGHT = 8;
 
@@ -79,7 +77,7 @@ class BodyTemperatureChartRenderer {
 		g2.setColor(COLOR_AXIS);
 		g2.drawLine(plotLeft, plotTop, plotLeft, plotBottom);
 		g2.drawLine(plotLeft, plotBottom, plotRight, plotBottom);
-		drawReferenceLine(g2, plotLeft, plotRight, plotTop, plotBottom, minCelsius, maxCelsius);
+		drawRangeBand(g2, plotLeft, plotRight, plotTop, plotBottom, data, days, minCelsius, maxCelsius);
 		drawStatusBar(g2, plotLeft, plotRight, data, days);
 		drawTemperatureLine(g2, plotLeft, plotRight, plotTop, plotBottom, data, days, minCelsius, maxCelsius);
 		drawTrend(g2, plotLeft, plotRight, plotTop, plotBottom, data, days, minCelsius, maxCelsius);
@@ -251,49 +249,66 @@ class BodyTemperatureChartRenderer {
 	}
 
 	/**
-	 * Two thin horizontal green reference lines marking the normal body temperature band at
-	 * {@value #REFERENCE_CELSIUS_LOWER} °C and {@value #REFERENCE_CELSIUS_UPPER} °C. Each line is only drawn when it falls
-	 * within [min, max].
+	 * Draws, per day, a short horizontal green segment at that day's regular minimum and maximum (the minimum of the
+	 * minima and the maximum of the maxima of the points of measurement used). A segment is only drawn when the day has
+	 * the respective value and it falls within [min, max].
 	 */
-	private void drawReferenceLine(
+	private void drawRangeBand(
 		Graphics2D g2,
 		int plotLeft,
 		int plotRight,
 		int plotTop,
 		int plotBottom,
+		List<BodyTemperatureChartData> data,
+		int days,
 		double min,
 		double max
 	) {
+		double spacing = days > 1 ? (double) (plotRight - plotLeft) / (days - 1) : (plotRight - plotLeft);
+		int half = Math.max(1, (int) Math.round(spacing / 2));
 		g2.setColor(COLOR_REFERENCE);
 		g2.setStroke(REFERENCE_STROKE);
-		drawReferenceValue(g2, plotLeft, plotRight, plotTop, plotBottom, min, max, REFERENCE_CELSIUS_LOWER);
-		drawReferenceValue(g2, plotLeft, plotRight, plotTop, plotBottom, min, max, REFERENCE_CELSIUS_UPPER);
+		for (BodyTemperatureChartData entry : data) {
+			int center = xForDay(plotLeft, plotRight, entry.day(), days);
+			int left = Math.max(plotLeft, center - half);
+			int right = Math.min(plotRight, center + half);
+			drawRangeSegment(g2, left, right, plotTop, plotBottom, min, max, entry.minCelsius());
+			drawRangeSegment(g2, left, right, plotTop, plotBottom, min, max, entry.maxCelsius());
+		}
 	}
 
-	private void drawReferenceValue(
+	private void drawRangeSegment(
 		Graphics2D g2,
-		int plotLeft,
-		int plotRight,
+		int left,
+		int right,
 		int plotTop,
 		int plotBottom,
 		double min,
 		double max,
-		double value
+		Double value
 	) {
-		if (value < min || value > max) {
+		if (value == null || value < min || value > max) {
 			return;
 		}
 		int y = yForTemperature(value, plotTop, plotBottom, min, max);
-		g2.drawLine(plotLeft, y, plotRight, y);
+		g2.drawLine(left, y, right, y);
 	}
 
 	private void drawLegend(Graphics2D g2, int x, int y) {
 		FontMetrics fm = g2.getFontMetrics();
 		int swatch = fm.getAscent();
+		int baseline = y + (LEGEND_HEIGHT + fm.getAscent()) / 2 - 1;
+		int swatchTop = y + (LEGEND_HEIGHT - swatch) / 2;
 		g2.setColor(COLOR_TEMPERATURE);
-		g2.fillRect(x, y + (LEGEND_HEIGHT - swatch) / 2, swatch, swatch);
+		g2.fillRect(x, swatchTop, swatch, swatch);
 		g2.setColor(COLOR_AXIS);
-		g2.drawString("Body Temperature (°C)", x + swatch + HGAP, y + (LEGEND_HEIGHT + fm.getAscent()) / 2 - 1);
+		String temperatureLabel = "Body Temperature (°C)";
+		g2.drawString(temperatureLabel, x + swatch + HGAP, baseline);
+		int rangeX = x + swatch + HGAP + fm.stringWidth(temperatureLabel) + 2 * HGAP;
+		g2.setColor(COLOR_REFERENCE);
+		g2.fillRect(rangeX, swatchTop, swatch, swatch);
+		g2.setColor(COLOR_AXIS);
+		g2.drawString("Regular range (°C)", rangeX + swatch + HGAP, baseline);
 	}
 
 	/** Evenly spaces the days 1..{@code daysInMonth} across the width; a single day is centered. */

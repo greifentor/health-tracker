@@ -3,6 +3,7 @@ package de.ollie.healthtracker.gui.swing.chart.bodytemperature;
 import de.ollie.healthtracker.core.service.BodyTemperatureMeasurementHistoryService;
 import de.ollie.healthtracker.core.service.BodyTemperatureStatusService;
 import de.ollie.healthtracker.core.service.model.BodyTemperatureStatus;
+import de.ollie.healthtracker.core.service.model.PointOfMeasurement;
 import jakarta.inject.Named;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,6 +35,9 @@ public class BodyTemperatureChartDataProvider {
 		Map<LocalDate, double[]> perDay = new HashMap<>();
 		// Per day: [anyBelow, anyAbove] over the measurements classified individually against their own range.
 		Map<LocalDate, boolean[]> outOfRange = new HashMap<>();
+		// Per day: the minimum of the regular minima and the maximum of the regular maxima over the points of measurement.
+		Map<LocalDate, Double> minPerDay = new HashMap<>();
+		Map<LocalDate, Double> maxPerDay = new HashMap<>();
 		bodyTemperatureMeasurementHistoryService
 			.findAllOfLastDays(windowDays - 1)
 			.forEach(btm -> {
@@ -54,6 +58,7 @@ public class BodyTemperatureChartDataProvider {
 				} else if (status == BodyTemperatureStatus.ABOVE) {
 					flags[1] = true;
 				}
+				mergeRange(minPerDay, maxPerDay, btm.getDateOfRecording(), btm.getPointOfMeasurement());
 			});
 		List<BodyTemperatureChartData> result = new ArrayList<>();
 		perDay.forEach((date, sums) -> {
@@ -61,9 +66,34 @@ public class BodyTemperatureChartDataProvider {
 			BodyTemperatureStatus status = flags[1]
 				? BodyTemperatureStatus.ABOVE
 				: flags[0] ? BodyTemperatureStatus.BELOW : BodyTemperatureStatus.NORMAL;
-			result.add(new BodyTemperatureChartData(windowPosition(date, today, windowDays), sums[0] / sums[1], status));
+			result.add(
+				new BodyTemperatureChartData(
+					windowPosition(date, today, windowDays),
+					sums[0] / sums[1],
+					status,
+					minPerDay.get(date),
+					maxPerDay.get(date)
+				)
+			);
 		});
 		return result;
+	}
+
+	private void mergeRange(
+		Map<LocalDate, Double> minPerDay,
+		Map<LocalDate, Double> maxPerDay,
+		LocalDate date,
+		PointOfMeasurement pointOfMeasurement
+	) {
+		if (pointOfMeasurement == null) {
+			return;
+		}
+		if (pointOfMeasurement.getRegularMinCelsius() != null) {
+			minPerDay.merge(date, pointOfMeasurement.getRegularMinCelsius().doubleValue(), Math::min);
+		}
+		if (pointOfMeasurement.getRegularMaxCelsius() != null) {
+			maxPerDay.merge(date, pointOfMeasurement.getRegularMaxCelsius().doubleValue(), Math::max);
+		}
 	}
 
 	/** Maps a date to its 1-based position within the {@code windowDays}-day window ending today (today = last). */

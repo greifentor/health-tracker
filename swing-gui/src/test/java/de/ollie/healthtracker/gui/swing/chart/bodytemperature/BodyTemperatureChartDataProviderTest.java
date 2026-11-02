@@ -1,6 +1,7 @@
 package de.ollie.healthtracker.gui.swing.chart.bodytemperature;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -40,6 +41,12 @@ class BodyTemperatureChartDataProviderTest {
 			.setDateOfRecording(date)
 			.setCelsius(BigDecimal.valueOf(celsius))
 			.setPointOfMeasurement(point);
+	}
+
+	private PointOfMeasurement point(double regularMinCelsius, double regularMaxCelsius) {
+		return new PointOfMeasurement()
+			.setRegularMinCelsius(BigDecimal.valueOf(regularMinCelsius))
+			.setRegularMaxCelsius(BigDecimal.valueOf(regularMaxCelsius));
 	}
 
 	@Test
@@ -106,6 +113,44 @@ class BodyTemperatureChartDataProviderTest {
 		unitUnderTest.create(WINDOW_DAYS);
 		// Check
 		verify(bodyTemperatureStatusService).calculateStatus(BigDecimal.valueOf(37.6), point);
+	}
+
+	@Test
+	void usesTheMinimumOfTheMinimaAcrossPointsOfMeasurement() {
+		// Prepare
+		LocalDate today = LocalDate.now();
+		when(bodyTemperatureMeasurementHistoryService.findAllOfLastDays(anyInt()))
+			.thenReturn(List.of(measurement(today, 37.0, point(36.0, 37.5)), measurement(today, 37.0, point(36.5, 38.0))));
+		when(bodyTemperatureStatusService.calculateStatus(any(), any())).thenReturn(BodyTemperatureStatus.NORMAL);
+		// Run
+		List<BodyTemperatureChartData> result = unitUnderTest.create(WINDOW_DAYS);
+		// Check
+		assertEquals(36.0, result.get(0).minCelsius(), 0.0001);
+	}
+
+	@Test
+	void usesTheMaximumOfTheMaximaAcrossPointsOfMeasurement() {
+		// Prepare
+		LocalDate today = LocalDate.now();
+		when(bodyTemperatureMeasurementHistoryService.findAllOfLastDays(anyInt()))
+			.thenReturn(List.of(measurement(today, 37.0, point(36.0, 37.5)), measurement(today, 37.0, point(36.5, 38.0))));
+		when(bodyTemperatureStatusService.calculateStatus(any(), any())).thenReturn(BodyTemperatureStatus.NORMAL);
+		// Run
+		List<BodyTemperatureChartData> result = unitUnderTest.create(WINDOW_DAYS);
+		// Check
+		assertEquals(38.0, result.get(0).maxCelsius(), 0.0001);
+	}
+
+	@Test
+	void leavesTheRangeNullWhenNoPointOfMeasurementIsGiven() {
+		// Prepare
+		when(bodyTemperatureMeasurementHistoryService.findAllOfLastDays(anyInt()))
+			.thenReturn(List.of(measurement(LocalDate.now(), 37.0, null)));
+		when(bodyTemperatureStatusService.calculateStatus(any(), any())).thenReturn(BodyTemperatureStatus.NORMAL);
+		// Run
+		List<BodyTemperatureChartData> result = unitUnderTest.create(WINDOW_DAYS);
+		// Check
+		assertNull(result.get(0).minCelsius());
 	}
 
 	@Test
