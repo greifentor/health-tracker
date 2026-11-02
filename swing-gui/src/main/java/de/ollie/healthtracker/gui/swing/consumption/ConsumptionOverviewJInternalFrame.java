@@ -4,7 +4,10 @@ import static de.ollie.healthtracker.gui.swing.Constants.HGAP;
 import static de.ollie.healthtracker.gui.swing.Constants.VGAP;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
@@ -16,9 +19,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * An internal frame that lists the consumption of meat, fish (both in grams, each broken down into its meat types as
- * indented sub-positions) and alcohol (in litres of pure alcohol), as provided by a {@link ConsumptionOverviewProvider}.
- * The overview is loaded from the provider when the frame opens.
+ * An internal frame that lists the consumption of meat, fish (both in kilograms, each broken down into its meat types as
+ * indented sub-positions) and alcohol (in litres of pure alcohol, broken down into its alcohol types), as provided by a
+ * {@link ConsumptionOverviewProvider}. The category rows (Fleisch, Fisch, Alkohol) are shown in bold. The overview is
+ * loaded from the provider when the frame opens.
  */
 public class ConsumptionOverviewJInternalFrame extends JInternalFrame {
 
@@ -26,24 +30,22 @@ public class ConsumptionOverviewJInternalFrame extends JInternalFrame {
 
 	public ConsumptionOverviewJInternalFrame(JDesktopPane desktopPane, ConsumptionOverviewProvider provider) {
 		super("Consumption Overview", true, true, true, true);
+		List<ConsumptionOverviewRow> rows = provider.create();
 		DefaultTableModel tableModel = new DefaultTableModel(new Object[] { "Position", "Verbrauch" }, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
 		};
-		provider
-			.create()
-			.forEach(row ->
-				tableModel.addRow(
-					new Object[] { row.subPosition() ? SUB_POSITION_INDENT + row.label() : row.label(), row.amount() }
-				)
-			);
+		rows.forEach(row ->
+			tableModel.addRow(
+				new Object[] { row.subPosition() ? SUB_POSITION_INDENT + row.label() : row.label(), row.amount() }
+			)
+		);
 		JTable table = new JTable(tableModel);
 		table.setRowSelectionAllowed(false);
-		DefaultTableCellRenderer rightAlignedRenderer = new DefaultTableCellRenderer();
-		rightAlignedRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
-		table.getColumnModel().getColumn(1).setCellRenderer(rightAlignedRenderer);
+		table.getColumnModel().getColumn(0).setCellRenderer(categoryBoldRenderer(rows, SwingConstants.LEFT));
+		table.getColumnModel().getColumn(1).setCellRenderer(categoryBoldRenderer(rows, SwingConstants.RIGHT));
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		JButton buttonClose = new JButton("Close");
 		buttonClose.addActionListener(e -> dispose());
@@ -61,5 +63,27 @@ public class ConsumptionOverviewJInternalFrame extends JInternalFrame {
 			e.printStackTrace();
 		}
 		setVisible(true);
+	}
+
+	/** A cell renderer with the given horizontal alignment that renders category rows (non sub-positions) in bold. */
+	private DefaultTableCellRenderer categoryBoldRenderer(List<ConsumptionOverviewRow> rows, int alignment) {
+		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+			@Override
+			public Component getTableCellRendererComponent(
+				JTable table,
+				Object value,
+				boolean isSelected,
+				boolean hasFocus,
+				int row,
+				int column
+			) {
+				Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+				boolean category = !rows.get(table.convertRowIndexToModel(row)).subPosition();
+				component.setFont(component.getFont().deriveFont(category ? Font.BOLD : Font.PLAIN));
+				return component;
+			}
+		};
+		renderer.setHorizontalAlignment(alignment);
+		return renderer;
 	}
 }
