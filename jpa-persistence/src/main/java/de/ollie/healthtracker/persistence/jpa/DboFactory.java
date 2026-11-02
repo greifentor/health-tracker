@@ -26,6 +26,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.MeatTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationLogDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationPlanDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.MedicationProductDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MedicationUnitDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.PointOfMeasurementDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.SymptomDbo;
@@ -375,6 +376,30 @@ class DboFactory {
 			.setSelfMedication(selfMedication)
 			.setTimeOfIntake(timeOfIntake)
 			.setUnitCount(unitCount);
+	}
+
+	MedicationProductDbo createMedicationProduct(
+		LocalDate expirationDate,
+		UUID medicationId,
+		BigDecimal packageSize,
+		UUID medicationUnitId
+	) {
+		ensure(medicationId != null, "medication id cannot be null!");
+		ensure(expirationDate != null, "expiration date cannot be null!");
+		ensure(packageSize != null, "package size cannot be null!");
+		ensure(medicationUnitId != null, "medication unit id cannot be null!");
+		MedicationDbo medication = medicationDboRepository
+			.findById(medicationId)
+			.orElseThrow(() -> new NoSuchElementException("no medication found with id: " + medicationId));
+		MedicationUnitDbo medicationUnit = medicationUnitDboRepository
+			.findById(medicationUnitId)
+			.orElseThrow(() -> new NoSuchElementException("no medication unit found with id: " + medicationUnitId));
+		return new MedicationProductDbo()
+			.setId(uuidFactory.create())
+			.setMedication(medication)
+			.setExpirationDate(expirationDate)
+			.setPackageSize(packageSize)
+			.setMedicationUnit(medicationUnit);
 	}
 
 	MedicationUnitDbo createMedicationUnit(String name, String token) {

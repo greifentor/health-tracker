@@ -601,4 +601,26 @@
             <column name="ALCOHOL_TYPE" value="93aef096-94dc-4aab-a1bc-013ae45b3d94"/>
         </update>
     </changeSet>
+    <changeSet author="ollie" id="Add-Table-MEDICATION_PRODUCT" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="MEDICATION_PRODUCT">
+            <column name="ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MEDICATION" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EXPIRATION_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PACKAGE_SIZE" type="NUMERIC(5, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MEDICATION_UNIT" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="MEDICATION_PRODUCT"/>
+        <addForeignKeyConstraint constraintName="FK_MEDICATION_PRODUCT_MEDICATION_TO_MEDICATION" baseColumnNames="MEDICATION" baseTableName="MEDICATION_PRODUCT" referencedColumnNames="ID" referencedTableName="MEDICATION"/>
+        <addForeignKeyConstraint constraintName="FK_MEDICATION_PRODUCT_MEDICATION_UNIT_TO_MEDICATION_UNIT" baseColumnNames="MEDICATION_UNIT" baseTableName="MEDICATION_PRODUCT" referencedColumnNames="ID" referencedTableName="MEDICATION_UNIT"/>
+    </changeSet>
 </databaseChangeLog>

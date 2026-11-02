@@ -1055,6 +1055,68 @@ classes:
           properties:
             - name: import
               value: java.math.BigDecimal
+  - name: MedicationProduct
+    properties:
+      - name: order
+        value: expirationDate ASC
+      - name: gui
+        value: true
+    attributes:
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: expirationDate
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 1
+        type:
+          name: LocalDate
+          properties:
+            - name: import
+              value: java.time.LocalDate
+      - name: medication
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 2
+        type:
+          name: Medication
+      - name: packageSize
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 3
+          - name: editor-min
+            value: 0
+          - name: editor-fraction-digits
+            value: 1
+        type:
+          name: BigDecimal
+          properties:
+            - name: import
+              value: java.math.BigDecimal
+      - name: medicationUnit
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 4
+        type:
+          name: MedicationUnit
   - name: MedicationUnit
     properties:
       - name: order

@@ -22,6 +22,7 @@ import de.ollie.healthtracker.core.service.MeatProductService;
 import de.ollie.healthtracker.core.service.MeatTypeService;
 import de.ollie.healthtracker.core.service.MedicationLogService;
 import de.ollie.healthtracker.core.service.MedicationPlanService;
+import de.ollie.healthtracker.core.service.MedicationProductService;
 import de.ollie.healthtracker.core.service.MedicationService;
 import de.ollie.healthtracker.core.service.MedicationUnitService;
 import de.ollie.healthtracker.core.service.NutritionClassCalculationService;
@@ -54,15 +55,19 @@ import de.ollie.healthtracker.gui.swing.event.AlcoholConsumptionChangeNotifier;
 import de.ollie.healthtracker.gui.swing.event.BloodPressureMeasurementChangeNotifier;
 import de.ollie.healthtracker.gui.swing.event.BodyTemperatureMeasurementChangeNotifier;
 import de.ollie.healthtracker.gui.swing.event.MeatConsumptionChangeNotifier;
+import de.ollie.healthtracker.gui.swing.event.MedicationProductChangeNotifier;
 import de.ollie.healthtracker.gui.swing.event.NotifyingAlcoholConsumptionService;
 import de.ollie.healthtracker.gui.swing.event.NotifyingBloodPressureMeasurementService;
 import de.ollie.healthtracker.gui.swing.event.NotifyingBodyTemperatureMeasurementService;
 import de.ollie.healthtracker.gui.swing.event.NotifyingMeatConsumptionService;
+import de.ollie.healthtracker.gui.swing.event.NotifyingMedicationProductService;
 import de.ollie.healthtracker.gui.swing.event.NotifyingWeightMeasurementService;
 import de.ollie.healthtracker.gui.swing.event.WeightMeasurementChangeNotifier;
 import de.ollie.healthtracker.gui.swing.external.viewer.pdf.ExternalPdfViewerStarter;
 import de.ollie.healthtracker.gui.swing.frame.BoundsTrackingDesktopPane;
 import de.ollie.healthtracker.gui.swing.frame.InternalFrameBoundsManager;
+import de.ollie.healthtracker.gui.swing.medicationproduct.ExpiredMedicationProductJInternalFrame;
+import de.ollie.healthtracker.gui.swing.medicationproduct.ExpiredMedicationProductProvider;
 import de.ollie.healthtracker.gui.swing.opentask.OpenTaskJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.alcoholconsumption.AlcoholConsumptionSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.alcoholproduct.AlcoholProductSelectJInternalFrame;
@@ -84,6 +89,7 @@ import de.ollie.healthtracker.gui.swing.select.meattype.MeatTypeSelectJInternalF
 import de.ollie.healthtracker.gui.swing.select.medication.MedicationSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.medicationlog.MedicationLogSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.medicationplan.MedicationPlanSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.medicationproduct.MedicationProductSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.medicationunit.MedicationUnitSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.pointofmeasurement.PointOfMeasurementSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.symptom.SymptomSelectJInternalFrame;
@@ -115,6 +121,8 @@ import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import lombok.Data;
@@ -158,6 +166,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final DoctorService doctorService;
 	private final DoctorTypeService doctorTypeService;
 	private final ExerciseService exerciseService;
+	private final ExpiredMedicationProductProvider expiredMedicationProductProvider;
 	private final ExternalPdfViewerStarter externalPdfViewerStarter;
 	private final GeneralBodyPartService generalBodyPartService;
 	private final InternalFrameBoundsManager internalFrameBoundsManager;
@@ -168,6 +177,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final MeatTypeService meatTypeService;
 	private final MedicationLogService medicationLogService;
 	private final MedicationPlanService medicationPlanService;
+	private final MedicationProductChangeNotifier medicationProductChangeNotifier;
+	private final MedicationProductService medicationProductService;
 	private final MedicationService medicationService;
 	private final MedicationUnitService medicationUnitService;
 	private final NutritionChartDataProvider nutritionChartDataProvider;
@@ -183,6 +194,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final EditDialogComponentFactory editDialogComponentFactory;
 
 	private JDesktopPane desktopPane;
+	private ExpiredMedicationProductJInternalFrame expiredMedicationProductFrame;
 	private JMenuItem menuItemDuplicateLastSymtoms;
 	private JMenuItem menuItemEditAlcoholConsumption;
 	private JMenuItem menuItemEditAlcoholProduct;
@@ -204,6 +216,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemEditMedication;
 	private JMenuItem menuItemEditMedicationLog;
 	private JMenuItem menuItemEditMedicationPlan;
+	private JMenuItem menuItemEditMedicationProduct;
 	private JMenuItem menuItemEditMedicationUnit;
 	private JMenuItem menuItemEditWeightMeasurement;
 	private JMenuItem menuItemEditPointOfMeasurement;
@@ -227,6 +240,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	void postConstruct() {
 		desktopPane = new BoundsTrackingDesktopPane(internalFrameBoundsManager);
 		desktopPane.setMinimumSize(new Dimension(200, 100));
+		medicationProductChangeNotifier.addListener(this::refreshExpiredMedicationProducts);
 		JPanel mainPanel = new JPanel(new BorderLayout(HGAP, VGAP));
 		mainPanel.add(desktopPane, BorderLayout.CENTER);
 		setJMenuBar(createJMenuBar());
@@ -279,6 +293,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			private List<NutritionChartData> nutrition;
 			private List<AlcoholChartData> alcohol;
 			private boolean hasOpenTasks;
+			private List<String> expiredMedicationProducts;
 
 			@Override
 			protected Void doInBackground() {
@@ -288,12 +303,14 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				nutrition = nutritionChartDataProvider.create(chartWindowMonths);
 				alcohol = alcoholChartDataProvider.create(chartWindowDays);
 				hasOpenTasks = !openTaskService.findAllOpenTasks().isEmpty();
+				expiredMedicationProducts = expiredMedicationProductProvider.findExpiredProductWarnings();
 				return null;
 			}
 
 			@Override
 			protected void done() {
 				showInitialCharts(weight, bloodPressure, bodyTemperature, nutrition, alcohol, hasOpenTasks);
+				showExpiredMedicationProducts(expiredMedicationProducts);
 			}
 		}
 			.execute();
@@ -360,6 +377,34 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				bodyTemperatureMeasurementChangeNotifier,
 				weightMeasurementChangeNotifier
 			);
+		}
+	}
+
+	private void refreshExpiredMedicationProducts() {
+		showExpiredMedicationProducts(expiredMedicationProductProvider.findExpiredProductWarnings());
+	}
+
+	private void showExpiredMedicationProducts(List<String> expiredMedicationProducts) {
+		if (expiredMedicationProducts.isEmpty()) {
+			if (expiredMedicationProductFrame != null) {
+				expiredMedicationProductFrame.dispose();
+				expiredMedicationProductFrame = null;
+			}
+			return;
+		}
+		if (expiredMedicationProductFrame == null) {
+			expiredMedicationProductFrame =
+				new ExpiredMedicationProductJInternalFrame(desktopPane, expiredMedicationProducts);
+			expiredMedicationProductFrame.addInternalFrameListener(
+				new InternalFrameAdapter() {
+					@Override
+					public void internalFrameClosed(InternalFrameEvent e) {
+						expiredMedicationProductFrame = null;
+					}
+				}
+			);
+		} else {
+			expiredMedicationProductFrame.setWarnings(expiredMedicationProducts);
 		}
 	}
 
@@ -475,6 +520,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		subMenu.add(menuItemEditMedicationLog);
 		menuItemEditMedicationPlan = createMenuItem("Medication Plan", this);
 		subMenu.add(menuItemEditMedicationPlan);
+		menuItemEditMedicationProduct = createMenuItem("Medication Product", this);
+		subMenu.add(menuItemEditMedicationProduct);
 		menuItemEditMedicationUnit = createMenuItem("Medication Unit", this);
 		subMenu.add(menuItemEditMedicationUnit);
 		menu.add(subMenu);
@@ -643,6 +690,14 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		} else if (e.getSource() == menuItemEditMedicationPlan) {
 			new MedicationPlanSelectJInternalFrame(
 				medicationPlanService,
+				medicationService,
+				medicationUnitService,
+				desktopPane,
+				editDialogComponentFactory
+			);
+		} else if (e.getSource() == menuItemEditMedicationProduct) {
+			new MedicationProductSelectJInternalFrame(
+				new NotifyingMedicationProductService(medicationProductService, medicationProductChangeNotifier),
 				medicationService,
 				medicationUnitService,
 				desktopPane,
