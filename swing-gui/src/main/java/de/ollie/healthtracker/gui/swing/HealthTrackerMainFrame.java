@@ -43,6 +43,9 @@ import de.ollie.healthtracker.gui.swing.chart.bloodpressure.BloodPressureChartJI
 import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartData;
 import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.bodytemperature.BodyTemperatureChartJInternalFrame;
+import de.ollie.healthtracker.gui.swing.chart.meatfishmass.MeatFishMassChartData;
+import de.ollie.healthtracker.gui.swing.chart.meatfishmass.MeatFishMassChartDataProvider;
+import de.ollie.healthtracker.gui.swing.chart.meatfishmass.MeatFishMassChartJInternalFrame;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartData;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartDataProvider;
 import de.ollie.healthtracker.gui.swing.chart.nutrition.NutritionChartJInternalFrame;
@@ -173,6 +176,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final ManufacturerService manufacturerService;
 	private final MeatConsumptionChangeNotifier meatConsumptionChangeNotifier;
 	private final MeatConsumptionService meatConsumptionService;
+	private final MeatFishMassChartDataProvider meatFishMassChartDataProvider;
 	private final MeatProductService meatProductService;
 	private final MeatTypeService meatTypeService;
 	private final MedicationLogService medicationLogService;
@@ -232,6 +236,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemFileShowBloodPressureChart;
 	private JMenuItem menuItemFileShowBodyTemperatureChart;
 	private JMenuItem menuItemFileShowConsumptionOverview;
+	private JMenuItem menuItemFileShowMeatFishMassChart;
 	private JMenuItem menuItemFileShowNutritionChart;
 	private JMenuItem menuItemFileShowOpenTasks;
 	private JMenuItem menuItemFileShowWeightChart;
@@ -291,6 +296,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			private List<BloodPressureChartData> bloodPressure;
 			private List<BodyTemperatureChartData> bodyTemperature;
 			private List<NutritionChartData> nutrition;
+			private List<MeatFishMassChartData> meatFishMass;
 			private List<AlcoholChartData> alcohol;
 			private boolean hasOpenTasks;
 			private List<String> expiredMedicationProducts;
@@ -301,6 +307,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				bloodPressure = bloodPressureChartDataProvider.create(chartWindowDays);
 				bodyTemperature = bodyTemperatureChartDataProvider.create(chartWindowDays);
 				nutrition = nutritionChartDataProvider.create(chartWindowMonths);
+				meatFishMass = meatFishMassChartDataProvider.create(chartWindowMonths);
 				alcohol = alcoholChartDataProvider.create(chartWindowDays);
 				hasOpenTasks = !openTaskService.findAllOpenTasks().isEmpty();
 				expiredMedicationProducts = expiredMedicationProductProvider.findExpiredProductWarnings();
@@ -309,7 +316,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 
 			@Override
 			protected void done() {
-				showInitialCharts(weight, bloodPressure, bodyTemperature, nutrition, alcohol, hasOpenTasks);
+				showInitialCharts(weight, bloodPressure, bodyTemperature, nutrition, meatFishMass, alcohol, hasOpenTasks);
 				showExpiredMedicationProducts(expiredMedicationProducts);
 			}
 		}
@@ -321,6 +328,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		List<BloodPressureChartData> bloodPressure,
 		List<BodyTemperatureChartData> bodyTemperature,
 		List<NutritionChartData> nutrition,
+		List<MeatFishMassChartData> meatFishMass,
 		List<AlcoholChartData> alcohol,
 		boolean hasOpenTasks
 	) {
@@ -350,6 +358,12 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			new NutritionChartJInternalFrame(
 				desktopPane,
 				servingPrefetchedFirst(nutrition, nutritionChartDataProvider::create),
+				chartWindowMonths,
+				meatConsumptionChangeNotifier
+			),
+			new MeatFishMassChartJInternalFrame(
+				desktopPane,
+				servingPrefetchedFirst(meatFishMass, meatFishMassChartDataProvider::create),
 				chartWindowMonths,
 				meatConsumptionChangeNotifier
 			),
@@ -451,6 +465,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemFileShowBloodPressureChart);
 		menuItemFileShowBodyTemperatureChart = createMenuItem("Show Body Temperature Chart", this);
 		menu.add(menuItemFileShowBodyTemperatureChart);
+		menuItemFileShowMeatFishMassChart = createMenuItem("Show Meat and Fish Mass Chart", this);
+		menu.add(menuItemFileShowMeatFishMassChart);
 		menuItemFileShowNutritionChart = createMenuItem("Show Nutrition Chart", this);
 		menu.add(menuItemFileShowNutritionChart);
 		menuItemFileShowWeightChart = createMenuItem("Show Weight Chart", this);
@@ -883,6 +899,13 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 				bloodPressureMeasurementChangeNotifier,
 				bodyTemperatureMeasurementChangeNotifier,
 				weightMeasurementChangeNotifier
+			);
+		} else if (e.getSource() == menuItemFileShowMeatFishMassChart) {
+			new MeatFishMassChartJInternalFrame(
+				desktopPane,
+				meatFishMassChartDataProvider::create,
+				chartWindowMonths,
+				meatConsumptionChangeNotifier
 			);
 		} else if (e.getSource() == menuItemFileShowNutritionChart) {
 			new NutritionChartJInternalFrame(
