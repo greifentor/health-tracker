@@ -1,11 +1,47 @@
+title: DIAGRAMMNAME
 classes:
   - name: AlcoholConsumption
     properties:
-      - name: order
-        value: date DESC
       - name: gui
         value: true
+      - name: order
+        value: date DESC
     attributes:
+      - name: alcoholProduct
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+          - name: duplicate-check
+            value: true
+          - name: editor-position
+            value: 2
+        type:
+          name: AlcoholProduct
+      - name: comment
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 3
+        type:
+          name: String
+          properties:
+            - name: length
+              value: 255
+      - name: date
+        properties:
+          - name: nullable
+            value: false
+          - name: duplicate-check
+            value: true
+          - name: editor-position
+            value: 1
+        type:
+          name: LocalDate
+          properties:
+            - name: import
+              value: java.time.LocalDate
       - name: id
         properties:
           - name: nullable
@@ -17,52 +53,20 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
-      - name: date
-        properties:
-          - name: nullable
-            value: false
-          - name: editor-position
-            value: 1
-          - name: duplicate-check
-            value: true
-        type:
-          name: LocalDate
-          properties:
-            - name: import
-              value: java.time.LocalDate
-      - name: alcoholProduct
-        reference: true
-        properties:
-          - name: nullable
-            value: false
-          - name: editor-position
-            value: 2
-          - name: duplicate-check
-            value: true
-        type:
-          name: AlcoholProduct
-      - name: comment
-        properties:
-          - name: nullable
-            value: false
-          - name: editor-position
-            value: 3
-        type:
-          name: String
       - name: liter
         properties:
           - name: nullable
             value: false
           - name: duplicate-check
             value: true
-          - name: editor-position
-            value: 4
-          - name: editor-min
-            value: 0
-          - name: editor-step
-            value: 0.1
           - name: editor-fraction-digits
             value: 2
+          - name: editor-min
+            value: 0
+          - name: editor-position
+            value: 4
+          - name: editor-step
+            value: 0.1
         type:
           name: BigDecimal
           properties:
@@ -70,11 +74,20 @@ classes:
               value: java.math.BigDecimal
   - name: AlcoholProduct
     properties:
-      - name: order
-        value: name
       - name: gui
         value: true
+      - name: order
+        value: name
     attributes:
+      - name: alcoholType
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 3
+        type:
+          name: AlcoholType
       - name: id
         properties:
           - name: nullable
@@ -90,12 +103,15 @@ classes:
         properties:
           - name: nullable
             value: false
-          - name: findable
-            value: true
           - name: editor-position
             value: 1
+          - name: findable
+            value: true
         type:
           name: String
+          properties:
+            - name: length
+              value: 255
       - name: percentVol
         properties:
           - name: nullable
@@ -107,21 +123,12 @@ classes:
           properties:
             - name: import
               value: java.math.BigDecimal
-      - name: alcoholType
-        reference: true
-        properties:
-          - name: nullable
-            value: false
-          - name: editor-position
-            value: 3
-        type:
-          name: AlcoholType
   - name: AlcoholType
     properties:
-      - name: order
-        value: name
       - name: gui
         value: true
+      - name: order
+        value: name
     attributes:
       - name: id
         properties:
@@ -138,21 +145,58 @@ classes:
         properties:
           - name: nullable
             value: false
-          - name: findable
-            value: true
           - name: editor-position
             value: 1
+          - name: findable
+            value: true
         type:
           name: String
+          properties:
+            - name: length
+              value: 255
   - name: BloodPressureMeasurement
     properties:
+      - name: gui
+        value: true
       - name: order
         value: dateOfRecording DESC
       - name: order
         value: timeOfRecording DESC
-      - name: gui
-        value: true
     attributes:
+      - name: comment
+        properties:
+          - name: editor-position
+            value: 99
+        type:
+          name: String
+          properties:
+            - name: length
+              value: 255
+      - name: dateOfRecording
+        default-value: LocalDate.now()
+        properties:
+          - name: nullable
+            value: false
+          - name: duplicate-check
+            value: true
+          - name: editor-position
+            value: 1
+        type:
+          name: LocalDate
+          properties:
+            - name: import
+              value: java.time.LocalDate
+      - name: diaMmHg
+        default-value: 80
+        properties:
+          - name: nullable
+            value: false
+          - name: duplicate-check
+            value: true
+          - name: editor-position
+            value: 4
+        type:
+          name: int
       - name: id
         properties:
           - name: nullable
@@ -164,49 +208,42 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
-      - name: comment
+      - name: irregularHeartbeat
         properties:
-          - name: editor-position
-            value: 99
-          - name: nullable
-            value: true
-        type:
-          name: String
-      - name: dateOfRecording
-        default-value: LocalDate.now()
-        properties:
-          - name: duplicate-check
-            value: true
-          - name: editor-position
-            value: 1
           - name: nullable
             value: false
-        type:
-          name: LocalDate
-          properties:
-            - name: import
-              value: java.time.LocalDate
-      - name: diaMmHg
-        default-value: 80
-        properties:
-          - name: duplicate-check
-            value: true
           - name: editor-position
-            value: 4
+            value: 7
         type:
-          name: int
+          name: boolean
       - name: pulsePerMinute
         default-value: 60
         properties:
+          - name: nullable
+            value: false
           - name: duplicate-check
             value: true
           - name: editor-position
             value: 5
         type:
           name: int
+      - name: status
+        default-value: WhoBloodPressureClassification.HIGH_NORMAL
+        enum: true
+        properties:
+          - name: nullable
+            value: false
+          - name: duplicate-check
+            value: true
+          - name: editor-position
+            value: 6
+        type:
+          name: WhoBloodPressureClassification
       - name: sysMmHg
         default-value: 130
         properties:
+          - name: nullable
+            value: false
           - name: duplicate-check
             value: true
           - name: editor-position
@@ -216,56 +253,24 @@ classes:
       - name: timeOfRecording
         default-value: LocalTime.now()
         properties:
+          - name: nullable
+            value: false
           - name: duplicate-check
             value: true
           - name: editor-position
             value: 2
-          - name: nullable
-            value: false
         type:
           name: LocalTime
           properties:
             - name: import
               value: java.time.LocalTime
-      - name: status
-        default-value: WhoBloodPressureClassification.HIGH_NORMAL
-        properties:
-          - name: duplicate-check
-            value: true
-          - name: editor-position
-            value: 6
-          - name: nullable
-            value: false
-        enum: true
-        type:
-          name: WhoBloodPressureClassification
-          properties:
-            - name: project-type
-              value: true
-      - name: irregularHeartbeat
-        properties:
-          - name: editor-position
-            value: 7
-        type:
-          name: boolean
   - name: BodyPart
     properties:
-      - name: order
-        value: name
       - name: gui
         value: true
+      - name: order
+        value: name
     attributes:
-      - name: id
-        properties:
-          - name: nullable
-            value: false
-          - name: id
-            value: true
-        type:
-          name: UUID
-          properties:
-            - name: import
-              value: java.util.UUID
       - name: generalBodyPart
         reference: true
         properties:
@@ -275,25 +280,6 @@ classes:
             value: 2
         type:
           name: GeneralBodyPart
-      - name: name
-        properties:
-          - name: nullable
-            value: false
-          - name: findable
-            value: true
-          - name: editor-position
-            value: 1
-        type:
-          name: String
-  - name: BodyTemperatureMeasurement
-    properties:
-      - name: order
-        value: dateOfRecording DESC
-      - name: order
-        value: timeOfRecording DESC
-      - name: gui
-        value: true
-    attributes:
       - name: id
         properties:
           - name: nullable
@@ -305,74 +291,76 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
-      - name: comment
+      - name: name
         properties:
-          - name: editor-position
-            value: 99
           - name: nullable
+            value: false
+          - name: editor-position
+            value: 1
+          - name: findable
             value: true
         type:
           name: String
-      - name: dateOfRecording
-        default-value: LocalDate.now()
-        properties:
-          - name: editor-position
-            value: 1
-          - name: nullable
-            value: false
-        type:
-          name: LocalDate
           properties:
-            - name: import
-              value: java.time.LocalDate
-      - name: celsius
-        default-value: new BigDecimal(37.0)
-        properties:
-          - name: editor-position
-            value: 3
-          - name: nullable
-            value: false
-          - name: editor-min
-            value: 30
-          - name: editor-max
-            value: 45
-          - name: editor-step
-            value: 0.1
-          - name: editor-fraction-digits
-            value: 1
-        type:
-          name: BigDecimal
-          properties:
-            - name: import
-              value: java.math.BigDecimal
-      - name: timeOfRecording
-        default-value: LocalTime.now()
-        properties:
-          - name: editor-position
-            value: 2
-          - name: nullable
-            value: false
-        type:
-          name: LocalTime
-          properties:
-            - name: import
-              value: java.time.LocalTime
+            - name: length
+              value: 255
+  - name: BodyTemperatureMeasurement
+    properties:
+      - name: gui
+        value: true
+      - name: order
+        value: dateOfRecording DESC
+      - name: order
+        value: timeOfRecording DESC
+    attributes:
       - name: pointOfMeasurement
         reference: true
         properties:
           - name: editor-position
             value: 4
-          - name: nullable
-            value: true
         type:
           name: PointOfMeasurement
-  - name: Comment
-    properties:
-      - name: order
-        value: dateOfRecording DESC
-      - name: gui
-        value: true
-    attributes:
+      - name: celsius
+        default-value: new BigDecimal(37.0)
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-fraction-digits
+            value: 1
+          - name: editor-max
+            value: 45
+          - name: editor-min
+            value: 30
+          - name: editor-position
+            value: 3
+          - name: editor-step
+            value: 0.1
+        type:
+          name: BigDecimal
+          properties:
+            - name: import
+              value: java.math.BigDecimal
+      - name: comment
+        properties:
+          - name: editor-position
+            value: 99
+        type:
+          name: String
+          properties:
+            - name: length
+              value: 255
+      - name: dateOfRecording
+        default-value: LocalDate.now()
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 1
+        type:
+          name: LocalDate
+          properties:
+            - name: import
+              value: java.time.LocalDate
       - name: id
         properties:
           - name: nullable
@@ -384,28 +372,47 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
+      - name: timeOfRecording
+        default-value: LocalTime.now()
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 2
+        type:
+          name: LocalTime
+          properties:
+            - name: import
+              value: java.time.LocalTime
+  - name: Comment
+    properties:
+      - name: gui
+        value: true
+      - name: order
+        value: dateOfRecording DESC
+    attributes:
       - name: commentType
+        reference: true
         properties:
           - name: nullable
             value: false
           - name: editor-position
             value: 3
-        reference: true
         type:
           name: CommentType
-          properties:
-            - name: project-type
-              value: true
       - name: content
         properties:
           - name: nullable
             value: false
-          - name: findable
-            value: true
           - name: editor-position
             value: 2
+          - name: findable
+            value: true
         type:
           name: String
+          properties:
+            - name: length
+              value: 255
       - name: dateOfRecording
         properties:
           - name: nullable
@@ -417,12 +424,23 @@ classes:
           properties:
             - name: import
               value: java.time.LocalDate
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
   - name: CommentType
     properties:
-      - name: order
-        value: name DESC
       - name: gui
         value: true
+      - name: order
+        value: name DESC
     attributes:
       - name: id
         properties:
@@ -439,36 +457,20 @@ classes:
         properties:
           - name: nullable
             value: false
-          - name: findable
-            value: true
           - name: editor-position
             value: 1
+          - name: findable
+            value: true
         type:
           name: String
+          properties:
+            - name: length
+              value: 255
   - name: Doctor
     properties:
       - name: order
         value: name
     attributes:
-      - name: id
-        properties:
-          - name: nullable
-            value: false
-          - name: id
-            value: true
-        type:
-          name: UUID
-          properties:
-            - name: import
-              value: java.util.UUID
-      - name: name
-        properties:
-          - name: nullable
-            value: false
-          - name: findable
-            value: true
-        type:
-          name: String
       - name: doctorType
         reference: true
         properties:
@@ -476,13 +478,6 @@ classes:
             value: false
         type:
           name: DoctorType
-  - name: DoctorConsultation
-    properties:
-      - name: order
-        value: date DESC
-      - name: order
-        value: time DESC
-    attributes:
       - name: id
         properties:
           - name: nullable
@@ -494,6 +489,35 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
+      - name: name
+        properties:
+          - name: nullable
+            value: false
+          - name: findable
+            value: true
+        type:
+          name: String
+          properties:
+            - name: length
+              value: 255
+  - name: DoctorConsultation
+    properties:
+      - name: order
+        value: date DESC
+      - name: order
+        value: time DESC
+    attributes:
+      - name: doctor
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+        type:
+          name: Doctor
+      - name: subsequentAppointmentOf
+        reference: true
+        type:
+          name: DoctorConsultation
       - name: date
         properties:
           - name: nullable
@@ -503,22 +527,17 @@ classes:
           properties:
             - name: import
               value: java.time.LocalDate
-      - name: time
+      - name: id
         properties:
           - name: nullable
             value: false
+          - name: id
+            value: true
         type:
-          name: LocalTime
+          name: UUID
           properties:
             - name: import
-              value: java.time.LocalTime
-      - name: doctor
-        reference: true
-        properties:
-          - name: nullable
-            value: false
-        type:
-          name: Doctor
+              value: java.util.UUID
       - name: open
         properties:
           - name: nullable
@@ -531,19 +550,27 @@ classes:
             value: false
         type:
           name: String
+          properties:
+            - name: length
+              value: 255
       - name: result
         properties:
           - name: nullable
             value: false
         type:
           name: String
-      - name: subsequentAppointmentOf
-        reference: true
+          properties:
+            - name: length
+              value: 255
+      - name: time
         properties:
           - name: nullable
-            value: true
+            value: false
         type:
-          name: DoctorConsultation
+          name: LocalTime
+          properties:
+            - name: import
+              value: java.time.LocalTime
   - name: DoctorType
     properties:
       - name: order
@@ -568,24 +595,16 @@ classes:
             value: true
         type:
           name: String
+          properties:
+            - name: length
+              value: 255
   - name: Exercise
     properties:
-      - name: order
-        value: name
       - name: gui
         value: true
+      - name: order
+        value: name
     attributes:
-      - name: id
-        properties:
-          - name: nullable
-            value: false
-          - name: id
-            value: true
-        type:
-          name: UUID
-          properties:
-            - name: import
-              value: java.util.UUID
       - name: bodyPart
         reference: true
         properties:
@@ -603,6 +622,20 @@ classes:
             value: 3
         type:
           name: String
+          properties:
+            - name: length
+              value: 255
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
       - name: name
         properties:
           - name: nullable
@@ -611,12 +644,15 @@ classes:
             value: 1
         type:
           name: String
+          properties:
+            - name: length
+              value: 255
   - name: GeneralBodyPart
     properties:
-      - name: order
-        value: name
       - name: gui
         value: true
+      - name: order
+        value: name
     attributes:
       - name: id
         properties:
@@ -633,18 +669,21 @@ classes:
         properties:
           - name: nullable
             value: false
-          - name: findable
-            value: true
           - name: editor-position
             value: 1
+          - name: findable
+            value: true
         type:
           name: String
+          properties:
+            - name: length
+              value: 255
   - name: Manufacturer
     properties:
-      - name: order
-        value: name
       - name: gui
         value: true
+      - name: order
+        value: name
     attributes:
       - name: id
         properties:
@@ -667,24 +706,25 @@ classes:
             value: true
         type:
           name: String
+          properties:
+            - name: length
+              value: 255
   - name: MeatConsumption
     properties:
-      - name: order
-        value: dateOfRecording DESC
       - name: gui
         value: true
+      - name: order
+        value: dateOfRecording DESC
     attributes:
-      - name: id
+      - name: meatProduct
+        reference: true
         properties:
-          - name: nullable
-            value: false
-          - name: id
+          - name: duplicate-check
             value: true
+          - name: editor-position
+            value: 2
         type:
-          name: UUID
-          properties:
-            - name: import
-              value: java.util.UUID
+          name: MeatProduct
       - name: dateOfRecording
         properties:
           - name: nullable
@@ -698,40 +738,6 @@ classes:
           properties:
             - name: import
               value: java.time.LocalDate
-      - name: meatProduct
-        reference: true
-        properties:
-          - name: duplicate-check
-            value: true
-          - name: editor-position
-            value: 2
-        type:
-          name: MeatProduct
-      - name: units
-        default-value: new BigDecimal("1.0")
-        properties:
-          - name: nullable
-            value: false
-          - name: duplicate-check
-            value: true
-          - name: editor-position
-            value: 3
-          - name: editor-fraction-digits
-            value: 2
-        type:
-          name: BigDecimal
-          properties:
-            - name: import
-              value: java.math.BigDecimal
-  - name: MeatProduct
-    properties:
-      - name: order
-        value: description ASC
-      - name: gui
-        value: true
-      - name: implements
-        value: NameProvider<MeatProduct>
-    attributes:
       - name: id
         properties:
           - name: nullable
@@ -743,6 +749,40 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
+      - name: units
+        default-value: new BigDecimal("1.0")
+        properties:
+          - name: nullable
+            value: false
+          - name: duplicate-check
+            value: true
+          - name: editor-fraction-digits
+            value: 2
+          - name: editor-position
+            value: 3
+        type:
+          name: BigDecimal
+          properties:
+            - name: import
+              value: java.math.BigDecimal
+  - name: MeatProduct
+    properties:
+      - name: gui
+        value: true
+      - name: implements
+        value: NameProvider<MeatProduct>
+      - name: order
+        value: description ASC
+    attributes:
+      - name: meatType
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 3
+        type:
+          name: MeatType
       - name: amountInGr
         properties:
           - name: nullable
@@ -755,30 +795,17 @@ classes:
         properties:
           - name: nullable
             value: false
-          - name: findable
-            value: true
           - name: editor-position
             value: 2
+          - name: findable
+            value: true
           - name: name-provider
             value: true
         type:
           name: String
-      - name: meatType
-        reference: true
-        properties:
-          - name: nullable
-            value: false
-          - name: editor-position
-            value: 3
-        type:
-          name: MeatType
-  - name: MeatType
-    properties:
-      - name: order
-        value: name
-      - name: gui
-        value: true
-    attributes:
+          properties:
+            - name: length
+              value: 255
       - name: id
         properties:
           - name: nullable
@@ -790,35 +817,20 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
+  - name: MeatType
+    properties:
+      - name: gui
+        value: true
+      - name: order
+        value: name
+    attributes:
       - name: category
+        enum: true
         properties:
           - name: editor-position
             value: 2
-        enum: true
         type:
           name: MeatCategory
-          properties:
-            - name: project-type
-              value: true
-            - name: import
-              value: de.ollie.healthtracker.core.service.model.MeatCategory
-      - name: name
-        properties:
-          - name: nullable
-            value: false
-          - name: findable
-            value: true
-          - name: editor-position
-            value: 1
-        type:
-          name: String
-  - name: Medication
-    properties:
-      - name: order
-        value: name
-      - name: gui
-        value: true
-    attributes:
       - name: id
         properties:
           - name: nullable
@@ -834,12 +846,22 @@ classes:
         properties:
           - name: nullable
             value: false
-          - name: findable
-            value: true
           - name: editor-position
             value: 1
+          - name: findable
+            value: true
         type:
           name: String
+          properties:
+            - name: length
+              value: 255
+  - name: Medication
+    properties:
+      - name: gui
+        value: true
+      - name: order
+        value: name
+    attributes:
       - name: manufacturer
         reference: true
         properties:
@@ -849,15 +871,6 @@ classes:
             value: 2
         type:
           name: Manufacturer
-  - name: MedicationLog
-    properties:
-      - name: gui
-        value: true
-      - name: order
-        value: dateOfIntake DESC
-      - name: order
-        value: timeOfIntake DESC
-    attributes:
       - name: id
         properties:
           - name: nullable
@@ -869,28 +882,37 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
-      - name: comment
+      - name: name
         properties:
+          - name: nullable
+            value: false
           - name: editor-position
-            value: 7
+            value: 1
+          - name: findable
+            value: true
         type:
           name: String
-      - name: confirmed
-        default-value: true
-        properties:
-          - name: editor-position
-            value: 6
-        type:
-          name: boolean
+          properties:
+            - name: length
+              value: 255
+  - name: MedicationLog
+    properties:
+      - name: gui
+        value: true
+      - name: order
+        value: dateOfIntake DESC
+      - name: order
+        value: timeOfIntake DESC
+    attributes:
       - name: medication
         reference: true
         properties:
           - name: nullable
             value: false
-          - name: editor-position
-            value: 3
           - name: duplicate-check
             value: true
+          - name: editor-position
+            value: 3
         type:
           name: Medication
       - name: medicationUnit
@@ -898,27 +920,58 @@ classes:
         properties:
           - name: nullable
             value: false
-          - name: editor-position
-            value: 4
           - name: duplicate-check
             value: true
+          - name: editor-position
+            value: 4
         type:
           name: MedicationUnit
-      - name: dateOfIntake
+      - name: comment
+        properties:
+          - name: editor-position
+            value: 7
+        type:
+          name: String
+          properties:
+            - name: length
+              value: 255
+      - name: confirmed
+        default-value: true
         properties:
           - name: nullable
             value: false
           - name: editor-position
-            value: 1
+            value: 6
+        type:
+          name: boolean
+      - name: dateOfIntake
+        properties:
+          - name: nullable
+            value: false
           - name: duplicate-check
             value: true
+          - name: editor-position
+            value: 1
         type:
           name: LocalDate
           properties:
             - name: import
               value: java.time.LocalDate
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
       - name: selfMedication
         properties:
+          - name: nullable
+            value: false
           - name: editor-position
             value: 6
         type:
@@ -927,10 +980,10 @@ classes:
         properties:
           - name: nullable
             value: false
-          - name: editor-position
-            value: 2
           - name: duplicate-check
             value: true
+          - name: editor-position
+            value: 2
         type:
           name: LocalTime
           properties:
@@ -941,16 +994,14 @@ classes:
         properties:
           - name: nullable
             value: false
-          - name: nullable
-            value: false
-          - name: editor-min
-            value: -1000
-          - name: editor-position
-            value: 5
-          - name: editor-fraction-digits
-            value: 1
           - name: duplicate-check
             value: true
+          - name: editor-fraction-digits
+            value: 1
+          - name: editor-min
+            value: '-1000'
+          - name: editor-position
+            value: 5
         type:
           name: BigDecimal
           properties:
@@ -965,28 +1016,6 @@ classes:
       - name: order
         value: timeOfIntake DESC
     attributes:
-      - name: id
-        properties:
-          - name: nullable
-            value: false
-          - name: id
-            value: true
-        type:
-          name: UUID
-          properties:
-            - name: import
-              value: java.util.UUID
-      - name: endDate
-        properties:
-          - name: nullable
-            value: false
-          - name: editor-position
-            value: 2
-        type:
-          name: LocalDate
-          properties:
-            - name: import
-              value: java.time.LocalDate
       - name: medication
         reference: true
         properties:
@@ -1005,6 +1034,28 @@ classes:
             value: 6
         type:
           name: MedicationUnit
+      - name: endDate
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 2
+        type:
+          name: LocalDate
+          properties:
+            - name: import
+              value: java.time.LocalDate
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
       - name: nextDateOfIntake
         properties:
           - name: nullable
@@ -1018,6 +1069,8 @@ classes:
               value: java.time.LocalDate
       - name: selfMedication
         properties:
+          - name: nullable
+            value: false
           - name: editor-position
             value: 8
         type:
@@ -1057,22 +1110,29 @@ classes:
               value: java.math.BigDecimal
   - name: MedicationProduct
     properties:
-      - name: order
-        value: expirationDate ASC
       - name: gui
         value: true
+      - name: order
+        value: expirationDate ASC
     attributes:
-      - name: id
+      - name: medication
+        reference: true
         properties:
           - name: nullable
             value: false
-          - name: id
-            value: true
+          - name: editor-position
+            value: 2
         type:
-          name: UUID
-          properties:
-            - name: import
-              value: java.util.UUID
+          name: Medication
+      - name: medicationUnit
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 4
+        type:
+          name: MedicationUnit
       - name: expirationDate
         properties:
           - name: nullable
@@ -1084,45 +1144,38 @@ classes:
           properties:
             - name: import
               value: java.time.LocalDate
-      - name: medication
-        reference: true
+      - name: id
         properties:
           - name: nullable
             value: false
-          - name: editor-position
-            value: 2
+          - name: id
+            value: true
         type:
-          name: Medication
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
       - name: packageSize
         properties:
           - name: nullable
             value: false
-          - name: editor-position
-            value: 3
-          - name: editor-min
-            value: 0
           - name: editor-fraction-digits
             value: 1
+          - name: editor-min
+            value: 0
+          - name: editor-position
+            value: 3
         type:
           name: BigDecimal
           properties:
             - name: import
               value: java.math.BigDecimal
-      - name: medicationUnit
-        reference: true
-        properties:
-          - name: nullable
-            value: false
-          - name: editor-position
-            value: 4
-        type:
-          name: MedicationUnit
   - name: MedicationUnit
     properties:
-      - name: order
-        value: name
       - name: gui
         value: true
+      - name: order
+        value: name
     attributes:
       - name: id
         properties:
@@ -1139,12 +1192,15 @@ classes:
         properties:
           - name: nullable
             value: false
-          - name: findable
-            value: true
           - name: editor-position
             value: 1
+          - name: findable
+            value: true
         type:
           name: String
+          properties:
+            - name: length
+              value: 255
       - name: token
         properties:
           - name: nullable
@@ -1153,6 +1209,9 @@ classes:
             value: 2
         type:
           name: String
+          properties:
+            - name: length
+              value: 255
   - name: NutritionCalculationData
     properties:
       - name: suppress-persistence
@@ -1194,27 +1253,28 @@ classes:
         properties:
           - name: nullable
             value: false
-          - name: findable
-            value: true
           - name: editor-position
             value: 1
+          - name: findable
+            value: true
         type:
           name: String
+          properties:
+            - name: length
+              value: 255
       - name: regularMaxCelsius
         default-value: new BigDecimal(37.0)
         properties:
-          - name: editor-position
-            value: 3
-          - name: nullable
-            value: true
-          - name: editor-min
-            value: 30
-          - name: editor-max
-            value: 45
-          - name: editor-step
-            value: 0.1
           - name: editor-fraction-digits
             value: 1
+          - name: editor-max
+            value: 45
+          - name: editor-min
+            value: 30
+          - name: editor-position
+            value: 3
+          - name: editor-step
+            value: 0.1
         type:
           name: BigDecimal
           properties:
@@ -1223,18 +1283,16 @@ classes:
       - name: regularMinCelsius
         default-value: new BigDecimal(37.0)
         properties:
-          - name: editor-position
-            value: 2
-          - name: nullable
-            value: true
-          - name: editor-min
-            value: 30
-          - name: editor-max
-            value: 45
-          - name: editor-step
-            value: 0.1
           - name: editor-fraction-digits
             value: 1
+          - name: editor-max
+            value: 45
+          - name: editor-min
+            value: 30
+          - name: editor-position
+            value: 2
+          - name: editor-step
+            value: 0.1
         type:
           name: BigDecimal
           properties:
@@ -1242,36 +1300,22 @@ classes:
               value: java.math.BigDecimal
   - name: Symptom
     properties:
+      - name: gui
+        value: true
       - name: order
         value: dateOfRecording DESC
       - name: order
         value: description
-      - name: gui
-        value: true
     attributes:
-      - name: id
+      - name: bodyPart
+        reference: true
         properties:
           - name: nullable
             value: false
-          - name: id
-            value: true
-          - name: name-attribute
-            value: true
-        type:
-          name: UUID
-          properties:
-            - name: import
-              value: java.util.UUID
-      - name: description
-        properties:
-          - name: nullable
-            value: false
-          - name: findable
-            value: true
           - name: editor-position
-            value: 2
+            value: 3
         type:
-          name: String
+          name: BodyPart
       - name: dateOfRecording
         properties:
           - name: nullable
@@ -1285,15 +1329,32 @@ classes:
           properties:
             - name: import
               value: java.time.LocalDate
-      - name: bodyPart
-        reference: true
+      - name: description
         properties:
           - name: nullable
             value: false
           - name: editor-position
-            value: 3
+            value: 2
+          - name: findable
+            value: true
         type:
-          name: BodyPart
+          name: String
+          properties:
+            - name: length
+              value: 255
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+          - name: name-attribute
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
       - name: unverified
         properties:
           - name: nullable
@@ -1304,13 +1365,34 @@ classes:
           name: boolean
   - name: WeightMeasurement
     properties:
+      - name: gui
+        value: true
       - name: order
         value: dateOfRecording DESC
       - name: order
         value: timeOfRecording DESC
-      - name: gui
-        value: true
     attributes:
+      - name: comment
+        properties:
+          - name: editor-position
+            value: 99
+        type:
+          name: String
+          properties:
+            - name: length
+              value: 255
+      - name: dateOfRecording
+        default-value: LocalDate.now()
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 1
+        type:
+          name: LocalDate
+          properties:
+            - name: import
+              value: java.time.LocalDate
       - name: id
         properties:
           - name: nullable
@@ -1322,41 +1404,21 @@ classes:
           properties:
             - name: import
               value: java.util.UUID
-      - name: comment
-        properties:
-          - name: editor-position
-            value: 99
-          - name: nullable
-            value: true
-        type:
-          name: String
-      - name: dateOfRecording
-        default-value: LocalDate.now()
-        properties:
-          - name: editor-position
-            value: 1
-          - name: nullable
-            value: false
-        type:
-          name: LocalDate
-          properties:
-            - name: import
-              value: java.time.LocalDate
       - name: kg
         default-value: new BigDecimal(70.0)
         properties:
-          - name: editor-position
-            value: 3
           - name: nullable
             value: false
-          - name: editor-min
-            value: 0
-          - name: editor-max
-            value: 499
-          - name: editor-step
-            value: 0.1
           - name: editor-fraction-digits
             value: 2
+          - name: editor-max
+            value: 499
+          - name: editor-min
+            value: 0
+          - name: editor-position
+            value: 3
+          - name: editor-step
+            value: 0.1
         type:
           name: BigDecimal
           properties:
@@ -1365,10 +1427,10 @@ classes:
       - name: timeOfRecording
         default-value: LocalTime.now()
         properties:
-          - name: editor-position
-            value: 2
           - name: nullable
             value: false
+          - name: editor-position
+            value: 2
         type:
           name: LocalTime
           properties:
@@ -1377,18 +1439,18 @@ classes:
 enums:
   - name: MeatCategory
     identifiers:
-    - FISH
-    - MEAT
+      - FISH
+      - MEAT
   - name: NutritionClass
     identifiers:
-    - OMNIVOR
-    - PESCETARIAN
-    - VEGETARIAN
+      - OMNIVOR
+      - PESCETARIAN
+      - VEGETARIAN
   - name: WhoBloodPressureClassification
     identifiers:
-    - OPTIMAL
-    - NORMAL
-    - HIGH_NORMAL
-    - HYPERTENSION_GRADE_1
-    - HYPERTENSION_GRADE_2
-    - HYPERTENSION_GRADE_3
+      - OPTIMAL
+      - NORMAL
+      - HIGH_NORMAL
+      - HYPERTENSION_GRADE_1
+      - HYPERTENSION_GRADE_2
+      - HYPERTENSION_GRADE_3

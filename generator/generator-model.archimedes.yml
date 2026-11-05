@@ -1,0 +1,349 @@
+title: DIAGRAMMNAME
+views:
+  - name: Main
+    description: Diese Sicht beinhaltet alle Tabellen des Schemas
+    main-view: true
+    show-referenced-columns: true
+    tables:
+      - name: AlcoholConsumption
+        x: 50
+        y: 50
+      - name: AlcoholProduct
+        x: 400
+        y: 50
+      - name: AlcoholType
+        x: 725
+        y: 50
+      - name: BloodPressureMeasurement
+        x: 1075
+        y: 50
+      - name: BodyPart
+        x: 50
+        y: 350
+      - name: BodyTemperatureMeasurement
+        x: 1075
+        y: 750
+      - name: Comment
+        x: 725
+        y: 350
+      - name: CommentType
+        x: 725
+        y: 200
+      - name: Doctor
+        x: 750
+        y: 575
+      - name: DoctorConsultation
+        x: 400
+        y: 575
+      - name: DoctorType
+        x: 750
+        y: 750
+      - name: Exercise
+        x: 400
+        y: 350
+      - name: GeneralBodyPart
+        x: 50
+        y: 525
+      - name: Manufacturer
+        x: 750
+        y: 925
+      - name: MeatConsumption
+        x: 1525
+        y: 1000
+      - name: MeatProduct
+        x: 1525
+        y: 750
+      - name: MeatType
+        x: 1525
+        y: 575
+      - name: Medication
+        x: 400
+        y: 925
+      - name: MedicationLog
+        x: 1075
+        y: 1175
+      - name: MedicationPlan
+        x: 50
+        y: 1175
+      - name: MedicationProduct
+        x: 50
+        y: 925
+      - name: MedicationUnit
+        x: 450
+        y: 1175
+      - name: NutritionCalculationData
+        x: 1075
+        y: 350
+      - name: PointOfMeasurement
+        x: 1075
+        y: 575
+      - name: Symptom
+        x: 50
+        y: 675
+      - name: WeightMeasurement
+        x: 1375
+        y: 350
+    relations:
+      - table: AlcoholConsumption
+        column: alcoholProduct
+        direction-0: RIGHT
+        offset-0: 25
+        direction-1: LEFT
+        offset-1: 25
+      - table: AlcoholProduct
+        column: alcoholType
+        direction-0: RIGHT
+        offset-0: 25
+        direction-1: LEFT
+        offset-1: 25
+      - table: BodyPart
+        column: generalBodyPart
+        direction-0: DOWN
+        offset-0: 25
+        direction-1: UP
+        offset-1: 25
+      - table: BodyTemperatureMeasurement
+        column: pointOfMeasurement
+        direction-0: UP
+        offset-0: 25
+        direction-1: DOWN
+        offset-1: 25
+      - table: Comment
+        column: commentType
+        direction-0: UP
+        offset-0: 25
+        direction-1: DOWN
+        offset-1: 25
+      - table: Doctor
+        column: doctorType
+        direction-0: DOWN
+        offset-0: 25
+        direction-1: UP
+        offset-1: 25
+      - table: DoctorConsultation
+        column: doctor
+        direction-0: RIGHT
+        offset-0: 75
+        direction-1: LEFT
+        offset-1: 75
+      - table: DoctorConsultation
+        column: subsequentAppointmentOf
+        direction-0: RIGHT
+        offset-0: 25
+        direction-1: RIGHT
+        offset-1: 50
+        points:
+          - x: 725
+            y: 600
+          - x: 725
+            y: 625
+      - table: Exercise
+        column: bodyPart
+        direction-0: LEFT
+        offset-0: 25
+        direction-1: RIGHT
+        offset-1: 25
+      - table: MeatConsumption
+        column: meatProduct
+        direction-0: UP
+        offset-0: 25
+        direction-1: DOWN
+        offset-1: 25
+      - table: MeatProduct
+        column: meatType
+        direction-0: UP
+        offset-0: 25
+        direction-1: DOWN
+        offset-1: 25
+      - table: Medication
+        column: manufacturer
+        direction-0: RIGHT
+        offset-0: 25
+        direction-1: LEFT
+        offset-1: 25
+      - table: MedicationLog
+        column: medication
+        direction-0: UP
+        offset-0: 25
+        direction-1: DOWN
+        offset-1: 50
+        points:
+          - x: 1100
+            y: 1125
+          - x: 450
+            y: 1125
+      - table: MedicationLog
+        column: medicationUnit
+        direction-0: LEFT
+        offset-0: 25
+        direction-1: RIGHT
+        offset-1: 25
+      - table: MedicationPlan
+        column: medication
+        direction-0: RIGHT
+        offset-0: 25
+        direction-1: DOWN
+        offset-1: 25
+        points:
+          - x: 425
+            y: 1200
+      - table: MedicationPlan
+        column: medicationUnit
+        direction-0: RIGHT
+        offset-0: 50
+        direction-1: LEFT
+        offset-1: 50
+      - table: MedicationProduct
+        column: medication
+        direction-0: RIGHT
+        offset-0: 25
+        direction-1: LEFT
+        offset-1: 25
+      - table: MedicationProduct
+        column: medicationUnit
+        direction-0: RIGHT
+        offset-0: 50
+        direction-1: UP
+        offset-1: 25
+        points:
+          - x: 375
+            y: 975
+          - x: 375
+            y: 1150
+          - x: 475
+            y: 1150
+      - table: Symptom
+        column: bodyPart
+        direction-0: LEFT
+        offset-0: 25
+        direction-1: LEFT
+        offset-1: 25
+        points:
+          - x: 25
+            y: 700
+          - x: 25
+            y: 375
+tables:
+  - name: AlcoholConsumption
+    background-color: pastell-lila
+    font-color: schwarz
+  - name: AlcoholProduct
+    background-color: pastell-lila
+    font-color: schwarz
+  - name: AlcoholType
+    background-color: pastell-lila
+    font-color: schwarz
+  - name: BloodPressureMeasurement
+    background-color: pastell-rot
+    font-color: schwarz
+  - name: BodyPart
+    background-color: pastell-rot
+    font-color: schwarz
+  - name: BodyTemperatureMeasurement
+    background-color: gelb
+    font-color: schwarz
+  - name: Comment
+    background-color: blaugrau
+    font-color: schwarz
+  - name: CommentType
+    background-color: blaugrau
+    font-color: schwarz
+  - name: Doctor
+    background-color: pastell-blau
+    font-color: schwarz
+  - name: DoctorConsultation
+    background-color: hellblau
+    font-color: schwarz
+  - name: DoctorType
+    background-color: pastell-blau
+    font-color: schwarz
+  - name: Exercise
+    background-color: pastell-lila
+    font-color: schwarz
+  - name: GeneralBodyPart
+    background-color: pastell-rot
+    font-color: schwarz
+  - name: Manufacturer
+    background-color: pastell-gelb
+    font-color: schwarz
+  - name: MeatConsumption
+    background-color: pastell-grün
+    font-color: schwarz
+  - name: MeatProduct
+    background-color: pastell-grün
+    font-color: schwarz
+  - name: MeatType
+    background-color: pastell-grün
+    font-color: schwarz
+  - name: Medication
+    background-color: pastell-gelb
+    font-color: schwarz
+  - name: MedicationLog
+    background-color: gelb
+    font-color: schwarz
+  - name: MedicationPlan
+    background-color: pastell-gelb
+    font-color: schwarz
+  - name: MedicationProduct
+    background-color: pastell-gelb
+    font-color: schwarz
+  - name: MedicationUnit
+    background-color: pastell-gelb
+    font-color: schwarz
+  - name: NutritionCalculationData
+    background-color: hellgrau
+    font-color: schwarz
+  - name: PointOfMeasurement
+    background-color: goldgelb
+    font-color: schwarz
+  - name: Symptom
+    background-color: pastell-rot
+    font-color: schwarz
+  - name: WeightMeasurement
+    background-color: goldgelb
+    font-color: schwarz
+colors:
+  - name: pastell-lila
+    red: 244
+    green: 211
+    blue: 255
+  - name: schwarz
+    red: 0
+    green: 0
+    blue: 0
+  - name: pastell-rot
+    red: 244
+    green: 165
+    blue: 191
+  - name: gelb
+    red: 255
+    green: 255
+    blue: 0
+  - name: blaugrau
+    red: 175
+    green: 212
+    blue: 221
+  - name: pastell-blau
+    red: 211
+    green: 247
+    blue: 255
+  - name: hellblau
+    red: 191
+    green: 212
+    blue: 255
+  - name: pastell-gelb
+    red: 255
+    green: 245
+    blue: 186
+  - name: pastell-grün
+    red: 211
+    green: 255
+    blue: 234
+  - name: hellgrau
+    red: 192
+    green: 192
+    blue: 192
+  - name: goldgelb
+    red: 255
+    green: 225
+    blue: 0
