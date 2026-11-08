@@ -80,7 +80,7 @@ public class WeightMeasurementSelectJPanel
 			.setId(UUID.randomUUID())
 			.setComment("")
 			.setDateOfRecording(LocalDate.now())
-			.setKg(new BigDecimal(70.0))
+			.setKg(new BigDecimal(weightMeasurementService.getWeightAverage()))
 			.setTimeOfRecording(LocalTime.now());
 	}
 

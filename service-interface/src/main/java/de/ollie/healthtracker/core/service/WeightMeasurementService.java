@@ -30,4 +30,6 @@ public interface WeightMeasurementService {
 	List<WeightMeasurement> listWeightMeasurements();
 
 	WeightMeasurement updateWeightMeasurement(WeightMeasurement toSave);
+
+	double getWeightAverage();
 }

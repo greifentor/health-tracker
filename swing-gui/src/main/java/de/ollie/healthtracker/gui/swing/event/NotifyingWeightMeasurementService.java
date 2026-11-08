@@ -60,4 +60,9 @@ public class NotifyingWeightMeasurementService implements WeightMeasurementServi
 		changeNotifier.notifyChanged();
 		return saved;
 	}
+
+	@Override
+	public double getWeightAverage() {
+		return delegate.getWeightAverage();
+	}
 }
