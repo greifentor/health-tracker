@@ -3,6 +3,7 @@ package de.ollie.healthtracker.print.jasper;
 import de.ollie.healthtracker.core.service.AlcoholConsumptionService;
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.BodyTemperatureMeasurementHistoryService;
+import de.ollie.healthtracker.core.service.LongTermSymptomService;
 import de.ollie.healthtracker.core.service.MeatConsumptionHistoryService;
 import de.ollie.healthtracker.core.service.MedicationLogService;
 import de.ollie.healthtracker.core.service.MedicationPlanService;
@@ -50,6 +51,7 @@ class DailyHealthReportDataCollector {
 	private final AlcoholConsumptionService alcoholConsumptionService;
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final BodyTemperatureMeasurementHistoryService bodyTemperatureMeasurementHistoryService;
+	private final LongTermSymptomService longTermSymptomService;
 	private final MeatConsumptionHistoryService meatConsumptionHistoryService;
 	private final MedicationLogService medicationLogService;
 	private final MedicationPlanService medicationPlanService;
@@ -115,6 +117,20 @@ class DailyHealthReportDataCollector {
 				DayData day = dayFor(dataPerDay, symptom.getDateOfRecording(), from, to);
 				if (day != null) {
 					day.symptoms.add(symptom.getDescription());
+				}
+			});
+		longTermSymptomService
+			.listLongTermSymptoms()
+			.forEach(longTermSymptom -> {
+				LocalDate symptomStart = longTermSymptom.getStartDate() == null ? from : longTermSymptom.getStartDate();
+				LocalDate symptomEnd = longTermSymptom.getEndDate() == null ? to : longTermSymptom.getEndDate();
+				LocalDate rangeStart = symptomStart.isBefore(from) ? from : symptomStart;
+				LocalDate rangeEnd = symptomEnd.isAfter(to) ? to : symptomEnd;
+				for (LocalDate date = rangeStart; !date.isAfter(rangeEnd); date = date.plusDays(1)) {
+					DayData day = dayFor(dataPerDay, date, from, to);
+					if (day != null) {
+						day.symptoms.add(longTermSymptom.getDescription());
+					}
 				}
 			});
 		meatConsumptionHistoryService

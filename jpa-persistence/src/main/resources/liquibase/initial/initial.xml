@@ -623,4 +623,32 @@
         <addForeignKeyConstraint constraintName="FK_MEDICATION_PRODUCT_MEDICATION_TO_MEDICATION" baseColumnNames="MEDICATION" baseTableName="MEDICATION_PRODUCT" referencedColumnNames="ID" referencedTableName="MEDICATION"/>
         <addForeignKeyConstraint constraintName="FK_MEDICATION_PRODUCT_MEDICATION_UNIT_TO_MEDICATION_UNIT" baseColumnNames="MEDICATION_UNIT" baseTableName="MEDICATION_PRODUCT" referencedColumnNames="ID" referencedTableName="MEDICATION_UNIT"/>
     </changeSet>
+    <changeSet author="ollie" id="Drop-Partial-LONG_TERM_SYMPTOM" objectQuotingStrategy="LEGACY">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="LONG_TERM_SYMPTOM"/>
+        </preConditions>
+        <dropTable tableName="LONG_TERM_SYMPTOM"/>
+    </changeSet>
+    <changeSet author="ollie" id="Add-Table-LONG_TERM_SYMPTOM" objectQuotingStrategy="LEGACY" runOnChange="true">
+        <createTable tableName="LONG_TERM_SYMPTOM">
+            <column name="ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="START_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="END_DATE" type="DATE"/>
+            <column name="BODY_PART" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UNVERIFIED" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="ID" tableName="LONG_TERM_SYMPTOM"/>
+        <addForeignKeyConstraint constraintName="FK_LONG_TERM_SYMPTOM_BODY_PART_TO_BODY_PART" baseColumnNames="BODY_PART" baseTableName="LONG_TERM_SYMPTOM" referencedColumnNames="ID" referencedTableName="BODY_PART"/>
+    </changeSet>
 </databaseChangeLog>

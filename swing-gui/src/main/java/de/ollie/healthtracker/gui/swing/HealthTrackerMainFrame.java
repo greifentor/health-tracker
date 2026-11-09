@@ -16,6 +16,7 @@ import de.ollie.healthtracker.core.service.DoctorService;
 import de.ollie.healthtracker.core.service.DoctorTypeService;
 import de.ollie.healthtracker.core.service.ExerciseService;
 import de.ollie.healthtracker.core.service.GeneralBodyPartService;
+import de.ollie.healthtracker.core.service.LongTermSymptomService;
 import de.ollie.healthtracker.core.service.ManufacturerService;
 import de.ollie.healthtracker.core.service.MeatConsumptionService;
 import de.ollie.healthtracker.core.service.MeatProductService;
@@ -85,6 +86,7 @@ import de.ollie.healthtracker.gui.swing.select.doctorconsultation.DoctorConsulta
 import de.ollie.healthtracker.gui.swing.select.doctortype.DoctorTypeSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.exercise.ExerciseSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.generalbodypart.GeneralBodyPartSelectJInternalFrame;
+import de.ollie.healthtracker.gui.swing.select.longtermsymptom.LongTermSymptomSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.manufacturer.ManufacturerSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.meatconsumption.MeatConsumptionSelectJInternalFrame;
 import de.ollie.healthtracker.gui.swing.select.meatproduct.MeatProductSelectJInternalFrame;
@@ -173,6 +175,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private final ExternalPdfViewerStarter externalPdfViewerStarter;
 	private final GeneralBodyPartService generalBodyPartService;
 	private final InternalFrameBoundsManager internalFrameBoundsManager;
+	private final LongTermSymptomService longTermSymptomService;
 	private final ManufacturerService manufacturerService;
 	private final MeatConsumptionChangeNotifier meatConsumptionChangeNotifier;
 	private final MeatConsumptionService meatConsumptionService;
@@ -224,6 +227,7 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 	private JMenuItem menuItemEditMedicationUnit;
 	private JMenuItem menuItemEditWeightMeasurement;
 	private JMenuItem menuItemEditPointOfMeasurement;
+	private JMenuItem menuItemEditLongTermSymptom;
 	private JMenuItem menuItemEditSymptom;
 	private JMenuItem menuItemFilePrintBPM;
 	private JMenuItem menuItemFilePrintBloodPressureLast30Days;
@@ -484,6 +488,8 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 		menu.add(menuItemEditComment);
 		menuItemEditCommentType = createMenuItem("Comment Type", this);
 		menu.add(menuItemEditCommentType);
+		menuItemEditLongTermSymptom = createMenuItem("Long Term Symptom", this);
+		menu.add(menuItemEditLongTermSymptom);
 		menuItemEditSymptom = createMenuItem("Symptom", this);
 		menu.add(menuItemEditSymptom);
 		menuItemEditWeightMeasurement = createMenuItem("Weight Measurement", this);
@@ -723,6 +729,13 @@ public class HealthTrackerMainFrame extends JFrame implements ActionListener {
 			new MedicationUnitSelectJInternalFrame(medicationUnitService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditPointOfMeasurement) {
 			new PointOfMeasurementSelectJInternalFrame(pointOfMeasurementService, desktopPane, editDialogComponentFactory);
+		} else if (e.getSource() == menuItemEditLongTermSymptom) {
+			new LongTermSymptomSelectJInternalFrame(
+				longTermSymptomService,
+				bodyPartService,
+				desktopPane,
+				editDialogComponentFactory
+			);
 		} else if (e.getSource() == menuItemEditSymptom) {
 			new SymptomSelectJInternalFrame(symptomService, bodyPartService, desktopPane, editDialogComponentFactory);
 		} else if (e.getSource() == menuItemEditWeightMeasurement) {

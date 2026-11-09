@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import de.ollie.healthtracker.core.service.AlcoholConsumptionService;
 import de.ollie.healthtracker.core.service.BloodPressureMeasurementService;
 import de.ollie.healthtracker.core.service.BodyTemperatureMeasurementHistoryService;
+import de.ollie.healthtracker.core.service.LongTermSymptomService;
 import de.ollie.healthtracker.core.service.MeatConsumptionHistoryService;
 import de.ollie.healthtracker.core.service.MedicationLogService;
 import de.ollie.healthtracker.core.service.MedicationPlanService;
@@ -18,6 +19,7 @@ import de.ollie.healthtracker.core.service.WeightMeasurementHistoryService;
 import de.ollie.healthtracker.core.service.model.AlcoholConsumption;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BodyTemperatureMeasurement;
+import de.ollie.healthtracker.core.service.model.LongTermSymptom;
 import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.MeatConsumption;
 import de.ollie.healthtracker.core.service.model.MeatProduct;
@@ -63,6 +65,9 @@ class DailyHealthReportDataCollectorTest {
 	private BodyTemperatureMeasurementHistoryService bodyTemperatureMeasurementHistoryService;
 
 	@Mock
+	private LongTermSymptomService longTermSymptomService;
+
+	@Mock
 	private MeatConsumptionHistoryService meatConsumptionHistoryService;
 
 	@Mock
@@ -93,6 +98,7 @@ class DailyHealthReportDataCollectorTest {
 		when(medicationLogService.listMedicationLogs()).thenReturn(List.of());
 		when(medicationPlanService.listMedicationPlans()).thenReturn(List.of());
 		when(symptomService.listSymptoms()).thenReturn(List.of());
+		when(longTermSymptomService.listLongTermSymptoms()).thenReturn(List.of());
 		when(meatConsumptionHistoryService.findAllOfLastDays(anyInt())).thenReturn(List.of());
 		when(alcoholConsumptionService.listAlcoholConsumptions()).thenReturn(List.of());
 	}
@@ -284,6 +290,17 @@ class DailyHealthReportDataCollectorTest {
 		DailyHealthReportPO result = firstRow();
 		// Check
 		assertEquals("Kopfschmerz", result.getSymptoms());
+	}
+
+	@Test
+	void includesLongTermSymptomsActiveOnTheDay() {
+		// Prepare
+		when(longTermSymptomService.listLongTermSymptoms())
+			.thenReturn(List.of(new LongTermSymptom().setStartDate(DAY).setEndDate(DAY).setDescription("Rückenschmerz")));
+		// Run
+		DailyHealthReportPO result = firstRow();
+		// Check
+		assertEquals("Rückenschmerz", result.getSymptoms());
 	}
 
 	@Test

@@ -678,6 +678,74 @@ classes:
           properties:
             - name: length
               value: 255
+  - name: LongTermSymptom
+    properties:
+      - name: gui
+        value: true
+      - name: order
+        value: startDate DESC
+    attributes:
+      - name: bodyPart
+        reference: true
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 3
+        type:
+          name: BodyPart
+      - name: description
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 4
+          - name: findable
+            value: true
+        type:
+          name: String
+          properties:
+            - name: length
+              value: 255
+      - name: endDate
+        properties:
+          - name: editor-position
+            value: 2
+        type:
+          name: LocalDate
+          properties:
+            - name: import
+              value: java.time.LocalDate
+      - name: id
+        properties:
+          - name: nullable
+            value: false
+          - name: id
+            value: true
+        type:
+          name: UUID
+          properties:
+            - name: import
+              value: java.util.UUID
+      - name: startDate
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 1
+        type:
+          name: LocalDate
+          properties:
+            - name: import
+              value: java.time.LocalDate
+      - name: unverified
+        properties:
+          - name: nullable
+            value: false
+          - name: editor-position
+            value: 5
+        type:
+          name: boolean
   - name: Manufacturer
     properties:
       - name: gui
