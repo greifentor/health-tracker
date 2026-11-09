@@ -24,11 +24,11 @@ views:
         x: 1075
         y: 750
       - name: Comment
-        x: 725
-        y: 350
+        x: 1525
+        y: 1275
       - name: CommentType
-        x: 725
-        y: 200
+        x: 1525
+        y: 1100
       - name: Doctor
         x: 750
         y: 575
@@ -44,24 +44,27 @@ views:
       - name: GeneralBodyPart
         x: 50
         y: 525
+      - name: LongTermSymptom
+        x: 750
+        y: 300
       - name: Manufacturer
         x: 750
         y: 925
       - name: MeatConsumption
         x: 1525
-        y: 1000
+        y: 825
       - name: MeatProduct
         x: 1525
-        y: 750
+        y: 575
       - name: MeatType
         x: 1525
-        y: 575
+        y: 350
       - name: Medication
         x: 400
         y: 925
       - name: MedicationLog
         x: 1075
-        y: 1175
+        y: 1100
       - name: MedicationPlan
         x: 50
         y: 1175
@@ -72,8 +75,8 @@ views:
         x: 450
         y: 1175
       - name: NutritionCalculationData
-        x: 1075
-        y: 350
+        x: 1800
+        y: 50
       - name: PointOfMeasurement
         x: 1075
         y: 575
@@ -81,7 +84,7 @@ views:
         x: 50
         y: 675
       - name: WeightMeasurement
-        x: 1375
+        x: 1075
         y: 350
     relations:
       - table: AlcoholConsumption
@@ -143,6 +146,15 @@ views:
         offset-0: 25
         direction-1: RIGHT
         offset-1: 25
+      - table: LongTermSymptom
+        column: bodyPart
+        direction-0: LEFT
+        offset-0: 25
+        direction-1: UP
+        offset-1: 25
+        points:
+          - x: 75
+            y: 325
       - table: MeatConsumption
         column: meatProduct
         direction-0: UP
@@ -163,19 +175,17 @@ views:
         offset-1: 25
       - table: MedicationLog
         column: medication
-        direction-0: UP
+        direction-0: LEFT
         offset-0: 25
         direction-1: DOWN
         offset-1: 50
         points:
-          - x: 1100
-            y: 1125
           - x: 450
             y: 1125
       - table: MedicationLog
         column: medicationUnit
         direction-0: LEFT
-        offset-0: 25
+        offset-0: 100
         direction-1: RIGHT
         offset-1: 25
       - table: MedicationPlan
@@ -261,6 +271,9 @@ tables:
     background-color: pastell-lila
     font-color: schwarz
   - name: GeneralBodyPart
+    background-color: pastell-rot
+    font-color: schwarz
+  - name: LongTermSymptom
     background-color: pastell-rot
     font-color: schwarz
   - name: Manufacturer

@@ -18,6 +18,7 @@ import de.ollie.healthtracker.persistence.jpa.dbo.DoctorDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.DoctorTypeDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ExerciseDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.GeneralBodyPartDbo;
+import de.ollie.healthtracker.persistence.jpa.dbo.LongTermSymptomDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.ManufacturerDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MeatCategoryDbo;
 import de.ollie.healthtracker.persistence.jpa.dbo.MeatConsumptionDbo;
@@ -263,6 +264,29 @@ class DboFactory {
 		ensure(name != null, "name cannot be null!");
 		ensure(!name.isBlank(), "name cannot be blank!");
 		return new GeneralBodyPartDbo().setId(uuidFactory.create()).setName(name);
+	}
+
+	LongTermSymptomDbo createLongTermSymptom(
+		LocalDate startDate,
+		LocalDate endDate,
+		UUID bodyPartId,
+		String description,
+		boolean unverified
+	) {
+		ensure(startDate != null, "start date cannot be null!");
+		ensure(bodyPartId != null, "body part id cannot be null!");
+		ensure(description != null, "description cannot be null!");
+		ensure(!description.isBlank(), "description cannot be blank!");
+		BodyPartDbo bodyPart = bodyPartRepository
+			.findById(bodyPartId)
+			.orElseThrow(() -> new NoSuchElementException("no body part found with id: " + bodyPartId));
+		return new LongTermSymptomDbo()
+			.setId(uuidFactory.create())
+			.setStartDate(startDate)
+			.setEndDate(endDate)
+			.setBodyPart(bodyPart)
+			.setDescription(description)
+			.setUnverified(unverified);
 	}
 
 	ManufacturerDbo createManufacturer(String name) {

@@ -4,4 +4,4 @@ java ^
 -Dspring.datasource.username=sa ^
 -Dspring.datasource.password= ^
 -Dlogging.level.root=INFO ^
--jar swing-gui/target/health-tracker-swing-gui-1.9.0.jar
+-jar swing-gui/target/health-tracker-swing-gui-1.10.0.jar
