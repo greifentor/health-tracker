@@ -18,6 +18,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
 @Named
@@ -37,11 +40,11 @@ class MedicationScheduleDataCollector {
 	private final MedicationPlanService medicationPlanService;
 
 	List<MedicationScheduleItemPO> collect(LocalDate from, LocalDate to) {
-		List<Row> rows = new ArrayList<>();
 		List<Interval> mergeableIntervals = new ArrayList<>();
+		List<Row> rows = new ArrayList<>();
 		collectPlans(from, to, rows, mergeableIntervals);
 		collectLogs(from, to, mergeableIntervals);
-		rows.addAll(consolidate(mergeableIntervals));
+		rows.addAll(combineByPeriod(mergePerTime(mergeableIntervals)));
 		return rows.stream().sorted(ROW_ORDER).map(Row::po).toList();
 	}
 
@@ -105,18 +108,18 @@ class MedicationScheduleDataCollector {
 		return new MergeKey(medicationName(medication), manufacturerName(medication), formatDosage(count, unit), time);
 	}
 
-	private List<Row> consolidate(List<Interval> intervals) {
+	private List<SubRegimen> mergePerTime(List<Interval> intervals) {
 		Map<MergeKey, List<Interval>> intervalsByKey = new LinkedHashMap<>();
 		intervals.forEach(interval -> intervalsByKey.computeIfAbsent(interval.key(), key -> new ArrayList<>()).add(interval)
 		);
-		List<Row> rows = new ArrayList<>();
-		intervalsByKey.forEach((key, group) -> rows.addAll(mergeGroup(key, group)));
-		return rows;
+		List<SubRegimen> subRegimens = new ArrayList<>();
+		intervalsByKey.forEach((key, group) -> subRegimens.addAll(mergeContiguousDays(key, group)));
+		return subRegimens;
 	}
 
-	private List<Row> mergeGroup(MergeKey key, List<Interval> group) {
+	private List<SubRegimen> mergeContiguousDays(MergeKey key, List<Interval> group) {
 		group.sort(Comparator.comparing(Interval::start));
-		List<Row> rows = new ArrayList<>();
+		List<SubRegimen> subRegimens = new ArrayList<>();
 		LocalDate start = null;
 		LocalDate end = null;
 		boolean containsPlan = false;
@@ -129,16 +132,16 @@ class MedicationScheduleDataCollector {
 				end = laterOf(end, interval.end());
 				containsPlan = containsPlan || interval.fromPlan();
 			} else {
-				rows.add(toRow(key, start, end, containsPlan));
+				subRegimens.add(toSubRegimen(key, start, end, containsPlan));
 				start = interval.start();
 				end = interval.end();
 				containsPlan = interval.fromPlan();
 			}
 		}
 		if (start != null) {
-			rows.add(toRow(key, start, end, containsPlan));
+			subRegimens.add(toSubRegimen(key, start, end, containsPlan));
 		}
-		return rows;
+		return subRegimens;
 	}
 
 	private boolean isContiguous(LocalDate currentEnd, LocalDate nextStart) {
@@ -149,15 +152,71 @@ class MedicationScheduleDataCollector {
 		return second.isAfter(first) ? second : first;
 	}
 
-	private Row toRow(MergeKey key, LocalDate start, LocalDate end, boolean containsPlan) {
+	private SubRegimen toSubRegimen(MergeKey key, LocalDate start, LocalDate end, boolean containsPlan) {
+		return new SubRegimen(key.medication(), key.manufacturer(), key.dosage(), start, end, key.time(), containsPlan);
+	}
+
+	private List<Row> combineByPeriod(List<SubRegimen> subRegimens) {
+		Map<RangeKey, List<SubRegimen>> subRegimensByRange = new LinkedHashMap<>();
+		subRegimens.forEach(subRegimen ->
+			subRegimensByRange.computeIfAbsent(rangeKey(subRegimen), key -> new ArrayList<>()).add(subRegimen)
+		);
+		List<Row> rows = new ArrayList<>();
+		subRegimensByRange.forEach((range, group) -> rows.addAll(toRows(range, group)));
+		return rows;
+	}
+
+	private RangeKey rangeKey(SubRegimen subRegimen) {
+		return new RangeKey(
+			subRegimen.medication(),
+			subRegimen.manufacturer(),
+			subRegimen.dosage(),
+			subRegimen.start(),
+			subRegimen.end()
+		);
+	}
+
+	private List<Row> toRows(RangeKey range, List<SubRegimen> group) {
+		List<Row> rows = new ArrayList<>();
+		if (group.stream().anyMatch(SubRegimen::containsPlan)) {
+			rows.add(toPlanRow(range, planTimes(group)));
+		}
+		group
+			.stream()
+			.filter(subRegimen -> !subRegimen.containsPlan())
+			.forEach(subRegimen -> rows.add(toLogRow(range, subRegimen.time())));
+		return rows;
+	}
+
+	private TreeSet<LocalTime> planTimes(List<SubRegimen> group) {
+		return group
+			.stream()
+			.filter(SubRegimen::containsPlan)
+			.map(SubRegimen::time)
+			.filter(Objects::nonNull)
+			.collect(Collectors.toCollection(TreeSet::new));
+	}
+
+	private Row toPlanRow(RangeKey range, TreeSet<LocalTime> times) {
 		MedicationScheduleItemPO po = new MedicationScheduleItemPO()
-			.setMedication(key.medication())
-			.setManufacturer(key.manufacturer())
-			.setPeriod(formatRange(start, end))
-			.setFrequency(frequency(containsPlan, start, end))
-			.setDosage(key.dosage())
-			.setTime(formatTime(key.time()));
-		return new Row(key.medication(), start, key.time(), po);
+			.setMedication(range.medication())
+			.setManufacturer(range.manufacturer())
+			.setPeriod(formatRange(range.start(), range.end()))
+			.setFrequency(dailyFrequency(Math.max(times.size(), 1)))
+			.setDosage(range.dosage())
+			.setTime(formatTimes(times));
+		return new Row(range.medication(), range.start(), times.isEmpty() ? null : times.first(), po);
+	}
+
+	private Row toLogRow(RangeKey range, LocalTime time) {
+		MedicationScheduleItemPO po = new MedicationScheduleItemPO()
+			.setMedication(range.medication())
+			.setManufacturer(range.manufacturer())
+			.setPeriod(formatRange(range.start(), range.end()))
+			.setFrequency(isSingleDay(range.start(), range.end()) ? "einmalig" : "1x täglich")
+			.setDosage(range.dosage())
+			.setTime(formatTimes(timeSet(time)));
+		return new Row(range.medication(), range.start(), time, po);
 	}
 
 	private Row toOpenPlanRow(MedicationPlan plan) {
@@ -165,14 +224,18 @@ class MedicationScheduleDataCollector {
 			.setMedication(medicationName(plan.getMedication()))
 			.setManufacturer(manufacturerName(plan.getMedication()))
 			.setPeriod(formatPeriod(plan.getStartDate(), plan.getEndDate()))
-			.setFrequency("1x täglich")
+			.setFrequency(dailyFrequency(1))
 			.setDosage(formatDosage(plan.getUnitCount(), plan.getMedicationUnit()))
-			.setTime(formatTime(plan.getTimeOfIntake()));
+			.setTime(formatTimes(timeSet(plan.getTimeOfIntake())));
 		return new Row(po.getMedication(), plan.getStartDate(), plan.getTimeOfIntake(), po);
 	}
 
-	private String frequency(boolean containsPlan, LocalDate start, LocalDate end) {
-		return (containsPlan || !start.equals(end)) ? "1x täglich" : "einmalig";
+	private String dailyFrequency(int timesPerDay) {
+		return timesPerDay + "x täglich";
+	}
+
+	private boolean isSingleDay(LocalDate start, LocalDate end) {
+		return start.equals(end);
 	}
 
 	private String medicationName(Medication medication) {
@@ -213,8 +276,19 @@ class MedicationScheduleDataCollector {
 		return date == null ? "-" : date.format(GERMAN_DATE);
 	}
 
-	private String formatTime(LocalTime time) {
-		return time == null ? "-" : "um " + time.format(GERMAN_TIME) + " Uhr";
+	private TreeSet<LocalTime> timeSet(LocalTime time) {
+		TreeSet<LocalTime> times = new TreeSet<>();
+		if (time != null) {
+			times.add(time);
+		}
+		return times;
+	}
+
+	private String formatTimes(TreeSet<LocalTime> times) {
+		if (times.isEmpty()) {
+			return "-";
+		}
+		return "um " + times.stream().map(GERMAN_TIME::format).collect(Collectors.joining(", ")) + " Uhr";
 	}
 
 	private String formatDosage(BigDecimal count, MedicationUnit unit) {
@@ -236,6 +310,18 @@ class MedicationScheduleDataCollector {
 	private record MergeKey(String medication, String manufacturer, String dosage, LocalTime time) {}
 
 	private record Interval(MergeKey key, LocalDate start, LocalDate end, boolean fromPlan) {}
+
+	private record SubRegimen(
+		String medication,
+		String manufacturer,
+		String dosage,
+		LocalDate start,
+		LocalDate end,
+		LocalTime time,
+		boolean containsPlan
+	) {}
+
+	private record RangeKey(String medication, String manufacturer, String dosage, LocalDate start, LocalDate end) {}
 
 	private record Row(String name, LocalDate start, LocalTime time, MedicationScheduleItemPO po) {}
 }

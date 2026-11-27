@@ -261,19 +261,66 @@ class MedicationScheduleDataCollectorTest {
 	}
 
 	@Test
-	void keepsDifferentIntakeTimesOfOneMedicationAsSeparateEntries() {
+	void combinesTwoPlanTimesOfTheSamePeriodIntoOneEntry() {
 		// Prepare
 		when(medicationPlanService.listMedicationPlans())
 			.thenReturn(
 				List.of(
-					plan("Nasenspray", DAY, DAY.plusDays(2), LocalTime.of(8, 30), "1.0"),
-					plan("Nasenspray", DAY, DAY.plusDays(2), LocalTime.of(20, 0), "1.0")
+					plan("Nasenspray", DAY, DAY.plusDays(2), LocalTime.of(10, 0), "1.0"),
+					plan("Nasenspray", DAY, DAY.plusDays(2), LocalTime.of(22, 0), "1.0")
 				)
 			);
+		MedicationScheduleItemPO expected = new MedicationScheduleItemPO()
+			.setMedication("Nasenspray")
+			.setManufacturer("Ratiopharm")
+			.setPeriod(DAY.format(GERMAN_DATE) + " - " + DAY.plusDays(2).format(GERMAN_DATE))
+			.setFrequency("2x täglich")
+			.setDosage("1 Tablette")
+			.setTime("um 10:00, 22:00 Uhr");
 		// Run
 		List<MedicationScheduleItemPO> result = unitUnderTest.collect(FROM, TO);
 		// Check
-		assertEquals(2, result.size());
+		assertEquals(List.of(expected), result);
+	}
+
+	@Test
+	void combinesTwoPlanTimesWithTheirMatchingAdjoiningLogsAndKeepsTheUnmatchedLogSeparate() {
+		// Prepare
+		LocalDate start = TO.minusDays(20);
+		LocalDate end = TO.minusDays(1);
+		when(medicationPlanService.listMedicationPlans())
+			.thenReturn(
+				List.of(
+					plan("Nasenspray", start, end, LocalTime.of(10, 0), "1.0"),
+					plan("Nasenspray", start, end, LocalTime.of(22, 0), "1.0")
+				)
+			);
+		when(medicationLogService.listMedicationLogs())
+			.thenReturn(
+				List.of(
+					log("Nasenspray", end.plusDays(1), LocalTime.of(18, 0), "1.0"),
+					log("Nasenspray", start.minusDays(1), LocalTime.of(10, 0), "1.0"),
+					log("Nasenspray", start.minusDays(1), LocalTime.of(22, 0), "1.0")
+				)
+			);
+		MedicationScheduleItemPO combined = new MedicationScheduleItemPO()
+			.setMedication("Nasenspray")
+			.setManufacturer("Ratiopharm")
+			.setPeriod(start.minusDays(1).format(GERMAN_DATE) + " - " + end.format(GERMAN_DATE))
+			.setFrequency("2x täglich")
+			.setDosage("1 Tablette")
+			.setTime("um 10:00, 22:00 Uhr");
+		MedicationScheduleItemPO standalone = new MedicationScheduleItemPO()
+			.setMedication("Nasenspray")
+			.setManufacturer("Ratiopharm")
+			.setPeriod(end.plusDays(1).format(GERMAN_DATE))
+			.setFrequency("einmalig")
+			.setDosage("1 Tablette")
+			.setTime("um 18:00 Uhr");
+		// Run
+		List<MedicationScheduleItemPO> result = unitUnderTest.collect(FROM, TO);
+		// Check
+		assertEquals(List.of(combined, standalone), result);
 	}
 
 	@Test
