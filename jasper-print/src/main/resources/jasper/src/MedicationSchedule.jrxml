@@ -31,42 +31,42 @@
 	<columnHeader>
 		<band height="18" splitType="Prevent">
 			<textField>
-				<reportElement x="0" y="0" width="105" height="14" uuid="3d8f0b20-0000-0000-0000-000000000210"/>
+				<reportElement x="0" y="0" width="100" height="14" uuid="3d8f0b20-0000-0000-0000-000000000210"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Medikament"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="105" y="0" width="95" height="14" uuid="3d8f0b20-0000-0000-0000-000000000211"/>
+				<reportElement x="100" y="0" width="85" height="14" uuid="3d8f0b20-0000-0000-0000-000000000211"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Hersteller"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="200" y="0" width="125" height="14" uuid="3d8f0b20-0000-0000-0000-000000000212"/>
+				<reportElement x="185" y="0" width="115" height="14" uuid="3d8f0b20-0000-0000-0000-000000000212"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Zeitraum"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="325" y="0" width="65" height="14" uuid="3d8f0b20-0000-0000-0000-000000000213"/>
+				<reportElement x="300" y="0" width="60" height="14" uuid="3d8f0b20-0000-0000-0000-000000000213"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Häufigkeit"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="390" y="0" width="90" height="14" uuid="3d8f0b20-0000-0000-0000-000000000214"/>
+				<reportElement x="360" y="0" width="75" height="14" uuid="3d8f0b20-0000-0000-0000-000000000214"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Dosis"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="480" y="0" width="75" height="14" uuid="3d8f0b20-0000-0000-0000-000000000215"/>
+				<reportElement x="435" y="0" width="120" height="14" uuid="3d8f0b20-0000-0000-0000-000000000215"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -80,27 +80,27 @@
 	<detail>
 		<band height="16" splitType="Prevent">
 			<textField textAdjust="StretchHeight">
-				<reportElement x="0" y="1" width="105" height="14" uuid="3d8f0b20-0000-0000-0000-000000000220"/>
+				<reportElement x="0" y="1" width="100" height="14" uuid="3d8f0b20-0000-0000-0000-000000000220"/>
 				<textFieldExpression><![CDATA[$F{medication}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight">
-				<reportElement x="105" y="1" width="95" height="14" uuid="3d8f0b20-0000-0000-0000-000000000221"/>
+				<reportElement x="100" y="1" width="85" height="14" uuid="3d8f0b20-0000-0000-0000-000000000221"/>
 				<textFieldExpression><![CDATA[$F{manufacturer}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="200" y="1" width="125" height="14" uuid="3d8f0b20-0000-0000-0000-000000000222"/>
+				<reportElement x="185" y="1" width="115" height="14" uuid="3d8f0b20-0000-0000-0000-000000000222"/>
 				<textFieldExpression><![CDATA[$F{period}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="325" y="1" width="65" height="14" uuid="3d8f0b20-0000-0000-0000-000000000223"/>
+				<reportElement x="300" y="1" width="60" height="14" uuid="3d8f0b20-0000-0000-0000-000000000223"/>
 				<textFieldExpression><![CDATA[$F{frequency}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="390" y="1" width="90" height="14" uuid="3d8f0b20-0000-0000-0000-000000000224"/>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="360" y="1" width="75" height="14" uuid="3d8f0b20-0000-0000-0000-000000000224"/>
 				<textFieldExpression><![CDATA[$F{dosage}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="480" y="1" width="75" height="14" uuid="3d8f0b20-0000-0000-0000-000000000225"/>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="435" y="1" width="120" height="14" uuid="3d8f0b20-0000-0000-0000-000000000225"/>
 				<textFieldExpression><![CDATA[$F{time}]]></textFieldExpression>
 			</textField>
 		</band>
