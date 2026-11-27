@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DoctorConsultations" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenNoDataType="NoDataSection" uuid="5a1c7d30-0000-0000-0000-000000000300">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<parameter name="HEAD_LINE" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Arztbesuche"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="date" class="java.lang.String"/>
+	<field name="time" class="java.lang.String"/>
+	<field name="doctor" class="java.lang.String"/>
+	<field name="reason" class="java.lang.String"/>
+	<field name="result" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="followUp" class="java.lang.Boolean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50">
+			<textField>
+				<reportElement x="0" y="0" width="555" height="30" uuid="5a1c7d30-0000-0000-0000-000000000301"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{HEAD_LINE}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="34" width="555" height="1" uuid="5a1c7d30-0000-0000-0000-000000000302"/>
+			</line>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="18" splitType="Prevent">
+			<textField>
+				<reportElement x="16" y="0" width="64" height="14" uuid="5a1c7d30-0000-0000-0000-000000000310"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Datum"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="82" y="0" width="36" height="14" uuid="5a1c7d30-0000-0000-0000-000000000311"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Zeit"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="120" y="0" width="120" height="14" uuid="5a1c7d30-0000-0000-0000-000000000312"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Arzt"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="242" y="0" width="118" height="14" uuid="5a1c7d30-0000-0000-0000-000000000313"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Grund"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="362" y="0" width="118" height="14" uuid="5a1c7d30-0000-0000-0000-000000000314"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Ergebnis"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="482" y="0" width="73" height="14" uuid="5a1c7d30-0000-0000-0000-000000000315"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Status"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="16" width="555" height="1" uuid="5a1c7d30-0000-0000-0000-000000000316"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Prevent">
+			<textField>
+				<reportElement x="0" y="1" width="14" height="14" uuid="5a1c7d30-0000-0000-0000-000000000320">
+					<printWhenExpression><![CDATA[Boolean.TRUE.equals($F{followUp})]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA["↳"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="16" y="1" width="64" height="14" uuid="5a1c7d30-0000-0000-0000-000000000321"/>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="82" y="1" width="36" height="14" uuid="5a1c7d30-0000-0000-0000-000000000322"/>
+				<textFieldExpression><![CDATA[$F{time}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="120" y="1" width="120" height="14" uuid="5a1c7d30-0000-0000-0000-000000000323"/>
+				<textFieldExpression><![CDATA[$F{doctor}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="242" y="1" width="118" height="14" uuid="5a1c7d30-0000-0000-0000-000000000324"/>
+				<textFieldExpression><![CDATA[$F{reason}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="362" y="1" width="118" height="14" uuid="5a1c7d30-0000-0000-0000-000000000325"/>
+				<textFieldExpression><![CDATA[$F{result}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="482" y="1" width="73" height="14" uuid="5a1c7d30-0000-0000-0000-000000000326"/>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<noData>
+		<band height="16">
+			<textField>
+				<reportElement x="0" y="1" width="555" height="14" uuid="5a1c7d30-0000-0000-0000-000000000330"/>
+				<textFieldExpression><![CDATA["Keine Arztbesuche erfasst."]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
+</jasperReport>
