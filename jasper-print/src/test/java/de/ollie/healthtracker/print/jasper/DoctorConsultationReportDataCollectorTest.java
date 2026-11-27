@@ -83,18 +83,36 @@ class DoctorConsultationReportDataCollectorTest {
 	}
 
 	@Test
-	void ordersFollowUpsOfAPredecessorByDate() {
+	void followsTheChainOfLinkedFollowUpsRegardlessOfTheirDate() {
 		// Prepare
-		DoctorConsultation predecessor = consultation(UUID.randomUUID(), DATE, null);
-		DoctorConsultation laterFollowUp = consultation(UUID.randomUUID(), DATE.plusDays(20), predecessor);
-		DoctorConsultation earlierFollowUp = consultation(UUID.randomUUID(), DATE.plusDays(10), predecessor);
+		DoctorConsultation original = consultation(UUID.randomUUID(), LocalDate.of(2026, 3, 1), null);
+		DoctorConsultation firstFollowUp = consultation(UUID.randomUUID(), LocalDate.of(2026, 3, 5), original);
+		DoctorConsultation secondFollowUp = consultation(UUID.randomUUID(), LocalDate.of(2026, 3, 3), firstFollowUp);
 		when(doctorConsultationService.listDoctorConsultations())
-			.thenReturn(List.of(laterFollowUp, earlierFollowUp, predecessor));
+			.thenReturn(List.of(secondFollowUp, original, firstFollowUp));
 		// Run
 		List<DoctorConsultationItemPO> result = unitUnderTest.collect();
 		// Check
 		assertEquals(
-			List.of("10.03.2026", "20.03.2026", "30.03.2026"),
+			List.of("01.03.2026", "05.03.2026", "03.03.2026"),
+			result.stream().map(DoctorConsultationItemPO::getDate).toList()
+		);
+	}
+
+	@Test
+	void arrangesEachOriginalFollowedByItsChainAndOrdersOriginalsByDate() {
+		// Prepare
+		DoctorConsultation firstOriginal = consultation(UUID.randomUUID(), LocalDate.of(2026, 3, 10), null);
+		DoctorConsultation firstFollowUp = consultation(UUID.randomUUID(), LocalDate.of(2026, 3, 12), firstOriginal);
+		DoctorConsultation secondFollowUp = consultation(UUID.randomUUID(), LocalDate.of(2026, 3, 11), firstFollowUp);
+		DoctorConsultation secondOriginal = consultation(UUID.randomUUID(), LocalDate.of(2026, 3, 5), null);
+		when(doctorConsultationService.listDoctorConsultations())
+			.thenReturn(List.of(secondFollowUp, secondOriginal, firstFollowUp, firstOriginal));
+		// Run
+		List<DoctorConsultationItemPO> result = unitUnderTest.collect();
+		// Check
+		assertEquals(
+			List.of("05.03.2026", "10.03.2026", "12.03.2026", "11.03.2026"),
 			result.stream().map(DoctorConsultationItemPO::getDate).toList()
 		);
 	}
