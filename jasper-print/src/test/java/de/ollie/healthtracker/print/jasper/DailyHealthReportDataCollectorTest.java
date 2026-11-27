@@ -17,6 +17,7 @@ import de.ollie.healthtracker.core.service.NutritionClassCalculationService;
 import de.ollie.healthtracker.core.service.SymptomService;
 import de.ollie.healthtracker.core.service.WeightMeasurementHistoryService;
 import de.ollie.healthtracker.core.service.model.AlcoholConsumption;
+import de.ollie.healthtracker.core.service.model.AlcoholProduct;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.BodyTemperatureMeasurement;
 import de.ollie.healthtracker.core.service.model.LongTermSymptom;
@@ -32,6 +33,7 @@ import de.ollie.healthtracker.core.service.model.NutritionClass;
 import de.ollie.healthtracker.core.service.model.Symptom;
 import de.ollie.healthtracker.core.service.model.WeightMeasurement;
 import de.ollie.healthtracker.print.jasper.po.DailyHealthReportPO;
+import de.ollie.healthtracker.print.jasper.po.MedicationItemPO;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -105,6 +107,10 @@ class DailyHealthReportDataCollectorTest {
 
 	private DailyHealthReportPO firstRow() {
 		return unitUnderTest.collect(FROM, TO).get(0);
+	}
+
+	private List<String> medicationTexts(DailyHealthReportPO row) {
+		return row.getMedications().stream().map(MedicationItemPO::getText).toList();
 	}
 
 	@Test
@@ -204,11 +210,11 @@ class DailyHealthReportDataCollectorTest {
 		// Run
 		DailyHealthReportPO result = firstRow();
 		// Check
-		assertEquals("Aspirin 1 Tbl", result.getMedications());
+		assertEquals(List.of("Aspirin 1 Tbl"), medicationTexts(result));
 	}
 
 	@Test
-	void joinsSeveralMedicationsOfADayWithLineBreaks() {
+	void listsSeveralMedicationsOfADay() {
 		// Prepare
 		when(medicationLogService.listMedicationLogs())
 			.thenReturn(
@@ -228,7 +234,7 @@ class DailyHealthReportDataCollectorTest {
 		// Run
 		DailyHealthReportPO result = firstRow();
 		// Check
-		assertEquals("Aspirin 1 Tbl\nIbuprofen 2 Tbl", result.getMedications());
+		assertEquals(List.of("Aspirin 1 Tbl", "Ibuprofen 2 Tbl"), medicationTexts(result));
 	}
 
 	@Test
@@ -248,7 +254,7 @@ class DailyHealthReportDataCollectorTest {
 		// Run
 		DailyHealthReportPO result = firstRow();
 		// Check
-		assertEquals("Aspirin 1 Tbl", result.getMedications());
+		assertEquals(List.of("Aspirin 1 Tbl"), medicationTexts(result));
 	}
 
 	@Test
@@ -278,7 +284,7 @@ class DailyHealthReportDataCollectorTest {
 		// Run
 		DailyHealthReportPO result = firstRow();
 		// Check
-		assertEquals("Aspirin 2 Tbl", result.getMedications());
+		assertEquals(List.of("Aspirin 2 Tbl"), medicationTexts(result));
 	}
 
 	@Test
@@ -322,14 +328,43 @@ class DailyHealthReportDataCollectorTest {
 	}
 
 	@Test
-	void flagsAlcoholConsumption() {
+	void showsVegetarianWhenNoMeatOrFishWasConsumed() {
 		// Prepare
-		when(alcoholConsumptionService.listAlcoholConsumptions())
-			.thenReturn(List.of(new AlcoholConsumption().setDate(DAY)));
+		when(weightMeasurementHistoryService.findAllOfLastDays(anyInt()))
+			.thenReturn(List.of(new WeightMeasurement().setDateOfRecording(DAY).setKg(BigDecimal.valueOf(80.0))));
 		// Run
 		DailyHealthReportPO result = firstRow();
 		// Check
-		assertTrue(result.isAlcohol());
+		assertEquals("Vegetarisch", result.getNutrition());
+	}
+
+	@Test
+	void showsTheConsumedPureAlcoholOfTheDay() {
+		// Prepare
+		when(alcoholConsumptionService.listAlcoholConsumptions())
+			.thenReturn(
+				List.of(
+					new AlcoholConsumption()
+						.setDate(DAY)
+						.setLiter(BigDecimal.valueOf(0.5))
+						.setAlcoholProduct(new AlcoholProduct().setPercentVol(BigDecimal.valueOf(40.0)))
+				)
+			);
+		// Run
+		DailyHealthReportPO result = firstRow();
+		// Check
+		assertEquals("0,20 l", result.getAlcohol());
+	}
+
+	@Test
+	void showsADashWhenNoAlcoholWasConsumed() {
+		// Prepare
+		when(weightMeasurementHistoryService.findAllOfLastDays(anyInt()))
+			.thenReturn(List.of(new WeightMeasurement().setDateOfRecording(DAY).setKg(BigDecimal.valueOf(80.0))));
+		// Run
+		DailyHealthReportPO result = firstRow();
+		// Check
+		assertEquals("-", result.getAlcohol());
 	}
 
 	@Test

@@ -34,7 +34,7 @@ tmp0/
 /generate-code.sh
 /test.pdf
 
-*/*.jasper
+**/*.jasper
 /start-home.sh
 /bin/
 /start-shell-local.sh

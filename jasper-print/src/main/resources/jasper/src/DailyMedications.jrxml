@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DailyMedications" pageWidth="480" pageHeight="802" columnWidth="235" columnSpacing="10" columnCount="2" printOrder="Horizontal" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" whenNoDataType="NoDataSection" uuid="2c7f9a10-0000-0000-0000-000000000100">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="text" class="java.lang.String"/>
+	<detail>
+		<band height="14" splitType="Prevent">
+			<textField textAdjust="StretchHeight">
+				<reportElement x="0" y="0" width="235" height="14" uuid="2c7f9a10-0000-0000-0000-000000000101"/>
+				<textFieldExpression><![CDATA[$F{text}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<noData>
+		<band height="14">
+			<textField>
+				<reportElement x="0" y="0" width="235" height="14" uuid="2c7f9a10-0000-0000-0000-000000000102"/>
+				<textFieldExpression><![CDATA["-"]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
+</jasperReport>

@@ -10,6 +10,8 @@ import de.ollie.healthtracker.core.service.MedicationPlanService;
 import de.ollie.healthtracker.core.service.NutritionClassCalculationService;
 import de.ollie.healthtracker.core.service.SymptomService;
 import de.ollie.healthtracker.core.service.WeightMeasurementHistoryService;
+import de.ollie.healthtracker.core.service.model.AlcoholConsumption;
+import de.ollie.healthtracker.core.service.model.AlcoholProduct;
 import de.ollie.healthtracker.core.service.model.BloodPressureMeasurement;
 import de.ollie.healthtracker.core.service.model.MeatCategory;
 import de.ollie.healthtracker.core.service.model.Medication;
@@ -17,6 +19,7 @@ import de.ollie.healthtracker.core.service.model.MedicationUnit;
 import de.ollie.healthtracker.core.service.model.NutritionCalculationData;
 import de.ollie.healthtracker.core.service.model.NutritionClass;
 import de.ollie.healthtracker.print.jasper.po.DailyHealthReportPO;
+import de.ollie.healthtracker.print.jasper.po.MedicationItemPO;
 import jakarta.inject.Named;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,7 +32,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -62,7 +64,6 @@ class DailyHealthReportDataCollector {
 	List<DailyHealthReportPO> collect(LocalDate from, LocalDate to) {
 		int days = (int) ChronoUnit.DAYS.between(from, to);
 		Map<LocalDate, DayData> dataPerDay = new TreeMap<>(Comparator.reverseOrder());
-
 		weightMeasurementHistoryService
 			.findAllOfLastDays(days)
 			.forEach(wm -> {
@@ -151,17 +152,16 @@ class DailyHealthReportDataCollector {
 			.forEach(ac -> {
 				DayData day = dayFor(dataPerDay, ac.getDate(), from, to);
 				if (day != null) {
-					day.alcohol = true;
+					day.pureAlcoholLitres += pureAlcoholLitres(ac);
 				}
 			});
-
 		List<DailyHealthReportPO> result = new ArrayList<>();
 		dataPerDay.forEach((date, day) -> result.add(toPO(date, day)));
 		return result;
 	}
 
 	private DayData dayFor(Map<LocalDate, DayData> dataPerDay, LocalDate date, LocalDate from, LocalDate to) {
-		if (date == null || date.isBefore(from) || date.isAfter(to)) {
+		if ((date == null) || date.isBefore(from) || date.isAfter(to)) {
 			return null;
 		}
 		return dataPerDay.computeIfAbsent(date, d -> new DayData());
@@ -174,18 +174,38 @@ class DailyHealthReportDataCollector {
 			.setBodyTemperature(day.temperatureCount > 0 ? format(day.temperatureSum / day.temperatureCount) + " °C" : "-")
 			.setBloodPressure(day.bloodPressure.isEmpty() ? "-" : String.join(" - ", day.bloodPressure))
 			.setMedications(
-				day.medications.isEmpty()
-					? "-"
-					: day.medications.values().stream().map(MedicationAmount::format).sorted().collect(Collectors.joining("\n"))
+				day.medications
+					.values()
+					.stream()
+					.map(MedicationAmount::format)
+					.sorted()
+					.map(text -> new MedicationItemPO().setText(text))
+					.toList()
 			)
 			.setSymptoms(day.symptoms.isEmpty() ? "-" : String.join("\n", day.symptoms.stream().sorted().toList()))
 			.setNutrition(nutritionLabel(day))
-			.setAlcohol(day.alcohol);
+			.setAlcohol(alcoholLabel(day));
+	}
+
+	private String alcoholLabel(DayData day) {
+		if (day.pureAlcoholLitres <= 0) {
+			return "-";
+		}
+		return String.format(Locale.GERMANY, "%.2f l", day.pureAlcoholLitres);
+	}
+
+	private double pureAlcoholLitres(AlcoholConsumption consumption) {
+		BigDecimal liter = consumption.getLiter();
+		AlcoholProduct product = consumption.getAlcoholProduct();
+		if ((liter == null) || (product == null) || (product.getPercentVol() == null)) {
+			return 0;
+		}
+		return liter.multiply(product.getPercentVol()).movePointLeft(2).doubleValue();
 	}
 
 	private String nutritionLabel(DayData day) {
-		if (day.fish == 0 && day.meat == 0) {
-			return "-";
+		if ((day.fish == 0) && (day.meat == 0)) {
+			return "Vegetarisch";
 		}
 		NutritionClass nutritionClass = nutritionClassCalculationService.calculate(
 			new NutritionCalculationData().setFishConsumptionDays(day.fish).setMeatConsumptionDays(day.meat)
@@ -245,7 +265,7 @@ class DailyHealthReportDataCollector {
 		private final List<String> symptoms = new ArrayList<>();
 		private int fish;
 		private int meat;
-		private boolean alcohol;
+		private double pureAlcoholLitres;
 	}
 
 	private static class MedicationAmount {

@@ -1,5 +1,7 @@
 package de.ollie.healthtracker.print.jasper.po;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Data;
 import lombok.Generated;
 import lombok.experimental.Accessors;
@@ -14,8 +16,8 @@ public class DailyHealthReportPO {
 	private String weight;
 	private String bodyTemperature;
 	private String bloodPressure;
-	private String medications;
+	private List<MedicationItemPO> medications = new ArrayList<>();
 	private String symptoms;
 	private String nutrition;
-	private boolean alcohol;
+	private String alcohol;
 }
