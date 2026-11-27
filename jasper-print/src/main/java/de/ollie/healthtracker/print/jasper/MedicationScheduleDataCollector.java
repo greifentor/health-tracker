@@ -12,10 +12,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Stream;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 
 @Named
@@ -26,31 +28,44 @@ class MedicationScheduleDataCollector {
 		.ofPattern("dd.MM.yyyy")
 		.withLocale(Locale.GERMANY);
 	private static final DateTimeFormatter GERMAN_TIME = DateTimeFormatter.ofPattern("HH:mm");
-	private static final Comparator<ScheduleEntry> ORDER = Comparator
-		.comparing(ScheduleEntry::name, String.CASE_INSENSITIVE_ORDER)
-		.thenComparing(ScheduleEntry::date, Comparator.nullsLast(Comparator.naturalOrder()))
-		.thenComparing(ScheduleEntry::time, Comparator.nullsLast(Comparator.naturalOrder()));
+	private static final Comparator<Row> ROW_ORDER = Comparator
+		.comparing(Row::name, String.CASE_INSENSITIVE_ORDER)
+		.thenComparing(Row::start, Comparator.nullsLast(Comparator.naturalOrder()))
+		.thenComparing(Row::time, Comparator.nullsLast(Comparator.naturalOrder()));
 
 	private final MedicationLogService medicationLogService;
 	private final MedicationPlanService medicationPlanService;
 
 	List<MedicationScheduleItemPO> collect(LocalDate from, LocalDate to) {
-		return Stream
-			.concat(
-				medicationPlanService
-					.listMedicationPlans()
-					.stream()
-					.filter(plan -> planIntersectsInterval(plan, from, to))
-					.map(this::toEntry),
-				medicationLogService
-					.listMedicationLogs()
-					.stream()
-					.filter(log -> logFallsIntoInterval(log, from, to))
-					.map(this::toEntry)
-			)
-			.sorted(ORDER)
-			.map(ScheduleEntry::po)
-			.toList();
+		List<Row> rows = new ArrayList<>();
+		List<Interval> mergeableIntervals = new ArrayList<>();
+		collectPlans(from, to, rows, mergeableIntervals);
+		collectLogs(from, to, mergeableIntervals);
+		rows.addAll(consolidate(mergeableIntervals));
+		return rows.stream().sorted(ROW_ORDER).map(Row::po).toList();
+	}
+
+	private void collectPlans(LocalDate from, LocalDate to, List<Row> rows, List<Interval> mergeableIntervals) {
+		medicationPlanService
+			.listMedicationPlans()
+			.stream()
+			.filter(plan -> planIntersectsInterval(plan, from, to))
+			.forEach(plan -> {
+				if (hasConcretePeriod(plan)) {
+					mergeableIntervals.add(toInterval(plan));
+				} else {
+					rows.add(toOpenPlanRow(plan));
+				}
+			});
+	}
+
+	private void collectLogs(LocalDate from, LocalDate to, List<Interval> mergeableIntervals) {
+		medicationLogService
+			.listMedicationLogs()
+			.stream()
+			.filter(log -> logFallsIntoInterval(log, from, to))
+			.map(this::toInterval)
+			.forEach(mergeableIntervals::add);
 	}
 
 	private boolean planIntersectsInterval(MedicationPlan plan, LocalDate from, LocalDate to) {
@@ -64,7 +79,88 @@ class MedicationScheduleDataCollector {
 		return (date != null) && !date.isBefore(from) && !date.isAfter(to);
 	}
 
-	private ScheduleEntry toEntry(MedicationPlan plan) {
+	private boolean hasConcretePeriod(MedicationPlan plan) {
+		return (plan.getStartDate() != null) && (plan.getEndDate() != null);
+	}
+
+	private Interval toInterval(MedicationPlan plan) {
+		return new Interval(
+			mergeKey(plan.getMedication(), plan.getUnitCount(), plan.getMedicationUnit(), plan.getTimeOfIntake()),
+			plan.getStartDate(),
+			plan.getEndDate(),
+			true
+		);
+	}
+
+	private Interval toInterval(MedicationLog log) {
+		return new Interval(
+			mergeKey(log.getMedication(), log.getUnitCount(), log.getMedicationUnit(), log.getTimeOfIntake()),
+			log.getDateOfIntake(),
+			log.getDateOfIntake(),
+			false
+		);
+	}
+
+	private MergeKey mergeKey(Medication medication, BigDecimal count, MedicationUnit unit, LocalTime time) {
+		return new MergeKey(medicationName(medication), manufacturerName(medication), formatDosage(count, unit), time);
+	}
+
+	private List<Row> consolidate(List<Interval> intervals) {
+		Map<MergeKey, List<Interval>> intervalsByKey = new LinkedHashMap<>();
+		intervals.forEach(interval -> intervalsByKey.computeIfAbsent(interval.key(), key -> new ArrayList<>()).add(interval)
+		);
+		List<Row> rows = new ArrayList<>();
+		intervalsByKey.forEach((key, group) -> rows.addAll(mergeGroup(key, group)));
+		return rows;
+	}
+
+	private List<Row> mergeGroup(MergeKey key, List<Interval> group) {
+		group.sort(Comparator.comparing(Interval::start));
+		List<Row> rows = new ArrayList<>();
+		LocalDate start = null;
+		LocalDate end = null;
+		boolean containsPlan = false;
+		for (Interval interval : group) {
+			if (start == null) {
+				start = interval.start();
+				end = interval.end();
+				containsPlan = interval.fromPlan();
+			} else if (isContiguous(end, interval.start())) {
+				end = laterOf(end, interval.end());
+				containsPlan = containsPlan || interval.fromPlan();
+			} else {
+				rows.add(toRow(key, start, end, containsPlan));
+				start = interval.start();
+				end = interval.end();
+				containsPlan = interval.fromPlan();
+			}
+		}
+		if (start != null) {
+			rows.add(toRow(key, start, end, containsPlan));
+		}
+		return rows;
+	}
+
+	private boolean isContiguous(LocalDate currentEnd, LocalDate nextStart) {
+		return !nextStart.isAfter(currentEnd.plusDays(1));
+	}
+
+	private LocalDate laterOf(LocalDate first, LocalDate second) {
+		return second.isAfter(first) ? second : first;
+	}
+
+	private Row toRow(MergeKey key, LocalDate start, LocalDate end, boolean containsPlan) {
+		MedicationScheduleItemPO po = new MedicationScheduleItemPO()
+			.setMedication(key.medication())
+			.setManufacturer(key.manufacturer())
+			.setPeriod(formatRange(start, end))
+			.setFrequency(frequency(containsPlan, start, end))
+			.setDosage(key.dosage())
+			.setTime(formatTime(key.time()));
+		return new Row(key.medication(), start, key.time(), po);
+	}
+
+	private Row toOpenPlanRow(MedicationPlan plan) {
 		MedicationScheduleItemPO po = new MedicationScheduleItemPO()
 			.setMedication(medicationName(plan.getMedication()))
 			.setManufacturer(manufacturerName(plan.getMedication()))
@@ -72,18 +168,11 @@ class MedicationScheduleDataCollector {
 			.setFrequency("1x täglich")
 			.setDosage(formatDosage(plan.getUnitCount(), plan.getMedicationUnit()))
 			.setTime(formatTime(plan.getTimeOfIntake()));
-		return new ScheduleEntry(po.getMedication(), plan.getStartDate(), plan.getTimeOfIntake(), po);
+		return new Row(po.getMedication(), plan.getStartDate(), plan.getTimeOfIntake(), po);
 	}
 
-	private ScheduleEntry toEntry(MedicationLog log) {
-		MedicationScheduleItemPO po = new MedicationScheduleItemPO()
-			.setMedication(medicationName(log.getMedication()))
-			.setManufacturer(manufacturerName(log.getMedication()))
-			.setPeriod(formatDate(log.getDateOfIntake()))
-			.setFrequency("einmalig")
-			.setDosage(formatDosage(log.getUnitCount(), log.getMedicationUnit()))
-			.setTime(formatTime(log.getTimeOfIntake()));
-		return new ScheduleEntry(po.getMedication(), log.getDateOfIntake(), log.getTimeOfIntake(), po);
+	private String frequency(boolean containsPlan, LocalDate start, LocalDate end) {
+		return (containsPlan || !start.equals(end)) ? "1x täglich" : "einmalig";
 	}
 
 	private String medicationName(Medication medication) {
@@ -101,6 +190,10 @@ class MedicationScheduleDataCollector {
 		return (
 			(medication == null) || (medication.getManufacturer() == null) || (medication.getManufacturer().getName() == null)
 		);
+	}
+
+	private String formatRange(LocalDate start, LocalDate end) {
+		return start.equals(end) ? formatDate(start) : formatDate(start) + " - " + formatDate(end);
 	}
 
 	private String formatPeriod(LocalDate start, LocalDate end) {
@@ -140,5 +233,9 @@ class MedicationScheduleDataCollector {
 		return unit.getToken() == null ? "" : unit.getToken();
 	}
 
-	private record ScheduleEntry(String name, LocalDate date, LocalTime time, MedicationScheduleItemPO po) {}
+	private record MergeKey(String medication, String manufacturer, String dosage, LocalTime time) {}
+
+	private record Interval(MergeKey key, LocalDate start, LocalDate end, boolean fromPlan) {}
+
+	private record Row(String name, LocalDate start, LocalTime time, MedicationScheduleItemPO po) {}
 }

@@ -156,6 +156,110 @@ class MedicationScheduleDataCollectorTest {
 		assertTrue(result.isEmpty());
 	}
 
+	private MedicationPlan plan(String name, LocalDate start, LocalDate end, LocalTime time, String amount) {
+		return new MedicationPlan()
+			.setMedication(medication(name, "Ratiopharm"))
+			.setMedicationUnit(unit("Tablette"))
+			.setUnitCount(new BigDecimal(amount))
+			.setStartDate(start)
+			.setEndDate(end)
+			.setTimeOfIntake(time);
+	}
+
+	private MedicationLog log(String name, LocalDate date, LocalTime time, String amount) {
+		return new MedicationLog()
+			.setMedication(medication(name, "Ratiopharm"))
+			.setMedicationUnit(unit("Tablette"))
+			.setUnitCount(new BigDecimal(amount))
+			.setDateOfIntake(date)
+			.setTimeOfIntake(time);
+	}
+
+	@Test
+	void mergesSameMedicationOnConsecutiveDaysIntoOnePeriod() {
+		// Prepare
+		LocalTime time = LocalTime.of(8, 30);
+		when(medicationLogService.listMedicationLogs())
+			.thenReturn(List.of(log("Nasenspray", DAY, time, "1.0"), log("Nasenspray", DAY.plusDays(1), time, "1.0")));
+		MedicationScheduleItemPO expected = new MedicationScheduleItemPO()
+			.setMedication("Nasenspray")
+			.setManufacturer("Ratiopharm")
+			.setPeriod(DAY.format(GERMAN_DATE) + " - " + DAY.plusDays(1).format(GERMAN_DATE))
+			.setFrequency("1x täglich")
+			.setDosage("1 Tablette")
+			.setTime("um 08:30 Uhr");
+		// Run
+		List<MedicationScheduleItemPO> result = unitUnderTest.collect(FROM, TO);
+		// Check
+		assertEquals(List.of(expected), result);
+	}
+
+	@Test
+	void mergesALogFollowingAPlanIntoThePlanPeriod() {
+		// Prepare
+		LocalTime time = LocalTime.of(8, 30);
+		when(medicationPlanService.listMedicationPlans())
+			.thenReturn(List.of(plan("Nasenspray", DAY, DAY.plusDays(2), time, "1.0")));
+		when(medicationLogService.listMedicationLogs())
+			.thenReturn(List.of(log("Nasenspray", DAY.plusDays(3), time, "1.0")));
+		MedicationScheduleItemPO expected = new MedicationScheduleItemPO()
+			.setMedication("Nasenspray")
+			.setManufacturer("Ratiopharm")
+			.setPeriod(DAY.format(GERMAN_DATE) + " - " + DAY.plusDays(3).format(GERMAN_DATE))
+			.setFrequency("1x täglich")
+			.setDosage("1 Tablette")
+			.setTime("um 08:30 Uhr");
+		// Run
+		List<MedicationScheduleItemPO> result = unitUnderTest.collect(FROM, TO);
+		// Check
+		assertEquals(List.of(expected), result);
+	}
+
+	@Test
+	void mergesALogPrecedingAPlanIntoThePlanPeriod() {
+		// Prepare
+		LocalTime time = LocalTime.of(8, 30);
+		when(medicationPlanService.listMedicationPlans())
+			.thenReturn(List.of(plan("Nasenspray", DAY, DAY.plusDays(2), time, "1.0")));
+		when(medicationLogService.listMedicationLogs())
+			.thenReturn(List.of(log("Nasenspray", DAY.minusDays(1), time, "1.0")));
+		MedicationScheduleItemPO expected = new MedicationScheduleItemPO()
+			.setMedication("Nasenspray")
+			.setManufacturer("Ratiopharm")
+			.setPeriod(DAY.minusDays(1).format(GERMAN_DATE) + " - " + DAY.plusDays(2).format(GERMAN_DATE))
+			.setFrequency("1x täglich")
+			.setDosage("1 Tablette")
+			.setTime("um 08:30 Uhr");
+		// Run
+		List<MedicationScheduleItemPO> result = unitUnderTest.collect(FROM, TO);
+		// Check
+		assertEquals(List.of(expected), result);
+	}
+
+	@Test
+	void keepsNonConsecutiveLogsAsSeparateEntries() {
+		// Prepare
+		LocalTime time = LocalTime.of(8, 30);
+		when(medicationLogService.listMedicationLogs())
+			.thenReturn(List.of(log("Nasenspray", DAY, time, "1.0"), log("Nasenspray", DAY.plusDays(2), time, "1.0")));
+		// Run
+		List<MedicationScheduleItemPO> result = unitUnderTest.collect(FROM, TO);
+		// Check
+		assertEquals(2, result.size());
+	}
+
+	@Test
+	void doesNotMergeConsecutiveDaysWithDifferentDosage() {
+		// Prepare
+		LocalTime time = LocalTime.of(8, 30);
+		when(medicationLogService.listMedicationLogs())
+			.thenReturn(List.of(log("Nasenspray", DAY, time, "1.0"), log("Nasenspray", DAY.plusDays(1), time, "2.0")));
+		// Run
+		List<MedicationScheduleItemPO> result = unitUnderTest.collect(FROM, TO);
+		// Check
+		assertEquals(2, result.size());
+	}
+
 	@Test
 	void excludesLogsOutsideTheReportInterval() {
 		// Prepare
