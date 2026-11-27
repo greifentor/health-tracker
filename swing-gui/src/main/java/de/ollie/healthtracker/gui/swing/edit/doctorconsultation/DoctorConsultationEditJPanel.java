@@ -90,7 +90,12 @@ public class DoctorConsultationEditJPanel extends AbstractEditPanel<DoctorConsul
 		List<DoctorConsultation> doctorConsultationList = doctorConsultations.getItem();
 		comboBoxSubsequentAppointmentOf =
 			new JComboBox<>(doctorConsultationList.toArray(new DoctorConsultation[doctorConsultationList.size()]));
-		comboBoxSubsequentAppointmentOf.setSelectedItem(toEdit.getSubsequentAppointmentOf());
+		DoctorConsultation selected = doctorConsultationList
+			.stream()
+			.filter(dc -> dc.getId().equals(toEdit.getSubsequentAppointmentOf()))
+			.findFirst()
+			.orElse(null);
+		comboBoxSubsequentAppointmentOf.setSelectedItem(selected);
 		comboBoxSubsequentAppointmentOf.setRenderer((list, value, index, isSelected, cellHasFocus) -> {
 			if (value != null) {
 				return new JLabel(
@@ -142,7 +147,11 @@ public class DoctorConsultationEditJPanel extends AbstractEditPanel<DoctorConsul
 			.setOpen(checkBoxOpen.isSelected())
 			.setReason(textAreaReason.getText())
 			.setResult(textAreaResult.getText())
-			.setSubsequentAppointmentOf((DoctorConsultation) comboBoxSubsequentAppointmentOf.getSelectedItem())
+			.setSubsequentAppointmentOf(
+				comboBoxSubsequentAppointmentOf.getSelectedItem() != null
+					? ((DoctorConsultation) comboBoxSubsequentAppointmentOf.getSelectedItem()).getId()
+					: null
+			)
 			.setTime(DateTimeUtil.timeFromString(textFieldTime.getText()));
 	}
 }

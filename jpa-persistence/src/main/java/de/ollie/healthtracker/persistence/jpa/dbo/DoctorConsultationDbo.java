@@ -49,7 +49,6 @@ public class DoctorConsultationDbo {
 	@Column(name = "RESULT", nullable = false)
 	private String result;
 
-	@JoinColumn(name = "SUBSEQUENT_APPOINTMENT_OF", referencedColumnName = "ID", nullable = true)
-	@ManyToOne(fetch = FetchType.EAGER)
-	private DoctorConsultationDbo subsequentAppointmentOf;
+	@Column(name = "SUBSEQUENT_APPOINTMENT_OF", nullable = true)
+	private UUID subsequentAppointmentOf;
 }

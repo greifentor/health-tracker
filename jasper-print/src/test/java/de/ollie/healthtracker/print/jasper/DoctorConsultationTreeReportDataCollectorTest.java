@@ -43,7 +43,7 @@ class DoctorConsultationTreeReportDataCollectorTest {
 			.setReason("Kontrolle")
 			.setResult("ok")
 			.setOpen(false)
-			.setSubsequentAppointmentOf(predecessor);
+			.setSubsequentAppointmentOf(predecessor != null ? predecessor.getId() : null);
 	}
 
 	@Test

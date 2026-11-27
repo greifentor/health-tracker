@@ -224,9 +224,6 @@ class DboFactory {
 		DoctorDbo doctor = doctorRepository
 			.findById(doctorId)
 			.orElseThrow(() -> new NoSuchElementException("no doctor found with id: " + doctorId));
-		DoctorConsultationDbo doctorConsultation = doctorConsultationId == null
-			? null
-			: doctorConsultationRepository.findById(doctorConsultationId).orElse(null);
 		return new DoctorConsultationDbo()
 			.setDate(date)
 			.setDoctor(doctor)
@@ -234,7 +231,7 @@ class DboFactory {
 			.setOpen(open)
 			.setReason(reason)
 			.setResult(result)
-			.setSubsequentAppointmentOf(doctorConsultation)
+			.setSubsequentAppointmentOf(doctorConsultationId)
 			.setTime(time);
 	}
 

@@ -50,7 +50,7 @@ class DoctorConsultationReportDataCollector {
 		return consultations
 			.stream()
 			.filter(this::isFollowUp)
-			.collect(Collectors.groupingBy(consultation -> consultation.getSubsequentAppointmentOf().getId()));
+			.collect(Collectors.groupingBy(consultation -> consultation.getSubsequentAppointmentOf()));
 	}
 
 	private List<DoctorConsultation> predecessors(List<DoctorConsultation> consultations) {
@@ -58,9 +58,7 @@ class DoctorConsultationReportDataCollector {
 	}
 
 	private boolean isFollowUp(DoctorConsultation consultation) {
-		return (
-			(consultation.getSubsequentAppointmentOf() != null) && (consultation.getSubsequentAppointmentOf().getId() != null)
-		);
+		return consultation.getSubsequentAppointmentOf() != null;
 	}
 
 	private void appendWithFollowUps(
