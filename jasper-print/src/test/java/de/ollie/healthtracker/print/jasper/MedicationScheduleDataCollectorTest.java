@@ -261,7 +261,7 @@ class MedicationScheduleDataCollectorTest {
 	}
 
 	@Test
-	void derivesTwiceDailyFrequencyAndListsAllTimesForTwoDailyIntakes() {
+	void keepsDifferentIntakeTimesOfOneMedicationAsSeparateEntries() {
 		// Prepare
 		when(medicationPlanService.listMedicationPlans())
 			.thenReturn(
@@ -270,37 +270,36 @@ class MedicationScheduleDataCollectorTest {
 					plan("Nasenspray", DAY, DAY.plusDays(2), LocalTime.of(20, 0), "1.0")
 				)
 			);
-		MedicationScheduleItemPO expected = new MedicationScheduleItemPO()
-			.setMedication("Nasenspray")
-			.setManufacturer("Ratiopharm")
-			.setPeriod(DAY.format(GERMAN_DATE) + " - " + DAY.plusDays(2).format(GERMAN_DATE))
-			.setFrequency("2x täglich")
-			.setDosage("1 Tablette")
-			.setTime("um 08:30, 20:00 Uhr");
 		// Run
 		List<MedicationScheduleItemPO> result = unitUnderTest.collect(FROM, TO);
 		// Check
-		assertEquals(List.of(expected), result);
+		assertEquals(2, result.size());
 	}
 
 	@Test
-	void derivesTwiceDailyFrequencyFromTwoLogsOnTheSameDay() {
+	void doesNotMergeALogIntoAnAdjoiningPlanWhenTheTimeDiffers() {
 		// Prepare
+		when(medicationPlanService.listMedicationPlans())
+			.thenReturn(List.of(plan("Nasenspray", DAY, DAY.plusDays(2), LocalTime.of(8, 30), "1.0")));
 		when(medicationLogService.listMedicationLogs())
-			.thenReturn(
-				List.of(log("Aspirin", DAY, LocalTime.of(8, 0), "1.0"), log("Aspirin", DAY, LocalTime.of(18, 0), "1.0"))
-			);
-		MedicationScheduleItemPO expected = new MedicationScheduleItemPO()
-			.setMedication("Aspirin")
-			.setManufacturer("Ratiopharm")
-			.setPeriod(DAY.format(GERMAN_DATE))
-			.setFrequency("2x täglich")
-			.setDosage("1 Tablette")
-			.setTime("um 08:00, 18:00 Uhr");
+			.thenReturn(List.of(log("Nasenspray", DAY.plusDays(3), LocalTime.of(20, 0), "1.0")));
 		// Run
 		List<MedicationScheduleItemPO> result = unitUnderTest.collect(FROM, TO);
 		// Check
-		assertEquals(List.of(expected), result);
+		assertEquals(2, result.size());
+	}
+
+	@Test
+	void doesNotMergeALogIntoAnAdjoiningPlanWhenTheQuantityDiffers() {
+		// Prepare
+		when(medicationPlanService.listMedicationPlans())
+			.thenReturn(List.of(plan("Nasenspray", DAY, DAY.plusDays(2), LocalTime.of(8, 30), "1.0")));
+		when(medicationLogService.listMedicationLogs())
+			.thenReturn(List.of(log("Nasenspray", DAY.plusDays(3), LocalTime.of(8, 30), "2.0")));
+		// Run
+		List<MedicationScheduleItemPO> result = unitUnderTest.collect(FROM, TO);
+		// Check
+		assertEquals(2, result.size());
 	}
 
 	@Test
