@@ -83,6 +83,23 @@ class DoctorConsultationReportDataCollectorTest {
 	}
 
 	@Test
+	void ordersFollowUpsOfAPredecessorByDate() {
+		// Prepare
+		DoctorConsultation predecessor = consultation(UUID.randomUUID(), DATE, null);
+		DoctorConsultation laterFollowUp = consultation(UUID.randomUUID(), DATE.plusDays(20), predecessor);
+		DoctorConsultation earlierFollowUp = consultation(UUID.randomUUID(), DATE.plusDays(10), predecessor);
+		when(doctorConsultationService.listDoctorConsultations())
+			.thenReturn(List.of(laterFollowUp, earlierFollowUp, predecessor));
+		// Run
+		List<DoctorConsultationItemPO> result = unitUnderTest.collect();
+		// Check
+		assertEquals(
+			List.of("10.03.2026", "20.03.2026", "30.03.2026"),
+			result.stream().map(DoctorConsultationItemPO::getDate).toList()
+		);
+	}
+
+	@Test
 	void formatsTheDoctorWithItsType() {
 		// Prepare
 		when(doctorConsultationService.listDoctorConsultations())

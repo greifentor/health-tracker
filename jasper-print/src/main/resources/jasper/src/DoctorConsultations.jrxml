@@ -82,35 +82,40 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="16" splitType="Prevent">
+		<band height="19" splitType="Prevent">
+			<line>
+				<reportElement x="0" y="1" width="555" height="1" uuid="5a1c7d30-0000-0000-0000-000000000327">
+					<printWhenExpression><![CDATA[!Boolean.TRUE.equals($F{followUp})]]></printWhenExpression>
+				</reportElement>
+			</line>
 			<textField>
-				<reportElement x="0" y="1" width="14" height="14" uuid="5a1c7d30-0000-0000-0000-000000000320">
+				<reportElement x="0" y="4" width="14" height="14" uuid="5a1c7d30-0000-0000-0000-000000000320">
 					<printWhenExpression><![CDATA[Boolean.TRUE.equals($F{followUp})]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA["↳"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="16" y="1" width="64" height="14" uuid="5a1c7d30-0000-0000-0000-000000000321"/>
+				<reportElement x="16" y="4" width="64" height="14" uuid="5a1c7d30-0000-0000-0000-000000000321"/>
 				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="82" y="1" width="36" height="14" uuid="5a1c7d30-0000-0000-0000-000000000322"/>
+				<reportElement x="82" y="4" width="36" height="14" uuid="5a1c7d30-0000-0000-0000-000000000322"/>
 				<textFieldExpression><![CDATA[$F{time}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight">
-				<reportElement x="120" y="1" width="120" height="14" uuid="5a1c7d30-0000-0000-0000-000000000323"/>
+				<reportElement x="120" y="4" width="120" height="14" uuid="5a1c7d30-0000-0000-0000-000000000323"/>
 				<textFieldExpression><![CDATA[$F{doctor}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight">
-				<reportElement x="242" y="1" width="118" height="14" uuid="5a1c7d30-0000-0000-0000-000000000324"/>
+				<reportElement x="242" y="4" width="118" height="14" uuid="5a1c7d30-0000-0000-0000-000000000324"/>
 				<textFieldExpression><![CDATA[$F{reason}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight">
-				<reportElement x="362" y="1" width="118" height="14" uuid="5a1c7d30-0000-0000-0000-000000000325"/>
+				<reportElement x="362" y="4" width="118" height="14" uuid="5a1c7d30-0000-0000-0000-000000000325"/>
 				<textFieldExpression><![CDATA[$F{result}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="482" y="1" width="73" height="14" uuid="5a1c7d30-0000-0000-0000-000000000326"/>
+				<reportElement x="482" y="4" width="73" height="14" uuid="5a1c7d30-0000-0000-0000-000000000326"/>
 				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
 			</textField>
 		</band>
