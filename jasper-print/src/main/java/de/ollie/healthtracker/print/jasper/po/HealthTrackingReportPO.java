@@ -17,4 +17,5 @@ public class HealthTrackingReportPO {
 	private List<BloodPressureMeasurementPO> bloodPressureMeasurements = new ArrayList<>();
 	private List<BloodPressureMeasurementPO> bloodPressureMeasurementsCumulated = new ArrayList<>();
 	private List<DailyHealthReportPO> dailyHealthReport = new ArrayList<>();
+	private List<MedicationScheduleItemPO> medicationSchedule = new ArrayList<>();
 }

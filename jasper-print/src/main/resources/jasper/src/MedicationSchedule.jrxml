@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MedicationSchedule" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" whenNoDataType="NoDataSection" uuid="3d8f0b20-0000-0000-0000-000000000200">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<parameter name="HEAD_LINE" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Medikamenten-Aufstellung"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="medication" class="java.lang.String"/>
+	<field name="manufacturer" class="java.lang.String"/>
+	<field name="period" class="java.lang.String"/>
+	<field name="frequency" class="java.lang.String"/>
+	<field name="dosage" class="java.lang.String"/>
+	<field name="time" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="27">
+			<textField>
+				<reportElement x="0" y="0" width="555" height="24" uuid="3d8f0b20-0000-0000-0000-000000000201"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{HEAD_LINE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="18" splitType="Prevent">
+			<textField>
+				<reportElement x="0" y="0" width="105" height="14" uuid="3d8f0b20-0000-0000-0000-000000000210"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Medikament"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="105" y="0" width="95" height="14" uuid="3d8f0b20-0000-0000-0000-000000000211"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Hersteller"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="125" height="14" uuid="3d8f0b20-0000-0000-0000-000000000212"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Zeitraum"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="325" y="0" width="65" height="14" uuid="3d8f0b20-0000-0000-0000-000000000213"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Häufigkeit"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="390" y="0" width="90" height="14" uuid="3d8f0b20-0000-0000-0000-000000000214"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Dosis"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="480" y="0" width="75" height="14" uuid="3d8f0b20-0000-0000-0000-000000000215"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Uhrzeit"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="16" width="555" height="1" uuid="3d8f0b20-0000-0000-0000-000000000216"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Prevent">
+			<textField textAdjust="StretchHeight">
+				<reportElement x="0" y="1" width="105" height="14" uuid="3d8f0b20-0000-0000-0000-000000000220"/>
+				<textFieldExpression><![CDATA[$F{medication}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="105" y="1" width="95" height="14" uuid="3d8f0b20-0000-0000-0000-000000000221"/>
+				<textFieldExpression><![CDATA[$F{manufacturer}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="1" width="125" height="14" uuid="3d8f0b20-0000-0000-0000-000000000222"/>
+				<textFieldExpression><![CDATA[$F{period}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="325" y="1" width="65" height="14" uuid="3d8f0b20-0000-0000-0000-000000000223"/>
+				<textFieldExpression><![CDATA[$F{frequency}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="390" y="1" width="90" height="14" uuid="3d8f0b20-0000-0000-0000-000000000224"/>
+				<textFieldExpression><![CDATA[$F{dosage}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="480" y="1" width="75" height="14" uuid="3d8f0b20-0000-0000-0000-000000000225"/>
+				<textFieldExpression><![CDATA[$F{time}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<noData>
+		<band height="16">
+			<textField>
+				<reportElement x="0" y="1" width="555" height="14" uuid="3d8f0b20-0000-0000-0000-000000000230"/>
+				<textFieldExpression><![CDATA["Keine Medikationen im Berichtszeitraum."]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
+</jasperReport>

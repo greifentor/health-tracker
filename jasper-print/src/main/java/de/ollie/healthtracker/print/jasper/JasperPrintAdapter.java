@@ -28,6 +28,7 @@ class JasperPrintAdapter implements PrintPort {
 	private final BloodPressureMeasurementService bloodPressureMeasurementService;
 	private final BloodPressureMeasurementPOMapper bloodPressureMeasurementPOMapper;
 	private final DailyHealthReportDataCollector dailyHealthReportDataCollector;
+	private final MedicationScheduleDataCollector medicationScheduleDataCollector;
 	private final JasperConfiguration jasperConfiguration;
 
 	@Override
@@ -73,7 +74,8 @@ class JasperPrintAdapter implements PrintPort {
 					)
 				)
 			)
-			.setDailyHealthReport(dailyHealthReportDataCollector.collect(report.getFrom(), report.getTo()));
+			.setDailyHealthReport(dailyHealthReportDataCollector.collect(report.getFrom(), report.getTo()))
+			.setMedicationSchedule(medicationScheduleDataCollector.collect(report.getFrom(), report.getTo()));
 	}
 
 	private List<CommentPO> mapToCommentsPO(List<Comment> comments) {

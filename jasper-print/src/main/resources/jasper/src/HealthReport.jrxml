@@ -23,6 +23,7 @@
 	</field>
 	<field name="dataPerDayOrderedByDate" class="java.util.List"/>
 	<field name="dailyHealthReport" class="java.util.List"/>
+	<field name="medicationSchedule" class="java.util.List"/>
 	<field name="from" class="java.lang.String"/>
 	<field name="to" class="java.lang.String"/>
 	<title>
@@ -66,6 +67,21 @@
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{dailyHealthReport})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DailyHealthReport.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="47" splitType="Prevent">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<subreport>
+				<reportElement x="0" y="1" width="555" height="40" uuid="aed8591a-b10f-457a-9afb-64e2d4bef761">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<subreportParameter name="HEAD_LINE">
+					<subreportParameterExpression><![CDATA["Medikamenten-Aufstellung"]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{medicationSchedule})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "MedicationSchedule.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="47" splitType="Stretch">
