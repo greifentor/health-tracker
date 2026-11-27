@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DoctorConsultationTree" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenNoDataType="NoDataSection" uuid="6b2d8e40-0000-0000-0000-000000000400">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<parameter name="HEAD_LINE" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Arztbesuche – Verlinkungsbaum"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="tree" class="java.lang.String"/>
+	<field name="time" class="java.lang.String"/>
+	<field name="doctor" class="java.lang.String"/>
+	<field name="level" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50">
+			<textField>
+				<reportElement x="0" y="0" width="555" height="30" uuid="6b2d8e40-0000-0000-0000-000000000401"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{HEAD_LINE}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="34" width="555" height="1" uuid="6b2d8e40-0000-0000-0000-000000000402"/>
+			</line>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="18" splitType="Prevent">
+			<textField>
+				<reportElement x="0" y="0" width="230" height="14" uuid="6b2d8e40-0000-0000-0000-000000000410"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Verlauf (Datum)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="235" y="0" width="45" height="14" uuid="6b2d8e40-0000-0000-0000-000000000411"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Zeit"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="285" y="0" width="270" height="14" uuid="6b2d8e40-0000-0000-0000-000000000412"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Arzt"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="16" width="555" height="1" uuid="6b2d8e40-0000-0000-0000-000000000413"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Prevent">
+			<textField textAdjust="StretchHeight">
+				<reportElement x="0" y="1" width="230" height="14" uuid="6b2d8e40-0000-0000-0000-000000000420"/>
+				<textElement>
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tree}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="235" y="1" width="45" height="14" uuid="6b2d8e40-0000-0000-0000-000000000421"/>
+				<textFieldExpression><![CDATA[$F{time}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="285" y="1" width="270" height="14" uuid="6b2d8e40-0000-0000-0000-000000000422"/>
+				<textFieldExpression><![CDATA[$F{doctor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<noData>
+		<band height="16">
+			<textField>
+				<reportElement x="0" y="1" width="555" height="14" uuid="6b2d8e40-0000-0000-0000-000000000430"/>
+				<textFieldExpression><![CDATA["Keine Arztbesuche erfasst."]]></textFieldExpression>
+			</textField>
+		</band>
+	</noData>
+</jasperReport>
